@@ -23,11 +23,14 @@
                         sans: ['"Plus Jakarta Sans"', 'sans-serif'],
                     },
                     colors: {
-                        base: '#F6F5ED',
-                        holiday: '#2e7d32', 
-                        'holiday-dark': '#1b5e20',
-                        'holiday-light': '#a5d6a7',
-                        'holiday-glow': 'rgba(46, 125, 50, 0.4)'
+                        base: '#f4f0e7',
+                        ink: '#151813',
+                        clay: '#b96f3c',
+                        mist: '#dfe8df',
+                        holiday: '#2f6f42', 
+                        'holiday-dark': '#17442a',
+                        'holiday-light': '#b8d9bd',
+                        'holiday-glow': 'rgba(47, 111, 66, 0.28)'
                     }
                 }
             }
@@ -35,13 +38,41 @@
     </script>
 
     <style>
-        body { font-family: 'Plus Jakarta Sans', sans-serif; background-color: #F6F5ED; }
+        body { font-family: 'Plus Jakarta Sans', sans-serif; background-color: #f4f0e7; color: #151813; }
         
         .no-scrollbar::-webkit-scrollbar { display: none; }
         .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
 
-        .card-gradient { background: linear-gradient(to top, rgba(0,0,0,0.95) 0%, rgba(0,0,0,0.3) 50%, transparent 100%); }
-        .hero-gradient { background: linear-gradient(to bottom, rgba(0,0,0,0.5) 0%, rgba(0,0,0,0.2) 50%, rgba(0,0,0,0.8) 100%); }
+        .card-gradient { background: linear-gradient(to top, rgba(7,13,9,0.96) 0%, rgba(7,13,9,0.34) 58%, transparent 100%); }
+        .hero-gradient { background: linear-gradient(90deg, rgba(10,16,11,0.82) 0%, rgba(10,16,11,0.56) 42%, rgba(10,16,11,0.14) 100%), linear-gradient(to bottom, rgba(0,0,0,0.18) 0%, rgba(0,0,0,0.02) 48%, rgba(0,0,0,0.58) 100%); }
+        .section-shell { max-width: 1280px; margin-inline: auto; padding-inline: 1.5rem; }
+        .btn-primary { background: #2f6f42; color: #fff; box-shadow: 0 16px 42px rgba(47, 111, 66, 0.26); }
+        .btn-primary:hover { background: #17442a; transform: translateY(-1px); }
+        .btn-secondary { border: 1px solid rgba(255,255,255,0.34); background: rgba(255,255,255,0.12); color: #fff; backdrop-filter: blur(14px); }
+        .btn-secondary:hover { background: rgba(255,255,255,0.2); transform: translateY(-1px); }
+        .surface-card { background: rgba(255,255,255,0.72); border: 1px solid rgba(21,24,19,0.08); box-shadow: 0 20px 70px rgba(36, 45, 34, 0.08); }
+        .eyebrow { color: #2f6f42; font-size: .78rem; font-weight: 800; letter-spacing: .12em; text-transform: uppercase; }
+        .flag-button {
+            width: 28px;
+            height: 28px;
+            border-radius: 999px;
+            border: 1px solid rgba(21, 24, 19, 0.1);
+            box-shadow: inset 0 0 0 1px rgba(255,255,255,0.65);
+            overflow: hidden;
+        }
+        .flag-id { background: linear-gradient(to bottom, #ef3340 0 50%, #fff 50% 100%); }
+        .flag-en {
+            background:
+                linear-gradient(to bottom, transparent 41%, #c8102e 41% 59%, transparent 59%),
+                linear-gradient(to right, transparent 42%, #c8102e 42% 58%, transparent 58%),
+                linear-gradient(to bottom, transparent 32%, #fff 32% 68%, transparent 68%),
+                linear-gradient(to right, transparent 34%, #fff 34% 66%, transparent 66%),
+                linear-gradient(34deg, transparent 44%, #c8102e 44% 56%, transparent 56%),
+                linear-gradient(-34deg, transparent 44%, #c8102e 44% 56%, transparent 56%),
+                linear-gradient(34deg, transparent 38%, #fff 38% 62%, transparent 62%),
+                linear-gradient(-34deg, transparent 38%, #fff 38% 62%, transparent 62%),
+                #012169;
+        }
 
         /* --- 1. COVERFLOW STYLES (Untuk Destinasi) --- */
         .carousel-card {
@@ -133,203 +164,214 @@
         .marquee-track:hover { animation-play-state: paused; }
         @keyframes marquee { 0% { transform: translateX(0); } 100% { transform: translateX(-50%); } }
         
-        .gsap-item { opacity: 0; visibility: hidden; }
+        .gsap-item { opacity: 1; visibility: visible; }
         .smooth-scroll-x { scroll-behavior: smooth; }
         .slider-dot { transition: all 0.3s cubic-bezier(0.25, 1, 0.5, 1); }
+        @media (prefers-reduced-motion: reduce) {
+            *, *::before, *::after {
+                animation-duration: 0.01ms !important;
+                animation-iteration-count: 1 !important;
+                scroll-behavior: auto !important;
+                transition-duration: 0.01ms !important;
+            }
+        }
     </style>
 </head>
 <body class="text-gray-800 overflow-x-hidden antialiased">
 
     <!-- Navbar & Sidebar -->
     <div id="menu-overlay" class="fixed inset-0 bg-black/60 z-[60] hidden opacity-0 backdrop-blur-sm"></div>
-    <aside id="mobile-sidebar" class="fixed top-0 left-0 h-full w-[80%] max-w-sm bg-base shadow-2xl z-[70] p-8 flex flex-col transform -translate-x-full border-r border-gray-200">
+    <aside id="mobile-sidebar" class="fixed top-0 left-0 h-full w-[84%] max-w-sm bg-base shadow-2xl z-[70] p-8 flex flex-col transform -translate-x-full border-r border-black/10">
         <div class="flex justify-between items-center mb-10">
-            <a href="#" class="text-2xl font-extrabold flex items-center gap-2">
+            <a href="index.html" class="text-2xl font-extrabold flex items-center gap-2">
                 <i class="bi bi-jeep text-holiday"></i> JB.
             </a>
-            <button id="close-menu-btn" class="w-10 h-10 rounded-full bg-gray-100 flex items-center justify-center text-gray-800 hover:bg-holiday hover:text-white transition">
+            <button id="close-menu-btn" class="w-10 h-10 rounded-full bg-white flex items-center justify-center text-gray-800 hover:bg-holiday hover:text-white transition border border-black/10">
                 <i class="bi bi-x-lg"></i>
             </button>
         </div>
         <nav class="flex flex-col gap-6 text-lg font-bold text-gray-700">
-            <a href="#" class="hover:text-holiday transition flex items-center gap-3"><i class="bi bi-house"></i> Beranda</a>
-            <a href="news.html" class="bg-red-500 text-white px-3 py-2 rounded-lg hover:bg-red-600 transition flex items-center gap-3 w-fit"><i class="bi bi-compass"></i> New</a>
+            <a href="index.html" class="hover:text-holiday transition flex items-center gap-3"><i class="bi bi-house"></i> Beranda</a>
+            <a href="news.html" class="hover:text-holiday transition flex items-center gap-3"><i class="bi bi-compass"></i> Cerita</a>
             <a href="#paket" class="hover:text-holiday transition flex items-center gap-3"><i class="bi bi-map"></i> Paket Trip</a>
             <a href="#armada" class="hover:text-holiday transition flex items-center gap-3"><i class="bi bi-truck"></i> Armada</a>
         </nav>
         <div class="mt-auto">
-            <a href="detail.html" class="block w-full text-center bg-holiday !text-gray-600 py-4 rounded-xl font-bold shadow-lg">Booking Sekarang</a>
+            <a href="detail.html" class="block w-full text-center bg-holiday text-white py-4 rounded-2xl font-bold shadow-lg shadow-holiday-glow">Booking Sekarang</a>
         </div>
     </aside>
 
-    <header id="header-wrapper" class="fixed w-full top-0 z-50 transition-all duration-700 ease-in-out py-4 flex justify-center">
-        <div id="nav-container" class="w-full flex justify-between items-center px-6 md:px-10 py-4 transition-all duration-700 text-white border border-transparent">
-            <a href="#" class="text-2xl font-extrabold tracking-wide flex items-center gap-2 drop-shadow-md">
+    <header id="header-wrapper" class="fixed w-full top-0 z-50 transition-all duration-700 ease-in-out py-3 flex justify-center px-4 md:px-6">
+        <div id="nav-container" class="w-full max-w-[1440px] flex justify-between items-center px-6 md:px-9 py-3.5 transition-all duration-500 text-ink bg-white/90 backdrop-blur-xl rounded-[1.65rem] border border-white/70 shadow-[0_18px_55px_rgba(0,0,0,0.16)]">
+            <a href="index.html" class="text-2xl font-extrabold tracking-wide flex items-center gap-2">
                 <i class="bi bi-jeep text-holiday"></i> <span class="hidden sm:block">Jadi Berangkat</span><span class="sm:hidden">JB.</span>
             </a>
-            <nav class="hidden md:flex gap-8 font-semibold items-center bg-black/20 px-6 py-2.5 rounded-full backdrop-blur-md border border-white/10">
-                <a href="#" class="hover:text-holiday transition">Beranda</a>
-                <a href="news.html" class="bg-red-500 text-white px-4 py-2 rounded-lg hover:bg-red-600 transition font-bold">New</a>
+            <nav class="hidden md:flex gap-8 font-semibold items-center text-gray-700">
+                <a href="index.html" class="hover:text-holiday transition">Beranda</a>
+                <a href="news.html" class="hover:text-holiday transition">Cerita</a>
                 <a href="#paket" class="hover:text-holiday transition">Paket Trip</a>
                 <a href="#armada" class="hover:text-holiday transition">Armada</a>
             </nav>
             <div class="flex items-center gap-4">
-                <a href="#" class="hidden md:block bg-holiday hover:bg-holiday-dark text-white px-7 py-2.5 rounded-full transition shadow-lg font-bold">Masuk</a>
-                <button id="open-menu-btn" class="md:hidden w-11 h-11 flex items-center justify-center rounded-full bg-black/40 backdrop-blur-md text-white border border-white/20 hover:bg-holiday transition">
+                <a href="detail.html" class="hidden md:block bg-holiday text-white px-7 py-3 rounded-full transition shadow-lg shadow-holiday-glow font-bold hover:bg-holiday-dark">Booking</a>
+                <div class="hidden md:flex items-center gap-3 border-l border-black/10 pl-4" aria-label="Pilihan bahasa">
+                    <a href="index.html" class="flag-button flag-id" aria-label="Bahasa Indonesia"></a>
+                    <a href="index.html" class="flag-button flag-en" aria-label="English"></a>
+                </div>
+                <button id="open-menu-btn" class="md:hidden w-11 h-11 flex items-center justify-center rounded-full bg-ink text-white border border-black/10 hover:bg-holiday transition">
                     <i class="bi bi-list text-2xl"></i>
                 </button>
             </div>
         </div>
     </header>
 
-    <section class="relative h-[100svh] w-full overflow-hidden flex items-center justify-center">
-        <video id="hero-video" class="absolute inset-0 w-full h-full object-cover" autoplay loop muted playsinline>
+    <section class="relative min-h-[100dvh] w-full overflow-hidden flex items-start md:items-center">
+        <video id="hero-video" class="absolute inset-0 w-full h-full object-cover" autoplay loop muted playsinline poster="img/bluefire (1).png">
             <source src="hero.mp4" type="video/mp4">
         </video>
         <div class="absolute inset-0 hero-gradient"></div>
-        <div class="relative z-10 text-center text-white px-6 w-full max-w-5xl mx-auto flex flex-col items-center mt-12 gsap-section">
-            <h1 class="gsap-item text-4xl md:text-6xl lg:text-7xl font-extrabold mb-6 drop-shadow-2xl leading-tight">
-                Jelajahi Alam <br class="hidden md:block">
-                <span class="text-transparent bg-clip-text bg-gradient-to-r from-holiday-light to-holiday">Tanpa Batas</span>
+        <div class="relative z-10 text-white section-shell w-full pt-28 md:pt-28 pb-16 md:pb-20 gsap-section">
+            <div class="max-w-3xl">
+                <p class="gsap-item inline-flex items-center gap-2 rounded-full border border-white/20 bg-white/10 px-4 py-2 text-xs font-bold uppercase tracking-[0.18em] text-holiday-light backdrop-blur-md">
+                    Jeep trip Banyuwangi
+                </p>
+                <h1 class="gsap-item mt-7 text-4xl sm:text-5xl md:text-7xl lg:text-8xl font-extrabold mb-6 drop-shadow-2xl leading-[0.98] md:leading-[0.95] text-white">
+                    Trip alam yang rapi dari awal sampai pulang.
             </h1>
-            <p class="gsap-item text-base md:text-xl max-w-2xl mx-auto drop-shadow-md text-gray-200 mb-10 font-medium">
-                Pesan Jeep eksklusif dengan mudah. Nikmati rute menantang, pemandangan memukau, dan pengalaman aman bersama profesional.
-            </p>
-            <a href="#" class="gsap-item bg-holiday hover:bg-holiday-dark text-white px-8 py-4 rounded-full transition-all shadow-lg font-bold flex items-center gap-2 hover:-translate-y-1">
-                Mulai Petualangan <i class="bi bi-arrow-right"></i>
-            </a>
+                <p class="gsap-item text-base md:text-xl max-w-xl drop-shadow-md text-white/88 mb-7 md:mb-9 font-medium leading-relaxed">
+                    Pilih rute, tambah perlengkapan, lalu berangkat dengan jeep terawat dan driver lokal yang paham medan.
+                </p>
+                <div class="gsap-item flex flex-col sm:flex-row gap-3">
+                    <a href="detail.html" class="btn-primary px-7 py-4 rounded-full transition-all font-bold inline-flex items-center justify-center gap-2">
+                        Booking Trip <i class="bi bi-arrow-right"></i>
+                    </a>
+                    <a href="#destinasi" class="btn-secondary px-7 py-4 rounded-full transition-all font-bold inline-flex items-center justify-center gap-2">
+                        Lihat Destinasi
+                    </a>
+                </div>
+            </div>
+            <div class="gsap-item mt-10 md:mt-14 grid grid-cols-3 max-w-2xl divide-x divide-white/18 rounded-[1.5rem] border border-white/14 bg-black/24 p-4 text-white backdrop-blur-md">
+                <div class="px-3">
+                    <p class="text-2xl md:text-3xl font-extrabold">25+</p>
+                    <p class="text-xs text-white/65 font-bold">Destinasi</p>
+                </div>
+                <div class="px-3">
+                    <p class="text-2xl md:text-3xl font-extrabold">120+</p>
+                    <p class="text-xs text-white/65 font-bold">Armada</p>
+                </div>
+                <div class="px-3">
+                    <p class="text-2xl md:text-3xl font-extrabold">4.9</p>
+                    <p class="text-xs text-white/65 font-bold">Rating</p>
+                </div>
+            </div>
         </div>
         <button id="mute-btn" class="absolute bottom-8 left-6 md:left-10 z-20 w-12 h-12 bg-black/50 backdrop-blur-md rounded-full flex items-center justify-center text-white hover:bg-holiday transition border border-white/20 shadow-xl">
             <i class="bi bi-volume-mute-fill text-xl" id="mute-icon"></i>
         </button>
-        <div class="absolute bottom-10 right-6 md:right-10 z-20 flex gap-2 bg-black/40 px-4 py-2.5 rounded-full backdrop-blur-md shadow-lg border border-white/10">
-            <div class="w-6 h-2 rounded-full bg-holiday cursor-pointer transition"></div>
-            <div class="w-2 h-2 rounded-full bg-white/50 hover:bg-white cursor-pointer transition"></div>
-            <div class="w-2 h-2 rounded-full bg-white/50 hover:bg-white cursor-pointer transition"></div>
-        </div>
     </section>
 
     <!-- SECTION DESTINASI -->
-    <section id="destinasi" class="pt-24 pb-16 px-4 overflow-hidden relative gsap-section">
-        <div class="max-w-7xl mx-auto text-center mb-12">
-            <span class="gsap-item text-holiday font-extrabold tracking-wider text-sm uppercase">Eksplorasi Lokal</span>
-            <h2 class="gsap-item text-3xl md:text-4xl font-extrabold text-gray-900 mt-2 mb-3">Destinasi Pilihan</h2>
-            <p class="gsap-item text-gray-500 max-w-lg mx-auto font-medium">Geser atau sentuh card untuk memindahkan fokus ke destinasi impianmu.</p>
-        </div>
-
-        <div class="gsap-item relative w-full max-w-7xl mx-auto group">
-            <!-- Arrows untuk Destinasi (Sekarang Muncul di Mobile juga) -->
-            <button id="btn-prev-dest" class="flex absolute left-1 md:left-4 top-1/2 -translate-y-1/2 z-40 w-10 h-10 md:w-12 md:h-12 rounded-full bg-white shadow-lg items-center justify-center text-gray-800 hover:bg-holiday hover:text-white transition cursor-pointer"><i class="bi bi-chevron-left"></i></button>
-            <button id="btn-next-dest" class="flex absolute right-1 md:right-4 top-1/2 -translate-y-1/2 z-40 w-10 h-10 md:w-12 md:h-12 rounded-full bg-white shadow-lg items-center justify-center text-gray-800 hover:bg-holiday hover:text-white transition cursor-pointer"><i class="bi bi-chevron-right"></i></button>
-
-            <!-- 3D Coverflow Container -->
-            <div class="relative w-full h-[400px] md:h-[500px] flex justify-center items-center overflow-hidden touch-pan-y" id="carousel-container">
-                
-                <div class="carousel-card w-[260px] h-[360px] md:w-[350px] md:h-[480px] rounded-[2rem] overflow-hidden shadow-2xl bg-black border border-gray-700/50">
-                    <img src="img/djawatan.png" alt="De Djawatan" class="absolute inset-0 w-full h-full object-cover transition-transform duration-700 pointer-events-none">
-                    <div class="absolute inset-0 card-gradient pointer-events-none"></div>
-                    <div class="card-content absolute bottom-0 left-0 right-0 p-6 flex flex-col justify-end text-white transition-all duration-500">
-                        <h3 class="text-2xl md:text-3xl font-bold mb-1">Hutan De Djawatan</h3>
-                        <div class="flex items-center gap-2 mb-3">
-                            <div class="flex text-yellow-400 text-sm"><i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i><i class="bi bi-star-half"></i></div>
-                            <span class="text-sm font-bold text-gray-300">4.8/5</span>
-                        </div>
-                        <div class="flex items-center justify-between pt-3 border-t border-white/20" onclick="window.location.href='detail.html'; event.stopPropagation();">
-                            <span class="text-sm text-gray-300 font-medium">Nuansa magis hutan trembesi</span>
-                            <div class="w-8 h-8 rounded-full bg-holiday flex items-center justify-center cursor-pointer hover:scale-110 transition"><i class="bi bi-arrow-up-right text-white"></i></div>
-                        </div>
-                    </div>
+    <section id="destinasi" class="py-24 md:py-28 overflow-hidden relative gsap-section">
+        <div class="section-shell">
+            <div class="grid lg:grid-cols-[0.9fr_1.4fr] gap-10 lg:gap-14 items-end mb-12">
+                <div class="max-w-5xl lg:col-span-2">
+                    <span class="gsap-item eyebrow">Eksplorasi lokal</span>
+                    <h2 class="gsap-item text-4xl md:text-5xl xl:text-6xl font-extrabold text-ink mt-3 mb-5 leading-tight whitespace-normal xl:whitespace-nowrap">Destinasi pilihan untuk satu hari yang utuh.</h2>
                 </div>
-
-                <div class="carousel-card w-[260px] h-[360px] md:w-[350px] md:h-[480px] rounded-[2rem] overflow-hidden shadow-2xl bg-black border border-gray-700/50">
-                    <img src="img/kemiren.png" alt="Desa Kemiren" class="absolute inset-0 w-full h-full object-cover transition-transform duration-700 pointer-events-none">
-                    <div class="absolute inset-0 card-gradient pointer-events-none"></div>
-                    <div class="card-content absolute bottom-0 left-0 right-0 p-6 flex flex-col justify-end text-white transition-all duration-500">
-                        <h3 class="text-2xl md:text-3xl font-bold mb-1">Desa Wisata Kemiren</h3>
-                        <div class="flex items-center gap-2 mb-3">
-                            <div class="flex text-yellow-400 text-sm"><i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i></div>
-                            <span class="text-sm font-bold text-gray-300">5.0/5</span>
-                        </div>
-                        <div class="flex items-center justify-between pt-3 border-t border-white/20" onclick="window.location.href='detail.html'; event.stopPropagation();">
-                            <span class="text-sm text-gray-300 font-medium">Budaya asli suku Osing</span>
-                            <div class="w-8 h-8 rounded-full bg-holiday flex items-center justify-center cursor-pointer hover:scale-110 transition"><i class="bi bi-arrow-up-right text-white"></i></div>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="carousel-card w-[260px] h-[360px] md:w-[350px] md:h-[480px] rounded-[2rem] overflow-hidden shadow-2xl bg-black border border-gray-700/50">
-                    <img src="img/jembatan.png" alt="Jembatan" class="absolute inset-0 w-full h-full object-cover transition-transform duration-700 pointer-events-none">
-                    <div class="absolute inset-0 card-gradient pointer-events-none"></div>
-                    <div class="card-content absolute bottom-0 left-0 right-0 p-6 flex flex-col justify-end text-white transition-all duration-500">
-                        <h3 class="text-2xl md:text-3xl font-bold mb-1">Eksplorasi Jembatan</h3>
-                        <div class="flex items-center gap-2 mb-3">
-                            <div class="flex text-yellow-400 text-sm"><i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i><i class="bi bi-star"></i></div>
-                            <span class="text-sm font-bold text-gray-300">4.5/5</span>
-                        </div>
-                        <div class="flex items-center justify-between pt-3 border-t border-white/20" onclick="window.location.href='detail.html'; event.stopPropagation();">
-                            <span class="text-sm text-gray-300 font-medium">Jejak peninggalan sejarah</span>
-                            <div class="w-8 h-8 rounded-full bg-holiday flex items-center justify-center cursor-pointer hover:scale-110 transition"><i class="bi bi-arrow-up-right text-white"></i></div>
-                        </div>
-                    </div>
-                </div>
-                
-                <div class="carousel-card w-[260px] h-[360px] md:w-[350px] md:h-[480px] rounded-[2rem] overflow-hidden shadow-2xl bg-black border border-gray-700/50">
-                    <img src="img/laut.png" alt="Pantai" class="absolute inset-0 w-full h-full object-cover transition-transform duration-700 pointer-events-none">
-                    <div class="absolute inset-0 card-gradient pointer-events-none"></div>
-                    <div class="card-content absolute bottom-0 left-0 right-0 p-6 flex flex-col justify-end text-white transition-all duration-500">
-                        <h3 class="text-2xl md:text-3xl font-bold mb-1">Eksotisme Pantai</h3>
-                        <div class="flex items-center gap-2 mb-3">
-                            <div class="flex text-yellow-400 text-sm"><i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i></div>
-                            <span class="text-sm font-bold text-gray-300">5.0/5</span>
-                        </div>
-                        <div class="flex items-center justify-between pt-3 border-t border-white/20" onclick="window.location.href='detail.html'; event.stopPropagation();">
-                            <span class="text-sm text-gray-300 font-medium">Pesona laut timur</span>
-                            <div class="w-8 h-8 rounded-full bg-holiday flex items-center justify-center cursor-pointer hover:scale-110 transition"><i class="bi bi-arrow-up-right text-white"></i></div>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="carousel-card w-[260px] h-[360px] md:w-[350px] md:h-[480px] rounded-[2rem] overflow-hidden shadow-2xl bg-black border border-gray-700/50">
-                    <img src="img/Tarian_Gandrung_sewu_03 1.png" alt="Gandrung Sewu" class="absolute inset-0 w-full h-full object-cover transition-transform duration-700 pointer-events-none">
-                    <div class="absolute inset-0 card-gradient pointer-events-none"></div>
-                    <div class="card-content absolute bottom-0 left-0 right-0 p-6 flex flex-col justify-end text-white transition-all duration-500">
-                        <h3 class="text-2xl md:text-3xl font-bold mb-1">Gandrung Sewu</h3>
-                        <div class="flex items-center gap-2 mb-3">
-                            <div class="flex text-yellow-400 text-sm"><i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i></div>
-                            <span class="text-sm font-bold text-gray-300">5.0/5</span>
-                        </div>
-                        <div class="flex items-center justify-between pt-3 border-t border-white/20" onclick="window.location.href='detail.html'; event.stopPropagation();">
-                            <span class="text-sm text-gray-300 font-medium">Festival Budaya Tahunan</span>
-                            <div class="w-8 h-8 rounded-full bg-holiday flex items-center justify-center cursor-pointer hover:scale-110 transition"><i class="bi bi-arrow-up-right text-white"></i></div>
-                        </div>
-                    </div>
-                </div>
-
+                <p class="gsap-item text-gray-600 max-w-2xl font-medium leading-relaxed lg:pb-3">
+                    Mulai dari kawah, hutan trembesi, kampung budaya, sampai pantai. Pilih satu rute utama, lalu kami susun perjalanan yang masuk akal untuk waktu dan energimu.
+                </p>
             </div>
-            <!-- Dots Indicator untuk Destinasi -->
-            <div id="dots-destinasi" class="flex justify-center gap-2 mt-4 relative z-40"></div>
+
+            <div class="gsap-item grid lg:grid-cols-[1.05fr_1fr] gap-5 lg:gap-6">
+                <a href="detail.html" class="group relative min-h-[520px] overflow-hidden rounded-[1.75rem] bg-ink text-white shadow-[0_28px_90px_rgba(21,24,19,0.18)]">
+                    <img src="img/unsplash_M8drGBgFNZE.png" alt="Kawah Ijen Banyuwangi" class="absolute inset-0 h-full w-full object-cover transition-transform duration-700 group-hover:scale-105">
+                    <div class="absolute inset-0 bg-gradient-to-t from-black/88 via-black/30 to-black/5"></div>
+                    <div class="absolute left-6 right-6 top-6 flex items-center justify-between">
+                        <span class="rounded-full bg-white/16 px-4 py-2 text-xs font-extrabold uppercase tracking-[0.16em] backdrop-blur-md">Rute utama</span>
+                        <span class="rounded-full bg-white text-holiday-dark px-4 py-2 text-sm font-extrabold">Mulai pagi</span>
+                    </div>
+                    <div class="absolute bottom-0 left-0 right-0 p-6 md:p-8">
+                        <p class="mb-3 text-sm font-bold text-holiday-light">Kawah Ijen</p>
+                        <h3 class="max-w-xl text-4xl md:text-5xl font-extrabold leading-tight">Blue fire, sunrise, dan jeep transfer yang rapi.</h3>
+                        <div class="mt-7 grid grid-cols-3 gap-3 border-t border-white/18 pt-5 text-sm">
+                            <div>
+                                <p class="text-white/55 font-bold">Durasi</p>
+                                <p class="font-extrabold">8 jam</p>
+                            </div>
+                            <div>
+                                <p class="text-white/55 font-bold">Mood</p>
+                                <p class="font-extrabold">Sunrise</p>
+                            </div>
+                            <div>
+                                <p class="text-white/55 font-bold">Rating</p>
+                                <p class="font-extrabold">4.9/5</p>
+                            </div>
+                        </div>
+                    </div>
+                </a>
+
+                <div class="grid sm:grid-cols-2 gap-5 lg:gap-6">
+                    <a href="detail.html" class="group relative min-h-[250px] overflow-hidden rounded-[1.5rem] bg-ink text-white">
+                        <img src="img/djawatan.png" alt="Hutan De Djawatan" class="absolute inset-0 h-full w-full object-cover transition-transform duration-700 group-hover:scale-105">
+                        <div class="absolute inset-0 bg-gradient-to-t from-black/86 via-black/20 to-transparent"></div>
+                        <div class="absolute bottom-0 left-0 right-0 p-5">
+                            <p class="text-xs font-extrabold uppercase tracking-[0.14em] text-holiday-light">Hutan</p>
+                            <h3 class="mt-2 text-2xl font-extrabold">De Djawatan</h3>
+                            <p class="mt-2 text-sm text-white/72">Trembesi raksasa dan jalur foto teduh.</p>
+                        </div>
+                    </a>
+                    <a href="detail.html" class="group relative min-h-[250px] overflow-hidden rounded-[1.5rem] bg-ink text-white">
+                        <img src="img/kemiren.png" alt="Desa Wisata Kemiren" class="absolute inset-0 h-full w-full object-cover transition-transform duration-700 group-hover:scale-105">
+                        <div class="absolute inset-0 bg-gradient-to-t from-black/86 via-black/20 to-transparent"></div>
+                        <div class="absolute bottom-0 left-0 right-0 p-5">
+                            <p class="text-xs font-extrabold uppercase tracking-[0.14em] text-holiday-light">Budaya</p>
+                            <h3 class="mt-2 text-2xl font-extrabold">Desa Kemiren</h3>
+                            <p class="mt-2 text-sm text-white/72">Kopi, tradisi Osing, dan cerita lokal.</p>
+                        </div>
+                    </a>
+                    <a href="detail.html" class="group relative min-h-[250px] overflow-hidden rounded-[1.5rem] bg-ink text-white">
+                        <img src="img/pantaiboom.png" alt="Pantai Boom Banyuwangi" class="absolute inset-0 h-full w-full object-cover transition-transform duration-700 group-hover:scale-105">
+                        <div class="absolute inset-0 bg-gradient-to-t from-black/86 via-black/20 to-transparent"></div>
+                        <div class="absolute bottom-0 left-0 right-0 p-5">
+                            <p class="text-xs font-extrabold uppercase tracking-[0.14em] text-holiday-light">Pantai</p>
+                            <h3 class="mt-2 text-2xl font-extrabold">Pantai Boom</h3>
+                            <p class="mt-2 text-sm text-white/72">Sunrise, dermaga, dan angin laut kota.</p>
+                        </div>
+                    </a>
+                    <a href="detail.html" class="group relative min-h-[250px] overflow-hidden rounded-[1.5rem] bg-ink text-white">
+                        <img src="img/Tarian_Gandrung_sewu_03 1.png" alt="Gandrung Sewu" class="absolute inset-0 h-full w-full object-cover transition-transform duration-700 group-hover:scale-105">
+                        <div class="absolute inset-0 bg-gradient-to-t from-black/86 via-black/20 to-transparent"></div>
+                        <div class="absolute bottom-0 left-0 right-0 p-5">
+                            <p class="text-xs font-extrabold uppercase tracking-[0.14em] text-holiday-light">Festival</p>
+                            <h3 class="mt-2 text-2xl font-extrabold">Gandrung Sewu</h3>
+                            <p class="mt-2 text-sm text-white/72">Ribuan penari dan energi budaya pesisir.</p>
+                        </div>
+                    </a>
+                </div>
+            </div>
         </div>
     </section>
 
     <!-- SECTION PAKET TRIP -->
-    <section id="paket" class="py-16 relative gsap-section overflow-hidden">
-        <div class="max-w-7xl mx-auto px-6 md:px-10 relative">
-            <div class="flex justify-between items-end mb-10">
+    <section id="paket" class="py-20 relative gsap-section overflow-hidden">
+        <div class="section-shell relative">
+            <div class="flex justify-between items-end mb-10 gap-6">
                 <div class="gsap-item text-left w-auto">
-                    <span class="text-holiday font-extrabold tracking-wider text-sm uppercase">Penawaran</span>
-                    <h2 class="text-3xl font-extrabold text-gray-900 mt-2">Paket Trip Populer</h2>
+                    <span class="eyebrow">Penawaran</span>
+                    <h2 class="text-4xl md:text-5xl font-extrabold text-ink mt-3 leading-tight">Paket yang paling sering dipesan.</h2>
                 </div>
                 <!-- Tombol Navigasi sekarang juga muncul di Mobile -->
                 <div class="gsap-item flex gap-2">
-                    <button id="btn-prev-paket" class="w-10 h-10 rounded-full bg-white shadow-md flex items-center justify-center text-gray-600 hover:text-white hover:bg-holiday transition cursor-pointer"><i class="bi bi-chevron-left"></i></button>
-                    <button id="btn-next-paket" class="w-10 h-10 rounded-full bg-white shadow-md flex items-center justify-center text-gray-600 hover:text-white hover:bg-holiday transition cursor-pointer"><i class="bi bi-chevron-right"></i></button>
+                    <button id="btn-prev-paket" class="w-10 h-10 rounded-full bg-white shadow-md flex items-center justify-center text-gray-600 hover:text-white hover:bg-holiday transition cursor-pointer border border-black/10"><i class="bi bi-chevron-left"></i></button>
+                    <button id="btn-next-paket" class="w-10 h-10 rounded-full bg-white shadow-md flex items-center justify-center text-gray-600 hover:text-white hover:bg-holiday transition cursor-pointer border border-black/10"><i class="bi bi-chevron-right"></i></button>
                 </div>
             </div>
 
             <!-- Tambahan efek pada class card: slider-card-native -->
             <div id="paket-slider" class="gsap-item flex overflow-x-auto gap-4 md:gap-6 pb-6 pt-2 snap-x snap-mandatory no-scrollbar -mx-6 px-6 md:mx-0 md:px-0 md:justify-start items-stretch w-auto smooth-scroll-x relative">
                 
-                <div class="slider-card-native w-full md:w-[340px] flex-shrink-0 bg-white rounded-3xl shadow-lg border border-gray-200/60 overflow-hidden snap-center group flex flex-col">
+                <div class="slider-card-native w-full md:w-[340px] flex-shrink-0 surface-card rounded-[1.5rem] overflow-hidden snap-center group flex flex-col">
                     <div class="relative w-full h-52 overflow-hidden bg-gray-200 flex-shrink-0">
                         <img src="img/unsplash_M8drGBgFNZE.png" alt="Trip 1" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110">
                         <div class="absolute top-4 left-4 bg-white/90 backdrop-blur text-gray-900 text-xs font-extrabold px-3 py-1.5 rounded-full flex items-center gap-1 shadow">
@@ -347,9 +389,9 @@
                         </div>
                         <p class="text-sm text-gray-600 mb-6 line-clamp-2">Menikmati keindahan alam secara langsung dengan rute menantang yang memacu adrenalin ..</p>
                         <div class="mt-auto">
-                            <div class="bg-orange-50/80 rounded-2xl p-4 mb-5 border border-orange-100">
-                                <p class="text-xs text-orange-600/80 font-bold mb-1 uppercase tracking-wider">Mulai dari</p>
-                                <p class="text-xl font-extrabold text-orange-600">Rp 1.250.000</p>
+                            <div class="bg-holiday-light/35 rounded-2xl p-4 mb-5 border border-holiday/10">
+                                <p class="text-xs text-holiday-dark/80 font-bold mb-1 uppercase tracking-wider">Mulai dari</p>
+                                <p class="text-xl font-extrabold text-holiday-dark">Rp 1.250.000</p>
                             </div>
                             <div class="flex gap-3">
                                 <button onclick="window.location.href='detail.html'" class="flex-1 py-3 rounded-xl border border-gray-200 text-gray-700 font-extrabold hover:bg-gray-50 transition">Detail</button>
@@ -359,7 +401,7 @@
                     </div>
                 </div>
 
-                <div class="slider-card-native w-full md:w-[340px] flex-shrink-0 bg-white rounded-3xl shadow-lg border border-gray-200/60 overflow-hidden snap-center group flex flex-col">
+                <div class="slider-card-native w-full md:w-[340px] flex-shrink-0 surface-card rounded-[1.5rem] overflow-hidden snap-center group flex flex-col">
                     <div class="relative w-full h-52 overflow-hidden bg-gray-200 flex-shrink-0">
                         <img src="img/unsplash_Souw06F1irM.png" alt="Trip 2" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110">
                         <div class="absolute top-4 left-4 bg-white/90 backdrop-blur text-gray-900 text-xs font-extrabold px-3 py-1.5 rounded-full flex items-center gap-1 shadow">
@@ -377,9 +419,9 @@
                         </div>
                         <p class="text-sm text-gray-600 mb-6 line-clamp-2">Perjalanan singkat melintasi kawasan asri dengan pemandangan pegunungan yang menyejukkan ..</p>
                         <div class="mt-auto">
-                            <div class="bg-orange-50/80 rounded-2xl p-4 mb-5 border border-orange-100">
-                                <p class="text-xs text-orange-600/80 font-bold mb-1 uppercase tracking-wider">Mulai dari</p>
-                                <p class="text-xl font-extrabold text-orange-600">Rp 450.000</p>
+                            <div class="bg-holiday-light/35 rounded-2xl p-4 mb-5 border border-holiday/10">
+                                <p class="text-xs text-holiday-dark/80 font-bold mb-1 uppercase tracking-wider">Mulai dari</p>
+                                <p class="text-xl font-extrabold text-holiday-dark">Rp 450.000</p>
                             </div>
                             <div class="flex gap-3">
                                 <button onclick="window.location.href='detail.html'" class="flex-1 py-3 rounded-xl border border-gray-200 text-gray-700 font-extrabold hover:bg-gray-50 transition">Detail</button>
@@ -389,7 +431,7 @@
                     </div>
                 </div>
 
-                <div class="slider-card-native w-full md:w-[340px] flex-shrink-0 bg-white rounded-3xl shadow-lg border border-gray-200/60 overflow-hidden snap-center group flex flex-col">
+                <div class="slider-card-native w-full md:w-[340px] flex-shrink-0 surface-card rounded-[1.5rem] overflow-hidden snap-center group flex flex-col">
                     <div class="relative w-full h-52 overflow-hidden bg-gray-200 flex-shrink-0">
                         <img src="img/gandrung1.png" alt="Trip 3" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110 object-top">
                         <div class="absolute top-4 left-4 bg-white/90 backdrop-blur text-gray-900 text-xs font-extrabold px-3 py-1.5 rounded-full flex items-center gap-1 shadow">
@@ -407,9 +449,9 @@
                         </div>
                         <p class="text-sm text-gray-600 mb-6 line-clamp-2">Kenali lebih dekat kearifan lokal melalui tarian dan tradisi masyarakat setempat ..</p>
                         <div class="mt-auto">
-                            <div class="bg-orange-50/80 rounded-2xl p-4 mb-5 border border-orange-100">
-                                <p class="text-xs text-orange-600/80 font-bold mb-1 uppercase tracking-wider">Mulai dari</p>
-                                <p class="text-xl font-extrabold text-orange-600">Rp 850.000</p>
+                            <div class="bg-holiday-light/35 rounded-2xl p-4 mb-5 border border-holiday/10">
+                                <p class="text-xs text-holiday-dark/80 font-bold mb-1 uppercase tracking-wider">Mulai dari</p>
+                                <p class="text-xl font-extrabold text-holiday-dark">Rp 850.000</p>
                             </div>
                             <div class="flex gap-3">
                                 <button onclick="window.location.href='detail.html'" class="flex-1 py-3 rounded-xl border border-gray-200 text-gray-700 font-extrabold hover:bg-gray-50 transition">Detail</button>
@@ -419,7 +461,7 @@
                     </div>
                 </div>
 
-                 <div class="slider-card-native w-full md:w-[340px] flex-shrink-0 bg-white rounded-3xl shadow-lg border border-gray-200/60 overflow-hidden snap-center group flex flex-col">
+                 <div class="slider-card-native w-full md:w-[340px] flex-shrink-0 surface-card rounded-[1.5rem] overflow-hidden snap-center group flex flex-col">
                     <div class="relative w-full h-52 overflow-hidden bg-gray-200 flex-shrink-0">
                         <img src="img/unsplash_M8drGBgFNZE.png" alt="Trip 1" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110">
                         <div class="absolute top-4 left-4 bg-white/90 backdrop-blur text-gray-900 text-xs font-extrabold px-3 py-1.5 rounded-full flex items-center gap-1 shadow">
@@ -437,9 +479,9 @@
                         </div>
                         <p class="text-sm text-gray-600 mb-6 line-clamp-2">Menikmati keindahan alam secara langsung dengan rute menantang yang memacu adrenalin ..</p>
                         <div class="mt-auto">
-                            <div class="bg-orange-50/80 rounded-2xl p-4 mb-5 border border-orange-100">
-                                <p class="text-xs text-orange-600/80 font-bold mb-1 uppercase tracking-wider">Mulai dari</p>
-                                <p class="text-xl font-extrabold text-orange-600">Rp 1.250.000</p>
+                            <div class="bg-holiday-light/35 rounded-2xl p-4 mb-5 border border-holiday/10">
+                                <p class="text-xs text-holiday-dark/80 font-bold mb-1 uppercase tracking-wider">Mulai dari</p>
+                                <p class="text-xl font-extrabold text-holiday-dark">Rp 1.250.000</p>
                             </div>
                             <div class="flex gap-3">
                                 <button onclick="window.location.href='detail.html'" class="flex-1 py-3 rounded-xl border border-gray-200 text-gray-700 font-extrabold hover:bg-gray-50 transition">Detail</button>
@@ -449,7 +491,7 @@
                     </div>
                 </div>
 
-                <div class="slider-card-native w-full md:w-[340px] flex-shrink-0 bg-white rounded-3xl shadow-lg border border-gray-200/60 overflow-hidden snap-center group flex flex-col">
+                <div class="slider-card-native w-full md:w-[340px] flex-shrink-0 surface-card rounded-[1.5rem] overflow-hidden snap-center group flex flex-col">
                     <div class="relative w-full h-52 overflow-hidden bg-gray-200 flex-shrink-0">
                         <img src="img/unsplash_Souw06F1irM.png" alt="Trip 2" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110">
                         <div class="absolute top-4 left-4 bg-white/90 backdrop-blur text-gray-900 text-xs font-extrabold px-3 py-1.5 rounded-full flex items-center gap-1 shadow">
@@ -467,9 +509,9 @@
                         </div>
                         <p class="text-sm text-gray-600 mb-6 line-clamp-2">Perjalanan singkat melintasi kawasan asri dengan pemandangan pegunungan yang menyejukkan ..</p>
                         <div class="mt-auto">
-                            <div class="bg-orange-50/80 rounded-2xl p-4 mb-5 border border-orange-100">
-                                <p class="text-xs text-orange-600/80 font-bold mb-1 uppercase tracking-wider">Mulai dari</p>
-                                <p class="text-xl font-extrabold text-orange-600">Rp 450.000</p>
+                            <div class="bg-holiday-light/35 rounded-2xl p-4 mb-5 border border-holiday/10">
+                                <p class="text-xs text-holiday-dark/80 font-bold mb-1 uppercase tracking-wider">Mulai dari</p>
+                                <p class="text-xl font-extrabold text-holiday-dark">Rp 450.000</p>
                             </div>
                             <div class="flex gap-3">
                                 <button onclick="window.location.href='detail.html'" class="flex-1 py-3 rounded-xl border border-gray-200 text-gray-700 font-extrabold hover:bg-gray-50 transition">Detail</button>
@@ -479,7 +521,7 @@
                     </div>
                 </div>
 
-                <div class="slider-card-native w-full md:w-[340px] flex-shrink-0 bg-white rounded-3xl shadow-lg border border-gray-200/60 overflow-hidden snap-center group flex flex-col">
+                <div class="slider-card-native w-full md:w-[340px] flex-shrink-0 surface-card rounded-[1.5rem] overflow-hidden snap-center group flex flex-col">
                     <div class="relative w-full h-52 overflow-hidden bg-gray-200 flex-shrink-0">
                         <img src="img/gandrung1.png" alt="Trip 3" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110 object-top">
                         <div class="absolute top-4 left-4 bg-white/90 backdrop-blur text-gray-900 text-xs font-extrabold px-3 py-1.5 rounded-full flex items-center gap-1 shadow">
@@ -497,9 +539,9 @@
                         </div>
                         <p class="text-sm text-gray-600 mb-6 line-clamp-2">Kenali lebih dekat kearifan lokal melalui tarian dan tradisi masyarakat setempat ..</p>
                         <div class="mt-auto">
-                            <div class="bg-orange-50/80 rounded-2xl p-4 mb-5 border border-orange-100">
-                                <p class="text-xs text-orange-600/80 font-bold mb-1 uppercase tracking-wider">Mulai dari</p>
-                                <p class="text-xl font-extrabold text-orange-600">Rp 850.000</p>
+                            <div class="bg-holiday-light/35 rounded-2xl p-4 mb-5 border border-holiday/10">
+                                <p class="text-xs text-holiday-dark/80 font-bold mb-1 uppercase tracking-wider">Mulai dari</p>
+                                <p class="text-xl font-extrabold text-holiday-dark">Rp 850.000</p>
                             </div>
                             <div class="flex gap-3">
                                 <button onclick="window.location.href='detail.html'" class="flex-1 py-3 rounded-xl border border-gray-200 text-gray-700 font-extrabold hover:bg-gray-50 transition">Detail</button>
@@ -514,24 +556,24 @@
         </div>
     </section>
 
-    <section class="py-16 bg-holiday text-white relative overflow-hidden gsap-section">
-        <div class="max-w-7xl mx-auto px-6 md:px-10 relative z-10">
-            <div class="grid grid-cols-2 md:grid-cols-4 gap-y-10 gap-x-6 text-center divide-y-0 md:divide-x divide-white/20">
+    <section class="py-16 bg-ink text-white relative overflow-hidden gsap-section">
+        <div class="section-shell relative z-10">
+            <div class="grid grid-cols-2 md:grid-cols-4 gap-y-10 gap-x-6 text-left md:text-center divide-y-0 md:divide-x divide-white/12">
                 <div class="px-4 gsap-item flex flex-col justify-center">
                     <h3 class="text-4xl md:text-5xl font-extrabold mb-2 tracking-tight">12K+</h3>
-                    <p class="text-sm text-holiday-light font-bold uppercase tracking-widest">Pengunjung</p>
+                    <p class="text-sm text-white/58 font-bold uppercase tracking-widest">Pengunjung</p>
                 </div>
                 <div class="px-4 gsap-item flex flex-col justify-center border-l border-white/20 md:border-l-0">
                     <h3 class="text-4xl md:text-5xl font-extrabold mb-2 tracking-tight">25+</h3>
-                    <p class="text-sm text-holiday-light font-bold uppercase tracking-widest">Destinasi</p>
+                    <p class="text-sm text-white/58 font-bold uppercase tracking-widest">Destinasi</p>
                 </div>
                 <div class="px-4 gsap-item flex flex-col justify-center">
                     <h3 class="text-4xl md:text-5xl font-extrabold mb-2 tracking-tight">50+</h3>
-                    <p class="text-sm text-holiday-light font-bold uppercase tracking-widest">Rute Trip</p>
+                    <p class="text-sm text-white/58 font-bold uppercase tracking-widest">Rute Trip</p>
                 </div>
                 <div class="px-4 gsap-item flex flex-col justify-center border-l border-white/20 md:border-l-0">
                     <h3 class="text-4xl md:text-5xl font-extrabold mb-2 tracking-tight">120+</h3>
-                    <p class="text-sm text-holiday-light font-bold uppercase tracking-widest">Jeep Armada</p>
+                    <p class="text-sm text-white/58 font-bold uppercase tracking-widest">Jeep Armada</p>
                 </div>
             </div>
         </div>
@@ -539,24 +581,24 @@
 
     <!-- SECTION ARMADA -->
     <section id="armada" class="py-24 bg-base relative gsap-section overflow-hidden">
-        <div class="max-w-7xl mx-auto px-6 md:px-10 relative">
-            <div class="flex justify-between items-end mb-10">
+        <div class="section-shell relative">
+            <div class="flex justify-between items-end mb-10 gap-6">
                 <div class="gsap-item text-left w-auto">
-                    <span class="text-holiday font-extrabold tracking-wider text-sm uppercase">Kendaraan Kami</span>
-                    <h2 class="text-3xl md:text-4xl font-extrabold text-gray-900 mt-2 mb-3">Armada Tangguh</h2>
+                    <span class="eyebrow">Kendaraan kami</span>
+                    <h2 class="text-4xl md:text-5xl font-extrabold text-ink mt-3 mb-4 leading-tight">Armada tangguh, tampil bersih.</h2>
                     <p class="text-gray-500 max-w-lg font-medium">Kondisi mesin prima dan terawat, siap memberikan keamanan serta kenyamanan.</p>
                 </div>
                 <!-- Panah juga ditambahkan untuk Armada -->
                 <div class="gsap-item flex gap-2">
-                    <button id="btn-prev-armada" class="w-10 h-10 rounded-full bg-white shadow-md flex items-center justify-center text-gray-600 hover:text-white hover:bg-holiday transition cursor-pointer"><i class="bi bi-chevron-left"></i></button>
-                    <button id="btn-next-armada" class="w-10 h-10 rounded-full bg-white shadow-md flex items-center justify-center text-gray-600 hover:text-white hover:bg-holiday transition cursor-pointer"><i class="bi bi-chevron-right"></i></button>
+                    <button id="btn-prev-armada" class="w-10 h-10 rounded-full bg-white shadow-md flex items-center justify-center text-gray-600 hover:text-white hover:bg-holiday transition cursor-pointer border border-black/10"><i class="bi bi-chevron-left"></i></button>
+                    <button id="btn-next-armada" class="w-10 h-10 rounded-full bg-white shadow-md flex items-center justify-center text-gray-600 hover:text-white hover:bg-holiday transition cursor-pointer border border-black/10"><i class="bi bi-chevron-right"></i></button>
                 </div>
             </div>
 
             <!-- Tambahan efek pada class card: slider-card-native -->
             <div id="slider-armada" class="gsap-item flex overflow-x-auto gap-4 md:gap-8 pb-6 snap-x snap-mandatory no-scrollbar -mx-6 px-6 md:mx-0 md:px-0 md:justify-start items-stretch w-auto smooth-scroll-x relative">
                 
-                <div class="slider-card-native w-full md:w-[360px] flex-shrink-0 bg-white rounded-[2rem] p-6 flex flex-col items-center snap-center group border border-gray-200 hover:border-holiday/50 transition-all shadow-sm">
+                <div class="slider-card-native w-full md:w-[360px] flex-shrink-0 surface-card rounded-[1.5rem] p-5 flex flex-col items-center snap-center group hover:border-holiday/50 transition-all">
                     <img src="img/unsplash_M8drGBgFNZE.png" alt="Kendaraan 1" class="w-full object-cover h-48 md:h-56 mb-6 rounded-2xl transition-transform duration-500 group-hover:scale-105 relative z-10 flex-shrink-0">
                     <div class="relative z-10 text-center w-full flex-grow flex flex-col justify-between">
                         <div>
@@ -567,7 +609,7 @@
                     </div>
                 </div>
 
-                <div class="slider-card-native w-full md:w-[360px] flex-shrink-0 bg-white rounded-[2rem] p-6 flex flex-col items-center snap-center group border border-gray-200 hover:border-holiday/50 transition-all shadow-sm">
+                <div class="slider-card-native w-full md:w-[360px] flex-shrink-0 surface-card rounded-[1.5rem] p-5 flex flex-col items-center snap-center group hover:border-holiday/50 transition-all">
                     <img src="img/unsplash_Souw06F1irM.png" alt="Kendaraan 2" class="w-full object-cover h-48 md:h-56 mb-6 rounded-2xl transition-transform duration-500 group-hover:scale-105 relative z-10 flex-shrink-0">
                     <div class="relative z-10 text-center w-full flex-grow flex flex-col justify-between">
                         <div>
@@ -578,7 +620,7 @@
                     </div>
                 </div>
                 
-                <div class="slider-card-native w-full md:w-[360px] flex-shrink-0 bg-white rounded-[2rem] p-6 flex flex-col items-center snap-center group border border-gray-200 hover:border-holiday/50 transition-all shadow-sm">
+                <div class="slider-card-native w-full md:w-[360px] flex-shrink-0 surface-card rounded-[1.5rem] p-5 flex flex-col items-center snap-center group hover:border-holiday/50 transition-all">
                     <img src="img/jembatan.png" alt="Kendaraan 3" class="w-full object-cover h-48 md:h-56 mb-6 rounded-2xl transition-transform duration-500 group-hover:scale-105 relative z-10 flex-shrink-0">
                     <div class="relative z-10 text-center w-full flex-grow flex flex-col justify-between">
                         <div>
@@ -589,7 +631,7 @@
                     </div>
                 </div>
 
-                <div class="slider-card-native w-full md:w-[360px] flex-shrink-0 bg-white rounded-[2rem] p-6 flex flex-col items-center snap-center group border border-gray-200 hover:border-holiday/50 transition-all shadow-sm">
+                <div class="slider-card-native w-full md:w-[360px] flex-shrink-0 surface-card rounded-[1.5rem] p-5 flex flex-col items-center snap-center group hover:border-holiday/50 transition-all">
                     <img src="img/unsplash_M8drGBgFNZE.png" alt="Kendaraan 1" class="w-full object-cover h-48 md:h-56 mb-6 rounded-2xl transition-transform duration-500 group-hover:scale-105 relative z-10 flex-shrink-0">
                     <div class="relative z-10 text-center w-full flex-grow flex flex-col justify-between">
                         <div>
@@ -600,7 +642,7 @@
                     </div>
                 </div>
 
-                <div class="slider-card-native w-full md:w-[360px] flex-shrink-0 bg-white rounded-[2rem] p-6 flex flex-col items-center snap-center group border border-gray-200 hover:border-holiday/50 transition-all shadow-sm">
+                <div class="slider-card-native w-full md:w-[360px] flex-shrink-0 surface-card rounded-[1.5rem] p-5 flex flex-col items-center snap-center group hover:border-holiday/50 transition-all">
                     <img src="img/unsplash_Souw06F1irM.png" alt="Kendaraan 2" class="w-full object-cover h-48 md:h-56 mb-6 rounded-2xl transition-transform duration-500 group-hover:scale-105 relative z-10 flex-shrink-0">
                     <div class="relative z-10 text-center w-full flex-grow flex flex-col justify-between">
                         <div>
@@ -611,7 +653,7 @@
                     </div>
                 </div>
                 
-                <div class="slider-card-native w-full md:w-[360px] flex-shrink-0 bg-white rounded-[2rem] p-6 flex flex-col items-center snap-center group border border-gray-200 hover:border-holiday/50 transition-all shadow-sm">
+                <div class="slider-card-native w-full md:w-[360px] flex-shrink-0 surface-card rounded-[1.5rem] p-5 flex flex-col items-center snap-center group hover:border-holiday/50 transition-all">
                     <img src="img/jembatan.png" alt="Kendaraan 3" class="w-full object-cover h-48 md:h-56 mb-6 rounded-2xl transition-transform duration-500 group-hover:scale-105 relative z-10 flex-shrink-0">
                     <div class="relative z-10 text-center w-full flex-grow flex flex-col justify-between">
                         <div>
@@ -629,16 +671,16 @@
     </section>
 
     <section class="py-20 bg-white overflow-hidden relative gsap-section">
-        <div class="text-center mb-12 px-6">
-            <span class="gsap-item text-holiday font-extrabold tracking-wider text-sm uppercase">Ulasan</span>
-            <h2 class="gsap-item text-3xl md:text-4xl font-extrabold text-gray-900 mt-2 mb-3">Kata Mereka</h2>
-            <p class="gsap-item text-gray-500 font-medium">Ribuan petualang telah membuktikan kualitas layanan kami</p>
+        <div class="section-shell mb-12">
+            <span class="gsap-item eyebrow">Ulasan</span>
+            <h2 class="gsap-item text-4xl md:text-5xl font-extrabold text-ink mt-3 mb-4 leading-tight">Cerita setelah turun dari jeep.</h2>
+            <p class="gsap-item text-gray-500 font-medium max-w-xl">Ribuan petualang telah membuktikan kualitas layanan kami lewat rute, driver, dan kendaraan yang siap jalan.</p>
         </div>
 
         <div class="gsap-item marquee-wrapper py-4">
             <div class="marquee-track">
                 <div class="flex gap-6 pr-6">
-                    <div class="w-[340px] flex-shrink-0 bg-base p-8 rounded-3xl border border-gray-200">
+                    <div class="w-[340px] flex-shrink-0 bg-base p-8 rounded-[1.5rem] border border-gray-200">
                         <div class="flex text-yellow-400 text-sm mb-4"><i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i></div>
                         <p class="text-gray-700 mb-6 text-sm leading-relaxed font-semibold">"Sangat terkesan dengan pelayanan JB. Driver ramah dan paham betul kondisi jalanan. Rute Hutan De Djawatan jadi super seru!"</p>
                         <div class="flex items-center gap-4">
@@ -647,27 +689,27 @@
                         </div>
                     </div>
                     
-                    <div class="w-[340px] flex-shrink-0 bg-base p-8 rounded-3xl border border-gray-200">
+                    <div class="w-[340px] flex-shrink-0 bg-base p-8 rounded-[1.5rem] border border-gray-200">
                         <div class="flex text-yellow-400 text-sm mb-4"><i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i><i class="bi bi-star-half"></i></div>
                         <p class="text-gray-700 mb-6 text-sm leading-relaxed font-semibold">"Pengalaman kultural di Desa Kemiren sangat otentik. Jeep yang dipakai bersih dan mesinnya halus. Sangat direkomendasikan!"</p>
                         <div class="flex items-center gap-4">
-                            <div class="w-12 h-12 rounded-full bg-gray-800 text-white flex items-center justify-center font-bold">RM</div>
+                            <div class="w-12 h-12 rounded-full bg-ink text-white flex items-center justify-center font-bold">RM</div>
                             <div><h4 class="font-extrabold text-sm text-gray-900">Rina Melati</h4><p class="text-xs text-gray-500 font-medium">Budaya Trip</p></div>
                         </div>
                     </div>
 
-                    <div class="w-[340px] flex-shrink-0 bg-base p-8 rounded-3xl border border-gray-200">
+                    <div class="w-[340px] flex-shrink-0 bg-base p-8 rounded-[1.5rem] border border-gray-200">
                         <div class="flex text-yellow-400 text-sm mb-4"><i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i></div>
                         <p class="text-gray-700 mb-6 text-sm leading-relaxed font-semibold">"Tripnya sangat on-time dan profesional. Kendaraannya benar-benar tangguh melintasi jalanan berat tanpa hambatan sama sekali!"</p>
                         <div class="flex items-center gap-4">
-                            <div class="w-12 h-12 rounded-full bg-blue-600 text-white flex items-center justify-center font-bold">DK</div>
+                            <div class="w-12 h-12 rounded-full bg-holiday-dark text-white flex items-center justify-center font-bold">DK</div>
                             <div><h4 class="font-extrabold text-sm text-gray-900">Dimas Kusuma</h4><p class="text-xs text-gray-500 font-medium">Open Trip</p></div>
                         </div>
                     </div>
                 </div>
 
                 <div class="flex gap-6 pr-6">
-                    <div class="w-[340px] flex-shrink-0 bg-base p-8 rounded-3xl border border-gray-200">
+                    <div class="w-[340px] flex-shrink-0 bg-base p-8 rounded-[1.5rem] border border-gray-200">
                         <div class="flex text-yellow-400 text-sm mb-4"><i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i></div>
                         <p class="text-gray-700 mb-6 text-sm leading-relaxed font-semibold">"Sangat terkesan dengan pelayanan JB. Driver ramah dan paham betul kondisi jalanan. Rute Hutan De Djawatan jadi super seru!"</p>
                         <div class="flex items-center gap-4">
@@ -676,20 +718,20 @@
                         </div>
                     </div>
                     
-                    <div class="w-[340px] flex-shrink-0 bg-base p-8 rounded-3xl border border-gray-200">
+                    <div class="w-[340px] flex-shrink-0 bg-base p-8 rounded-[1.5rem] border border-gray-200">
                         <div class="flex text-yellow-400 text-sm mb-4"><i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i><i class="bi bi-star-half"></i></div>
                         <p class="text-gray-700 mb-6 text-sm leading-relaxed font-semibold">"Pengalaman kultural di Desa Kemiren sangat otentik. Jeep yang dipakai bersih dan mesinnya halus. Sangat direkomendasikan!"</p>
                         <div class="flex items-center gap-4">
-                            <div class="w-12 h-12 rounded-full bg-gray-800 text-white flex items-center justify-center font-bold">RM</div>
+                            <div class="w-12 h-12 rounded-full bg-ink text-white flex items-center justify-center font-bold">RM</div>
                             <div><h4 class="font-extrabold text-sm text-gray-900">Rina Melati</h4><p class="text-xs text-gray-500 font-medium">Budaya Trip</p></div>
                         </div>
                     </div>
 
-                    <div class="w-[340px] flex-shrink-0 bg-base p-8 rounded-3xl border border-gray-200">
+                    <div class="w-[340px] flex-shrink-0 bg-base p-8 rounded-[1.5rem] border border-gray-200">
                         <div class="flex text-yellow-400 text-sm mb-4"><i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i></div>
                         <p class="text-gray-700 mb-6 text-sm leading-relaxed font-semibold">"Tripnya sangat on-time dan profesional. Kendaraannya benar-benar tangguh melintasi jalanan berat tanpa hambatan sama sekali!"</p>
                         <div class="flex items-center gap-4">
-                            <div class="w-12 h-12 rounded-full bg-blue-600 text-white flex items-center justify-center font-bold">DK</div>
+                            <div class="w-12 h-12 rounded-full bg-holiday-dark text-white flex items-center justify-center font-bold">DK</div>
                             <div><h4 class="font-extrabold text-sm text-gray-900">Dimas Kusuma</h4><p class="text-xs text-gray-500 font-medium">Open Trip</p></div>
                         </div>
                     </div>
@@ -698,11 +740,11 @@
         </div>
     </section>
 
-    <footer class="bg-gray-900 text-white pt-20 pb-8 border-t-[6px] border-holiday">
-        <div class="max-w-7xl mx-auto px-6 md:px-10">
+    <footer class="bg-ink text-white pt-20 pb-8 border-t-[6px] border-holiday">
+        <div class="section-shell">
             <div class="grid grid-cols-1 md:grid-cols-12 gap-10 md:gap-8 mb-16">
                 <div class="md:col-span-5 pr-0 md:pr-10">
-                    <a href="#" class="text-3xl font-extrabold tracking-wide flex items-center gap-2 mb-6 text-white">
+                    <a href="index.html" class="text-3xl font-extrabold tracking-wide flex items-center gap-2 mb-6 text-white">
                         <div class="w-10 h-10 bg-holiday rounded-xl flex items-center justify-center shadow-lg">
                             <i class="bi bi-jeep text-white text-xl"></i>
                         </div> 
@@ -712,30 +754,30 @@
                         Platform penyedia layanan penyewaan Jeep wisata premium. Berkomitmen memberikan pengalaman petualangan lokal yang aman, nyaman, dan tak terlupakan.
                     </p>
                     <div class="flex gap-4">
-                        <a href="#" class="w-10 h-10 rounded-full bg-white/10 flex items-center justify-center text-white hover:bg-holiday hover:scale-110 transition-all"><i class="bi bi-instagram"></i></a>
-                        <a href="#" class="w-10 h-10 rounded-full bg-white/10 flex items-center justify-center text-white hover:bg-holiday hover:scale-110 transition-all"><i class="bi bi-facebook"></i></a>
+                        <a href="news.html" aria-label="Instagram Jadi Berangkat" class="w-10 h-10 rounded-full bg-white/10 flex items-center justify-center text-white hover:bg-holiday hover:scale-110 transition-all"><i class="bi bi-instagram"></i></a>
+                        <a href="news.html" aria-label="Facebook Jadi Berangkat" class="w-10 h-10 rounded-full bg-white/10 flex items-center justify-center text-white hover:bg-holiday hover:scale-110 transition-all"><i class="bi bi-facebook"></i></a>
                     </div>
                 </div>
                 <div class="md:col-span-3 md:col-start-7">
                     <h4 class="text-lg font-extrabold mb-6 text-white">Eksplorasi</h4>
                     <ul class="space-y-4 text-sm text-gray-400 font-bold">
-                        <li><a href="#" class="hover:text-holiday transition-colors">Tentang Kami</a></li>
-                        <li><a href="#" class="hover:text-holiday transition-colors">Destinasi Populer</a></li>
-                        <li><a href="#" class="hover:text-holiday transition-colors">Paket Promo</a></li>
+                        <li><a href="#destinasi" class="hover:text-holiday transition-colors">Tentang Kami</a></li>
+                        <li><a href="#destinasi" class="hover:text-holiday transition-colors">Destinasi Populer</a></li>
+                        <li><a href="#paket" class="hover:text-holiday transition-colors">Paket Promo</a></li>
                     </ul>
                 </div>
                 <div class="md:col-span-2">
                     <h4 class="text-lg font-extrabold mb-6 text-white">Dukungan</h4>
                     <ul class="space-y-4 text-sm text-gray-400 font-bold">
-                        <li><a href="#" class="hover:text-holiday transition-colors">Bantuan</a></li>
-                        <li><a href="#" class="hover:text-holiday transition-colors">Syarat Ketentuan</a></li>
-                        <li><a href="#" class="hover:text-holiday transition-colors">Kontak</a></li>
+                        <li><a href="detail.html" class="hover:text-holiday transition-colors">Bantuan</a></li>
+                        <li><a href="detail.html" class="hover:text-holiday transition-colors">Syarat Ketentuan</a></li>
+                        <li><a href="detail.html" class="hover:text-holiday transition-colors">Kontak</a></li>
                     </ul>
                 </div>
             </div>
             <div class="text-center md:text-left flex flex-col md:flex-row justify-between items-center text-sm text-gray-500 pt-8 border-t border-gray-800 font-medium">
                 <p>&copy; 2026 Jadi Berangkat. All rights reserved.</p>
-                <p class="mt-2 md:mt-0">Designed with <i class="bi bi-heart-fill text-holiday mx-1"></i> for Adventures</p>
+                <p class="mt-2 md:mt-0">Jeep trip Banyuwangi, siap dipesan online.</p>
             </div>
         </div>
     </footer>
@@ -761,19 +803,11 @@
             if (window.scrollY > 50) {
                 headerWrapper.classList.add('top-3');
                 headerWrapper.classList.remove('top-0');
-                navContainer.classList.remove('w-full', 'px-6', 'md:px-10', 'text-white', 'border-transparent');
-                navContainer.classList.add('w-[95%]', 'md:w-[85%]', 'rounded-[10pc]', 'bg-white/95', 'backdrop-blur-xl', 'shadow-xl', 'text-gray-900', 'px-6', 'md:px-8', 'border-gray-200');
-                navContainer.querySelector('.bi-jeep').classList.remove('text-holiday');
-                navContainer.querySelector('.bi-jeep').classList.add('text-holiday-dark');
-                document.getElementById('open-menu-btn').classList.replace('text-white', 'text-gray-900');
+                navContainer.classList.add('shadow-[0_18px_55px_rgba(0,0,0,0.2)]');
             } else {
                 headerWrapper.classList.remove('top-3');
                 headerWrapper.classList.add('top-0');
-                navContainer.classList.add('w-full', 'px-6', 'md:px-10', 'text-white', 'border-transparent');
-                navContainer.classList.remove('w-[95%]', 'md:w-[85%]', 'rounded-[10pc]', 'bg-white/95', 'backdrop-blur-xl', 'shadow-xl', 'text-gray-900', 'px-6', 'md:px-8', 'border-gray-200');
-                navContainer.querySelector('.bi-jeep').classList.add('text-holiday');
-                navContainer.querySelector('.bi-jeep').classList.remove('text-holiday-dark');
-                document.getElementById('open-menu-btn').classList.replace('text-gray-900', 'text-white');
+                navContainer.classList.remove('shadow-[0_18px_55px_rgba(0,0,0,0.2)]');
             }
         });
 
