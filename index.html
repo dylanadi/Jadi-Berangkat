@@ -5,22 +5,17 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Jadi Berangkat - Premium Jeep Booking</title>
     
-    <!-- Google Fonts: Plus Jakarta Sans -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:ital,wght@0,200..800;1,200..800&display=swap" rel="stylesheet">
     
-    <!-- Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
     
-    <!-- Bootstrap Icons -->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
     
-    <!-- GSAP & ScrollTrigger -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>
     
-    <!-- Custom Tailwind Configuration -->
     <script>
         tailwind.config = {
             theme: {
@@ -91,11 +86,13 @@
         
         /* Initial state for GSAP */
         .gsap-item { opacity: 0; visibility: hidden; }
+        
+        /* Smooth scrolling behavior specifically for slider container */
+        .smooth-scroll-x { scroll-behavior: smooth; }
     </style>
 </head>
 <body class="text-gray-800 overflow-x-hidden antialiased">
 
-    <!-- Mobile Sidebar Menu & Overlay -->
     <div id="menu-overlay" class="fixed inset-0 bg-black/60 z-[60] hidden opacity-0 backdrop-blur-sm"></div>
     <aside id="mobile-sidebar" class="fixed top-0 left-0 h-full w-[80%] max-w-sm bg-base shadow-2xl z-[70] p-8 flex flex-col transform -translate-x-full border-r border-gray-200">
         <div class="flex justify-between items-center mb-10">
@@ -113,11 +110,10 @@
             <a href="#armada" class="hover:text-holiday transition flex items-center gap-3"><i class="bi bi-truck"></i> Armada</a>
         </nav>
         <div class="mt-auto">
-            <a href="#" class="block w-full text-center bg-holiday text-white py-4 rounded-xl font-bold shadow-lg">Booking Sekarang</a>
+            <a href="https://laly.space" class="block w-full text-center bg-holiday text-white py-4 rounded-xl font-bold shadow-lg">Booking Sekarang</a>
         </div>
     </aside>
 
-    <!-- Header / Navbar -->
     <header id="header-wrapper" class="fixed w-full top-0 z-50 transition-all duration-700 ease-in-out py-4 flex justify-center">
         <div id="nav-container" class="w-full flex justify-between items-center px-6 md:px-10 py-4 transition-all duration-700 text-white border border-transparent">
             <a href="#" class="text-2xl font-extrabold tracking-wide flex items-center gap-2 drop-shadow-md">
@@ -132,8 +128,7 @@
             </nav>
 
             <div class="flex items-center gap-4">
-                <a href="#" class="hidden md:block bg-holiday hover:bg-holiday-dark text-white px-7 py-2.5 rounded-full transition shadow-lg font-bold">Masuk</a>
-                <!-- Mobile Burger Button -->
+                <a href="https://laly.space" class="hidden md:block bg-holiday hover:bg-holiday-dark text-white px-7 py-2.5 rounded-full transition shadow-lg font-bold">Masuk</a>
                 <button id="open-menu-btn" class="md:hidden w-11 h-11 flex items-center justify-center rounded-full bg-black/40 backdrop-blur-md text-white border border-white/20 hover:bg-holiday transition">
                     <i class="bi bi-list text-2xl"></i>
                 </button>
@@ -141,7 +136,6 @@
         </div>
     </header>
 
-    <!-- Hero Section -->
     <section class="relative h-[100svh] w-full overflow-hidden flex items-center justify-center">
         <video id="hero-video" class="absolute inset-0 w-full h-full object-cover" autoplay loop muted playsinline>
             <source src="hero.mp4" type="video/mp4">
@@ -150,7 +144,6 @@
         <div class="absolute inset-0 hero-gradient"></div>
 
         <div class="relative z-10 text-center text-white px-6 w-full max-w-5xl mx-auto flex flex-col items-center mt-12 gsap-section">
-           
             <h1 class="gsap-item text-4xl md:text-6xl lg:text-7xl font-extrabold mb-6 drop-shadow-2xl leading-tight">
                 Jelajahi Alam <br class="hidden md:block">
                 <span class="text-transparent bg-clip-text bg-gradient-to-r from-holiday-light to-holiday">Tanpa Batas</span>
@@ -159,8 +152,8 @@
                 Pesan Jeep eksklusif dengan mudah. Nikmati rute menantang, pemandangan memukau, dan pengalaman aman bersama profesional.
             </p>
             
-            <a href="#destinasi" class="gsap-item bg-holiday hover:bg-holiday-dark text-white px-8 py-4 rounded-full transition-all shadow-lg font-bold flex items-center gap-2 hover:-translate-y-1">
-                Mulai Petualangan <i class="bi bi-arrow-down"></i>
+            <a href="https://laly.space" class="gsap-item bg-holiday hover:bg-holiday-dark text-white px-8 py-4 rounded-full transition-all shadow-lg font-bold flex items-center gap-2 hover:-translate-y-1">
+                Mulai Petualangan <i class="bi bi-arrow-right"></i>
             </a>
         </div>
 
@@ -175,7 +168,6 @@
         </div>
     </section>
 
-    <!-- Destinasi Pilihan -->
     <section id="destinasi" class="pt-24 pb-16 px-4 overflow-hidden relative gsap-section">
         <div class="max-w-7xl mx-auto text-center mb-12">
             <span class="gsap-item text-holiday font-extrabold tracking-wider text-sm uppercase">Eksplorasi Lokal</span>
@@ -185,7 +177,6 @@
 
         <div class="gsap-item relative w-full h-[400px] md:h-[500px] flex justify-center items-center" id="carousel-container">
             
-            <!-- Card 1 -->
             <div class="carousel-card w-[260px] h-[360px] md:w-[350px] md:h-[480px] rounded-[2rem] overflow-hidden shadow-2xl bg-black border border-gray-700/50" data-index="0">
                 <img src="img/djawatan.png" alt="De Djawatan" class="absolute inset-0 w-full h-full object-cover transition-transform duration-700">
                 <div class="absolute inset-0 card-gradient"></div>
@@ -195,16 +186,15 @@
                         <div class="flex text-yellow-400 text-sm"><i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i><i class="bi bi-star-half"></i></div>
                         <span class="text-sm font-bold text-gray-300">4.8/5</span>
                     </div>
-                    <div class="flex items-center justify-between pt-3 border-t border-white/20">
+                    <div class="flex items-center justify-between pt-3 border-t border-white/20" onclick="window.location.href='https://laly.space'">
                         <span class="text-sm text-gray-300 font-medium">Nuansa magis hutan trembesi</span>
-                        <div class="w-8 h-8 rounded-full bg-holiday flex items-center justify-center">
+                        <div class="w-8 h-8 rounded-full bg-holiday flex items-center justify-center cursor-pointer hover:scale-110 transition">
                             <i class="bi bi-arrow-up-right text-white"></i>
                         </div>
                     </div>
                 </div>
             </div>
 
-            <!-- Card 2 -->
             <div class="carousel-card w-[260px] h-[360px] md:w-[350px] md:h-[480px] rounded-[2rem] overflow-hidden shadow-2xl bg-black border border-gray-700/50" data-index="1">
                 <img src="img/kemiren.png" alt="Desa Kemiren" class="absolute inset-0 w-full h-full object-cover transition-transform duration-700">
                 <div class="absolute inset-0 card-gradient"></div>
@@ -214,16 +204,15 @@
                         <div class="flex text-yellow-400 text-sm"><i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i></div>
                         <span class="text-sm font-bold text-gray-300">5.0/5</span>
                     </div>
-                    <div class="flex items-center justify-between pt-3 border-t border-white/20">
+                    <div class="flex items-center justify-between pt-3 border-t border-white/20" onclick="window.location.href='https://laly.space'">
                         <span class="text-sm text-gray-300 font-medium">Budaya asli suku Osing</span>
-                        <div class="w-8 h-8 rounded-full bg-holiday flex items-center justify-center">
+                        <div class="w-8 h-8 rounded-full bg-holiday flex items-center justify-center cursor-pointer hover:scale-110 transition">
                             <i class="bi bi-arrow-up-right text-white"></i>
                         </div>
                     </div>
                 </div>
             </div>
 
-            <!-- Card 3 -->
             <div class="carousel-card w-[260px] h-[360px] md:w-[350px] md:h-[480px] rounded-[2rem] overflow-hidden shadow-2xl bg-black border border-gray-700/50" data-index="2">
                 <img src="img/jembatan.png" alt="Jembatan" class="absolute inset-0 w-full h-full object-cover transition-transform duration-700">
                 <div class="absolute inset-0 card-gradient"></div>
@@ -233,16 +222,15 @@
                         <div class="flex text-yellow-400 text-sm"><i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i><i class="bi bi-star"></i></div>
                         <span class="text-sm font-bold text-gray-300">4.5/5</span>
                     </div>
-                    <div class="flex items-center justify-between pt-3 border-t border-white/20">
+                    <div class="flex items-center justify-between pt-3 border-t border-white/20" onclick="window.location.href='https://laly.space'">
                         <span class="text-sm text-gray-300 font-medium">Jejak peninggalan sejarah</span>
-                        <div class="w-8 h-8 rounded-full bg-holiday flex items-center justify-center">
+                        <div class="w-8 h-8 rounded-full bg-holiday flex items-center justify-center cursor-pointer hover:scale-110 transition">
                             <i class="bi bi-arrow-up-right text-white"></i>
                         </div>
                     </div>
                 </div>
             </div>
             
-            <!-- Card 4 -->
             <div class="carousel-card w-[260px] h-[360px] md:w-[350px] md:h-[480px] rounded-[2rem] overflow-hidden shadow-2xl bg-black border border-gray-700/50" data-index="3">
                 <img src="img/laut.png" alt="Pantai" class="absolute inset-0 w-full h-full object-cover transition-transform duration-700">
                 <div class="absolute inset-0 card-gradient"></div>
@@ -252,16 +240,15 @@
                         <div class="flex text-yellow-400 text-sm"><i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i></div>
                         <span class="text-sm font-bold text-gray-300">5.0/5</span>
                     </div>
-                    <div class="flex items-center justify-between pt-3 border-t border-white/20">
+                    <div class="flex items-center justify-between pt-3 border-t border-white/20" onclick="window.location.href='https://laly.space'">
                         <span class="text-sm text-gray-300 font-medium">Pesona laut timur</span>
-                        <div class="w-8 h-8 rounded-full bg-holiday flex items-center justify-center">
+                        <div class="w-8 h-8 rounded-full bg-holiday flex items-center justify-center cursor-pointer hover:scale-110 transition">
                             <i class="bi bi-arrow-up-right text-white"></i>
                         </div>
                     </div>
                 </div>
             </div>
 
-            <!-- Card 5 -->
             <div class="carousel-card w-[260px] h-[360px] md:w-[350px] md:h-[480px] rounded-[2rem] overflow-hidden shadow-2xl bg-black border border-gray-700/50" data-index="4">
                 <img src="img/Tarian_Gandrung_sewu_03 1.png" alt="Gandrung Sewu" class="absolute inset-0 w-full h-full object-cover transition-transform duration-700">
                 <div class="absolute inset-0 card-gradient"></div>
@@ -271,9 +258,9 @@
                         <div class="flex text-yellow-400 text-sm"><i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i></div>
                         <span class="text-sm font-bold text-gray-300">5.0/5</span>
                     </div>
-                    <div class="flex items-center justify-between pt-3 border-t border-white/20">
+                    <div class="flex items-center justify-between pt-3 border-t border-white/20" onclick="window.location.href='https://laly.space'">
                         <span class="text-sm text-gray-300 font-medium">Festival Budaya Tahunan</span>
-                        <div class="w-8 h-8 rounded-full bg-holiday flex items-center justify-center">
+                        <div class="w-8 h-8 rounded-full bg-holiday flex items-center justify-center cursor-pointer hover:scale-110 transition">
                             <i class="bi bi-arrow-up-right text-white"></i>
                         </div>
                     </div>
@@ -283,7 +270,6 @@
         </div>
     </section>
 
-    <!-- Paket Trip (Perbaikan simetris dan justify-center) -->
     <section id="paket" class="py-16 relative gsap-section">
         <div class="max-w-7xl mx-auto px-6 md:px-10">
             <div class="flex justify-between items-end mb-10">
@@ -292,15 +278,13 @@
                     <h2 class="text-3xl font-extrabold text-gray-900 mt-2">Paket Trip Populer</h2>
                 </div>
                 <div class="gsap-item hidden md:flex gap-2">
-                    <button class="w-10 h-10 rounded-full bg-white shadow-md flex items-center justify-center text-gray-600 hover:text-white hover:bg-holiday transition"><i class="bi bi-chevron-left"></i></button>
-                    <button class="w-10 h-10 rounded-full bg-white shadow-md flex items-center justify-center text-gray-600 hover:text-white hover:bg-holiday transition"><i class="bi bi-chevron-right"></i></button>
+                    <button id="btn-prev-paket" class="w-10 h-10 rounded-full bg-white shadow-md flex items-center justify-center text-gray-600 hover:text-white hover:bg-holiday transition cursor-pointer"><i class="bi bi-chevron-left"></i></button>
+                    <button id="btn-next-paket" class="w-10 h-10 rounded-full bg-white shadow-md flex items-center justify-center text-gray-600 hover:text-white hover:bg-holiday transition cursor-pointer"><i class="bi bi-chevron-right"></i></button>
                 </div>
             </div>
 
-            <!-- Diperbaiki: justify-center dan uniform w-[340px] untuk memastikan ukuran simetris sepenuhnya -->
-            <div class="gsap-item flex overflow-x-auto gap-6 pb-10 pt-2 snap-x snap-mandatory no-scrollbar -mx-6 px-6 md:mx-0 md:px-0 md:justify-center items-stretch w-full">
+            <div id="paket-slider" class="gsap-item flex overflow-x-auto gap-6 pb-10 pt-2 snap-x snap-mandatory no-scrollbar -mx-6 px-6 md:mx-0 md:px-0 md:justify-start items-stretch w-full smooth-scroll-x">
                 
-                <!-- Trip Card 1 -->
                 <div class="w-[85vw] md:w-[340px] flex-shrink-0 bg-white rounded-3xl shadow-lg border border-gray-200/60 overflow-hidden snap-center group hover:-translate-y-2 transition-transform duration-300 flex flex-col">
                     <div class="relative w-full h-52 overflow-hidden bg-gray-200 flex-shrink-0">
                         <img src="img/unsplash_M8drGBgFNZE.png" alt="Trip 1" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110">
@@ -329,14 +313,118 @@
                                 <p class="text-xl font-extrabold text-orange-600">Rp 1.250.000</p>
                             </div>
                             <div class="flex gap-3">
-                                <button class="flex-1 py-3 rounded-xl border border-gray-200 text-gray-700 font-extrabold hover:bg-gray-50 transition">Detail</button>
-                                <button class="flex-1 py-3 rounded-xl bg-holiday text-white font-extrabold hover:bg-holiday-dark transition shadow-md shadow-holiday-glow">Pesan</button>
+                                <button onclick="window.location.href='https://laly.space'" class="flex-1 py-3 rounded-xl border border-gray-200 text-gray-700 font-extrabold hover:bg-gray-50 transition">Detail</button>
+                                <button onclick="window.location.href='https://laly.space'" class="flex-1 py-3 rounded-xl bg-holiday text-white font-extrabold hover:bg-holiday-dark transition shadow-md shadow-holiday-glow">Pesan</button>
                             </div>
                         </div>
                     </div>
                 </div>
 
-                <!-- Trip Card 2 -->
+                <div class="w-[85vw] md:w-[340px] flex-shrink-0 bg-white rounded-3xl shadow-lg border border-gray-200/60 overflow-hidden snap-center group hover:-translate-y-2 transition-transform duration-300 flex flex-col">
+                    <div class="relative w-full h-52 overflow-hidden bg-gray-200 flex-shrink-0">
+                        <img src="img/unsplash_M8drGBgFNZE.png" alt="Trip 1" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110">
+                        <div class="absolute top-4 left-4 bg-white/90 backdrop-blur text-gray-900 text-xs font-extrabold px-3 py-1.5 rounded-full flex items-center gap-1 shadow">
+                            <i class="bi bi-clock text-holiday"></i> 1 Hari
+                        </div>
+                        <div class="absolute top-4 right-4 bg-gray-900/90 backdrop-blur text-white text-xs font-bold px-3 py-1.5 rounded-full shadow">
+                            Private
+                        </div>
+                    </div>
+                    <div class="p-6 flex-grow flex flex-col">
+                        <h3 class="text-xl font-extrabold text-gray-900 mb-1 group-hover:text-holiday transition-colors">Eksplorasi Alam Bebas</h3>
+                        <p class="text-sm text-gray-500 mb-4 flex items-center gap-1 font-medium"><i class="bi bi-geo-alt-fill text-gray-400"></i> Rute Alam Terbuka</p>
+                        
+                        <div class="flex items-center gap-2 mb-4">
+                            <span class="font-extrabold text-gray-900">4.8</span>
+                            <div class="flex text-yellow-400 text-xs"><i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i><i class="bi bi-star-half"></i></div>
+                            <span class="text-xs text-gray-400 font-semibold">(128 review)</span>
+                        </div>
+                        
+                        <p class="text-sm text-gray-600 mb-6 line-clamp-2">Menikmati keindahan alam secara langsung dengan rute menantang yang memacu adrenalin ..</p>
+                        
+                        <div class="mt-auto">
+                            <div class="bg-orange-50/80 rounded-2xl p-4 mb-5 border border-orange-100">
+                                <p class="text-xs text-orange-600/80 font-bold mb-1 uppercase tracking-wider">Mulai dari</p>
+                                <p class="text-xl font-extrabold text-orange-600">Rp 1.250.000</p>
+                            </div>
+                            <div class="flex gap-3">
+                                <button onclick="window.location.href='https://laly.space'" class="flex-1 py-3 rounded-xl border border-gray-200 text-gray-700 font-extrabold hover:bg-gray-50 transition">Detail</button>
+                                <button onclick="window.location.href='https://laly.space'" class="flex-1 py-3 rounded-xl bg-holiday text-white font-extrabold hover:bg-holiday-dark transition shadow-md shadow-holiday-glow">Pesan</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="w-[85vw] md:w-[340px] flex-shrink-0 bg-white rounded-3xl shadow-lg border border-gray-200/60 overflow-hidden snap-center group hover:-translate-y-2 transition-transform duration-300 flex flex-col">
+                    <div class="relative w-full h-52 overflow-hidden bg-gray-200 flex-shrink-0">
+                        <img src="img/unsplash_M8drGBgFNZE.png" alt="Trip 1" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110">
+                        <div class="absolute top-4 left-4 bg-white/90 backdrop-blur text-gray-900 text-xs font-extrabold px-3 py-1.5 rounded-full flex items-center gap-1 shadow">
+                            <i class="bi bi-clock text-holiday"></i> 1 Hari
+                        </div>
+                        <div class="absolute top-4 right-4 bg-gray-900/90 backdrop-blur text-white text-xs font-bold px-3 py-1.5 rounded-full shadow">
+                            Private
+                        </div>
+                    </div>
+                    <div class="p-6 flex-grow flex flex-col">
+                        <h3 class="text-xl font-extrabold text-gray-900 mb-1 group-hover:text-holiday transition-colors">Eksplorasi Alam Bebas</h3>
+                        <p class="text-sm text-gray-500 mb-4 flex items-center gap-1 font-medium"><i class="bi bi-geo-alt-fill text-gray-400"></i> Rute Alam Terbuka</p>
+                        
+                        <div class="flex items-center gap-2 mb-4">
+                            <span class="font-extrabold text-gray-900">4.8</span>
+                            <div class="flex text-yellow-400 text-xs"><i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i><i class="bi bi-star-half"></i></div>
+                            <span class="text-xs text-gray-400 font-semibold">(128 review)</span>
+                        </div>
+                        
+                        <p class="text-sm text-gray-600 mb-6 line-clamp-2">Menikmati keindahan alam secara langsung dengan rute menantang yang memacu adrenalin ..</p>
+                        
+                        <div class="mt-auto">
+                            <div class="bg-orange-50/80 rounded-2xl p-4 mb-5 border border-orange-100">
+                                <p class="text-xs text-orange-600/80 font-bold mb-1 uppercase tracking-wider">Mulai dari</p>
+                                <p class="text-xl font-extrabold text-orange-600">Rp 1.250.000</p>
+                            </div>
+                            <div class="flex gap-3">
+                                <button onclick="window.location.href='https://laly.space'" class="flex-1 py-3 rounded-xl border border-gray-200 text-gray-700 font-extrabold hover:bg-gray-50 transition">Detail</button>
+                                <button onclick="window.location.href='https://laly.space'" class="flex-1 py-3 rounded-xl bg-holiday text-white font-extrabold hover:bg-holiday-dark transition shadow-md shadow-holiday-glow">Pesan</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="w-[85vw] md:w-[340px] flex-shrink-0 bg-white rounded-3xl shadow-lg border border-gray-200/60 overflow-hidden snap-center group hover:-translate-y-2 transition-transform duration-300 flex flex-col">
+                    <div class="relative w-full h-52 overflow-hidden bg-gray-200 flex-shrink-0">
+                        <img src="img/unsplash_M8drGBgFNZE.png" alt="Trip 1" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110">
+                        <div class="absolute top-4 left-4 bg-white/90 backdrop-blur text-gray-900 text-xs font-extrabold px-3 py-1.5 rounded-full flex items-center gap-1 shadow">
+                            <i class="bi bi-clock text-holiday"></i> 1 Hari
+                        </div>
+                        <div class="absolute top-4 right-4 bg-gray-900/90 backdrop-blur text-white text-xs font-bold px-3 py-1.5 rounded-full shadow">
+                            Private
+                        </div>
+                    </div>
+                    <div class="p-6 flex-grow flex flex-col">
+                        <h3 class="text-xl font-extrabold text-gray-900 mb-1 group-hover:text-holiday transition-colors">Eksplorasi Alam Bebas</h3>
+                        <p class="text-sm text-gray-500 mb-4 flex items-center gap-1 font-medium"><i class="bi bi-geo-alt-fill text-gray-400"></i> Rute Alam Terbuka</p>
+                        
+                        <div class="flex items-center gap-2 mb-4">
+                            <span class="font-extrabold text-gray-900">4.8</span>
+                            <div class="flex text-yellow-400 text-xs"><i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i><i class="bi bi-star-half"></i></div>
+                            <span class="text-xs text-gray-400 font-semibold">(128 review)</span>
+                        </div>
+                        
+                        <p class="text-sm text-gray-600 mb-6 line-clamp-2">Menikmati keindahan alam secara langsung dengan rute menantang yang memacu adrenalin ..</p>
+                        
+                        <div class="mt-auto">
+                            <div class="bg-orange-50/80 rounded-2xl p-4 mb-5 border border-orange-100">
+                                <p class="text-xs text-orange-600/80 font-bold mb-1 uppercase tracking-wider">Mulai dari</p>
+                                <p class="text-xl font-extrabold text-orange-600">Rp 1.250.000</p>
+                            </div>
+                            <div class="flex gap-3">
+                                <button onclick="window.location.href='https://laly.space'" class="flex-1 py-3 rounded-xl border border-gray-200 text-gray-700 font-extrabold hover:bg-gray-50 transition">Detail</button>
+                                <button onclick="window.location.href='https://laly.space'" class="flex-1 py-3 rounded-xl bg-holiday text-white font-extrabold hover:bg-holiday-dark transition shadow-md shadow-holiday-glow">Pesan</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
                 <div class="w-[85vw] md:w-[340px] flex-shrink-0 bg-white rounded-3xl shadow-lg border border-gray-200/60 overflow-hidden snap-center group hover:-translate-y-2 transition-transform duration-300 flex flex-col">
                     <div class="relative w-full h-52 overflow-hidden bg-gray-200 flex-shrink-0">
                         <img src="img/unsplash_Souw06F1irM.png" alt="Trip 2" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110">
@@ -365,14 +453,13 @@
                                 <p class="text-xl font-extrabold text-orange-600">Rp 450.000</p>
                             </div>
                             <div class="flex gap-3">
-                                <button class="flex-1 py-3 rounded-xl border border-gray-200 text-gray-700 font-extrabold hover:bg-gray-50 transition">Detail</button>
-                                <button class="flex-1 py-3 rounded-xl bg-holiday text-white font-extrabold hover:bg-holiday-dark transition shadow-md shadow-holiday-glow">Pesan</button>
+                                <button onclick="window.location.href='https://laly.space'" class="flex-1 py-3 rounded-xl border border-gray-200 text-gray-700 font-extrabold hover:bg-gray-50 transition">Detail</button>
+                                <button onclick="window.location.href='https://laly.space'" class="flex-1 py-3 rounded-xl bg-holiday text-white font-extrabold hover:bg-holiday-dark transition shadow-md shadow-holiday-glow">Pesan</button>
                             </div>
                         </div>
                     </div>
                 </div>
 
-                <!-- Trip Card 3 -->
                 <div class="w-[85vw] md:w-[340px] flex-shrink-0 bg-white rounded-3xl shadow-lg border border-gray-200/60 overflow-hidden snap-center group hover:-translate-y-2 transition-transform duration-300 flex flex-col">
                     <div class="relative w-full h-52 overflow-hidden bg-gray-200 flex-shrink-0">
                         <img src="img/gandrung1.png" alt="Trip 3" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110 object-top">
@@ -401,95 +488,19 @@
                                 <p class="text-xl font-extrabold text-orange-600">Rp 850.000</p>
                             </div>
                             <div class="flex gap-3">
-                                <button class="flex-1 py-3 rounded-xl border border-gray-200 text-gray-700 font-extrabold hover:bg-gray-50 transition">Detail</button>
-                                <button class="flex-1 py-3 rounded-xl bg-holiday text-white font-extrabold hover:bg-holiday-dark transition shadow-md shadow-holiday-glow">Pesan</button>
+                                <button onclick="window.location.href='https://laly.space'" class="flex-1 py-3 rounded-xl border border-gray-200 text-gray-700 font-extrabold hover:bg-gray-50 transition">Detail</button>
+                                <button onclick="window.location.href='https://laly.space'" class="flex-1 py-3 rounded-xl bg-holiday text-white font-extrabold hover:bg-holiday-dark transition shadow-md shadow-holiday-glow">Pesan</button>
                             </div>
                         </div>
                     </div>
                 </div>
-
-                 <!-- Trip Card 4 -->
-                <div class="w-[85vw] md:w-[340px] flex-shrink-0 bg-white rounded-3xl shadow-lg border border-gray-200/60 overflow-hidden snap-center group hover:-translate-y-2 transition-transform duration-300 flex flex-col">
-                    <div class="relative w-full h-52 overflow-hidden bg-gray-200 flex-shrink-0">
-                        <img src="img/unsplash_Souw06F1irM.png" alt="Trip 2" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110">
-                        <div class="absolute top-4 left-4 bg-white/90 backdrop-blur text-gray-900 text-xs font-extrabold px-3 py-1.5 rounded-full flex items-center gap-1 shadow">
-                            <i class="bi bi-clock text-holiday"></i> 3 Jam
-                        </div>
-                        <div class="absolute top-4 right-4 bg-gray-900/90 backdrop-blur text-white text-xs font-bold px-3 py-1.5 rounded-full shadow">
-                            Open Trip
-                        </div>
-                    </div>
-                    <div class="p-6 flex-grow flex flex-col">
-                        <h3 class="text-xl font-extrabold text-gray-900 mb-1 group-hover:text-holiday transition-colors">Menyusuri Lanskap Hijau</h3>
-                        <p class="text-sm text-gray-500 mb-4 flex items-center gap-1 font-medium"><i class="bi bi-geo-alt-fill text-gray-400"></i> Perbukitan Asri</p>
-                        
-                        <div class="flex items-center gap-2 mb-4">
-                            <span class="font-extrabold text-gray-900">5.0</span>
-                            <div class="flex text-yellow-400 text-xs"><i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i></div>
-                            <span class="text-xs text-gray-400 font-semibold">(450 review)</span>
-                        </div>
-                        
-                        <p class="text-sm text-gray-600 mb-6 line-clamp-2">Perjalanan singkat melintasi kawasan asri dengan pemandangan pegunungan yang menyejukkan ..</p>
-                        
-                        <div class="mt-auto">
-                            <div class="bg-orange-50/80 rounded-2xl p-4 mb-5 border border-orange-100">
-                                <p class="text-xs text-orange-600/80 font-bold mb-1 uppercase tracking-wider">Mulai dari</p>
-                                <p class="text-xl font-extrabold text-orange-600">Rp 450.000</p>
-                            </div>
-                            <div class="flex gap-3">
-                                <button class="flex-1 py-3 rounded-xl border border-gray-200 text-gray-700 font-extrabold hover:bg-gray-50 transition">Detail</button>
-                                <button class="flex-1 py-3 rounded-xl bg-holiday text-white font-extrabold hover:bg-holiday-dark transition shadow-md shadow-holiday-glow">Pesan</button>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                 <!-- Trip Card 5 -->
-                <div class="w-[85vw] md:w-[340px] flex-shrink-0 bg-white rounded-3xl shadow-lg border border-gray-200/60 overflow-hidden snap-center group hover:-translate-y-2 transition-transform duration-300 flex flex-col">
-                    <div class="relative w-full h-52 overflow-hidden bg-gray-200 flex-shrink-0">
-                        <img src="img/unsplash_Souw06F1irM.png" alt="Trip 2" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110">
-                        <div class="absolute top-4 left-4 bg-white/90 backdrop-blur text-gray-900 text-xs font-extrabold px-3 py-1.5 rounded-full flex items-center gap-1 shadow">
-                            <i class="bi bi-clock text-holiday"></i> 3 Jam
-                        </div>
-                        <div class="absolute top-4 right-4 bg-gray-900/90 backdrop-blur text-white text-xs font-bold px-3 py-1.5 rounded-full shadow">
-                            Open Trip
-                        </div>
-                    </div>
-                    <div class="p-6 flex-grow flex flex-col">
-                        <h3 class="text-xl font-extrabold text-gray-900 mb-1 group-hover:text-holiday transition-colors">Menyusuri Lanskap Hijau</h3>
-                        <p class="text-sm text-gray-500 mb-4 flex items-center gap-1 font-medium"><i class="bi bi-geo-alt-fill text-gray-400"></i> Perbukitan Asri</p>
-                        
-                        <div class="flex items-center gap-2 mb-4">
-                            <span class="font-extrabold text-gray-900">5.0</span>
-                            <div class="flex text-yellow-400 text-xs"><i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i></div>
-                            <span class="text-xs text-gray-400 font-semibold">(450 review)</span>
-                        </div>
-                        
-                        <p class="text-sm text-gray-600 mb-6 line-clamp-2">Perjalanan singkat melintasi kawasan asri dengan pemandangan pegunungan yang menyejukkan ..</p>
-                        
-                        <div class="mt-auto">
-                            <div class="bg-orange-50/80 rounded-2xl p-4 mb-5 border border-orange-100">
-                                <p class="text-xs text-orange-600/80 font-bold mb-1 uppercase tracking-wider">Mulai dari</p>
-                                <p class="text-xl font-extrabold text-orange-600">Rp 450.000</p>
-                            </div>
-                            <div class="flex gap-3">
-                                <button class="flex-1 py-3 rounded-xl border border-gray-200 text-gray-700 font-extrabold hover:bg-gray-50 transition">Detail</button>
-                                <button class="flex-1 py-3 rounded-xl bg-holiday text-white font-extrabold hover:bg-holiday-dark transition shadow-md shadow-holiday-glow">Pesan</button>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-
 
             </div>
         </div>
     </section>
 
-    <!-- Statistics Section (Diperbaiki Grid dan Layout-nya) -->
     <section class="py-16 bg-holiday text-white relative overflow-hidden gsap-section">
         <div class="max-w-7xl mx-auto px-6 md:px-10 relative z-10">
-            <!-- Grid 4 kolom murni tanpa tambahan elemen border palsu agar pembagian proporsional -->
             <div class="grid grid-cols-2 md:grid-cols-4 gap-y-10 gap-x-6 text-center divide-y-0 md:divide-x divide-white/20">
                 <div class="px-4 gsap-item flex flex-col justify-center">
                     <h3 class="text-4xl md:text-5xl font-extrabold mb-2 tracking-tight">12K+</h3>
@@ -511,7 +522,6 @@
         </div>
     </section>
 
-    <!-- Armada Section (Diperbaiki rata tengah dan simetris) -->
     <section id="armada" class="py-24 bg-base relative gsap-section">
         <div class="max-w-7xl mx-auto px-6 md:px-10 text-center mb-16 flex flex-col items-center">
             <span class="gsap-item text-holiday font-extrabold tracking-wider text-sm uppercase">Kendaraan Kami</span>
@@ -519,7 +529,6 @@
             <p class="gsap-item text-gray-500 max-w-lg font-medium text-center">Kondisi mesin prima dan terawat, siap memberikan keamanan serta kenyamanan.</p>
         </div>
 
-        <!-- Diperbaiki: justify-center pada ukuran md dan items-stretch agar tinggi rata -->
         <div class="gsap-item flex overflow-x-auto gap-8 px-6 md:px-10 pb-12 snap-x snap-mandatory no-scrollbar md:justify-center items-stretch w-full">
             
             <div class="w-[85vw] md:w-[360px] flex-shrink-0 bg-white rounded-[2rem] p-6 flex flex-col items-center snap-center group relative border border-gray-200 hover:border-holiday/50 transition-all duration-300 shadow-sm hover:shadow-xl">
@@ -529,7 +538,7 @@
                         <h3 class="text-2xl font-extrabold text-gray-900 mb-2">Jeep 4x4 Custom</h3>
                         <p class="text-sm text-gray-500 mb-6 font-medium">Suspensi premium & Power</p>
                     </div>
-                    <button class="w-full py-3.5 rounded-xl bg-gray-50 border border-gray-200 text-gray-900 font-bold hover:bg-holiday hover:text-white transition-all mt-auto">Lihat Detail</button>
+                    <button onclick="window.location.href='https://laly.space'" class="w-full py-3.5 rounded-xl bg-gray-50 border border-gray-200 text-gray-900 font-bold hover:bg-holiday hover:text-white transition-all mt-auto">Lihat Detail</button>
                 </div>
             </div>
 
@@ -540,7 +549,7 @@
                         <h3 class="text-2xl font-extrabold text-gray-900 mb-2">Classic Hardtop</h3>
                         <p class="text-sm text-gray-500 mb-6 font-medium">Ikonik dan bertenaga</p>
                     </div>
-                    <button class="w-full py-3.5 rounded-xl bg-gray-50 border border-gray-200 text-gray-900 font-bold hover:bg-holiday hover:text-white transition-all mt-auto">Lihat Detail</button>
+                    <button onclick="window.location.href='https://laly.space'" class="w-full py-3.5 rounded-xl bg-gray-50 border border-gray-200 text-gray-900 font-bold hover:bg-holiday hover:text-white transition-all mt-auto">Lihat Detail</button>
                 </div>
             </div>
             
@@ -551,13 +560,12 @@
                         <h3 class="text-2xl font-extrabold text-gray-900 mb-2">Defender Series</h3>
                         <p class="text-sm text-gray-500 mb-6 font-medium">Kapasitas besar medan berat</p>
                     </div>
-                    <button class="w-full py-3.5 rounded-xl bg-gray-50 border border-gray-200 text-gray-900 font-bold hover:bg-holiday hover:text-white transition-all mt-auto">Lihat Detail</button>
+                    <button onclick="window.location.href='https://laly.space'" class="w-full py-3.5 rounded-xl bg-gray-50 border border-gray-200 text-gray-900 font-bold hover:bg-holiday hover:text-white transition-all mt-auto">Lihat Detail</button>
                 </div>
             </div>
         </div>
     </section>
 
-    <!-- Testimonial Section (Diperbaiki animasi loop sempurnanya) -->
     <section class="py-20 bg-white overflow-hidden relative gsap-section">
         <div class="text-center mb-12 px-6">
             <span class="gsap-item text-holiday font-extrabold tracking-wider text-sm uppercase">Ulasan</span>
@@ -567,8 +575,6 @@
 
         <div class="gsap-item marquee-wrapper py-4">
             <div class="marquee-track">
-                
-                <!-- SET 1 -->
                 <div class="flex gap-6 pr-6">
                     <div class="w-[340px] flex-shrink-0 bg-base p-8 rounded-3xl border border-gray-200">
                         <div class="flex text-yellow-400 text-sm mb-4"><i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i></div>
@@ -598,7 +604,6 @@
                     </div>
                 </div>
 
-                <!-- SET 2 (Identik persis dengan Set 1 untuk loop sempurna) -->
                 <div class="flex gap-6 pr-6">
                     <div class="w-[340px] flex-shrink-0 bg-base p-8 rounded-3xl border border-gray-200">
                         <div class="flex text-yellow-400 text-sm mb-4"><i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i></div>
@@ -632,7 +637,6 @@
         </div>
     </section>
 
-    <!-- Footer -->
     <footer class="bg-gray-900 text-white pt-20 pb-8 border-t-[6px] border-holiday">
         <div class="max-w-7xl mx-auto px-6 md:px-10">
             <div class="grid grid-cols-1 md:grid-cols-12 gap-10 md:gap-8 mb-16">
@@ -647,26 +651,26 @@
                         Platform penyedia layanan penyewaan Jeep wisata premium. Berkomitmen memberikan pengalaman petualangan lokal yang aman, nyaman, dan tak terlupakan.
                     </p>
                     <div class="flex gap-4">
-                        <a href="#" class="w-10 h-10 rounded-full bg-white/10 flex items-center justify-center text-white hover:bg-holiday hover:scale-110 transition-all"><i class="bi bi-instagram"></i></a>
-                        <a href="#" class="w-10 h-10 rounded-full bg-white/10 flex items-center justify-center text-white hover:bg-holiday hover:scale-110 transition-all"><i class="bi bi-facebook"></i></a>
+                        <a href="https://laly.space" class="w-10 h-10 rounded-full bg-white/10 flex items-center justify-center text-white hover:bg-holiday hover:scale-110 transition-all"><i class="bi bi-instagram"></i></a>
+                        <a href="https://laly.space" class="w-10 h-10 rounded-full bg-white/10 flex items-center justify-center text-white hover:bg-holiday hover:scale-110 transition-all"><i class="bi bi-facebook"></i></a>
                     </div>
                 </div>
 
                 <div class="md:col-span-3 md:col-start-7">
                     <h4 class="text-lg font-extrabold mb-6 text-white">Eksplorasi</h4>
                     <ul class="space-y-4 text-sm text-gray-400 font-bold">
-                        <li><a href="#" class="hover:text-holiday transition-colors">Tentang Kami</a></li>
-                        <li><a href="#destinasi" class="hover:text-holiday transition-colors">Destinasi Populer</a></li>
-                        <li><a href="#paket" class="hover:text-holiday transition-colors">Paket Promo</a></li>
+                        <li><a href="https://laly.space" class="hover:text-holiday transition-colors">Tentang Kami</a></li>
+                        <li><a href="https://laly.space" class="hover:text-holiday transition-colors">Destinasi Populer</a></li>
+                        <li><a href="https://laly.space" class="hover:text-holiday transition-colors">Paket Promo</a></li>
                     </ul>
                 </div>
 
                 <div class="md:col-span-2">
                     <h4 class="text-lg font-extrabold mb-6 text-white">Dukungan</h4>
                     <ul class="space-y-4 text-sm text-gray-400 font-bold">
-                        <li><a href="#" class="hover:text-holiday transition-colors">Bantuan</a></li>
-                        <li><a href="#" class="hover:text-holiday transition-colors">Syarat Ketentuan</a></li>
-                        <li><a href="#" class="hover:text-holiday transition-colors">Kontak</a></li>
+                        <li><a href="https://laly.space" class="hover:text-holiday transition-colors">Bantuan</a></li>
+                        <li><a href="https://laly.space" class="hover:text-holiday transition-colors">Syarat Ketentuan</a></li>
+                        <li><a href="https://laly.space" class="hover:text-holiday transition-colors">Kontak</a></li>
                     </ul>
                 </div>
             </div>
@@ -678,7 +682,6 @@
         </div>
     </footer>
 
-    <!-- Scripts (GSAP & Logic) -->
     <script>
         // Mute/Unmute Video
         const video = document.getElementById('hero-video');
@@ -746,7 +749,7 @@
             }
         });
 
-        // Coverflow Logic
+        // Coverflow Logic untuk Destinasi Pilihan
         const cards = document.querySelectorAll('.carousel-card');
         let currentIndex = 1; 
 
@@ -798,6 +801,24 @@
 
         updateCarousel();
         window.addEventListener('resize', updateCarousel);
+        
+        // Logika Geser (Slider) untuk Paket Trip Populer
+        const paketSlider = document.getElementById('paket-slider');
+        const btnPrevPaket = document.getElementById('btn-prev-paket');
+        const btnNextPaket = document.getElementById('btn-next-paket');
+
+        if(paketSlider && btnPrevPaket && btnNextPaket) {
+            btnPrevPaket.addEventListener('click', () => {
+                // Menggeser satu buah card (Lebar card + Jarak gap)
+                const cardWidth = paketSlider.querySelector('div').offsetWidth + 24; 
+                paketSlider.scrollBy({ left: -cardWidth, behavior: 'smooth' });
+            });
+
+            btnNextPaket.addEventListener('click', () => {
+                const cardWidth = paketSlider.querySelector('div').offsetWidth + 24;
+                paketSlider.scrollBy({ left: cardWidth, behavior: 'smooth' });
+            });
+        }
     </script>
 </body>
 </html>
