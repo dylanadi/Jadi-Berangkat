@@ -19,6 +19,8 @@
     <!-- GSAP & ScrollTrigger -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>
+
+    
     
     <!-- Custom Tailwind Configuration -->
     <script>
@@ -54,11 +56,81 @@
             to { opacity: 1; transform: translateY(0); }
         }
         .invoice-item-enter { animation: fadeInDown 0.3s ease-out forwards; }
+        
+        /* Line styling untuk Itinerary timeline */
+        .timeline-line::before {
+            content: '';
+            position: absolute;
+            top: 24px;
+            bottom: -24px;
+            left: 23px;
+            width: 2px;
+            background-color: #e5e7eb;
+            z-index: 0;
+        }
+        .timeline-item:last-child .timeline-line::before {
+            display: none;
+        }
+
+          @keyframes marquee {
+            0% { transform: translateX(0); }
+            100% { transform: translateX(-50%); } 
+        }
+        
+        /* Initial state for GSAP */
+        .gsap-item { opacity: 0; visibility: hidden; }
+        
+        /* Smooth scrolling behavior specifically for slider container */
+        .smooth-scroll-x { scroll-behavior: smooth; }
     </style>
 </head>
 <body class="text-gray-800 antialiased pt-6 pb-20">
 
-    <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+         <div id="menu-overlay" class="fixed inset-0 bg-black/60 z-[60] hidden opacity-0 backdrop-blur-sm"></div>
+    <aside id="mobile-sidebar" class="fixed top-0 left-0 h-full w-[80%] max-w-sm bg-base shadow-2xl z-[70] p-8 flex flex-col transform -translate-x-full border-r border-gray-200">
+        <div class="flex justify-between items-center mb-10">
+            <a href="#" class="text-2xl font-extrabold flex items-center gap-2">
+                <i class="bi bi-jeep text-holiday"></i> JB.
+            </a>
+            <button id="close-menu-btn" class="w-10 h-10 rounded-full bg-gray-100 flex items-center justify-center text-gray-800 hover:bg-holiday hover:text-white transition">
+                <i class="bi bi-x-lg"></i>
+            </button>
+        </div>
+        <nav class="flex flex-col gap-6 text-lg font-bold text-gray-700">
+            <a href="#" class="hover:text-holiday transition flex items-center gap-3"><i class="bi bi-house"></i> Beranda</a>
+            <a href="#destinasi" class="hover:text-holiday transition flex items-center gap-3"><i class="bi bi-compass"></i> Destinasi</a>
+            <a href="#paket" class="hover:text-holiday transition flex items-center gap-3"><i class="bi bi-map"></i> Paket Trip</a>
+            <a href="#armada" class="hover:text-holiday transition flex items-center gap-3"><i class="bi bi-truck"></i> Armada</a>
+        </nav>
+        <div class="mt-auto">
+            <a href="#" class="block w-full text-center bg-holiday text-white py-4 rounded-xl font-bold shadow-lg">Booking Sekarang</a>
+        </div>
+    </aside>
+
+    <header id="header-wrapper" class="fixed w-full top-0 z-50 transition-all duration-700 ease-in-out py-4 flex justify-center">
+        <div id="nav-container" class="w-full flex justify-between items-center px-6 md:px-10 py-4 transition-all duration-700 text-white border border-transparent">
+            <a href="#" class="text-2xl font-extrabold tracking-wide flex items-center gap-2 drop-shadow-md">
+                <i class="bi bi-jeep text-holiday"></i> <span class="hidden sm:block">Jadi Berangkat</span><span class="sm:hidden">JB.</span>
+            </a>
+            
+            <nav class="hidden md:flex gap-8 font-semibold items-center bg-black/20 px-6 py-2.5 rounded-full backdrop-blur-md border border-white/10">
+                <a href="#" class="hover:text-holiday transition">Beranda</a>
+                <a href="#destinasi" class="hover:text-holiday transition">Destinasi</a>
+                <a href="#paket" class="hover:text-holiday transition">Paket Trip</a>
+                <a href="#armada" class="hover:text-holiday transition">Armada</a>
+            </nav>
+
+            <div class="flex items-center gap-4">
+                <a href="#" class="hidden md:block bg-holiday hover:bg-holiday-dark text-white px-7 py-2.5 rounded-full transition shadow-lg font-bold">Masuk</a>
+                <button id="open-menu-btn" class="md:hidden w-11 h-11 flex items-center justify-center rounded-full bg-black/40 backdrop-blur-md text-white border border-white/20 hover:bg-holiday transition">
+                    <i class="bi bi-list text-2xl"></i>
+                </button>
+            </div>
+        </div>
+    </header>
+
+
+    <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8" style="margin-top: 100px;">
         
         <!-- Hero Section -->
         <section class="w-full h-[35vh] md:h-[55vh] rounded-[20px] overflow-hidden relative shadow-lg gsap-section">
@@ -77,19 +149,119 @@
             <!-- Bagian Kiri: Deskripsi & Paket Tambahan -->
             <div class="lg:col-span-2 space-y-10">
                 
-                <!-- Deskripsi -->
+                <!-- Deskripsi Utama -->
                 <div class="bg-white p-6 md:p-8 rounded-[2rem] shadow-sm border border-gray-200/60 gsap-item">
                     <h2 class="text-2xl font-extrabold text-gray-900 mb-4 flex items-center gap-2">
                         <i class="bi bi-file-text text-holiday"></i> Deskripsi Perjalanan
                     </h2>
-                    <div class="text-gray-600 leading-relaxed space-y-4 font-medium text-sm md:text-base">
-                        <p class="text-gray-600">
+                    <div class="!text-gray-600 leading-relaxed space-y-4 font-medium text-sm md:text-base mb-10">
+                        <p>
                             Nikmati keindahan magis Hutan De Djawatan yang terkenal dengan pohon-pohon trembesi raksasa berlumut menyerupai latar film fantasi. Perjalanan ini dirancang khusus untuk Anda yang mendambakan petualangan alam terbuka yang estetik sekaligus menantang menggunakan armada Jeep premium kami.
                         </p>
-                        <p class="text-gray-600">
+                        <p>
                             Selama trip berlangsung, Anda akan dipandu oleh driver profesional yang juga siap membantu mengambil dokumentasi terbaik di spot-spot ikonik tersembunyi. Kendaraan dipastikan dalam kondisi prima demi menjamin keamanan dan kenyamanan maksimal sepanjang rute petualangan.
                         </p>
                     </div>
+
+                    <!-- Itinerary / Jadwal Perjalanan -->
+                    <h3 class="text-xl font-extrabold text-gray-900 mb-6 flex items-center gap-2">
+                        <i class="bi bi-clock-history text-holiday"></i> Jadwal Perjalanan
+                    </h3>
+                    
+                    <div class="space-y-0 pl-2">
+                        <!-- Day 1 -->
+                        <div class="relative timeline-item pb-8">
+                            <div class="timeline-line relative z-10 flex gap-5">
+                                <div class="w-12 h-12 rounded-full bg-holiday-light/30 flex items-center justify-center shrink-0 border-[3px] border-white shadow-sm">
+                                    <i class="bi bi-1-circle-fill text-holiday text-2xl"></i>
+                                </div>
+                                <div class="pt-2">
+                                    <h4 class="text-lg font-extrabold text-gray-900 mb-1">Eksplorasi Hutan Purba</h4>
+                                    <p class="text-sm text-gray-500 font-medium">Penjemputan di meeting point, perjalanan menuju Hutan De Djawatan menggunakan Jeep, sesi foto di area trembesi raksasa, dan istirahat makan siang ala piknik.</p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Day 2 -->
+                        <div class="relative timeline-item pb-8">
+                            <div class="timeline-line relative z-10 flex gap-5">
+                                <div class="w-12 h-12 rounded-full bg-holiday-light/30 flex items-center justify-center shrink-0 border-[3px] border-white shadow-sm">
+                                    <i class="bi bi-2-circle-fill text-holiday text-2xl"></i>
+                                </div>
+                                <div class="pt-2">
+                                    <h4 class="text-lg font-extrabold text-gray-900 mb-1">Menyusuri Jalur Offroad</h4>
+                                    <p class="text-sm text-gray-500 font-medium">Petualangan memacu adrenalin menyusuri jalur lumpur dan sungai dangkal, diakhiri dengan menikmati sunset di area bukit terbuka.</p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Day 3 -->
+                        <div class="relative timeline-item">
+                            <div class="timeline-line relative z-10 flex gap-5">
+                                <div class="w-12 h-12 rounded-full bg-holiday-light/30 flex items-center justify-center shrink-0 border-[3px] border-white shadow-sm">
+                                    <i class="bi bi-3-circle-fill text-holiday text-2xl"></i>
+                                </div>
+                                <div class="pt-2">
+                                    <h4 class="text-lg font-extrabold text-gray-900 mb-1">Budaya & Kepulangan</h4>
+                                    <p class="text-sm text-gray-500 font-medium">Kunjungan singkat ke desa wisata untuk melihat pembuatan kopi tradisional, belanja oleh-oleh, dan kembali ke titik penurunan.</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Fasilitas: Termasuk & Tidak Termasuk -->
+                    <div class="mt-12 pt-8 border-t border-gray-100">
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-8 bg-transparent">
+                            <!-- Termasuk -->
+                            <div>
+                                <h4 class="text-sm font-extrabold text-gray-900 uppercase tracking-wider mb-4 flex items-center gap-2">
+                                    <i class="bi bi-check-circle text-holiday text-lg"></i> Termasuk
+                                </h4>
+                                <ul class="space-y-3">
+                                    <li class="flex items-start gap-2 text-sm text-gray-600 font-medium">
+                                        <i class="bi bi-check2 text-holiday mt-0.5"></i> Transportasi Jeep 4x4 Premium
+                                    </li>
+                                    <li class="flex items-start gap-2 text-sm text-gray-600 font-medium">
+                                        <i class="bi bi-check2 text-holiday mt-0.5"></i> Driver berpengalaman & Guide
+                                    </li>
+                                    <li class="flex items-start gap-2 text-sm text-gray-600 font-medium">
+                                        <i class="bi bi-check2 text-holiday mt-0.5"></i> Tiket masuk destinasi utama
+                                    </li>
+                                    <li class="flex items-start gap-2 text-sm text-gray-600 font-medium">
+                                        <i class="bi bi-check2 text-holiday mt-0.5"></i> BBM & Biaya Parkir
+                                    </li>
+                                    <li class="flex items-start gap-2 text-sm text-gray-600 font-medium">
+                                        <i class="bi bi-check2 text-holiday mt-0.5"></i> Air mineral & Snack box
+                                    </li>
+                                </ul>
+                            </div>
+                            
+                            <!-- Tidak Termasuk -->
+                            <div>
+                                <h4 class="text-sm font-extrabold text-gray-900 uppercase tracking-wider mb-4 flex items-center gap-2">
+                                    <i class="bi bi-x-circle text-red-500 text-lg"></i> Tidak Termasuk
+                                </h4>
+                                <ul class="space-y-3">
+                                    <li class="flex items-start gap-2 text-sm text-gray-600 font-medium">
+                                        <i class="bi bi-x text-red-400 mt-0.5 text-lg leading-none"></i> Tiket pesawat/kereta api
+                                    </li>
+                                    <li class="flex items-start gap-2 text-sm text-gray-600 font-medium">
+                                        <i class="bi bi-x text-red-400 mt-0.5 text-lg leading-none"></i> Pengeluaran pribadi (Oleh-oleh)
+                                    </li>
+                                    <li class="flex items-start gap-2 text-sm text-gray-600 font-medium">
+                                        <i class="bi bi-x text-red-400 mt-0.5 text-lg leading-none"></i> Makanan di luar itinerary
+                                    </li>
+                                    <li class="flex items-start gap-2 text-sm text-gray-600 font-medium">
+                                        <i class="bi bi-x text-red-400 mt-0.5 text-lg leading-none"></i> Tips untuk Driver & Guide
+                                    </li>
+                                    <li class="flex items-start gap-2 text-sm text-gray-600 font-medium">
+                                        <i class="bi bi-x text-red-400 mt-0.5 text-lg leading-none"></i> Dokumentasi Drone (Opsi Tambahan)
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+
                 </div>
 
                 <!-- Paket Tambahan (Add-ons) -->
@@ -109,7 +281,7 @@
                                     <i class="bi bi-camera-reels"></i>
                                 </div>
                                 <div>
-                                    <h4 class="font-extrabold !text-gray-700 text-sm md:text-base">Dokumentasi Drone 4K</h4>
+                                    <h4 class="font-extrabold text-gray-900 text-sm md:text-base">Dokumentasi Drone 4K</h4>
                                     <p class="text-xs text-gray-500 font-medium">Video udara durasi 3 menit & foto</p>
                                 </div>
                             </div>
@@ -131,7 +303,7 @@
                                     <i class="bi bi-fire"></i>
                                 </div>
                                 <div>
-                                    <h4 class="font-extrabold !text-gray-600 text-sm md:text-base">Set Camping Mandiri</h4>
+                                    <h4 class="font-extrabold text-gray-900 text-sm md:text-base">Set Camping Mandiri</h4>
                                     <p class="text-xs text-gray-500 font-medium">Tenda, matras, dan kompor</p>
                                 </div>
                             </div>
@@ -153,7 +325,7 @@
                                     <i class="bi bi-shield-check"></i>
                                 </div>
                                 <div>
-                                    <h4 class="font-extrabold !text-gray-600 text-sm md:text-base">Asuransi Premium</h4>
+                                    <h4 class="font-extrabold text-gray-900 text-sm md:text-base">Asuransi Premium</h4>
                                     <p class="text-xs text-gray-500 font-medium">Perlindungan jaminan ekstra</p>
                                 </div>
                             </div>
@@ -197,18 +369,15 @@
                         </div>
                     </div>
 
-                    <!-- Detail Fasilitas (What's Included) -->
+                    <!-- Detail Fasilitas Ringkas (What's Included) -->
                     <div class="bg-base rounded-2xl p-4 mb-6 space-y-3">
-                        <h4 class="text-[11px] font-extrabold text-gray-500 uppercase tracking-widest">Fasilitas Dasar:</h4>
+                        <h4 class="text-[11px] font-extrabold text-gray-500 uppercase tracking-widest">Fasilitas Utama:</h4>
                         <div class="grid grid-cols-1 gap-2">
                             <div class="flex items-center gap-2 text-xs font-semibold text-gray-700">
                                 <i class="bi bi-check-circle-fill text-holiday"></i> Jeep Terbuka 4x4
                             </div>
                             <div class="flex items-center gap-2 text-xs font-semibold text-gray-700">
                                 <i class="bi bi-check-circle-fill text-holiday"></i> BBM & Parkir Utama
-                            </div>
-                            <div class="flex items-center gap-2 text-xs font-semibold text-gray-700">
-                                <i class="bi bi-check-circle-fill text-holiday"></i> Air Mineral
                             </div>
                         </div>
                     </div>
@@ -223,7 +392,7 @@
                     </div>
 
                     <!-- Tombol Utama Booking -->
-                    <button onclick="window.location.href='https://laly.space'" class="w-full py-4 rounded-2xl bg-holiday text-white font-extrabold text-lg hover:bg-holiday-dark transition shadow-md shadow-holiday-glow flex items-center justify-center gap-2 group">
+                    <button onclick="window.location.href='#'" class="w-full py-4 rounded-2xl bg-holiday text-white font-extrabold text-lg hover:bg-holiday-dark transition shadow-md shadow-holiday-glow flex items-center justify-center gap-2 group">
                         <i class="bi bi-calendar2-check group-hover:scale-110 transition-transform"></i> Pesan Sekarang
                     </button>
                 </div>
@@ -246,7 +415,6 @@
 
             <div id="other-slider" class="gsap-item flex overflow-x-auto gap-6 pb-6 pt-2 snap-x snap-mandatory no-scrollbar -mx-4 px-4 md:mx-0 md:px-0 items-stretch w-full smooth-scroll-x">
                 
-                <!-- Card 1 -->
                 <div class="w-[85vw] sm:w-[290px] lg:w-[288px] flex-shrink-0 bg-white rounded-3xl shadow-md border border-gray-200/60 overflow-hidden snap-center group hover:-translate-y-1.5 transition-transform duration-300 flex flex-col">
                     <div class="relative w-full h-44 overflow-hidden bg-gray-100">
                         <img src="img/kemiren.png" alt="Trip 1" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110">
@@ -258,12 +426,11 @@
                         </div>
                         <div class="pt-3 mt-3 border-t border-gray-100 flex items-center justify-between">
                             <span class="text-xs font-extrabold text-orange-600">Rp 450.000</span>
-                            <button onclick="window.location.href='https://laly.space'" class="text-xs font-bold bg-holiday/10 text-holiday px-3 py-1.5 rounded-xl hover:bg-holiday hover:text-white transition">Detail</button>
+                            <button onclick="window.location.href='#'" class="text-xs font-bold bg-holiday/10 text-holiday px-3 py-1.5 rounded-xl hover:bg-holiday hover:text-white transition">Detail</button>
                         </div>
                     </div>
                 </div>
 
-                <!-- Card 2 -->
                 <div class="w-[85vw] sm:w-[290px] lg:w-[288px] flex-shrink-0 bg-white rounded-3xl shadow-md border border-gray-200/60 overflow-hidden snap-center group hover:-translate-y-1.5 transition-transform duration-300 flex flex-col">
                     <div class="relative w-full h-44 overflow-hidden bg-gray-100">
                         <img src="img/jembatan.png" alt="Trip 2" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110">
@@ -275,12 +442,11 @@
                         </div>
                         <div class="pt-3 mt-3 border-t border-gray-100 flex items-center justify-between">
                             <span class="text-xs font-extrabold text-orange-600">Rp 650.000</span>
-                            <button onclick="window.location.href='https://laly.space'" class="text-xs font-bold bg-holiday/10 text-holiday px-3 py-1.5 rounded-xl hover:bg-holiday hover:text-white transition">Detail</button>
+                            <button onclick="window.location.href='#'" class="text-xs font-bold bg-holiday/10 text-holiday px-3 py-1.5 rounded-xl hover:bg-holiday hover:text-white transition">Detail</button>
                         </div>
                     </div>
                 </div>
 
-                <!-- Card 3 -->
                 <div class="w-[85vw] sm:w-[290px] lg:w-[288px] flex-shrink-0 bg-white rounded-3xl shadow-md border border-gray-200/60 overflow-hidden snap-center group hover:-translate-y-1.5 transition-transform duration-300 flex flex-col">
                     <div class="relative w-full h-44 overflow-hidden bg-gray-100">
                         <img src="img/laut.png" alt="Trip 3" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110">
@@ -292,12 +458,11 @@
                         </div>
                         <div class="pt-3 mt-3 border-t border-gray-100 flex items-center justify-between">
                             <span class="text-xs font-extrabold text-orange-600">Rp 950.000</span>
-                            <button onclick="window.location.href='https://laly.space'" class="text-xs font-bold bg-holiday/10 text-holiday px-3 py-1.5 rounded-xl hover:bg-holiday hover:text-white transition">Detail</button>
+                            <button onclick="window.location.href='#'" class="text-xs font-bold bg-holiday/10 text-holiday px-3 py-1.5 rounded-xl hover:bg-holiday hover:text-white transition">Detail</button>
                         </div>
                     </div>
                 </div>
 
-                <!-- Card 4 -->
                 <div class="w-[85vw] sm:w-[290px] lg:w-[288px] flex-shrink-0 bg-white rounded-3xl shadow-md border border-gray-200/60 overflow-hidden snap-center group hover:-translate-y-1.5 transition-transform duration-300 flex flex-col">
                     <div class="relative w-full h-44 overflow-hidden bg-gray-100">
                         <img src="img/Tarian_Gandrung_sewu_03 1.png" alt="Trip 4" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110">
@@ -309,7 +474,7 @@
                         </div>
                         <div class="pt-3 mt-3 border-t border-gray-100 flex items-center justify-between">
                             <span class="text-xs font-extrabold text-orange-600">Rp 350.000</span>
-                            <button onclick="window.location.href='https://laly.space'" class="text-xs font-bold bg-holiday/10 text-holiday px-3 py-1.5 rounded-xl hover:bg-holiday hover:text-white transition">Detail</button>
+                            <button onclick="window.location.href='#'" class="text-xs font-bold bg-holiday/10 text-holiday px-3 py-1.5 rounded-xl hover:bg-holiday hover:text-white transition">Detail</button>
                         </div>
                     </div>
                 </div>
@@ -321,6 +486,41 @@
 
     <!-- Scripts -->
     <script>
+
+           // Navbar Sticky Logic
+        const headerWrapper = document.getElementById('header-wrapper');
+        const navContainer = document.getElementById('nav-container');
+
+        window.addEventListener('scroll', () => {
+            if (window.scrollY > 50) {
+                headerWrapper.classList.add('top-3');
+                headerWrapper.classList.remove('top-0');
+                navContainer.classList.remove('w-full', 'px-6', 'md:px-10', 'text-white', 'border-transparent');
+                navContainer.classList.add('w-[95%]', 'md:w-[85%]', 'rounded-[10pc]', 'bg-white/95', 'backdrop-blur-xl', 'shadow-xl', 'text-gray-900', 'px-6', 'md:px-8', 'border-gray-200');
+                navContainer.querySelector('.bi-jeep').classList.remove('text-holiday');
+                navContainer.querySelector('.bi-jeep').classList.add('text-holiday-dark');
+                document.getElementById('open-menu-btn').classList.replace('text-white', 'text-gray-900');
+            } else {
+                headerWrapper.classList.remove('top-3');
+                headerWrapper.classList.add('top-0');
+                navContainer.classList.add('w-full', 'px-6', 'md:px-10', 'text-white', 'border-transparent');
+                navContainer.classList.remove('w-[95%]', 'md:w-[85%]', 'rounded-[10pc]', 'bg-white/95', 'backdrop-blur-xl', 'shadow-xl', 'text-gray-900', 'px-6', 'md:px-8', 'border-gray-200');
+                navContainer.querySelector('.bi-jeep').classList.add('text-holiday');
+                navContainer.querySelector('.bi-jeep').classList.remove('text-holiday-dark');
+                document.getElementById('open-menu-btn').classList.replace('text-gray-900', 'text-white');
+            }
+        });
+
+        // GSAP Sidebar Mobile Menu
+        const tlMenu = gsap.timeline({ paused: true });
+        tlMenu.to('#menu-overlay', { display: 'block', opacity: 1, duration: 0.3 })
+              .to('#mobile-sidebar', { x: 0, duration: 0.4, ease: "power3.out", boxShadow: "20px 0 50px rgba(0,0,0,0.5)" }, "<");
+
+        document.getElementById('open-menu-btn').addEventListener('click', () => tlMenu.play());
+        document.getElementById('close-menu-btn').addEventListener('click', () => tlMenu.reverse());
+        document.getElementById('menu-overlay').addEventListener('click', () => tlMenu.reverse());
+
+      
         // INISIALISASI GSAP
         gsap.registerPlugin(ScrollTrigger);
         gsap.utils.toArray('.gsap-section').forEach(section => {
@@ -363,18 +563,14 @@
         const invoiceContainer = document.getElementById('invoice-addons-container');
         const addonButtons = document.querySelectorAll('.addon-btn');
 
-        // Kunci penyimpanan local storage unik untuk halaman trip ini
         const storageKey = 'jadiBerangkat_Addons_Djawatan';
         let selectedAddons = JSON.parse(localStorage.getItem(storageKey)) || [];
 
-        // Format angka ke format mata uang Rupiah
         function formatRupiah(number) {
             return new Intl.NumberFormat('id-ID', { style: 'currency', currency: 'IDR', minimumFractionDigits: 0 }).format(number);
         }
 
-        // Fungsi Render / Perbarui Tampilan Invoice dan Tombol Add-on
         function renderInvoice() {
-            // Kosongkan kontainer invoice add-ons
             invoiceContainer.innerHTML = '';
             let totalAddonsPrice = 0;
 
@@ -382,8 +578,6 @@
                 invoiceContainer.classList.remove('hidden');
                 selectedAddons.forEach(addon => {
                     totalAddonsPrice += addon.price;
-                    
-                    // Buat elemen baris invoice
                     const itemHTML = `
                         <div class="flex justify-between items-center invoice-item-enter">
                             <div class="flex items-center gap-2">
@@ -401,11 +595,9 @@
                 invoiceContainer.classList.add('hidden');
             }
 
-            // Hitung grand total
             const grandTotal = basePrice + totalAddonsPrice;
             grandTotalElement.textContent = formatRupiah(grandTotal);
 
-            // Perbarui status warna dan ikon tombol Plus
             addonButtons.forEach(btn => {
                 const id = btn.getAttribute('data-id');
                 const isAdded = selectedAddons.some(a => a.id === id);
@@ -413,7 +605,7 @@
                 if (isAdded) {
                     btn.innerHTML = '<i class="bi bi-check-lg text-xl"></i>';
                     btn.classList.replace('bg-holiday', 'bg-gray-300');
-                    btn.classList.replace('hover:bg-holiday-dark', 'hover:bg-red-400'); // Jika dihover akan merah tanda bisa dihapus
+                    btn.classList.replace('hover:bg-holiday-dark', 'hover:bg-red-400');
                     btn.title = "Hapus layanan";
                 } else {
                     btn.innerHTML = '<i class="bi bi-plus-lg text-lg"></i>';
@@ -424,31 +616,23 @@
             });
         }
 
-        // Fungsi Tambah / Hapus Data
         function toggleAddon(id, name, price) {
             const index = selectedAddons.findIndex(a => a.id === id);
-            
             if (index > -1) {
-                // Jika sudah ada, hapus dari list
                 selectedAddons.splice(index, 1);
             } else {
-                // Jika belum ada, tambahkan ke list
                 selectedAddons.push({ id, name, price: parseInt(price) });
             }
-            
-            // Simpan ke local storage
             localStorage.setItem(storageKey, JSON.stringify(selectedAddons));
             renderInvoice();
         }
 
-        // Fungsi Hapus via Ikon Silang Merah di Invoice
         window.removeAddon = function(id) {
             selectedAddons = selectedAddons.filter(a => a.id !== id);
             localStorage.setItem(storageKey, JSON.stringify(selectedAddons));
             renderInvoice();
         };
 
-        // Pasang Event Listener pada setiap tombol Add-on
         addonButtons.forEach(btn => {
             btn.addEventListener('click', function() {
                 const id = this.getAttribute('data-id');
@@ -458,7 +642,6 @@
             });
         });
 
-        // Jalankan render awal saat halaman dimuat
         renderInvoice();
     </script>
 </body>
