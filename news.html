@@ -31,16 +31,11 @@
                         sans: ['Plus Jakarta Sans', 'sans-serif'],
                     },
                     colors: {
-                        holiday: {
-                            50: '#f4fbf7',
-                            100: '#e2f7ea',
-                            200: '#c5eed4',
-                            500: '#22c55e',
-                            600: '#16a34a',
-                            700: '#15803d',
-                            800: '#166534',
-                            900: '#14532d',
-                        }
+                        base: '#F6F5ED',
+                        holiday: '#2e7d32', 
+                        'holiday-dark': '#1b5e20',
+                        'holiday-light': '#a5d6a7',
+                        'holiday-glow': 'rgba(46, 125, 50, 0.4)'
                     }
                 }
             }
@@ -75,12 +70,12 @@
         </div>
         <nav class="flex flex-col gap-6 text-lg font-bold text-gray-700">
             <a href="index.html" class="hover:text-holiday transition flex items-center gap-3"><i class="bi bi-house"></i> Beranda</a>
-            <a href="news.html" class="hover:text-holiday transition flex items-center gap-3"><i class="bi bi-compass"></i> Berita</a>
+            <a href="news.html" class="bg-red-500 text-white px-3 py-2 rounded-lg hover:bg-red-600 transition flex items-center gap-3 w-fit"><i class="bi bi-compass"></i> New</a>
             <a href="#paket" class="hover:text-holiday transition flex items-center gap-3"><i class="bi bi-map"></i> Paket Trip</a>
             <a href="#armada" class="hover:text-holiday transition flex items-center gap-3"><i class="bi bi-truck"></i> Armada</a>
         </nav>
         <div class="mt-auto">
-            <a href="#" class="block w-full text-center bg-holiday !text-gray-600 py-4 rounded-xl font-bold shadow-lg">Booking Sekarang</a>
+            <a href="detail.html" class="block w-full text-center bg-holiday !text-gray-600 py-4 rounded-xl font-bold shadow-lg">Booking Sekarang</a>
         </div>
     </aside>
 
@@ -92,7 +87,7 @@
             
             <nav class="hidden md:flex gap-8 font-semibold items-center bg-black/20 px-6 py-2.5 rounded-full backdrop-blur-md border border-white/10">
                 <a href="index.html" class="hover:text-holiday transition">Beranda</a>
-                <a href="news.html" class="hover:text-holiday transition">Berita</a>
+                <a href="news.html" class="bg-red-500 text-white px-4 py-2 rounded-lg hover:bg-red-600 transition font-bold">New</a>
                 <a href="#paket" class="hover:text-holiday transition">Paket Trip</a>
                 <a href="#armada" class="hover:text-holiday transition">Armada</a>
             </nav>

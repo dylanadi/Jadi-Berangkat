@@ -10,7 +10,6 @@
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:ital,wght@0,200..800;1,200..800&display=swap" rel="stylesheet">
     
     <script src="https://cdn.tailwindcss.com"></script>
-    
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
     
     <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
@@ -44,12 +43,14 @@
         .card-gradient { background: linear-gradient(to top, rgba(0,0,0,0.95) 0%, rgba(0,0,0,0.3) 50%, transparent 100%); }
         .hero-gradient { background: linear-gradient(to bottom, rgba(0,0,0,0.5) 0%, rgba(0,0,0,0.2) 50%, rgba(0,0,0,0.8) 100%); }
 
-        /* Coverflow Styles */
+        /* --- 1. COVERFLOW STYLES (Untuk Destinasi) --- */
         .carousel-card {
-            transition: all 0.6s cubic-bezier(0.25, 1, 0.5, 1);
+            transition: all 0.5s cubic-bezier(0.25, 1, 0.5, 1);
             position: absolute;
             cursor: pointer;
             will-change: transform, opacity;
+            user-select: none;
+            -webkit-user-drag: none;
         }
         .carousel-card:not(.active) .card-content {
             opacity: 0;
@@ -62,6 +63,58 @@
         }
         .carousel-card.active:hover img {
             transform: scale(1.08);
+        }
+        #carousel-container {
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        /* --- 2. NATIVE SLIDER EFFECTS (Untuk Paket & Armada) --- */
+        .slider-card-native {
+            transition: transform 0.5s cubic-bezier(0.25, 1, 0.5, 1), opacity 0.5s ease;
+            position: relative;
+        }
+
+        @media (max-width: 767px) {
+            #paket-slider, #slider-armada {
+                padding-left: 14vw !important;
+                padding-right: 14vw !important;
+            }
+            .slider-card-native {
+                width: 80vw !important;
+                flex: 0 0 80vw !important;
+                margin: 0 -4vw !important;
+                opacity: 0.35;
+                transform: scale(0.85);
+            }
+            .slider-card-native::after {
+                content: '';
+                position: absolute;
+                inset: 0;
+                background: black;
+                opacity: 0.3; 
+                transition: opacity 0.5s ease;
+                pointer-events: none;
+                z-index: 20;
+                border-radius: inherit;
+            }
+            .slider-card-native.active-slide {
+                opacity: 1;
+                transform: scale(1);
+                z-index: 10;
+            }
+            .slider-card-native.active-slide::after {
+                opacity: 0;
+            }
+        }
+
+        @media (min-width: 768px) {
+            .slider-card-native {
+                opacity: 1;
+                transform: scale(1);
+            }
+            .slider-card-native:hover {
+                transform: translateY(-8px);
+            }
         }
 
         /* Seamless Infinite Marquee for Reviews */
@@ -78,21 +131,16 @@
             animation: marquee 30s linear infinite;
         }
         .marquee-track:hover { animation-play-state: paused; }
+        @keyframes marquee { 0% { transform: translateX(0); } 100% { transform: translateX(-50%); } }
         
-        @keyframes marquee {
-            0% { transform: translateX(0); }
-            100% { transform: translateX(-50%); } 
-        }
-        
-        /* Initial state for GSAP */
         .gsap-item { opacity: 0; visibility: hidden; }
-        
-        /* Smooth scrolling behavior specifically for slider container */
         .smooth-scroll-x { scroll-behavior: smooth; }
+        .slider-dot { transition: all 0.3s cubic-bezier(0.25, 1, 0.5, 1); }
     </style>
 </head>
 <body class="text-gray-800 overflow-x-hidden antialiased">
 
+    <!-- Navbar & Sidebar -->
     <div id="menu-overlay" class="fixed inset-0 bg-black/60 z-[60] hidden opacity-0 backdrop-blur-sm"></div>
     <aside id="mobile-sidebar" class="fixed top-0 left-0 h-full w-[80%] max-w-sm bg-base shadow-2xl z-[70] p-8 flex flex-col transform -translate-x-full border-r border-gray-200">
         <div class="flex justify-between items-center mb-10">
@@ -105,12 +153,12 @@
         </div>
         <nav class="flex flex-col gap-6 text-lg font-bold text-gray-700">
             <a href="#" class="hover:text-holiday transition flex items-center gap-3"><i class="bi bi-house"></i> Beranda</a>
-            <a href="news.html" class="hover:text-holiday transition flex items-center gap-3"><i class="bi bi-compass"></i> Berita</a>
+            <a href="news.html" class="bg-red-500 text-white px-3 py-2 rounded-lg hover:bg-red-600 transition flex items-center gap-3 w-fit"><i class="bi bi-compass"></i> New</a>
             <a href="#paket" class="hover:text-holiday transition flex items-center gap-3"><i class="bi bi-map"></i> Paket Trip</a>
             <a href="#armada" class="hover:text-holiday transition flex items-center gap-3"><i class="bi bi-truck"></i> Armada</a>
         </nav>
         <div class="mt-auto">
-            <a href="#" class="block w-full text-center bg-holiday !text-gray-600 py-4 rounded-xl font-bold shadow-lg">Booking Sekarang</a>
+            <a href="detail.html" class="block w-full text-center bg-holiday !text-gray-600 py-4 rounded-xl font-bold shadow-lg">Booking Sekarang</a>
         </div>
     </aside>
 
@@ -119,14 +167,12 @@
             <a href="#" class="text-2xl font-extrabold tracking-wide flex items-center gap-2 drop-shadow-md">
                 <i class="bi bi-jeep text-holiday"></i> <span class="hidden sm:block">Jadi Berangkat</span><span class="sm:hidden">JB.</span>
             </a>
-            
             <nav class="hidden md:flex gap-8 font-semibold items-center bg-black/20 px-6 py-2.5 rounded-full backdrop-blur-md border border-white/10">
                 <a href="#" class="hover:text-holiday transition">Beranda</a>
-                <a href="news.html" class="hover:text-holiday transition">Berita</a>
+                <a href="news.html" class="bg-red-500 text-white px-4 py-2 rounded-lg hover:bg-red-600 transition font-bold">New</a>
                 <a href="#paket" class="hover:text-holiday transition">Paket Trip</a>
                 <a href="#armada" class="hover:text-holiday transition">Armada</a>
             </nav>
-
             <div class="flex items-center gap-4">
                 <a href="#" class="hidden md:block bg-holiday hover:bg-holiday-dark text-white px-7 py-2.5 rounded-full transition shadow-lg font-bold">Masuk</a>
                 <button id="open-menu-btn" class="md:hidden w-11 h-11 flex items-center justify-center rounded-full bg-black/40 backdrop-blur-md text-white border border-white/20 hover:bg-holiday transition">
@@ -140,9 +186,7 @@
         <video id="hero-video" class="absolute inset-0 w-full h-full object-cover" autoplay loop muted playsinline>
             <source src="hero.mp4" type="video/mp4">
         </video>
-        
         <div class="absolute inset-0 hero-gradient"></div>
-
         <div class="relative z-10 text-center text-white px-6 w-full max-w-5xl mx-auto flex flex-col items-center mt-12 gsap-section">
             <h1 class="gsap-item text-4xl md:text-6xl lg:text-7xl font-extrabold mb-6 drop-shadow-2xl leading-tight">
                 Jelajahi Alam <br class="hidden md:block">
@@ -151,16 +195,13 @@
             <p class="gsap-item text-base md:text-xl max-w-2xl mx-auto drop-shadow-md text-gray-200 mb-10 font-medium">
                 Pesan Jeep eksklusif dengan mudah. Nikmati rute menantang, pemandangan memukau, dan pengalaman aman bersama profesional.
             </p>
-            
             <a href="#" class="gsap-item bg-holiday hover:bg-holiday-dark text-white px-8 py-4 rounded-full transition-all shadow-lg font-bold flex items-center gap-2 hover:-translate-y-1">
                 Mulai Petualangan <i class="bi bi-arrow-right"></i>
             </a>
         </div>
-
         <button id="mute-btn" class="absolute bottom-8 left-6 md:left-10 z-20 w-12 h-12 bg-black/50 backdrop-blur-md rounded-full flex items-center justify-center text-white hover:bg-holiday transition border border-white/20 shadow-xl">
             <i class="bi bi-volume-mute-fill text-xl" id="mute-icon"></i>
         </button>
-
         <div class="absolute bottom-10 right-6 md:right-10 z-20 flex gap-2 bg-black/40 px-4 py-2.5 rounded-full backdrop-blur-md shadow-lg border border-white/10">
             <div class="w-6 h-2 rounded-full bg-holiday cursor-pointer transition"></div>
             <div class="w-2 h-2 rounded-full bg-white/50 hover:bg-white cursor-pointer transition"></div>
@@ -168,145 +209,143 @@
         </div>
     </section>
 
+    <!-- SECTION DESTINASI -->
     <section id="destinasi" class="pt-24 pb-16 px-4 overflow-hidden relative gsap-section">
         <div class="max-w-7xl mx-auto text-center mb-12">
             <span class="gsap-item text-holiday font-extrabold tracking-wider text-sm uppercase">Eksplorasi Lokal</span>
             <h2 class="gsap-item text-3xl md:text-4xl font-extrabold text-gray-900 mt-2 mb-3">Destinasi Pilihan</h2>
-            <p class="gsap-item text-gray-500 max-w-lg mx-auto font-medium">Klik atau sentuh card di samping untuk memindahkan fokus ke destinasi impianmu.</p>
+            <p class="gsap-item text-gray-500 max-w-lg mx-auto font-medium">Geser atau sentuh card untuk memindahkan fokus ke destinasi impianmu.</p>
         </div>
 
-        <div class="gsap-item relative w-full h-[400px] md:h-[500px] flex justify-center items-center" id="carousel-container">
-            
-            <div class="carousel-card w-[260px] h-[360px] md:w-[350px] md:h-[480px] rounded-[2rem] overflow-hidden shadow-2xl bg-black border border-gray-700/50" data-index="0">
-                <img src="img/djawatan.png" alt="De Djawatan" class="absolute inset-0 w-full h-full object-cover transition-transform duration-700">
-                <div class="absolute inset-0 card-gradient"></div>
-                <div class="card-content absolute bottom-0 left-0 right-0 p-6 flex flex-col justify-end text-white transition-all duration-500">
-                    <h3 class="text-2xl md:text-3xl font-bold mb-1">Hutan De Djawatan</h3>
-                    <div class="flex items-center gap-2 mb-3">
-                        <div class="flex text-yellow-400 text-sm"><i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i><i class="bi bi-star-half"></i></div>
-                        <span class="text-sm font-bold text-gray-300">4.8/5</span>
-                    </div>
-                    <div class="flex items-center justify-between pt-3 border-t border-white/20" onclick="window.location.href='detail.html'">
-                        <span class="text-sm text-gray-300 font-medium">Nuansa magis hutan trembesi</span>
-                        <div class="w-8 h-8 rounded-full bg-holiday flex items-center justify-center cursor-pointer hover:scale-110 transition">
-                            <i class="bi bi-arrow-up-right text-white"></i>
-                        </div>
-                    </div>
-                </div>
-            </div>
+        <div class="gsap-item relative w-full max-w-7xl mx-auto group">
+            <!-- Arrows untuk Destinasi (Sekarang Muncul di Mobile juga) -->
+            <button id="btn-prev-dest" class="flex absolute left-1 md:left-4 top-1/2 -translate-y-1/2 z-40 w-10 h-10 md:w-12 md:h-12 rounded-full bg-white shadow-lg items-center justify-center text-gray-800 hover:bg-holiday hover:text-white transition cursor-pointer"><i class="bi bi-chevron-left"></i></button>
+            <button id="btn-next-dest" class="flex absolute right-1 md:right-4 top-1/2 -translate-y-1/2 z-40 w-10 h-10 md:w-12 md:h-12 rounded-full bg-white shadow-lg items-center justify-center text-gray-800 hover:bg-holiday hover:text-white transition cursor-pointer"><i class="bi bi-chevron-right"></i></button>
 
-            <div class="carousel-card w-[260px] h-[360px] md:w-[350px] md:h-[480px] rounded-[2rem] overflow-hidden shadow-2xl bg-black border border-gray-700/50" data-index="1">
-                <img src="img/kemiren.png" alt="Desa Kemiren" class="absolute inset-0 w-full h-full object-cover transition-transform duration-700">
-                <div class="absolute inset-0 card-gradient"></div>
-                <div class="card-content absolute bottom-0 left-0 right-0 p-6 flex flex-col justify-end text-white transition-all duration-500">
-                    <h3 class="text-2xl md:text-3xl font-bold mb-1">Desa Wisata Kemiren</h3>
-                    <div class="flex items-center gap-2 mb-3">
-                        <div class="flex text-yellow-400 text-sm"><i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i></div>
-                        <span class="text-sm font-bold text-gray-300">5.0/5</span>
-                    </div>
-                    <div class="flex items-center justify-between pt-3 border-t border-white/20" onclick="window.location.href='detail.html'">
-                        <span class="text-sm text-gray-300 font-medium">Budaya asli suku Osing</span>
-                        <div class="w-8 h-8 rounded-full bg-holiday flex items-center justify-center cursor-pointer hover:scale-110 transition">
-                            <i class="bi bi-arrow-up-right text-white"></i>
+            <!-- 3D Coverflow Container -->
+            <div class="relative w-full h-[400px] md:h-[500px] flex justify-center items-center overflow-hidden touch-pan-y" id="carousel-container">
+                
+                <div class="carousel-card w-[260px] h-[360px] md:w-[350px] md:h-[480px] rounded-[2rem] overflow-hidden shadow-2xl bg-black border border-gray-700/50">
+                    <img src="img/djawatan.png" alt="De Djawatan" class="absolute inset-0 w-full h-full object-cover transition-transform duration-700 pointer-events-none">
+                    <div class="absolute inset-0 card-gradient pointer-events-none"></div>
+                    <div class="card-content absolute bottom-0 left-0 right-0 p-6 flex flex-col justify-end text-white transition-all duration-500">
+                        <h3 class="text-2xl md:text-3xl font-bold mb-1">Hutan De Djawatan</h3>
+                        <div class="flex items-center gap-2 mb-3">
+                            <div class="flex text-yellow-400 text-sm"><i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i><i class="bi bi-star-half"></i></div>
+                            <span class="text-sm font-bold text-gray-300">4.8/5</span>
+                        </div>
+                        <div class="flex items-center justify-between pt-3 border-t border-white/20" onclick="window.location.href='detail.html'; event.stopPropagation();">
+                            <span class="text-sm text-gray-300 font-medium">Nuansa magis hutan trembesi</span>
+                            <div class="w-8 h-8 rounded-full bg-holiday flex items-center justify-center cursor-pointer hover:scale-110 transition"><i class="bi bi-arrow-up-right text-white"></i></div>
                         </div>
                     </div>
                 </div>
-            </div>
 
-            <div class="carousel-card w-[260px] h-[360px] md:w-[350px] md:h-[480px] rounded-[2rem] overflow-hidden shadow-2xl bg-black border border-gray-700/50" data-index="2">
-                <img src="img/jembatan.png" alt="Jembatan" class="absolute inset-0 w-full h-full object-cover transition-transform duration-700">
-                <div class="absolute inset-0 card-gradient"></div>
-                <div class="card-content absolute bottom-0 left-0 right-0 p-6 flex flex-col justify-end text-white transition-all duration-500">
-                    <h3 class="text-2xl md:text-3xl font-bold mb-1">Eksplorasi Jembatan</h3>
-                    <div class="flex items-center gap-2 mb-3">
-                        <div class="flex text-yellow-400 text-sm"><i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i><i class="bi bi-star"></i></div>
-                        <span class="text-sm font-bold text-gray-300">4.5/5</span>
-                    </div>
-                    <div class="flex items-center justify-between pt-3 border-t border-white/20" onclick="window.location.href='detail.html'">
-                        <span class="text-sm text-gray-300 font-medium">Jejak peninggalan sejarah</span>
-                        <div class="w-8 h-8 rounded-full bg-holiday flex items-center justify-center cursor-pointer hover:scale-110 transition">
-                            <i class="bi bi-arrow-up-right text-white"></i>
+                <div class="carousel-card w-[260px] h-[360px] md:w-[350px] md:h-[480px] rounded-[2rem] overflow-hidden shadow-2xl bg-black border border-gray-700/50">
+                    <img src="img/kemiren.png" alt="Desa Kemiren" class="absolute inset-0 w-full h-full object-cover transition-transform duration-700 pointer-events-none">
+                    <div class="absolute inset-0 card-gradient pointer-events-none"></div>
+                    <div class="card-content absolute bottom-0 left-0 right-0 p-6 flex flex-col justify-end text-white transition-all duration-500">
+                        <h3 class="text-2xl md:text-3xl font-bold mb-1">Desa Wisata Kemiren</h3>
+                        <div class="flex items-center gap-2 mb-3">
+                            <div class="flex text-yellow-400 text-sm"><i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i></div>
+                            <span class="text-sm font-bold text-gray-300">5.0/5</span>
+                        </div>
+                        <div class="flex items-center justify-between pt-3 border-t border-white/20" onclick="window.location.href='detail.html'; event.stopPropagation();">
+                            <span class="text-sm text-gray-300 font-medium">Budaya asli suku Osing</span>
+                            <div class="w-8 h-8 rounded-full bg-holiday flex items-center justify-center cursor-pointer hover:scale-110 transition"><i class="bi bi-arrow-up-right text-white"></i></div>
                         </div>
                     </div>
                 </div>
-            </div>
-            
-            <div class="carousel-card w-[260px] h-[360px] md:w-[350px] md:h-[480px] rounded-[2rem] overflow-hidden shadow-2xl bg-black border border-gray-700/50" data-index="3">
-                <img src="img/laut.png" alt="Pantai" class="absolute inset-0 w-full h-full object-cover transition-transform duration-700">
-                <div class="absolute inset-0 card-gradient"></div>
-                <div class="card-content absolute bottom-0 left-0 right-0 p-6 flex flex-col justify-end text-white transition-all duration-500">
-                    <h3 class="text-2xl md:text-3xl font-bold mb-1">Eksotisme Pantai</h3>
-                    <div class="flex items-center gap-2 mb-3">
-                        <div class="flex text-yellow-400 text-sm"><i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i></div>
-                        <span class="text-sm font-bold text-gray-300">5.0/5</span>
-                    </div>
-                    <div class="flex items-center justify-between pt-3 border-t border-white/20" onclick="window.location.href='detail.html'">
-                        <span class="text-sm text-gray-300 font-medium">Pesona laut timur</span>
-                        <div class="w-8 h-8 rounded-full bg-holiday flex items-center justify-center cursor-pointer hover:scale-110 transition">
-                            <i class="bi bi-arrow-up-right text-white"></i>
-                        </div>
-                    </div>
-                </div>
-            </div>
 
-            <div class="carousel-card w-[260px] h-[360px] md:w-[350px] md:h-[480px] rounded-[2rem] overflow-hidden shadow-2xl bg-black border border-gray-700/50" data-index="4">
-                <img src="img/Tarian_Gandrung_sewu_03 1.png" alt="Gandrung Sewu" class="absolute inset-0 w-full h-full object-cover transition-transform duration-700">
-                <div class="absolute inset-0 card-gradient"></div>
-                <div class="card-content absolute bottom-0 left-0 right-0 p-6 flex flex-col justify-end text-white transition-all duration-500">
-                    <h3 class="text-2xl md:text-3xl font-bold mb-1">Gandrung Sewu</h3>
-                    <div class="flex items-center gap-2 mb-3">
-                        <div class="flex text-yellow-400 text-sm"><i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i></div>
-                        <span class="text-sm font-bold text-gray-300">5.0/5</span>
-                    </div>
-                    <div class="flex items-center justify-between pt-3 border-t border-white/20" onclick="window.location.href='detail.html'">
-                        <span class="text-sm text-gray-300 font-medium">Festival Budaya Tahunan</span>
-                        <div class="w-8 h-8 rounded-full bg-holiday flex items-center justify-center cursor-pointer hover:scale-110 transition">
-                            <i class="bi bi-arrow-up-right text-white"></i>
+                <div class="carousel-card w-[260px] h-[360px] md:w-[350px] md:h-[480px] rounded-[2rem] overflow-hidden shadow-2xl bg-black border border-gray-700/50">
+                    <img src="img/jembatan.png" alt="Jembatan" class="absolute inset-0 w-full h-full object-cover transition-transform duration-700 pointer-events-none">
+                    <div class="absolute inset-0 card-gradient pointer-events-none"></div>
+                    <div class="card-content absolute bottom-0 left-0 right-0 p-6 flex flex-col justify-end text-white transition-all duration-500">
+                        <h3 class="text-2xl md:text-3xl font-bold mb-1">Eksplorasi Jembatan</h3>
+                        <div class="flex items-center gap-2 mb-3">
+                            <div class="flex text-yellow-400 text-sm"><i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i><i class="bi bi-star"></i></div>
+                            <span class="text-sm font-bold text-gray-300">4.5/5</span>
+                        </div>
+                        <div class="flex items-center justify-between pt-3 border-t border-white/20" onclick="window.location.href='detail.html'; event.stopPropagation();">
+                            <span class="text-sm text-gray-300 font-medium">Jejak peninggalan sejarah</span>
+                            <div class="w-8 h-8 rounded-full bg-holiday flex items-center justify-center cursor-pointer hover:scale-110 transition"><i class="bi bi-arrow-up-right text-white"></i></div>
                         </div>
                     </div>
                 </div>
-            </div>
+                
+                <div class="carousel-card w-[260px] h-[360px] md:w-[350px] md:h-[480px] rounded-[2rem] overflow-hidden shadow-2xl bg-black border border-gray-700/50">
+                    <img src="img/laut.png" alt="Pantai" class="absolute inset-0 w-full h-full object-cover transition-transform duration-700 pointer-events-none">
+                    <div class="absolute inset-0 card-gradient pointer-events-none"></div>
+                    <div class="card-content absolute bottom-0 left-0 right-0 p-6 flex flex-col justify-end text-white transition-all duration-500">
+                        <h3 class="text-2xl md:text-3xl font-bold mb-1">Eksotisme Pantai</h3>
+                        <div class="flex items-center gap-2 mb-3">
+                            <div class="flex text-yellow-400 text-sm"><i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i></div>
+                            <span class="text-sm font-bold text-gray-300">5.0/5</span>
+                        </div>
+                        <div class="flex items-center justify-between pt-3 border-t border-white/20" onclick="window.location.href='detail.html'; event.stopPropagation();">
+                            <span class="text-sm text-gray-300 font-medium">Pesona laut timur</span>
+                            <div class="w-8 h-8 rounded-full bg-holiday flex items-center justify-center cursor-pointer hover:scale-110 transition"><i class="bi bi-arrow-up-right text-white"></i></div>
+                        </div>
+                    </div>
+                </div>
 
+                <div class="carousel-card w-[260px] h-[360px] md:w-[350px] md:h-[480px] rounded-[2rem] overflow-hidden shadow-2xl bg-black border border-gray-700/50">
+                    <img src="img/Tarian_Gandrung_sewu_03 1.png" alt="Gandrung Sewu" class="absolute inset-0 w-full h-full object-cover transition-transform duration-700 pointer-events-none">
+                    <div class="absolute inset-0 card-gradient pointer-events-none"></div>
+                    <div class="card-content absolute bottom-0 left-0 right-0 p-6 flex flex-col justify-end text-white transition-all duration-500">
+                        <h3 class="text-2xl md:text-3xl font-bold mb-1">Gandrung Sewu</h3>
+                        <div class="flex items-center gap-2 mb-3">
+                            <div class="flex text-yellow-400 text-sm"><i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i></div>
+                            <span class="text-sm font-bold text-gray-300">5.0/5</span>
+                        </div>
+                        <div class="flex items-center justify-between pt-3 border-t border-white/20" onclick="window.location.href='detail.html'; event.stopPropagation();">
+                            <span class="text-sm text-gray-300 font-medium">Festival Budaya Tahunan</span>
+                            <div class="w-8 h-8 rounded-full bg-holiday flex items-center justify-center cursor-pointer hover:scale-110 transition"><i class="bi bi-arrow-up-right text-white"></i></div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+            <!-- Dots Indicator untuk Destinasi -->
+            <div id="dots-destinasi" class="flex justify-center gap-2 mt-4 relative z-40"></div>
         </div>
     </section>
 
-    <section id="paket" class="py-16 relative gsap-section">
-        <div class="max-w-7xl mx-auto px-6 md:px-10">
+    <!-- SECTION PAKET TRIP -->
+    <section id="paket" class="py-16 relative gsap-section overflow-hidden">
+        <div class="max-w-7xl mx-auto px-6 md:px-10 relative">
             <div class="flex justify-between items-end mb-10">
-                <div class="gsap-item text-center md:text-left w-full md:w-auto">
+                <div class="gsap-item text-left w-auto">
                     <span class="text-holiday font-extrabold tracking-wider text-sm uppercase">Penawaran</span>
                     <h2 class="text-3xl font-extrabold text-gray-900 mt-2">Paket Trip Populer</h2>
                 </div>
-                <div class="gsap-item hidden md:flex gap-2">
+                <!-- Tombol Navigasi sekarang juga muncul di Mobile -->
+                <div class="gsap-item flex gap-2">
                     <button id="btn-prev-paket" class="w-10 h-10 rounded-full bg-white shadow-md flex items-center justify-center text-gray-600 hover:text-white hover:bg-holiday transition cursor-pointer"><i class="bi bi-chevron-left"></i></button>
                     <button id="btn-next-paket" class="w-10 h-10 rounded-full bg-white shadow-md flex items-center justify-center text-gray-600 hover:text-white hover:bg-holiday transition cursor-pointer"><i class="bi bi-chevron-right"></i></button>
                 </div>
             </div>
 
-            <div id="paket-slider" class="gsap-item flex overflow-x-auto gap-6 pb-10 pt-2 snap-x snap-mandatory no-scrollbar -mx-6 px-6 md:mx-0 md:px-0 md:justify-start items-stretch w-full smooth-scroll-x">
+            <!-- Tambahan efek pada class card: slider-card-native -->
+            <div id="paket-slider" class="gsap-item flex overflow-x-auto gap-4 md:gap-6 pb-6 pt-2 snap-x snap-mandatory no-scrollbar -mx-6 px-6 md:mx-0 md:px-0 md:justify-start items-stretch w-auto smooth-scroll-x relative">
                 
-                <div class="w-[85vw] md:w-[340px] flex-shrink-0 bg-white rounded-3xl shadow-lg border border-gray-200/60 overflow-hidden snap-center group hover:-translate-y-2 transition-transform duration-300 flex flex-col">
+                <div class="slider-card-native w-full md:w-[340px] flex-shrink-0 bg-white rounded-3xl shadow-lg border border-gray-200/60 overflow-hidden snap-center group flex flex-col">
                     <div class="relative w-full h-52 overflow-hidden bg-gray-200 flex-shrink-0">
                         <img src="img/unsplash_M8drGBgFNZE.png" alt="Trip 1" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110">
                         <div class="absolute top-4 left-4 bg-white/90 backdrop-blur text-gray-900 text-xs font-extrabold px-3 py-1.5 rounded-full flex items-center gap-1 shadow">
                             <i class="bi bi-clock text-holiday"></i> 1 Hari
                         </div>
-                        <div class="absolute top-4 right-4 bg-gray-900/90 backdrop-blur text-white text-xs font-bold px-3 py-1.5 rounded-full shadow">
-                            Private
-                        </div>
+                        <div class="absolute top-4 right-4 bg-gray-900/90 backdrop-blur text-white text-xs font-bold px-3 py-1.5 rounded-full shadow">Private</div>
                     </div>
                     <div class="p-6 flex-grow flex flex-col">
                         <h3 class="text-xl font-extrabold text-gray-900 mb-1 group-hover:text-holiday transition-colors">Eksplorasi Alam Bebas</h3>
                         <p class="text-sm text-gray-500 mb-4 flex items-center gap-1 font-medium"><i class="bi bi-geo-alt-fill text-gray-400"></i> Rute Alam Terbuka</p>
-                        
                         <div class="flex items-center gap-2 mb-4">
                             <span class="font-extrabold text-gray-900">4.8</span>
                             <div class="flex text-yellow-400 text-xs"><i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i><i class="bi bi-star-half"></i></div>
                             <span class="text-xs text-gray-400 font-semibold">(128 review)</span>
                         </div>
-                        
                         <p class="text-sm text-gray-600 mb-6 line-clamp-2">Menikmati keindahan alam secara langsung dengan rute menantang yang memacu adrenalin ..</p>
-                        
                         <div class="mt-auto">
                             <div class="bg-orange-50/80 rounded-2xl p-4 mb-5 border border-orange-100">
                                 <p class="text-xs text-orange-600/80 font-bold mb-1 uppercase tracking-wider">Mulai dari</p>
@@ -320,182 +359,158 @@
                     </div>
                 </div>
 
-                <div class="w-[85vw] md:w-[340px] flex-shrink-0 bg-white rounded-3xl shadow-lg border border-gray-200/60 overflow-hidden snap-center group hover:-translate-y-2 transition-transform duration-300 flex flex-col">
-                    <div class="relative w-full h-52 overflow-hidden bg-gray-200 flex-shrink-0">
-                        <img src="img/unsplash_M8drGBgFNZE.png" alt="Trip 1" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110">
-                        <div class="absolute top-4 left-4 bg-white/90 backdrop-blur text-gray-900 text-xs font-extrabold px-3 py-1.5 rounded-full flex items-center gap-1 shadow">
-                            <i class="bi bi-clock text-holiday"></i> 1 Hari
-                        </div>
-                        <div class="absolute top-4 right-4 bg-gray-900/90 backdrop-blur text-white text-xs font-bold px-3 py-1.5 rounded-full shadow">
-                            Private
-                        </div>
-                    </div>
-                    <div class="p-6 flex-grow flex flex-col">
-                        <h3 class="text-xl font-extrabold text-gray-900 mb-1 group-hover:text-holiday transition-colors">Eksplorasi Alam Bebas</h3>
-                        <p class="text-sm text-gray-500 mb-4 flex items-center gap-1 font-medium"><i class="bi bi-geo-alt-fill text-gray-400"></i> Rute Alam Terbuka</p>
-                        
-                        <div class="flex items-center gap-2 mb-4">
-                            <span class="font-extrabold text-gray-900">4.8</span>
-                            <div class="flex text-yellow-400 text-xs"><i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i><i class="bi bi-star-half"></i></div>
-                            <span class="text-xs text-gray-400 font-semibold">(128 review)</span>
-                        </div>
-                        
-                        <p class="text-sm text-gray-600 mb-6 line-clamp-2">Menikmati keindahan alam secara langsung dengan rute menantang yang memacu adrenalin ..</p>
-                        
-                        <div class="mt-auto">
-                            <div class="bg-orange-50/80 rounded-2xl p-4 mb-5 border border-orange-100">
-                                <p class="text-xs text-orange-600/80 font-bold mb-1 uppercase tracking-wider">Mulai dari</p>
-                                <p class="text-xl font-extrabold text-orange-600">Rp 1.250.000</p>
-                            </div>
-                            <div class="flex gap-3">
-                                <button onclick="window.location.href='detail.html'" class="flex-1 py-3 rounded-xl border border-gray-200 text-gray-700 font-extrabold hover:bg-gray-50 transition">Detail</button>
-                                <button onclick="window.location.href='detail.html'" class="flex-1 py-3 rounded-xl bg-holiday text-white font-extrabold hover:bg-holiday-dark transition shadow-md shadow-holiday-glow">Pesan</button>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="w-[85vw] md:w-[340px] flex-shrink-0 bg-white rounded-3xl shadow-lg border border-gray-200/60 overflow-hidden snap-center group hover:-translate-y-2 transition-transform duration-300 flex flex-col">
-                    <div class="relative w-full h-52 overflow-hidden bg-gray-200 flex-shrink-0">
-                        <img src="img/unsplash_M8drGBgFNZE.png" alt="Trip 1" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110">
-                        <div class="absolute top-4 left-4 bg-white/90 backdrop-blur text-gray-900 text-xs font-extrabold px-3 py-1.5 rounded-full flex items-center gap-1 shadow">
-                            <i class="bi bi-clock text-holiday"></i> 1 Hari
-                        </div>
-                        <div class="absolute top-4 right-4 bg-gray-900/90 backdrop-blur text-white text-xs font-bold px-3 py-1.5 rounded-full shadow">
-                            Private
-                        </div>
-                    </div>
-                    <div class="p-6 flex-grow flex flex-col">
-                        <h3 class="text-xl font-extrabold text-gray-900 mb-1 group-hover:text-holiday transition-colors">Eksplorasi Alam Bebas</h3>
-                        <p class="text-sm text-gray-500 mb-4 flex items-center gap-1 font-medium"><i class="bi bi-geo-alt-fill text-gray-400"></i> Rute Alam Terbuka</p>
-                        
-                        <div class="flex items-center gap-2 mb-4">
-                            <span class="font-extrabold text-gray-900">4.8</span>
-                            <div class="flex text-yellow-400 text-xs"><i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i><i class="bi bi-star-half"></i></div>
-                            <span class="text-xs text-gray-400 font-semibold">(128 review)</span>
-                        </div>
-                        
-                        <p class="text-sm text-gray-600 mb-6 line-clamp-2">Menikmati keindahan alam secara langsung dengan rute menantang yang memacu adrenalin ..</p>
-                        
-                        <div class="mt-auto">
-                            <div class="bg-orange-50/80 rounded-2xl p-4 mb-5 border border-orange-100">
-                                <p class="text-xs text-orange-600/80 font-bold mb-1 uppercase tracking-wider">Mulai dari</p>
-                                <p class="text-xl font-extrabold text-orange-600">Rp 1.250.000</p>
-                            </div>
-                            <div class="flex gap-3">
-                                <button onclick="window.location.href='#'" class="flex-1 py-3 rounded-xl border border-gray-200 text-gray-700 font-extrabold hover:bg-gray-50 transition">Detail</button>
-                                <button onclick="window.location.href='#'" class="flex-1 py-3 rounded-xl bg-holiday text-white font-extrabold hover:bg-holiday-dark transition shadow-md shadow-holiday-glow">Pesan</button>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="w-[85vw] md:w-[340px] flex-shrink-0 bg-white rounded-3xl shadow-lg border border-gray-200/60 overflow-hidden snap-center group hover:-translate-y-2 transition-transform duration-300 flex flex-col">
-                    <div class="relative w-full h-52 overflow-hidden bg-gray-200 flex-shrink-0">
-                        <img src="img/unsplash_M8drGBgFNZE.png" alt="Trip 1" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110">
-                        <div class="absolute top-4 left-4 bg-white/90 backdrop-blur text-gray-900 text-xs font-extrabold px-3 py-1.5 rounded-full flex items-center gap-1 shadow">
-                            <i class="bi bi-clock text-holiday"></i> 1 Hari
-                        </div>
-                        <div class="absolute top-4 right-4 bg-gray-900/90 backdrop-blur text-white text-xs font-bold px-3 py-1.5 rounded-full shadow">
-                            Private
-                        </div>
-                    </div>
-                    <div class="p-6 flex-grow flex flex-col">
-                        <h3 class="text-xl font-extrabold text-gray-900 mb-1 group-hover:text-holiday transition-colors">Eksplorasi Alam Bebas</h3>
-                        <p class="text-sm text-gray-500 mb-4 flex items-center gap-1 font-medium"><i class="bi bi-geo-alt-fill text-gray-400"></i> Rute Alam Terbuka</p>
-                        
-                        <div class="flex items-center gap-2 mb-4">
-                            <span class="font-extrabold text-gray-900">4.8</span>
-                            <div class="flex text-yellow-400 text-xs"><i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i><i class="bi bi-star-half"></i></div>
-                            <span class="text-xs text-gray-400 font-semibold">(128 review)</span>
-                        </div>
-                        
-                        <p class="text-sm text-gray-600 mb-6 line-clamp-2">Menikmati keindahan alam secara langsung dengan rute menantang yang memacu adrenalin ..</p>
-                        
-                        <div class="mt-auto">
-                            <div class="bg-orange-50/80 rounded-2xl p-4 mb-5 border border-orange-100">
-                                <p class="text-xs text-orange-600/80 font-bold mb-1 uppercase tracking-wider">Mulai dari</p>
-                                <p class="text-xl font-extrabold text-orange-600">Rp 1.250.000</p>
-                            </div>
-                            <div class="flex gap-3">
-                                <button onclick="window.location.href='#'" class="flex-1 py-3 rounded-xl border border-gray-200 text-gray-700 font-extrabold hover:bg-gray-50 transition">Detail</button>
-                                <button onclick="window.location.href='#'" class="flex-1 py-3 rounded-xl bg-holiday text-white font-extrabold hover:bg-holiday-dark transition shadow-md shadow-holiday-glow">Pesan</button>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="w-[85vw] md:w-[340px] flex-shrink-0 bg-white rounded-3xl shadow-lg border border-gray-200/60 overflow-hidden snap-center group hover:-translate-y-2 transition-transform duration-300 flex flex-col">
+                <div class="slider-card-native w-full md:w-[340px] flex-shrink-0 bg-white rounded-3xl shadow-lg border border-gray-200/60 overflow-hidden snap-center group flex flex-col">
                     <div class="relative w-full h-52 overflow-hidden bg-gray-200 flex-shrink-0">
                         <img src="img/unsplash_Souw06F1irM.png" alt="Trip 2" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110">
                         <div class="absolute top-4 left-4 bg-white/90 backdrop-blur text-gray-900 text-xs font-extrabold px-3 py-1.5 rounded-full flex items-center gap-1 shadow">
                             <i class="bi bi-clock text-holiday"></i> 3 Jam
                         </div>
-                        <div class="absolute top-4 right-4 bg-gray-900/90 backdrop-blur text-white text-xs font-bold px-3 py-1.5 rounded-full shadow">
-                            Open Trip
-                        </div>
+                        <div class="absolute top-4 right-4 bg-gray-900/90 backdrop-blur text-white text-xs font-bold px-3 py-1.5 rounded-full shadow">Open Trip</div>
                     </div>
                     <div class="p-6 flex-grow flex flex-col">
                         <h3 class="text-xl font-extrabold text-gray-900 mb-1 group-hover:text-holiday transition-colors">Menyusuri Lanskap Hijau</h3>
                         <p class="text-sm text-gray-500 mb-4 flex items-center gap-1 font-medium"><i class="bi bi-geo-alt-fill text-gray-400"></i> Perbukitan Asri</p>
-                        
                         <div class="flex items-center gap-2 mb-4">
                             <span class="font-extrabold text-gray-900">5.0</span>
                             <div class="flex text-yellow-400 text-xs"><i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i></div>
                             <span class="text-xs text-gray-400 font-semibold">(450 review)</span>
                         </div>
-                        
                         <p class="text-sm text-gray-600 mb-6 line-clamp-2">Perjalanan singkat melintasi kawasan asri dengan pemandangan pegunungan yang menyejukkan ..</p>
-                        
                         <div class="mt-auto">
                             <div class="bg-orange-50/80 rounded-2xl p-4 mb-5 border border-orange-100">
                                 <p class="text-xs text-orange-600/80 font-bold mb-1 uppercase tracking-wider">Mulai dari</p>
                                 <p class="text-xl font-extrabold text-orange-600">Rp 450.000</p>
                             </div>
                             <div class="flex gap-3">
-                                <button onclick="window.location.href='#'" class="flex-1 py-3 rounded-xl border border-gray-200 text-gray-700 font-extrabold hover:bg-gray-50 transition">Detail</button>
-                                <button onclick="window.location.href='#'" class="flex-1 py-3 rounded-xl bg-holiday text-white font-extrabold hover:bg-holiday-dark transition shadow-md shadow-holiday-glow">Pesan</button>
+                                <button onclick="window.location.href='detail.html'" class="flex-1 py-3 rounded-xl border border-gray-200 text-gray-700 font-extrabold hover:bg-gray-50 transition">Detail</button>
+                                <button onclick="window.location.href='detail.html'" class="flex-1 py-3 rounded-xl bg-holiday text-white font-extrabold hover:bg-holiday-dark transition shadow-md shadow-holiday-glow">Pesan</button>
                             </div>
                         </div>
                     </div>
                 </div>
 
-                <div class="w-[85vw] md:w-[340px] flex-shrink-0 bg-white rounded-3xl shadow-lg border border-gray-200/60 overflow-hidden snap-center group hover:-translate-y-2 transition-transform duration-300 flex flex-col">
+                <div class="slider-card-native w-full md:w-[340px] flex-shrink-0 bg-white rounded-3xl shadow-lg border border-gray-200/60 overflow-hidden snap-center group flex flex-col">
                     <div class="relative w-full h-52 overflow-hidden bg-gray-200 flex-shrink-0">
                         <img src="img/gandrung1.png" alt="Trip 3" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110 object-top">
                         <div class="absolute top-4 left-4 bg-white/90 backdrop-blur text-gray-900 text-xs font-extrabold px-3 py-1.5 rounded-full flex items-center gap-1 shadow">
                             <i class="bi bi-clock text-holiday"></i> Budaya
                         </div>
-                        <div class="absolute top-4 right-4 bg-gray-900/90 backdrop-blur text-white text-xs font-bold px-3 py-1.5 rounded-full shadow">
-                            Eksklusif
-                        </div>
+                        <div class="absolute top-4 right-4 bg-gray-900/90 backdrop-blur text-white text-xs font-bold px-3 py-1.5 rounded-full shadow">Eksklusif</div>
                     </div>
                     <div class="p-6 flex-grow flex flex-col">
                         <h3 class="text-xl font-extrabold text-gray-900 mb-1 group-hover:text-holiday transition-colors">Paket Wisata Budaya</h3>
                         <p class="text-sm text-gray-500 mb-4 flex items-center gap-1 font-medium"><i class="bi bi-geo-alt-fill text-gray-400"></i> Desa Tradisional</p>
-                        
                         <div class="flex items-center gap-2 mb-4">
                             <span class="font-extrabold text-gray-900">4.9</span>
                             <div class="flex text-yellow-400 text-xs"><i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i><i class="bi bi-star-half"></i></div>
                             <span class="text-xs text-gray-400 font-semibold">(320 review)</span>
                         </div>
-                        
                         <p class="text-sm text-gray-600 mb-6 line-clamp-2">Kenali lebih dekat kearifan lokal melalui tarian dan tradisi masyarakat setempat ..</p>
-                        
                         <div class="mt-auto">
                             <div class="bg-orange-50/80 rounded-2xl p-4 mb-5 border border-orange-100">
                                 <p class="text-xs text-orange-600/80 font-bold mb-1 uppercase tracking-wider">Mulai dari</p>
                                 <p class="text-xl font-extrabold text-orange-600">Rp 850.000</p>
                             </div>
                             <div class="flex gap-3">
-                                <button onclick="window.location.href='#'" class="flex-1 py-3 rounded-xl border border-gray-200 text-gray-700 font-extrabold hover:bg-gray-50 transition">Detail</button>
-                                <button onclick="window.location.href='#'" class="flex-1 py-3 rounded-xl bg-holiday text-white font-extrabold hover:bg-holiday-dark transition shadow-md shadow-holiday-glow">Pesan</button>
+                                <button onclick="window.location.href='detail.html'" class="flex-1 py-3 rounded-xl border border-gray-200 text-gray-700 font-extrabold hover:bg-gray-50 transition">Detail</button>
+                                <button onclick="window.location.href='detail.html'" class="flex-1 py-3 rounded-xl bg-holiday text-white font-extrabold hover:bg-holiday-dark transition shadow-md shadow-holiday-glow">Pesan</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                 <div class="slider-card-native w-full md:w-[340px] flex-shrink-0 bg-white rounded-3xl shadow-lg border border-gray-200/60 overflow-hidden snap-center group flex flex-col">
+                    <div class="relative w-full h-52 overflow-hidden bg-gray-200 flex-shrink-0">
+                        <img src="img/unsplash_M8drGBgFNZE.png" alt="Trip 1" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110">
+                        <div class="absolute top-4 left-4 bg-white/90 backdrop-blur text-gray-900 text-xs font-extrabold px-3 py-1.5 rounded-full flex items-center gap-1 shadow">
+                            <i class="bi bi-clock text-holiday"></i> 1 Hari
+                        </div>
+                        <div class="absolute top-4 right-4 bg-gray-900/90 backdrop-blur text-white text-xs font-bold px-3 py-1.5 rounded-full shadow">Private</div>
+                    </div>
+                    <div class="p-6 flex-grow flex flex-col">
+                        <h3 class="text-xl font-extrabold text-gray-900 mb-1 group-hover:text-holiday transition-colors">Eksplorasi Alam Bebas</h3>
+                        <p class="text-sm text-gray-500 mb-4 flex items-center gap-1 font-medium"><i class="bi bi-geo-alt-fill text-gray-400"></i> Rute Alam Terbuka</p>
+                        <div class="flex items-center gap-2 mb-4">
+                            <span class="font-extrabold text-gray-900">4.8</span>
+                            <div class="flex text-yellow-400 text-xs"><i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i><i class="bi bi-star-half"></i></div>
+                            <span class="text-xs text-gray-400 font-semibold">(128 review)</span>
+                        </div>
+                        <p class="text-sm text-gray-600 mb-6 line-clamp-2">Menikmati keindahan alam secara langsung dengan rute menantang yang memacu adrenalin ..</p>
+                        <div class="mt-auto">
+                            <div class="bg-orange-50/80 rounded-2xl p-4 mb-5 border border-orange-100">
+                                <p class="text-xs text-orange-600/80 font-bold mb-1 uppercase tracking-wider">Mulai dari</p>
+                                <p class="text-xl font-extrabold text-orange-600">Rp 1.250.000</p>
+                            </div>
+                            <div class="flex gap-3">
+                                <button onclick="window.location.href='detail.html'" class="flex-1 py-3 rounded-xl border border-gray-200 text-gray-700 font-extrabold hover:bg-gray-50 transition">Detail</button>
+                                <button onclick="window.location.href='detail.html'" class="flex-1 py-3 rounded-xl bg-holiday text-white font-extrabold hover:bg-holiday-dark transition shadow-md shadow-holiday-glow">Pesan</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="slider-card-native w-full md:w-[340px] flex-shrink-0 bg-white rounded-3xl shadow-lg border border-gray-200/60 overflow-hidden snap-center group flex flex-col">
+                    <div class="relative w-full h-52 overflow-hidden bg-gray-200 flex-shrink-0">
+                        <img src="img/unsplash_Souw06F1irM.png" alt="Trip 2" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110">
+                        <div class="absolute top-4 left-4 bg-white/90 backdrop-blur text-gray-900 text-xs font-extrabold px-3 py-1.5 rounded-full flex items-center gap-1 shadow">
+                            <i class="bi bi-clock text-holiday"></i> 3 Jam
+                        </div>
+                        <div class="absolute top-4 right-4 bg-gray-900/90 backdrop-blur text-white text-xs font-bold px-3 py-1.5 rounded-full shadow">Open Trip</div>
+                    </div>
+                    <div class="p-6 flex-grow flex flex-col">
+                        <h3 class="text-xl font-extrabold text-gray-900 mb-1 group-hover:text-holiday transition-colors">Menyusuri Lanskap Hijau</h3>
+                        <p class="text-sm text-gray-500 mb-4 flex items-center gap-1 font-medium"><i class="bi bi-geo-alt-fill text-gray-400"></i> Perbukitan Asri</p>
+                        <div class="flex items-center gap-2 mb-4">
+                            <span class="font-extrabold text-gray-900">5.0</span>
+                            <div class="flex text-yellow-400 text-xs"><i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i></div>
+                            <span class="text-xs text-gray-400 font-semibold">(450 review)</span>
+                        </div>
+                        <p class="text-sm text-gray-600 mb-6 line-clamp-2">Perjalanan singkat melintasi kawasan asri dengan pemandangan pegunungan yang menyejukkan ..</p>
+                        <div class="mt-auto">
+                            <div class="bg-orange-50/80 rounded-2xl p-4 mb-5 border border-orange-100">
+                                <p class="text-xs text-orange-600/80 font-bold mb-1 uppercase tracking-wider">Mulai dari</p>
+                                <p class="text-xl font-extrabold text-orange-600">Rp 450.000</p>
+                            </div>
+                            <div class="flex gap-3">
+                                <button onclick="window.location.href='detail.html'" class="flex-1 py-3 rounded-xl border border-gray-200 text-gray-700 font-extrabold hover:bg-gray-50 transition">Detail</button>
+                                <button onclick="window.location.href='detail.html'" class="flex-1 py-3 rounded-xl bg-holiday text-white font-extrabold hover:bg-holiday-dark transition shadow-md shadow-holiday-glow">Pesan</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="slider-card-native w-full md:w-[340px] flex-shrink-0 bg-white rounded-3xl shadow-lg border border-gray-200/60 overflow-hidden snap-center group flex flex-col">
+                    <div class="relative w-full h-52 overflow-hidden bg-gray-200 flex-shrink-0">
+                        <img src="img/gandrung1.png" alt="Trip 3" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110 object-top">
+                        <div class="absolute top-4 left-4 bg-white/90 backdrop-blur text-gray-900 text-xs font-extrabold px-3 py-1.5 rounded-full flex items-center gap-1 shadow">
+                            <i class="bi bi-clock text-holiday"></i> Budaya
+                        </div>
+                        <div class="absolute top-4 right-4 bg-gray-900/90 backdrop-blur text-white text-xs font-bold px-3 py-1.5 rounded-full shadow">Eksklusif</div>
+                    </div>
+                    <div class="p-6 flex-grow flex flex-col">
+                        <h3 class="text-xl font-extrabold text-gray-900 mb-1 group-hover:text-holiday transition-colors">Paket Wisata Budaya</h3>
+                        <p class="text-sm text-gray-500 mb-4 flex items-center gap-1 font-medium"><i class="bi bi-geo-alt-fill text-gray-400"></i> Desa Tradisional</p>
+                        <div class="flex items-center gap-2 mb-4">
+                            <span class="font-extrabold text-gray-900">4.9</span>
+                            <div class="flex text-yellow-400 text-xs"><i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i><i class="bi bi-star-half"></i></div>
+                            <span class="text-xs text-gray-400 font-semibold">(320 review)</span>
+                        </div>
+                        <p class="text-sm text-gray-600 mb-6 line-clamp-2">Kenali lebih dekat kearifan lokal melalui tarian dan tradisi masyarakat setempat ..</p>
+                        <div class="mt-auto">
+                            <div class="bg-orange-50/80 rounded-2xl p-4 mb-5 border border-orange-100">
+                                <p class="text-xs text-orange-600/80 font-bold mb-1 uppercase tracking-wider">Mulai dari</p>
+                                <p class="text-xl font-extrabold text-orange-600">Rp 850.000</p>
+                            </div>
+                            <div class="flex gap-3">
+                                <button onclick="window.location.href='detail.html'" class="flex-1 py-3 rounded-xl border border-gray-200 text-gray-700 font-extrabold hover:bg-gray-50 transition">Detail</button>
+                                <button onclick="window.location.href='detail.html'" class="flex-1 py-3 rounded-xl bg-holiday text-white font-extrabold hover:bg-holiday-dark transition shadow-md shadow-holiday-glow">Pesan</button>
                             </div>
                         </div>
                     </div>
                 </div>
 
             </div>
+            <div id="dots-paket" class="flex justify-center gap-2 mt-4 relative z-10"></div>
         </div>
     </section>
 
@@ -522,47 +537,94 @@
         </div>
     </section>
 
-    <section id="armada" class="py-24 bg-base relative gsap-section">
-        <div class="max-w-7xl mx-auto px-6 md:px-10 text-center mb-16 flex flex-col items-center">
-            <span class="gsap-item text-holiday font-extrabold tracking-wider text-sm uppercase">Kendaraan Kami</span>
-            <h2 class="gsap-item text-3xl md:text-4xl font-extrabold text-gray-900 mt-2 mb-3">Armada Tangguh</h2>
-            <p class="gsap-item text-gray-500 max-w-lg font-medium text-center">Kondisi mesin prima dan terawat, siap memberikan keamanan serta kenyamanan.</p>
-        </div>
-
-        <div class="gsap-item flex overflow-x-auto gap-8 px-6 md:px-10 pb-12 snap-x snap-mandatory no-scrollbar md:justify-center items-stretch w-full">
-            
-            <div class="w-[85vw] md:w-[360px] flex-shrink-0 bg-white rounded-[2rem] p-6 flex flex-col items-center snap-center group relative border border-gray-200 hover:border-holiday/50 transition-all duration-300 shadow-sm hover:shadow-xl">
-                <img src="img/unsplash_M8drGBgFNZE.png" alt="Kendaraan 1" class="w-full object-cover h-48 md:h-56 mb-6 rounded-2xl transition-transform duration-500 group-hover:scale-105 relative z-10 flex-shrink-0">
-                <div class="relative z-10 text-center w-full flex-grow flex flex-col justify-between">
-                    <div>
-                        <h3 class="text-2xl font-extrabold text-gray-900 mb-2">Jeep 4x4 Custom</h3>
-                        <p class="text-sm text-gray-500 mb-6 font-medium">Suspensi premium & Power</p>
-                    </div>
-                    <button onclick="window.location.href='#'" class="w-full py-3.5 rounded-xl bg-gray-50 border border-gray-200 text-gray-900 font-bold hover:bg-holiday hover:text-white transition-all mt-auto">Lihat Detail</button>
+    <!-- SECTION ARMADA -->
+    <section id="armada" class="py-24 bg-base relative gsap-section overflow-hidden">
+        <div class="max-w-7xl mx-auto px-6 md:px-10 relative">
+            <div class="flex justify-between items-end mb-10">
+                <div class="gsap-item text-left w-auto">
+                    <span class="text-holiday font-extrabold tracking-wider text-sm uppercase">Kendaraan Kami</span>
+                    <h2 class="text-3xl md:text-4xl font-extrabold text-gray-900 mt-2 mb-3">Armada Tangguh</h2>
+                    <p class="text-gray-500 max-w-lg font-medium">Kondisi mesin prima dan terawat, siap memberikan keamanan serta kenyamanan.</p>
+                </div>
+                <!-- Panah juga ditambahkan untuk Armada -->
+                <div class="gsap-item flex gap-2">
+                    <button id="btn-prev-armada" class="w-10 h-10 rounded-full bg-white shadow-md flex items-center justify-center text-gray-600 hover:text-white hover:bg-holiday transition cursor-pointer"><i class="bi bi-chevron-left"></i></button>
+                    <button id="btn-next-armada" class="w-10 h-10 rounded-full bg-white shadow-md flex items-center justify-center text-gray-600 hover:text-white hover:bg-holiday transition cursor-pointer"><i class="bi bi-chevron-right"></i></button>
                 </div>
             </div>
 
-            <div class="w-[85vw] md:w-[360px] flex-shrink-0 bg-white rounded-[2rem] p-6 flex flex-col items-center snap-center group relative border border-gray-200 hover:border-holiday/50 transition-all duration-300 shadow-sm hover:shadow-xl">
-                <img src="img/unsplash_Souw06F1irM.png" alt="Kendaraan 2" class="w-full object-cover h-48 md:h-56 mb-6 rounded-2xl transition-transform duration-500 group-hover:scale-105 relative z-10 flex-shrink-0">
-                <div class="relative z-10 text-center w-full flex-grow flex flex-col justify-between">
-                    <div>
-                        <h3 class="text-2xl font-extrabold text-gray-900 mb-2">Classic Hardtop</h3>
-                        <p class="text-sm text-gray-500 mb-6 font-medium">Ikonik dan bertenaga</p>
+            <!-- Tambahan efek pada class card: slider-card-native -->
+            <div id="slider-armada" class="gsap-item flex overflow-x-auto gap-4 md:gap-8 pb-6 snap-x snap-mandatory no-scrollbar -mx-6 px-6 md:mx-0 md:px-0 md:justify-start items-stretch w-auto smooth-scroll-x relative">
+                
+                <div class="slider-card-native w-full md:w-[360px] flex-shrink-0 bg-white rounded-[2rem] p-6 flex flex-col items-center snap-center group border border-gray-200 hover:border-holiday/50 transition-all shadow-sm">
+                    <img src="img/unsplash_M8drGBgFNZE.png" alt="Kendaraan 1" class="w-full object-cover h-48 md:h-56 mb-6 rounded-2xl transition-transform duration-500 group-hover:scale-105 relative z-10 flex-shrink-0">
+                    <div class="relative z-10 text-center w-full flex-grow flex flex-col justify-between">
+                        <div>
+                            <h3 class="text-2xl font-extrabold text-gray-900 mb-2">Jeep 4x4 Custom</h3>
+                            <p class="text-sm text-gray-500 mb-6 font-medium">Suspensi premium & Power</p>
+                        </div>
+                        <button onclick="window.location.href='detail.html'" class="w-full py-3.5 rounded-xl bg-gray-50 border border-gray-200 text-gray-900 font-bold hover:bg-holiday hover:text-white transition-all mt-auto">Lihat Detail</button>
                     </div>
-                    <button onclick="window.location.href='#'" class="w-full py-3.5 rounded-xl bg-gray-50 border border-gray-200 text-gray-900 font-bold hover:bg-holiday hover:text-white transition-all mt-auto">Lihat Detail</button>
+                </div>
+
+                <div class="slider-card-native w-full md:w-[360px] flex-shrink-0 bg-white rounded-[2rem] p-6 flex flex-col items-center snap-center group border border-gray-200 hover:border-holiday/50 transition-all shadow-sm">
+                    <img src="img/unsplash_Souw06F1irM.png" alt="Kendaraan 2" class="w-full object-cover h-48 md:h-56 mb-6 rounded-2xl transition-transform duration-500 group-hover:scale-105 relative z-10 flex-shrink-0">
+                    <div class="relative z-10 text-center w-full flex-grow flex flex-col justify-between">
+                        <div>
+                            <h3 class="text-2xl font-extrabold text-gray-900 mb-2">Classic Hardtop</h3>
+                            <p class="text-sm text-gray-500 mb-6 font-medium">Ikonik dan bertenaga</p>
+                        </div>
+                        <button onclick="window.location.href='detail.html'" class="w-full py-3.5 rounded-xl bg-gray-50 border border-gray-200 text-gray-900 font-bold hover:bg-holiday hover:text-white transition-all mt-auto">Lihat Detail</button>
+                    </div>
+                </div>
+                
+                <div class="slider-card-native w-full md:w-[360px] flex-shrink-0 bg-white rounded-[2rem] p-6 flex flex-col items-center snap-center group border border-gray-200 hover:border-holiday/50 transition-all shadow-sm">
+                    <img src="img/jembatan.png" alt="Kendaraan 3" class="w-full object-cover h-48 md:h-56 mb-6 rounded-2xl transition-transform duration-500 group-hover:scale-105 relative z-10 flex-shrink-0">
+                    <div class="relative z-10 text-center w-full flex-grow flex flex-col justify-between">
+                        <div>
+                            <h3 class="text-2xl font-extrabold text-gray-900 mb-2">Defender Series</h3>
+                            <p class="text-sm text-gray-500 mb-6 font-medium">Kapasitas besar medan berat</p>
+                        </div>
+                        <button onclick="window.location.href='detail.html'" class="w-full py-3.5 rounded-xl bg-gray-50 border border-gray-200 text-gray-900 font-bold hover:bg-holiday hover:text-white transition-all mt-auto">Lihat Detail</button>
+                    </div>
+                </div>
+
+                <div class="slider-card-native w-full md:w-[360px] flex-shrink-0 bg-white rounded-[2rem] p-6 flex flex-col items-center snap-center group border border-gray-200 hover:border-holiday/50 transition-all shadow-sm">
+                    <img src="img/unsplash_M8drGBgFNZE.png" alt="Kendaraan 1" class="w-full object-cover h-48 md:h-56 mb-6 rounded-2xl transition-transform duration-500 group-hover:scale-105 relative z-10 flex-shrink-0">
+                    <div class="relative z-10 text-center w-full flex-grow flex flex-col justify-between">
+                        <div>
+                            <h3 class="text-2xl font-extrabold text-gray-900 mb-2">Jeep 4x4 Custom</h3>
+                            <p class="text-sm text-gray-500 mb-6 font-medium">Suspensi premium & Power</p>
+                        </div>
+                        <button onclick="window.location.href='detail.html'" class="w-full py-3.5 rounded-xl bg-gray-50 border border-gray-200 text-gray-900 font-bold hover:bg-holiday hover:text-white transition-all mt-auto">Lihat Detail</button>
+                    </div>
+                </div>
+
+                <div class="slider-card-native w-full md:w-[360px] flex-shrink-0 bg-white rounded-[2rem] p-6 flex flex-col items-center snap-center group border border-gray-200 hover:border-holiday/50 transition-all shadow-sm">
+                    <img src="img/unsplash_Souw06F1irM.png" alt="Kendaraan 2" class="w-full object-cover h-48 md:h-56 mb-6 rounded-2xl transition-transform duration-500 group-hover:scale-105 relative z-10 flex-shrink-0">
+                    <div class="relative z-10 text-center w-full flex-grow flex flex-col justify-between">
+                        <div>
+                            <h3 class="text-2xl font-extrabold text-gray-900 mb-2">Classic Hardtop</h3>
+                            <p class="text-sm text-gray-500 mb-6 font-medium">Ikonik dan bertenaga</p>
+                        </div>
+                        <button onclick="window.location.href='detail.html'" class="w-full py-3.5 rounded-xl bg-gray-50 border border-gray-200 text-gray-900 font-bold hover:bg-holiday hover:text-white transition-all mt-auto">Lihat Detail</button>
+                    </div>
+                </div>
+                
+                <div class="slider-card-native w-full md:w-[360px] flex-shrink-0 bg-white rounded-[2rem] p-6 flex flex-col items-center snap-center group border border-gray-200 hover:border-holiday/50 transition-all shadow-sm">
+                    <img src="img/jembatan.png" alt="Kendaraan 3" class="w-full object-cover h-48 md:h-56 mb-6 rounded-2xl transition-transform duration-500 group-hover:scale-105 relative z-10 flex-shrink-0">
+                    <div class="relative z-10 text-center w-full flex-grow flex flex-col justify-between">
+                        <div>
+                            <h3 class="text-2xl font-extrabold text-gray-900 mb-2">Defender Series</h3>
+                            <p class="text-sm text-gray-500 mb-6 font-medium">Kapasitas besar medan berat</p>
+                        </div>
+                        <button onclick="window.location.href='detail.html'" class="w-full py-3.5 rounded-xl bg-gray-50 border border-gray-200 text-gray-900 font-bold hover:bg-holiday hover:text-white transition-all mt-auto">Lihat Detail</button>
+                    </div>
                 </div>
             </div>
             
-            <div class="w-[85vw] md:w-[360px] flex-shrink-0 bg-white rounded-[2rem] p-6 flex flex-col items-center snap-center group relative border border-gray-200 hover:border-holiday/50 transition-all duration-300 shadow-sm hover:shadow-xl">
-                <img src="img/jembatan.png" alt="Kendaraan 3" class="w-full object-cover h-48 md:h-56 mb-6 rounded-2xl transition-transform duration-500 group-hover:scale-105 relative z-10 flex-shrink-0">
-                <div class="relative z-10 text-center w-full flex-grow flex flex-col justify-between">
-                    <div>
-                        <h3 class="text-2xl font-extrabold text-gray-900 mb-2">Defender Series</h3>
-                        <p class="text-sm text-gray-500 mb-6 font-medium">Kapasitas besar medan berat</p>
-                    </div>
-                    <button onclick="window.location.href='#'" class="w-full py-3.5 rounded-xl bg-gray-50 border border-gray-200 text-gray-900 font-bold hover:bg-holiday hover:text-white transition-all mt-auto">Lihat Detail</button>
-                </div>
-            </div>
+            <!-- Dots Indicator for Armada -->
+            <div id="dots-armada" class="flex justify-center gap-2 mt-4 relative z-10"></div>
         </div>
     </section>
 
@@ -632,7 +694,6 @@
                         </div>
                     </div>
                 </div>
-
             </div>
         </div>
     </section>
@@ -655,7 +716,6 @@
                         <a href="#" class="w-10 h-10 rounded-full bg-white/10 flex items-center justify-center text-white hover:bg-holiday hover:scale-110 transition-all"><i class="bi bi-facebook"></i></a>
                     </div>
                 </div>
-
                 <div class="md:col-span-3 md:col-start-7">
                     <h4 class="text-lg font-extrabold mb-6 text-white">Eksplorasi</h4>
                     <ul class="space-y-4 text-sm text-gray-400 font-bold">
@@ -664,7 +724,6 @@
                         <li><a href="#" class="hover:text-holiday transition-colors">Paket Promo</a></li>
                     </ul>
                 </div>
-
                 <div class="md:col-span-2">
                     <h4 class="text-lg font-extrabold mb-6 text-white">Dukungan</h4>
                     <ul class="space-y-4 text-sm text-gray-400 font-bold">
@@ -674,7 +733,6 @@
                     </ul>
                 </div>
             </div>
-            
             <div class="text-center md:text-left flex flex-col md:flex-row justify-between items-center text-sm text-gray-500 pt-8 border-t border-gray-800 font-medium">
                 <p>&copy; 2026 Jadi Berangkat. All rights reserved.</p>
                 <p class="mt-2 md:mt-0">Designed with <i class="bi bi-heart-fill text-holiday mx-1"></i> for Adventures</p>
@@ -688,10 +746,12 @@
         const muteBtn = document.getElementById('mute-btn');
         const muteIcon = document.getElementById('mute-icon');
 
-        muteBtn.addEventListener('click', () => {
-            video.muted = !video.muted;
-            muteIcon.className = video.muted ? 'bi bi-volume-mute-fill text-xl' : 'bi bi-volume-up-fill text-xl';
-        });
+        if (muteBtn && video) {
+            muteBtn.addEventListener('click', () => {
+                video.muted = !video.muted;
+                muteIcon.className = video.muted ? 'bi bi-volume-mute-fill text-xl' : 'bi bi-volume-up-fill text-xl';
+            });
+        }
 
         // Navbar Sticky Logic
         const headerWrapper = document.getElementById('header-wrapper');
@@ -728,7 +788,6 @@
 
         // GSAP Scroll Animations
         gsap.registerPlugin(ScrollTrigger);
-        
         gsap.utils.toArray('.gsap-section').forEach(section => {
             const items = section.querySelectorAll('.gsap-item');
             if(items.length > 0) {
@@ -749,37 +808,58 @@
             }
         });
 
-        // Coverflow Logic untuk Destinasi Pilihan
-        const cards = document.querySelectorAll('.carousel-card');
-        let currentIndex = 1; 
+        // ==========================================
+        // 1. LOGIKA COVERFLOW 3D UNTUK DESTINASI 
+        // ==========================================
+        const destContainer = document.getElementById('carousel-container');
+        const destCards = document.querySelectorAll('.carousel-card');
+        const destDotsContainer = document.getElementById('dots-destinasi');
+        const destPrevBtn = document.getElementById('btn-prev-dest');
+        const destNextBtn = document.getElementById('btn-next-dest');
+        
+        let currentDestIndex = 1; 
+        let destStartX = 0;
 
-        function updateCarousel() {
+        if(destDotsContainer) {
+            destDotsContainer.innerHTML = '';
+            destCards.forEach((_, i) => {
+                const dot = document.createElement('button');
+                dot.className = 'slider-dot w-2 h-2 rounded-full bg-gray-300 hover:bg-gray-400 focus:outline-none';
+                dot.addEventListener('click', () => { 
+                    currentDestIndex = i; 
+                    updateDestCarousel(); 
+                });
+                destDotsContainer.appendChild(dot);
+            });
+        }
+
+        function updateDestCarousel() {
             const isMobile = window.innerWidth < 768;
-            const shiftPercent = isMobile ? 55 : 65;
-            const scaleOuter = isMobile ? 0.85 : 0.85; 
+            const shiftPercent = isMobile ? 60 : 65;
+            const scaleOuter = isMobile ? 0.8 : 0.85; 
 
-            cards.forEach((card, index) => {
+            destCards.forEach((card, index) => {
                 card.classList.remove('active');
                 let transform = '';
                 let zIndex = 0;
                 let opacity = 0;
                 let filter = 'brightness(0.3)';
 
-                if (index === currentIndex) {
+                if (index === currentDestIndex) {
                     transform = 'translateX(0) scale(1)';
                     zIndex = 30; opacity = 1; filter = 'brightness(1)';
                     card.classList.add('active');
-                } else if (index === currentIndex - 1) {
+                } else if (index === currentDestIndex - 1) {
                     transform = `translateX(-${shiftPercent}%) scale(${scaleOuter})`;
-                    zIndex = 20; opacity = 0.8;
-                } else if (index === currentIndex + 1) {
+                    zIndex = 20; opacity = 1;
+                } else if (index === currentDestIndex + 1) {
                     transform = `translateX(${shiftPercent}%) scale(${scaleOuter})`;
-                    zIndex = 20; opacity = 0.8;
-                } else if (index < currentIndex - 1) {
-                    transform = `translateX(-100%) scale(0.6)`;
+                    zIndex = 20; opacity = 1;
+                } else if (index < currentDestIndex - 1) {
+                    transform = `translateX(-120%) scale(0.6)`;
                     zIndex = 10; opacity = 0;
-                } else if (index > currentIndex + 1) {
-                    transform = `translateX(100%) scale(0.6)`;
+                } else if (index > currentDestIndex + 1) {
+                    transform = `translateX(120%) scale(0.6)`;
                     zIndex = 10; opacity = 0;
                 }
 
@@ -788,37 +868,140 @@
                 card.style.opacity = opacity;
                 card.style.filter = filter;
             });
+
+            if(destDotsContainer) {
+                Array.from(destDotsContainer.children).forEach((dot, i) => {
+                    dot.className = i === currentDestIndex 
+                        ? 'slider-dot w-6 h-2 rounded-full bg-holiday focus:outline-none shadow-md shadow-holiday/50' 
+                        : 'slider-dot w-2 h-2 rounded-full bg-gray-300 hover:bg-gray-400 focus:outline-none';
+                });
+            }
         }
 
-        cards.forEach((card, index) => {
+        destCards.forEach((card, index) => {
             card.addEventListener('click', () => {
-                if(currentIndex !== index) {
-                    currentIndex = index;
-                    updateCarousel();
+                if(currentDestIndex !== index) {
+                    currentDestIndex = index;
+                    updateDestCarousel();
                 }
             });
         });
 
-        updateCarousel();
-        window.addEventListener('resize', updateCarousel);
-        
-        // Logika Geser (Slider) untuk Paket Trip Populer
-        const paketSlider = document.getElementById('paket-slider');
-        const btnPrevPaket = document.getElementById('btn-prev-paket');
-        const btnNextPaket = document.getElementById('btn-next-paket');
-
-        if(paketSlider && btnPrevPaket && btnNextPaket) {
-            btnPrevPaket.addEventListener('click', () => {
-                // Menggeser satu buah card (Lebar card + Jarak gap)
-                const cardWidth = paketSlider.querySelector('div').offsetWidth + 24; 
-                paketSlider.scrollBy({ left: -cardWidth, behavior: 'smooth' });
-            });
-
-            btnNextPaket.addEventListener('click', () => {
-                const cardWidth = paketSlider.querySelector('div').offsetWidth + 24;
-                paketSlider.scrollBy({ left: cardWidth, behavior: 'smooth' });
-            });
+        if(destContainer) {
+            destContainer.addEventListener('touchstart', (e) => {
+                destStartX = e.changedTouches[0].screenX;
+            }, {passive: true});
+            
+            destContainer.addEventListener('touchend', (e) => {
+                let destEndX = e.changedTouches[0].screenX;
+                if (destStartX - destEndX > 40 && currentDestIndex < destCards.length - 1) {
+                    currentDestIndex++;
+                    updateDestCarousel();
+                } else if (destEndX - destStartX > 40 && currentDestIndex > 0) {
+                    currentDestIndex--;
+                    updateDestCarousel();
+                }
+            }, {passive: true});
         }
+
+        if(destPrevBtn) destPrevBtn.addEventListener('click', () => { if(currentDestIndex > 0) { currentDestIndex--; updateDestCarousel(); } });
+        if(destNextBtn) destNextBtn.addEventListener('click', () => { if(currentDestIndex < destCards.length - 1) { currentDestIndex++; updateDestCarousel(); } });
+
+        updateDestCarousel();
+        window.addEventListener('resize', updateDestCarousel);
+
+        // ==========================================
+        // 2. LOGIKA NATIVE SLIDER EFEK FOKUS (PAKET & ARMADA)
+        // ==========================================
+        function initNativeSliderFocus({ sliderId, prevBtnId, nextBtnId, dotsId }) {
+            const slider = document.getElementById(sliderId);
+            const prevBtn = prevBtnId ? document.getElementById(prevBtnId) : null;
+            const nextBtn = nextBtnId ? document.getElementById(nextBtnId) : null;
+            const dotsContainer = dotsId ? document.getElementById(dotsId) : null;
+
+            if (!slider) return;
+
+            const cards = slider.querySelectorAll('.snap-center');
+            if (cards.length === 0) return;
+
+            // Generate Dots
+            if (dotsContainer) {
+                dotsContainer.innerHTML = ''; 
+                cards.forEach((_, index) => {
+                    const dot = document.createElement('button');
+                    dot.className = 'slider-dot w-2 h-2 rounded-full bg-gray-300 hover:bg-gray-400 focus:outline-none';
+                    dot.addEventListener('click', () => {
+                        const scrollPos = cards[index].offsetLeft - slider.offsetLeft;
+                        slider.scrollTo({ left: scrollPos, behavior: 'smooth' });
+                    });
+                    dotsContainer.appendChild(dot);
+                });
+            }
+
+            const updateNativeFocus = () => {
+                if (!slider || cards.length === 0) return;
+                
+                const scrollLeft = slider.scrollLeft;
+                // Hitung jarak dinamis antar card (Width + Gap)
+                const cardDistance = cards.length > 1 ? (cards[1].offsetLeft - cards[0].offsetLeft) : cards[0].offsetWidth;
+                
+                let activeIndex = Math.round(scrollLeft / cardDistance);
+                if (activeIndex >= cards.length) activeIndex = cards.length - 1;
+                if (activeIndex < 0) activeIndex = 0;
+
+                // Update efek gelap/terang pada Cards
+                cards.forEach((card, index) => {
+                    if (index === activeIndex) {
+                        card.classList.add('active-slide');
+                    } else {
+                        card.classList.remove('active-slide');
+                    }
+                });
+
+                // Update Dots
+                if (dotsContainer) {
+                    const dots = dotsContainer.children;
+                    Array.from(dots).forEach((dot, index) => {
+                        if (index === activeIndex) {
+                            dot.className = 'slider-dot w-6 h-2 rounded-full bg-holiday focus:outline-none shadow-md shadow-holiday/50';
+                        } else {
+                            dot.className = 'slider-dot w-2 h-2 rounded-full bg-gray-300 hover:bg-gray-400 focus:outline-none';
+                        }
+                    });
+                }
+            };
+
+            slider.addEventListener('scroll', updateNativeFocus);
+            window.addEventListener('resize', updateNativeFocus);
+            setTimeout(updateNativeFocus, 100);
+
+            // Tombol Panah
+            if (prevBtn && nextBtn) {
+                prevBtn.addEventListener('click', () => {
+                    const cardDistance = cards.length > 1 ? (cards[1].offsetLeft - cards[0].offsetLeft) : cards[0].offsetWidth;
+                    slider.scrollBy({ left: -cardDistance, behavior: 'smooth' });
+                });
+                nextBtn.addEventListener('click', () => {
+                    const cardDistance = cards.length > 1 ? (cards[1].offsetLeft - cards[0].offsetLeft) : cards[0].offsetWidth;
+                    slider.scrollBy({ left: cardDistance, behavior: 'smooth' });
+                });
+            }
+        }
+
+        // Inisialisasi Paket & Armada dengan Efek Fokus (Native)
+        initNativeSliderFocus({
+            sliderId: 'paket-slider',
+            prevBtnId: 'btn-prev-paket',
+            nextBtnId: 'btn-next-paket',
+            dotsId: 'dots-paket'
+        });
+
+        initNativeSliderFocus({
+            sliderId: 'slider-armada',
+            prevBtnId: 'btn-prev-armada',
+            nextBtnId: 'btn-next-armada',
+            dotsId: 'dots-armada'
+        });
     </script>
 </body>
 </html>
