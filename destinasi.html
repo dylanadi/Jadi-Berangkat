@@ -1,0 +1,632 @@
+<!DOCTYPE html>
+<html lang="id" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Jadi Berangkat - Destinasi</title>
+    
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:ital,wght@0,200..800;1,200..800&display=swap" rel="stylesheet">
+    
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+    
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>
+    
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['"Plus Jakarta Sans"', 'sans-serif'],
+                    },
+                    colors: {
+                        base: '#f4f0e7',
+                        ink: '#151813',
+                        clay: '#b96f3c',
+                        mist: '#dfe8df',
+                        holiday: '#2f6f42', 
+                        'holiday-dark': '#17442a',
+                        'holiday-light': '#b8d9bd',
+                        'holiday-glow': 'rgba(47, 111, 66, 0.28)'
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        body { font-family: 'Plus Jakarta Sans', sans-serif; background-color: #f4f0e7; color: #151813; }
+        .no-scrollbar::-webkit-scrollbar { display: none; }
+        .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+        
+        .flag-button {
+            width: 28px;
+            height: 28px;
+            border-radius: 999px;
+            border: 1px solid rgba(21, 24, 19, 0.1);
+            box-shadow: inset 0 0 0 1px rgba(255,255,255,0.65);
+            overflow: hidden;
+        }
+        .flag-id { background: linear-gradient(to bottom, #ef3340 0 50%, #fff 50% 100%); }
+        .flag-en {
+            background:
+                linear-gradient(to bottom, transparent 41%, #c8102e 41% 59%, transparent 59%),
+                linear-gradient(to right, transparent 42%, #c8102e 42% 58%, transparent 58%),
+                linear-gradient(to bottom, transparent 32%, #fff 32% 68%, transparent 68%),
+                linear-gradient(to right, transparent 34%, #fff 34% 66%, transparent 66%),
+                linear-gradient(34deg, transparent 44%, #c8102e 44% 56%, transparent 56%),
+                linear-gradient(-34deg, transparent 44%, #c8102e 44% 56%, transparent 56%),
+                linear-gradient(34deg, transparent 38%, #fff 38% 62%, transparent 62%),
+                linear-gradient(-34deg, transparent 38%, #fff 38% 62%, transparent 62%),
+                #012169;
+        }
+
+        /* View Toggle Styles */
+        #destinasi-grid {
+            transition: opacity 0.3s ease;
+        }
+        
+        /* Uniform View */
+        .view-uniform {
+            column-count: auto !important;
+            display: grid !important;
+            grid-template-columns: repeat(2, minmax(0, 1fr));
+            gap: 1rem;
+        }
+        @media (min-width: 768px) { .view-uniform { grid-template-columns: repeat(4, minmax(0, 1fr)); } }
+        @media (min-width: 1024px) { .view-uniform { grid-template-columns: repeat(6, minmax(0, 1fr)); } }
+        
+        .view-uniform > a {
+            height: 280px !important;
+            margin-bottom: 0 !important;
+        }
+
+        /* Card View */
+        .view-card {
+            column-count: auto !important;
+            display: grid !important;
+            grid-template-columns: repeat(1, minmax(0, 1fr));
+            gap: 1.5rem;
+        }
+        @media (min-width: 640px) { .view-card { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+        @media (min-width: 768px) { .view-card { grid-template-columns: repeat(3, minmax(0, 1fr)); } }
+        @media (min-width: 1024px) { .view-card { grid-template-columns: repeat(4, minmax(0, 1fr)); } }
+        
+        .view-card > a {
+            height: auto !important;
+            margin-bottom: 0 !important;
+            background-color: white !important;
+            border: 1px solid #e5e7eb;
+            display: flex;
+            flex-direction: column;
+        }
+        .view-card > a > img {
+            position: relative !important;
+            height: 200px !important;
+        }
+        .view-card > a > div:nth-child(2) {
+            display: none !important;
+        }
+        .view-card > a > div:nth-child(3) {
+            position: relative !important;
+            padding: 1.25rem !important;
+            background: transparent !important;
+        }
+        .view-card > a h4 {
+            color: #151813 !important;
+        }
+        .view-card > a p {
+            color: #4b5563 !important;
+            max-width: none !important; 
+        }
+    </style>
+</head>
+<body class="antialiased overflow-x-hidden">
+
+    <!-- Navbar & Sidebar -->
+    <div id="menu-overlay" class="fixed inset-0 bg-black/60 z-[60] hidden opacity-0 backdrop-blur-sm"></div>
+    <aside id="mobile-sidebar" class="fixed top-0 left-0 h-full w-[84%] max-w-sm bg-base shadow-2xl z-[70] p-8 flex flex-col transform -translate-x-full border-r border-black/10">
+        <div class="flex justify-between items-center mb-10">
+            <a href="index.html" class="text-2xl font-extrabold flex items-center gap-2">
+                <i class="bi bi-jeep text-holiday"></i> JB.
+            </a>
+            <button id="close-menu-btn" class="w-10 h-10 rounded-full bg-white flex items-center justify-center text-gray-800 hover:bg-holiday hover:text-white transition border border-black/10">
+                <i class="bi bi-x-lg"></i>
+            </button>
+        </div>
+        <nav class="flex flex-col gap-6 text-lg font-bold text-gray-700">
+            <a href="index.html" class="hover:text-holiday transition flex items-center gap-3"><i class="bi bi-house"></i> Beranda</a>
+            <a href="about.html" class="hover:text-holiday transition flex items-center gap-3"><i class="bi bi-info-circle"></i> Tentang</a>
+            <a href="destinasi.html" class="hover:text-holiday transition flex items-center gap-3"><i class="bi bi-geo-alt"></i> Destinasi</a>
+            <a href="news.html" class="hover:text-holiday transition flex items-center gap-3"><i class="bi bi-newspaper"></i> Baru</a>
+        </nav>
+        <div class="mt-auto">
+            <a href="auth/login.html" class="block w-full text-center bg-holiday text-white py-4 rounded-2xl font-bold shadow-lg shadow-holiday-glow">Login</a>
+        </div>
+    </aside>
+
+    <header id="header-wrapper" class="fixed w-full top-0 z-50 transition-all duration-700 ease-in-out py-3 flex justify-center px-4 md:px-6">
+        <div id="nav-container" class="w-full max-w-[1440px] flex justify-between items-center px-6 md:px-9 py-3.5 transition-all duration-500 text-ink bg-white/90 backdrop-blur-xl rounded-[1.65rem] border border-white/70 shadow-[0_18px_55px_rgba(0,0,0,0.16)]">
+            <a href="index.html" class="text-2xl font-extrabold tracking-wide flex items-center gap-2">
+                <i class="bi bi-jeep text-holiday"></i> <span class="hidden sm:block">Jadi Berangkat</span><span class="sm:hidden">JB.</span>
+            </a>
+            <nav class="hidden md:flex gap-8 font-semibold items-center text-gray-700">
+                <a href="index.html" class="hover:text-holiday transition">Beranda</a>
+                <a href="about.html" class="hover:text-holiday transition">Tentang</a>
+                <a href="destinasi.html" class="hover:text-holiday transition">Destinasi</a>
+                <a href="news.html" class="hover:text-holiday transition">Baru</a>
+            </nav>
+            <div class="flex items-center gap-4">
+                <a href="auth/login.html" class="hidden md:block bg-holiday text-white px-7 py-3 rounded-full transition shadow-lg shadow-holiday-glow font-bold hover:bg-holiday-dark">Login</a>
+                <div class="hidden md:flex items-center gap-3 border-l border-black/10 pl-4" aria-label="Pilihan bahasa">
+                    <a href="index.html" class="flag-button flag-id" aria-label="Bahasa Indonesia"></a>
+                    <a href="index.html" class="flag-button flag-en" aria-label="English"></a>
+                </div>
+                <button id="open-menu-btn" class="md:hidden w-11 h-11 flex items-center justify-center rounded-full bg-ink text-white border border-black/10 hover:bg-holiday transition">
+                    <i class="bi bi-list text-2xl"></i>
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <!-- HERO SECTION -->
+    <section class="relative h-[65vh] w-full mt-0 overflow-hidden">
+        <img src="img/bluefire (1).png" alt="Hero Destinasi" class="absolute inset-0 w-full h-full object-cover object-center">
+        <div class="absolute inset-0 bg-gradient-to-t from-ink via-ink/40 to-black/30"></div>
+        <div class="absolute inset-0 flex flex-col justify-center items-center text-center px-6 mt-16">
+            <span class="text-holiday-light font-bold text-sm tracking-widest uppercase mb-4 drop-shadow-md">Eksplorasi Tak Terbatas</span>
+            <h1 class="text-5xl md:text-7xl font-extrabold text-white drop-shadow-2xl">Destinasi Pilihan</h1>
+            <p class="text-white/80 mt-4 max-w-2xl text-lg font-medium">Temukan keindahan alam dan budaya Banyuwangi, disusun khusus untuk pengalaman petualangan Anda.</p>
+        </div>
+    </section>
+
+    <main class="max-w-7xl mx-auto px-6 md:px-12 py-16">
+        
+        <!-- UNTUK ANDA -->
+        <section class="mb-16">
+            <h2 class="text-3xl md:text-4xl font-extrabold text-ink mb-8">Untuk Anda</h2>
+            <div class="grid lg:grid-cols-[1.05fr_1fr] gap-5 lg:gap-6">
+                <!-- Kiri: 1 Card -->
+                <a href="detail.html" class="group relative min-h-[400px] lg:min-h-[520px] overflow-hidden rounded-[1.75rem] bg-ink text-white shadow-md hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-2">
+                    <img src="img/unsplash_M8drGBgFNZE.png" alt="Kawah Ijen" class="absolute inset-0 h-full w-full object-cover transition-transform duration-700 group-hover:scale-105">
+                    <div class="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent"></div>
+                    <div class="absolute left-6 right-6 top-6 flex items-center justify-between">
+                        <span class="rounded-full bg-white/16 px-4 py-2 text-xs font-extrabold uppercase tracking-[0.16em] backdrop-blur-md">Rekomendasi</span>
+                    </div>
+                    <div class="absolute bottom-0 left-0 right-0 p-8">
+                        <h3 class="text-4xl md:text-5xl font-extrabold leading-tight">Kawah Ijen</h3>
+                    </div>
+                </a>
+                
+                <!-- Kanan: 2 Cards -->
+                <div class="grid gap-5 lg:gap-6 grid-rows-2">
+                    <a href="detail.html" class="group relative min-h-[200px] lg:min-h-[250px] overflow-hidden rounded-[1.5rem] bg-ink text-white shadow-md hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-1">
+                        <img src="img/djawatan.png" alt="De Djawatan" class="absolute inset-0 h-full w-full object-cover transition-transform duration-700 group-hover:scale-105">
+                        <div class="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent"></div>
+                        <div class="absolute bottom-0 left-0 right-0 p-6 z-10">
+                            <h3 class="text-2xl font-extrabold">Hutan De Djawatan</h3>
+                        </div>
+                    </a>
+                    <a href="detail.html" class="group relative min-h-[200px] lg:min-h-[250px] overflow-hidden rounded-[1.5rem] bg-ink text-white shadow-md hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-1">
+                        <img src="img/pantaiboom.png" alt="Pantai Boom" class="absolute inset-0 h-full w-full object-cover transition-transform duration-700 group-hover:scale-105">
+                        <div class="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent"></div>
+                        <div class="absolute bottom-0 left-0 right-0 p-6 z-10">
+                            <h3 class="text-2xl font-extrabold">Pantai Boom</h3>
+                        </div>
+                    </a>
+                </div>
+            </div>
+        </section>
+
+        <!-- KATEGORI & SEARCH -->
+        <div class="flex flex-col md:flex-row justify-between items-center mb-6 gap-4 border-t border-black/10 pt-10">
+            <!-- Categories -->
+            <div class="flex gap-2 overflow-x-auto w-full md:w-auto pb-2 md:pb-0 no-scrollbar">
+                <button class="px-5 py-2.5 rounded-full text-xs font-bold uppercase tracking-wider bg-holiday text-white shadow-sm transition whitespace-nowrap">Semua</button>
+                <button class="px-5 py-2.5 rounded-full text-xs font-bold uppercase tracking-wider bg-white text-gray-600 border border-gray-200 hover:border-holiday hover:text-holiday shadow-sm transition whitespace-nowrap">Alam</button>
+                <button class="px-5 py-2.5 rounded-full text-xs font-bold uppercase tracking-wider bg-white text-gray-600 border border-gray-200 hover:border-holiday hover:text-holiday shadow-sm transition whitespace-nowrap">Budaya</button>
+                <button class="px-5 py-2.5 rounded-full text-xs font-bold uppercase tracking-wider bg-white text-gray-600 border border-gray-200 hover:border-holiday hover:text-holiday shadow-sm transition whitespace-nowrap">Pantai</button>
+                <button class="px-5 py-2.5 rounded-full text-xs font-bold uppercase tracking-wider bg-white text-gray-600 border border-gray-200 hover:border-holiday hover:text-holiday shadow-sm transition whitespace-nowrap">Kuliner</button>
+            </div>
+            
+            <!-- Search Bar -->
+            <div class="relative w-full md:w-72">
+                <input type="text" placeholder="Cari destinasi wisata..." class="w-full pl-11 pr-4 py-3 rounded-full border border-gray-200 focus:outline-none focus:border-holiday focus:ring-1 focus:ring-holiday text-sm bg-white font-medium">
+                <i class="bi bi-search absolute left-4 top-1/2 -translate-y-1/2 text-gray-400 text-lg"></i>
+            </div>
+        </div>
+
+        <!-- BREADCRUMB & VIEW TOGGLE -->
+        <div class="flex justify-between items-center mb-8 relative">
+            <nav class="text-sm font-medium text-gray-500" aria-label="Breadcrumb">
+                <ol class="list-none p-0 inline-flex items-center">
+                    <li class="flex items-center">
+                        <a href="index.html" class="hover:text-holiday transition">Beranda</a>
+                        <i class="bi bi-chevron-right mx-2 text-xs"></i>
+                    </li>
+                    <li class="flex items-center">
+                        <span class="text-ink font-bold">Destinasi</span>
+                    </li>
+                </ol>
+            </nav>
+
+            <!-- Apple Style Dropdown -->
+            <div class="relative">
+                <button id="view-toggle-btn" class="flex items-center gap-2 bg-white border border-gray-200 px-4 py-2 rounded-xl text-sm font-bold text-gray-700 shadow-sm hover:bg-gray-50 transition-colors">
+                    <i class="bi bi-grid" id="current-view-icon"></i> <span class="hidden sm:inline">View</span>
+                </button>
+                
+                <!-- Dropdown Menu -->
+                <div id="view-dropdown" class="absolute right-0 top-full mt-2 w-48 bg-white/90 backdrop-blur-xl border border-gray-200/60 rounded-2xl shadow-[0_8px_30px_rgba(0,0,0,0.12)] overflow-hidden origin-top-right transform scale-95 opacity-0 invisible transition-all duration-300 z-50">
+                    <div class="p-1.5 flex flex-col gap-0.5">
+                        <button onclick="setView('pinterest')" class="flex items-center gap-3 w-full text-left px-3 py-2.5 rounded-xl text-sm font-bold text-gray-700 hover:bg-black/5 hover:text-black transition-colors">
+                            <i class="bi bi-columns-gap text-lg w-5"></i> Pinterest
+                        </button>
+                        <button onclick="setView('uniform')" class="flex items-center gap-3 w-full text-left px-3 py-2.5 rounded-xl text-sm font-bold text-gray-700 hover:bg-black/5 hover:text-black transition-colors">
+                            <i class="bi bi-grid-fill text-lg w-5"></i> Uniform
+                        </button>
+                        <button onclick="setView('card')" class="flex items-center gap-3 w-full text-left px-3 py-2.5 rounded-xl text-sm font-bold text-gray-700 hover:bg-black/5 hover:text-black transition-colors">
+                            <i class="bi bi-card-list text-lg w-5"></i> Card
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- PINTEREST GRID -->
+        <div id="destinasi-grid" class="columns-2 md:columns-4 lg:columns-6 gap-4 space-y-4">
+            <!-- Item 1 -->
+            <a href="detail.html" class="block relative group overflow-hidden rounded-2xl shadow-sm hover:shadow-xl transition-all duration-300 hover:-translate-y-1 mb-4 break-inside-avoid bg-gray-200 h-[250px]">
+                <img src="img/unsplash_M8drGBgFNZE.png" loading="lazy" class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105" alt="Wisata">
+                <div class="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent opacity-90 group-hover:opacity-100 transition-opacity duration-300"></div>
+                <div class="absolute bottom-0 left-0 right-0 p-4">
+                    <h4 class="text-white font-extrabold text-lg leading-tight mb-1">Kawah Ijen</h4>
+                    <p class="text-gray-300 text-sm inline-block max-w-[10ch] truncate">Blue fire dan kawah eksotis</p>
+                </div>
+            </a>
+            <!-- Item 2 -->
+            <a href="detail.html" class="block relative group overflow-hidden rounded-2xl shadow-sm hover:shadow-xl transition-all duration-300 hover:-translate-y-1 mb-4 break-inside-avoid bg-gray-200 h-[300px]">
+                <img src="img/djawatan.png" loading="lazy" class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105" alt="Wisata">
+                <div class="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent opacity-90 group-hover:opacity-100 transition-opacity duration-300"></div>
+                <div class="absolute bottom-0 left-0 right-0 p-4">
+                    <h4 class="text-white font-extrabold text-lg leading-tight mb-1">De Djawatan</h4>
+                    <p class="text-gray-300 text-sm inline-block max-w-[10ch] truncate">Hutan trembesi raksasa</p>
+                </div>
+            </a>
+            <!-- Item 3 -->
+            <a href="detail.html" class="block relative group overflow-hidden rounded-2xl shadow-sm hover:shadow-xl transition-all duration-300 hover:-translate-y-1 mb-4 break-inside-avoid bg-gray-200 h-[200px]">
+                <img src="img/pantaiboom.png" loading="lazy" class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105" alt="Wisata">
+                <div class="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent opacity-90 group-hover:opacity-100 transition-opacity duration-300"></div>
+                <div class="absolute bottom-0 left-0 right-0 p-4">
+                    <h4 class="text-white font-extrabold text-lg leading-tight mb-1">Pantai Boom</h4>
+                    <p class="text-gray-300 text-sm inline-block max-w-[10ch] truncate">Pantai kota dan sunrise</p>
+                </div>
+            </a>
+            <!-- Item 4 -->
+            <a href="detail.html" class="block relative group overflow-hidden rounded-2xl shadow-sm hover:shadow-xl transition-all duration-300 hover:-translate-y-1 mb-4 break-inside-avoid bg-gray-200 h-[350px]">
+                <img src="img/kemiren.png" loading="lazy" class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105" alt="Wisata">
+                <div class="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent opacity-90 group-hover:opacity-100 transition-opacity duration-300"></div>
+                <div class="absolute bottom-0 left-0 right-0 p-4">
+                    <h4 class="text-white font-extrabold text-lg leading-tight mb-1">Desa Kemiren</h4>
+                    <p class="text-gray-300 text-sm inline-block max-w-[10ch] truncate">Pedesaan Osing yang asri</p>
+                </div>
+            </a>
+            <!-- Item 5 -->
+            <a href="detail.html" class="block relative group overflow-hidden rounded-2xl shadow-sm hover:shadow-xl transition-all duration-300 hover:-translate-y-1 mb-4 break-inside-avoid bg-gray-200 h-[250px]">
+                <img src="img/Tarian_Gandrung_sewu_03 1.png" loading="lazy" class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105" alt="Wisata">
+                <div class="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent opacity-90 group-hover:opacity-100 transition-opacity duration-300"></div>
+                <div class="absolute bottom-0 left-0 right-0 p-4">
+                    <h4 class="text-white font-extrabold text-lg leading-tight mb-1">Gandrung Sewu</h4>
+                    <p class="text-gray-300 text-sm inline-block max-w-[10ch] truncate">Tarian kolosal pesisir</p>
+                </div>
+            </a>
+            <!-- Item 6 -->
+            <a href="detail.html" class="block relative group overflow-hidden rounded-2xl shadow-sm hover:shadow-xl transition-all duration-300 hover:-translate-y-1 mb-4 break-inside-avoid bg-gray-200 h-[400px]">
+                <img src="img/Pantaisukamade.png" loading="lazy" class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105" alt="Wisata">
+                <div class="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent opacity-90 group-hover:opacity-100 transition-opacity duration-300"></div>
+                <div class="absolute bottom-0 left-0 right-0 p-4">
+                    <h4 class="text-white font-extrabold text-lg leading-tight mb-1">Sukamade</h4>
+                    <p class="text-gray-300 text-sm inline-block max-w-[10ch] truncate">Konservasi penyu laut</p>
+                </div>
+            </a>
+            <!-- Item 7 -->
+            <a href="detail.html" class="block relative group overflow-hidden rounded-2xl shadow-sm hover:shadow-xl transition-all duration-300 hover:-translate-y-1 mb-4 break-inside-avoid bg-gray-200 h-[200px]">
+                <img src="img/rujaksoto.png" loading="lazy" class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105" alt="Wisata">
+                <div class="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent opacity-90 group-hover:opacity-100 transition-opacity duration-300"></div>
+                <div class="absolute bottom-0 left-0 right-0 p-4">
+                    <h4 class="text-white font-extrabold text-lg leading-tight mb-1">Rujak Soto</h4>
+                    <p class="text-gray-300 text-sm inline-block max-w-[10ch] truncate">Kuliner khas banyuwangi</p>
+                </div>
+            </a>
+            <!-- Item 8 -->
+            <a href="detail.html" class="block relative group overflow-hidden rounded-2xl shadow-sm hover:shadow-xl transition-all duration-300 hover:-translate-y-1 mb-4 break-inside-avoid bg-gray-200 h-[350px]">
+                <img src="img/pantaipelengkung.png" loading="lazy" class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105" alt="Wisata">
+                <div class="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent opacity-90 group-hover:opacity-100 transition-opacity duration-300"></div>
+                <div class="absolute bottom-0 left-0 right-0 p-4">
+                    <h4 class="text-white font-extrabold text-lg leading-tight mb-1">Plengkung</h4>
+                    <p class="text-gray-300 text-sm inline-block max-w-[10ch] truncate">Ombak surfing dunia</p>
+                </div>
+            </a>
+            <!-- Item 9 -->
+            <a href="detail.html" class="block relative group overflow-hidden rounded-2xl shadow-sm hover:shadow-xl transition-all duration-300 hover:-translate-y-1 mb-4 break-inside-avoid bg-gray-200 h-[300px]">
+                <img src="img/gandrung1.png" loading="lazy" class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105" alt="Wisata">
+                <div class="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent opacity-90 group-hover:opacity-100 transition-opacity duration-300"></div>
+                <div class="absolute bottom-0 left-0 right-0 p-4">
+                    <h4 class="text-white font-extrabold text-lg leading-tight mb-1">Alas Purwo</h4>
+                    <p class="text-gray-300 text-sm inline-block max-w-[10ch] truncate">Taman nasional mistis</p>
+                </div>
+            </a>
+            <!-- Item 10 -->
+            <a href="detail.html" class="block relative group overflow-hidden rounded-2xl shadow-sm hover:shadow-xl transition-all duration-300 hover:-translate-y-1 mb-4 break-inside-avoid bg-gray-200 h-[250px]">
+                <img src="img/bluefire (1).png" loading="lazy" class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105" alt="Wisata">
+                <div class="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent opacity-90 group-hover:opacity-100 transition-opacity duration-300"></div>
+                <div class="absolute bottom-0 left-0 right-0 p-4">
+                    <h4 class="text-white font-extrabold text-lg leading-tight mb-1">Blue Fire</h4>
+                    <p class="text-gray-300 text-sm inline-block max-w-[10ch] truncate">Api biru menyala di malam hari</p>
+                </div>
+            </a>
+
+            <!-- Repeating to fill 24 items -->
+            <!-- Item 11 -->
+            <a href="detail.html" class="block relative group overflow-hidden rounded-2xl shadow-sm hover:shadow-xl transition-all duration-300 hover:-translate-y-1 mb-4 break-inside-avoid bg-gray-200 h-[300px]">
+                <img src="img/unsplash_M8drGBgFNZE.png" loading="lazy" class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105" alt="Wisata">
+                <div class="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent opacity-90 group-hover:opacity-100 transition-opacity duration-300"></div>
+                <div class="absolute bottom-0 left-0 right-0 p-4">
+                    <h4 class="text-white font-extrabold text-lg leading-tight mb-1">Kawah Ijen</h4>
+                    <p class="text-gray-300 text-sm inline-block max-w-[10ch] truncate">Pemandangan indah dari puncak</p>
+                </div>
+            </a>
+            <!-- Item 12 -->
+            <a href="detail.html" class="block relative group overflow-hidden rounded-2xl shadow-sm hover:shadow-xl transition-all duration-300 hover:-translate-y-1 mb-4 break-inside-avoid bg-gray-200 h-[250px]">
+                <img src="img/djawatan.png" loading="lazy" class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105" alt="Wisata">
+                <div class="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent opacity-90 group-hover:opacity-100 transition-opacity duration-300"></div>
+                <div class="absolute bottom-0 left-0 right-0 p-4">
+                    <h4 class="text-white font-extrabold text-lg leading-tight mb-1">De Djawatan</h4>
+                    <p class="text-gray-300 text-sm inline-block max-w-[10ch] truncate">Eksotisme pohon trembesi tua</p>
+                </div>
+            </a>
+            <!-- Item 13 -->
+            <a href="detail.html" class="block relative group overflow-hidden rounded-2xl shadow-sm hover:shadow-xl transition-all duration-300 hover:-translate-y-1 mb-4 break-inside-avoid bg-gray-200 h-[350px]">
+                <img src="img/pantaiboom.png" loading="lazy" class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105" alt="Wisata">
+                <div class="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent opacity-90 group-hover:opacity-100 transition-opacity duration-300"></div>
+                <div class="absolute bottom-0 left-0 right-0 p-4">
+                    <h4 class="text-white font-extrabold text-lg leading-tight mb-1">Pantai Boom</h4>
+                    <p class="text-gray-300 text-sm inline-block max-w-[10ch] truncate">Pusat hiburan tepi pantai</p>
+                </div>
+            </a>
+            <!-- Item 14 -->
+            <a href="detail.html" class="block relative group overflow-hidden rounded-2xl shadow-sm hover:shadow-xl transition-all duration-300 hover:-translate-y-1 mb-4 break-inside-avoid bg-gray-200 h-[200px]">
+                <img src="img/kemiren.png" loading="lazy" class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105" alt="Wisata">
+                <div class="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent opacity-90 group-hover:opacity-100 transition-opacity duration-300"></div>
+                <div class="absolute bottom-0 left-0 right-0 p-4">
+                    <h4 class="text-white font-extrabold text-lg leading-tight mb-1">Desa Kemiren</h4>
+                    <p class="text-gray-300 text-sm inline-block max-w-[10ch] truncate">Budaya lokal masyarakat osing</p>
+                </div>
+            </a>
+            <!-- Item 15 -->
+            <a href="detail.html" class="block relative group overflow-hidden rounded-2xl shadow-sm hover:shadow-xl transition-all duration-300 hover:-translate-y-1 mb-4 break-inside-avoid bg-gray-200 h-[400px]">
+                <img src="img/Tarian_Gandrung_sewu_03 1.png" loading="lazy" class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105" alt="Wisata">
+                <div class="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent opacity-90 group-hover:opacity-100 transition-opacity duration-300"></div>
+                <div class="absolute bottom-0 left-0 right-0 p-4">
+                    <h4 class="text-white font-extrabold text-lg leading-tight mb-1">Gandrung Sewu</h4>
+                    <p class="text-gray-300 text-sm inline-block max-w-[10ch] truncate">Festival budaya menari masal</p>
+                </div>
+            </a>
+            <!-- Item 16 -->
+            <a href="detail.html" class="block relative group overflow-hidden rounded-2xl shadow-sm hover:shadow-xl transition-all duration-300 hover:-translate-y-1 mb-4 break-inside-avoid bg-gray-200 h-[250px]">
+                <img src="img/Pantaisukamade.png" loading="lazy" class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105" alt="Wisata">
+                <div class="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent opacity-90 group-hover:opacity-100 transition-opacity duration-300"></div>
+                <div class="absolute bottom-0 left-0 right-0 p-4">
+                    <h4 class="text-white font-extrabold text-lg leading-tight mb-1">Sukamade</h4>
+                    <p class="text-gray-300 text-sm inline-block max-w-[10ch] truncate">Melihat penyu bertelur di malam hari</p>
+                </div>
+            </a>
+            <!-- Item 17 -->
+            <a href="detail.html" class="block relative group overflow-hidden rounded-2xl shadow-sm hover:shadow-xl transition-all duration-300 hover:-translate-y-1 mb-4 break-inside-avoid bg-gray-200 h-[300px]">
+                <img src="img/rujaksoto.png" loading="lazy" class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105" alt="Wisata">
+                <div class="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent opacity-90 group-hover:opacity-100 transition-opacity duration-300"></div>
+                <div class="absolute bottom-0 left-0 right-0 p-4">
+                    <h4 class="text-white font-extrabold text-lg leading-tight mb-1">Rujak Soto</h4>
+                    <p class="text-gray-300 text-sm inline-block max-w-[10ch] truncate">Hidangan kuliner wajib dicoba</p>
+                </div>
+            </a>
+            <!-- Item 18 -->
+            <a href="detail.html" class="block relative group overflow-hidden rounded-2xl shadow-sm hover:shadow-xl transition-all duration-300 hover:-translate-y-1 mb-4 break-inside-avoid bg-gray-200 h-[200px]">
+                <img src="img/pantaipelengkung.png" loading="lazy" class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105" alt="Wisata">
+                <div class="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent opacity-90 group-hover:opacity-100 transition-opacity duration-300"></div>
+                <div class="absolute bottom-0 left-0 right-0 p-4">
+                    <h4 class="text-white font-extrabold text-lg leading-tight mb-1">Plengkung</h4>
+                    <p class="text-gray-300 text-sm inline-block max-w-[10ch] truncate">Surga bagi peselancar profesional</p>
+                </div>
+            </a>
+            <!-- Item 19 -->
+            <a href="detail.html" class="block relative group overflow-hidden rounded-2xl shadow-sm hover:shadow-xl transition-all duration-300 hover:-translate-y-1 mb-4 break-inside-avoid bg-gray-200 h-[350px]">
+                <img src="img/gandrung1.png" loading="lazy" class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105" alt="Wisata">
+                <div class="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent opacity-90 group-hover:opacity-100 transition-opacity duration-300"></div>
+                <div class="absolute bottom-0 left-0 right-0 p-4">
+                    <h4 class="text-white font-extrabold text-lg leading-tight mb-1">Alas Purwo</h4>
+                    <p class="text-gray-300 text-sm inline-block max-w-[10ch] truncate">Penjelajahan alam yang eksotis</p>
+                </div>
+            </a>
+            <!-- Item 20 -->
+            <a href="detail.html" class="block relative group overflow-hidden rounded-2xl shadow-sm hover:shadow-xl transition-all duration-300 hover:-translate-y-1 mb-4 break-inside-avoid bg-gray-200 h-[300px]">
+                <img src="img/bluefire (1).png" loading="lazy" class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105" alt="Wisata">
+                <div class="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent opacity-90 group-hover:opacity-100 transition-opacity duration-300"></div>
+                <div class="absolute bottom-0 left-0 right-0 p-4">
+                    <h4 class="text-white font-extrabold text-lg leading-tight mb-1">Blue Fire</h4>
+                    <p class="text-gray-300 text-sm inline-block max-w-[10ch] truncate">Pesona tak terlupakan ijen</p>
+                </div>
+            </a>
+            <!-- Item 21 -->
+            <a href="detail.html" class="block relative group overflow-hidden rounded-2xl shadow-sm hover:shadow-xl transition-all duration-300 hover:-translate-y-1 mb-4 break-inside-avoid bg-gray-200 h-[250px]">
+                <img src="img/unsplash_M8drGBgFNZE.png" loading="lazy" class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105" alt="Wisata">
+                <div class="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent opacity-90 group-hover:opacity-100 transition-opacity duration-300"></div>
+                <div class="absolute bottom-0 left-0 right-0 p-4">
+                    <h4 class="text-white font-extrabold text-lg leading-tight mb-1">Gunung Ranti</h4>
+                    <p class="text-gray-300 text-sm inline-block max-w-[10ch] truncate">Pendakian santai nikmati sunrise</p>
+                </div>
+            </a>
+            <!-- Item 22 -->
+            <a href="detail.html" class="block relative group overflow-hidden rounded-2xl shadow-sm hover:shadow-xl transition-all duration-300 hover:-translate-y-1 mb-4 break-inside-avoid bg-gray-200 h-[350px]">
+                <img src="img/djawatan.png" loading="lazy" class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105" alt="Wisata">
+                <div class="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent opacity-90 group-hover:opacity-100 transition-opacity duration-300"></div>
+                <div class="absolute bottom-0 left-0 right-0 p-4">
+                    <h4 class="text-white font-extrabold text-lg leading-tight mb-1">Benculuk</h4>
+                    <p class="text-gray-300 text-sm inline-block max-w-[10ch] truncate">Lokasi rindang untuk berfoto</p>
+                </div>
+            </a>
+            <!-- Item 23 -->
+            <a href="detail.html" class="block relative group overflow-hidden rounded-2xl shadow-sm hover:shadow-xl transition-all duration-300 hover:-translate-y-1 mb-4 break-inside-avoid bg-gray-200 h-[200px]">
+                <img src="img/pantaiboom.png" loading="lazy" class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105" alt="Wisata">
+                <div class="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent opacity-90 group-hover:opacity-100 transition-opacity duration-300"></div>
+                <div class="absolute bottom-0 left-0 right-0 p-4">
+                    <h4 class="text-white font-extrabold text-lg leading-tight mb-1">Marina Boom</h4>
+                    <p class="text-gray-300 text-sm inline-block max-w-[10ch] truncate">Kawasan modern dekat pelabuhan</p>
+                </div>
+            </a>
+            <!-- Item 24 -->
+            <a href="detail.html" class="block relative group overflow-hidden rounded-2xl shadow-sm hover:shadow-xl transition-all duration-300 hover:-translate-y-1 mb-4 break-inside-avoid bg-gray-200 h-[400px]">
+                <img src="img/kemiren.png" loading="lazy" class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105" alt="Wisata">
+                <div class="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent opacity-90 group-hover:opacity-100 transition-opacity duration-300"></div>
+                <div class="absolute bottom-0 left-0 right-0 p-4">
+                    <h4 class="text-white font-extrabold text-lg leading-tight mb-1">Kampung Kopi</h4>
+                    <p class="text-gray-300 text-sm inline-block max-w-[10ch] truncate">Menikmati kopi sangrai tradisional</p>
+                </div>
+            </a>
+
+        </div>
+
+    </main>
+
+    <!-- Footer -->
+    <footer class="bg-gray-900 text-white pt-20 pb-8 border-t-[6px] border-holiday mt-10">
+        <div class="max-w-7xl mx-auto px-6 md:px-10">
+            <div class="grid grid-cols-1 md:grid-cols-12 gap-10 md:gap-8 mb-16">
+                <div class="md:col-span-5 pr-0 md:pr-10">
+                    <a href="index.html" class="text-3xl font-extrabold tracking-wide flex items-center gap-2 mb-6 text-white">
+                        <div class="w-10 h-10 bg-holiday rounded-xl flex items-center justify-center shadow-lg">
+                            <i class="bi bi-jeep text-white text-xl"></i>
+                        </div> 
+                        Jadi Berangkat
+                    </a>
+                    <p class="text-gray-400 text-sm leading-relaxed mb-8 font-medium">
+                        Platform penyedia layanan penyewaan Jeep wisata premium. Berkomitmen memberikan pengalaman petualangan lokal yang aman, nyaman, dan tak terlupakan.
+                    </p>
+                    <div class="flex gap-4">
+                        <a href="news.html" aria-label="Instagram Jadi Berangkat" class="w-10 h-10 rounded-full bg-white/10 flex items-center justify-center text-white hover:bg-holiday hover:scale-110 transition-all"><i class="bi bi-instagram"></i></a>
+                        <a href="news.html" aria-label="Facebook Jadi Berangkat" class="w-10 h-10 rounded-full bg-white/10 flex items-center justify-center text-white hover:bg-holiday hover:scale-110 transition-all"><i class="bi bi-facebook"></i></a>
+                    </div>
+                </div>
+
+                <div class="md:col-span-3 md:col-start-7">
+                    <h4 class="text-lg font-extrabold mb-6 text-white">Eksplorasi</h4>
+                    <ul class="space-y-4 text-sm text-gray-400 font-bold">
+                        <li><a href="index.html#destinasi" class="hover:text-holiday transition-colors">Tentang Kami</a></li>
+                        <li><a href="index.html#destinasi" class="hover:text-holiday transition-colors">Destinasi Populer</a></li>
+                        <li><a href="index.html#paket" class="hover:text-holiday transition-colors">Paket Promo</a></li>
+                    </ul>
+                </div>
+
+                <div class="md:col-span-2">
+                    <h4 class="text-lg font-extrabold mb-6 text-white">Dukungan</h4>
+                    <ul class="space-y-4 text-sm text-gray-400 font-bold">
+                        <li><a href="detail.html" class="hover:text-holiday transition-colors">Bantuan</a></li>
+                        <li><a href="detail.html" class="hover:text-holiday transition-colors">Syarat Ketentuan</a></li>
+                        <li><a href="detail.html" class="hover:text-holiday transition-colors">Kontak</a></li>
+                    </ul>
+                </div>
+            </div>
+            
+            <div class="text-center md:text-left flex flex-col md:flex-row justify-between items-center text-sm text-gray-500 pt-8 border-t border-gray-800 font-medium">
+                <p>&copy; 2026 Jadi Berangkat. All rights reserved.</p>
+                <p class="mt-2 md:mt-0">Jeep trip Banyuwangi, siap dipesan online.</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- INTERACTION JAVASCRIPT -->
+    <script>
+        // Navbar Sticky Logic
+        const headerWrapper = document.getElementById('header-wrapper');
+        const navContainer = document.getElementById('nav-container');
+
+        window.addEventListener('scroll', () => {
+            if (window.scrollY > 50) {
+                headerWrapper.classList.add('top-3');
+                headerWrapper.classList.remove('top-0');
+                navContainer.classList.add('shadow-[0_18px_55px_rgba(0,0,0,0.2)]');
+            } else {
+                headerWrapper.classList.remove('top-3');
+                headerWrapper.classList.add('top-0');
+                navContainer.classList.remove('shadow-[0_18px_55px_rgba(0,0,0,0.2)]');
+            }
+        });
+
+        // GSAP Sidebar Mobile Menu
+        const tlMenu = gsap.timeline({ paused: true });
+        tlMenu.to('#menu-overlay', { display: 'block', opacity: 1, duration: 0.3 })
+              .to('#mobile-sidebar', { x: 0, duration: 0.4, ease: "power3.out", boxShadow: "20px 0 50px rgba(0,0,0,0.5)" }, "<");
+
+        document.getElementById('open-menu-btn').addEventListener('click', () => tlMenu.play());
+        document.getElementById('close-menu-btn').addEventListener('click', () => tlMenu.reverse());
+        document.getElementById('menu-overlay').addEventListener('click', () => tlMenu.reverse());
+
+        // View Toggle Logic
+        const viewToggleBtn = document.getElementById('view-toggle-btn');
+        const viewDropdown = document.getElementById('view-dropdown');
+        const destinasiGrid = document.getElementById('destinasi-grid');
+        const currentViewIcon = document.getElementById('current-view-icon');
+        
+        let dropdownOpen = false;
+
+        viewToggleBtn.addEventListener('click', (e) => {
+            e.stopPropagation();
+            dropdownOpen = !dropdownOpen;
+            if (dropdownOpen) {
+                viewDropdown.classList.remove('opacity-0', 'invisible', 'scale-95');
+                viewDropdown.classList.add('opacity-100', 'visible', 'scale-100');
+            } else {
+                viewDropdown.classList.add('opacity-0', 'invisible', 'scale-95');
+                viewDropdown.classList.remove('opacity-100', 'visible', 'scale-100');
+            }
+        });
+
+        document.addEventListener('click', (e) => {
+            if (dropdownOpen && !viewDropdown.contains(e.target)) {
+                dropdownOpen = false;
+                viewDropdown.classList.add('opacity-0', 'invisible', 'scale-95');
+                viewDropdown.classList.remove('opacity-100', 'visible', 'scale-100');
+            }
+        });
+
+        function setView(viewMode) {
+            // Animasi transisi cepat 0.3s menggunakan GSAP atau opacity
+            destinasiGrid.style.opacity = 0;
+            
+            setTimeout(() => {
+                // Reset classes
+                destinasiGrid.classList.remove('view-uniform', 'view-card', 'columns-2', 'md:columns-4', 'lg:columns-6', 'gap-4', 'space-y-4');
+                
+                if (viewMode === 'pinterest') {
+                    destinasiGrid.classList.add('columns-2', 'md:columns-4', 'lg:columns-6', 'gap-4', 'space-y-4');
+                    currentViewIcon.className = 'bi bi-columns-gap';
+                } else if (viewMode === 'uniform') {
+                    destinasiGrid.classList.add('view-uniform');
+                    currentViewIcon.className = 'bi bi-grid-fill';
+                } else if (viewMode === 'card') {
+                    destinasiGrid.classList.add('view-card');
+                    currentViewIcon.className = 'bi bi-card-list';
+                }
+                
+                destinasiGrid.style.opacity = 1;
+            }, 300); // 300ms sesuai durasi transisi
+            
+            dropdownOpen = false;
+            viewDropdown.classList.add('opacity-0', 'invisible', 'scale-95');
+            viewDropdown.classList.remove('opacity-100', 'visible', 'scale-100');
+        }
+    </script>
+</body>
+</html>

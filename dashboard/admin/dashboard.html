@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html lang="id" class="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Dashboard - Jadi Berangkat</title>
+    
+    <!-- Google Fonts: Plus Jakarta Sans -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:ital,wght@0,200..800;1,200..800&display=swap" rel="stylesheet">
+    
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- Bootstrap Icons -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+    
+    <!-- GSAP -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+    
+    <!-- Chart.js -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+    <!-- Custom Tailwind Configuration -->
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['"Plus Jakarta Sans"', 'sans-serif'],
+                    },
+                    colors: {
+                        base: '#F6F5ED',
+                        ink: '#151813',
+                        holiday: '#2e7d32', 
+                        'holiday-dark': '#1b5e20',
+                        'holiday-light': '#a5d6a7',
+                    },
+                    boxShadow: {
+                        'soft': '0 10px 40px -10px rgba(0,0,0,0.05)',
+                    }
+                }
+            }
+        }
+    </script>
+
+    <style>
+        body { font-family: 'Plus Jakarta Sans', sans-serif; overflow-x: hidden; transition: background-color 0.3s, color 0.3s; }
+        
+        /* Custom Scrollbar */
+        ::-webkit-scrollbar { width: 8px; height: 8px; }
+        ::-webkit-scrollbar-track { background: transparent; }
+        ::-webkit-scrollbar-thumb { background: rgba(47, 111, 66, 0.4); border-radius: 10px; }
+        ::-webkit-scrollbar-thumb:hover { background: rgba(47, 111, 66, 0.7); }
+
+        /* Sidebar Nav Link Active State */
+        .nav-link.active {
+            background-color: #f0fdf4;
+            color: #166534;
+            border-right: 4px solid #2e7d32;
+            font-weight: 800;
+        }
+        .nav-link.active i {
+            color: #2e7d32;
+        }
+        html.dark .nav-link.active {
+            background-color: rgba(46, 125, 50, 0.2);
+            color: #4ade80;
+        }
+        html.dark .nav-link.active i {
+            color: #4ade80;
+        }
+    </style>
+</head>
+<body class="h-screen flex bg-base dark:bg-gray-900 text-ink dark:text-gray-100 overflow-hidden">
+
+    <!-- Sidebar -->
+    <aside class="flex-shrink-0 w-72 bg-white dark:bg-gray-900 border-r border-gray-200 dark:border-gray-800 flex flex-col h-full z-50 transition-colors">
+        <div class="p-8 border-b border-gray-100 dark:border-gray-800 flex items-center gap-3">
+            <div class="w-10 h-10 bg-holiday rounded-xl flex items-center justify-center text-white font-extrabold text-xl shadow-lg shadow-holiday/40">JB</div>
+            <div>
+                <h1 class="text-xl font-extrabold text-ink dark:text-white tracking-tight">Jadi Berangkat</h1>
+                <p class="text-xs font-bold text-gray-400 dark:text-gray-500 uppercase tracking-widest">Admin Panel</p>
+            </div>
+        </div>
+        
+        <nav class="flex-grow p-4 space-y-2 overflow-y-auto">
+            <a href="#" data-page="home" class="nav-link flex items-center gap-4 px-5 py-4 rounded-xl text-gray-500 dark:text-gray-400 font-bold hover:bg-gray-50 dark:hover:bg-gray-800 hover:text-gray-900 dark:hover:text-white transition-all">
+                <i class="bi bi-grid text-xl"></i>
+                Dashboard
+            </a>
+            <a href="#" data-page="catalog" class="nav-link flex items-center gap-4 px-5 py-4 rounded-xl text-gray-500 dark:text-gray-400 font-bold hover:bg-gray-50 dark:hover:bg-gray-800 hover:text-gray-900 dark:hover:text-white transition-all">
+                <i class="bi bi-journal-album text-xl"></i>
+                Katalog Wisata
+            </a>
+            <a href="#" data-page="bookings" class="nav-link flex items-center gap-4 px-5 py-4 rounded-xl text-gray-500 dark:text-gray-400 font-bold hover:bg-gray-50 dark:hover:bg-gray-800 hover:text-gray-900 dark:hover:text-white transition-all">
+                <i class="bi bi-wallet2 text-xl"></i>
+                Daftar Booking
+            </a>
+            <a href="#" data-page="validations" class="nav-link flex items-center gap-4 px-5 py-4 rounded-xl text-gray-500 dark:text-gray-400 font-bold hover:bg-gray-50 dark:hover:bg-gray-800 hover:text-gray-900 dark:hover:text-white transition-all">
+                <i class="bi bi-check2-circle text-xl"></i>
+                Validasi Jadwal
+                <span class="ml-auto w-6 h-6 bg-red-100 dark:bg-red-900/30 text-red-600 dark:text-red-400 rounded-full flex items-center justify-center text-xs font-extrabold">3</span>
+            </a>
+        </nav>
+        
+        <div class="p-6 border-t border-gray-100 dark:border-gray-800">
+            <a href="../index.html" class="flex items-center gap-3 px-5 py-3 rounded-xl text-gray-500 dark:text-gray-400 font-bold hover:bg-red-50 dark:hover:bg-red-900/20 hover:text-red-600 dark:hover:text-red-400 transition-all">
+                <i class="bi bi-box-arrow-left text-lg"></i>
+                Keluar
+            </a>
+        </div>
+    </aside>
+
+    <!-- Main Wrapper -->
+    <div class="flex-1 min-w-0 flex flex-col h-full overflow-hidden bg-base dark:bg-[#0f1115] relative transition-colors">
+        <!-- Topbar -->
+        <header class="bg-white/90 dark:bg-gray-900/90 backdrop-blur-md border-b border-gray-100 dark:border-gray-800 px-8 py-5 flex justify-between items-center z-40 shadow-[0_4px_30px_rgba(0,0,0,0.02)] transition-colors">
+            <h2 class="text-xl font-extrabold text-ink dark:text-white" id="topbar-title">Dashboard</h2>
+            
+            <div class="flex items-center gap-6">
+                <!-- Theme Toggle Button -->
+                <button id="theme-toggle" class="w-10 h-10 rounded-full bg-gray-50 dark:bg-gray-800 flex items-center justify-center text-gray-500 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors">
+                    <i class="bi bi-moon-stars-fill dark:hidden"></i>
+                    <i class="bi bi-sun-fill hidden dark:block text-yellow-400"></i>
+                </button>
+            
+                <button class="relative text-gray-400 dark:text-gray-500 hover:text-ink dark:hover:text-white transition-colors">
+                    <i class="bi bi-bell text-xl"></i>
+                    <span class="absolute -top-1 -right-1 w-2.5 h-2.5 bg-red-500 rounded-full border-2 border-white dark:border-gray-900"></span>
+                </button>
+                <div class="flex items-center gap-4 pl-6 border-l border-gray-100 dark:border-gray-800">
+                    <div class="text-right hidden md:block">
+                        <p class="text-sm font-extrabold text-ink dark:text-white">Budi Admin</p>
+                        <p class="text-[10px] font-bold text-gray-400 dark:text-gray-500 uppercase tracking-widest mt-0.5">Superadmin</p>
+                    </div>
+                    <img src="https://ui-avatars.com/api/?name=Budi+Admin&background=2e7d32&color=fff" alt="Admin" class="w-10 h-10 rounded-full shadow-sm border border-gray-100 dark:border-gray-700 cursor-pointer">
+                </div>
+            </div>
+        </header>
+
+        <!-- Dynamic Content Area -->
+        <main class="flex-1 overflow-y-auto overflow-x-hidden p-8" id="app-content-wrapper">
+            <div id="app-content" class="w-full max-w-7xl mx-auto text-ink dark:text-gray-200">
+                <!-- Content will be injected here via JS -->
+            </div>
+        </main>
+    </div>
+
+    <!-- Modals Container (Global) -->
+    <div id="modals-container"></div>
+
+    <!-- App Logic -->
+    <script src="js/app.js"></script>
+    <script>
+        // Theme Toggle Logic
+        const themeToggleBtn = document.getElementById('theme-toggle');
+        
+        function toggleTheme() {
+            if (document.documentElement.classList.contains('dark')) {
+                document.documentElement.classList.remove('dark');
+                localStorage.setItem('color-theme', 'light');
+            } else {
+                document.documentElement.classList.add('dark');
+                localStorage.setItem('color-theme', 'dark');
+            }
+            // Dispatch event so charts can re-render if needed
+            window.dispatchEvent(new Event('theme-changed'));
+        }
+
+        themeToggleBtn.addEventListener('click', toggleTheme);
+
+        // Check local storage
+        if (localStorage.getItem('color-theme') === 'dark' || (!('color-theme' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+            document.documentElement.classList.add('dark');
+        } else {
+            document.documentElement.classList.remove('dark');
+        }
+    </script>
+</body>
+</html>

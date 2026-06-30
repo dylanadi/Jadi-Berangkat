@@ -1,0 +1,717 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Booking - Jadi Berangkat</title>
+    
+    <!-- Google Fonts: Plus Jakarta Sans -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:ital,wght@0,200..800;1,200..800&display=swap" rel="stylesheet">
+    
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- Bootstrap Icons -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+    
+    <!-- GSAP -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+    
+    <!-- Custom Tailwind Configuration -->
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['"Plus Jakarta Sans"', 'sans-serif'],
+                    },
+                    colors: {
+                        base: '#F6F5ED',
+                        ink: '#151813',
+                        holiday: '#2e7d32', 
+                        'holiday-dark': '#1b5e20',
+                        'holiday-light': '#a5d6a7',
+                    },
+                    boxShadow: {
+                        'soft': '0 10px 40px -10px rgba(0,0,0,0.05)',
+                        'glow': '0 0 20px rgba(46,125,50,0.3)'
+                    }
+                }
+            }
+        }
+    </script>
+
+    <style>
+        body { font-family: 'Plus Jakarta Sans', sans-serif; background-color: #F6F5ED; color: #151813; overflow-x: hidden; }
+        
+        /* Custom Scrollbar */
+        ::-webkit-scrollbar { width: 8px; height: 8px; }
+        ::-webkit-scrollbar-track { background: rgba(0,0,0,0.04); }
+        ::-webkit-scrollbar-thumb { background: rgba(47, 111, 66, 0.4); border-radius: 10px; }
+        ::-webkit-scrollbar-thumb:hover { background: rgba(47, 111, 66, 0.7); }
+        
+        /* Input Styles */
+        input:focus, textarea:focus, select:focus {
+            outline: none;
+            box-shadow: 0 0 0 3px rgba(46, 125, 50, 0.15);
+            border-color: #2e7d32;
+        }
+
+        /* Calendar Styles */
+        .cal-day { position: relative; overflow: hidden; }
+        .cal-day::after {
+            content: ''; position: absolute; inset: 0; background: currentColor; opacity: 0; transition: opacity 0.2s;
+        }
+        .cal-day.available { background-color: #f0fdf4; color: #166534; border: 1px solid #bbf7d0; cursor: pointer; }
+        .cal-day.available:hover::after { opacity: 0.1; }
+        
+        .cal-day.full { background-color: #fef2f2; color: #991b1b; border: 1px solid #fecaca; cursor: not-allowed; opacity: 0.6; }
+        
+        .cal-day.selected { background-color: #1e3a8a !important; color: white !important; border: 1px solid #1e3a8a !important; box-shadow: 0 10px 25px -5px rgba(30, 58, 138, 0.4); transform: scale(1.05); font-weight: 800; z-index: 10; }
+        
+        .cal-day.empty { background-color: transparent; border: none; cursor: default; }
+
+        /* Payment Card */
+        .payment-card { border: 2px solid transparent; cursor: pointer; transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1); }
+        .payment-card:hover { border-color: rgba(46, 125, 50, 0.2); background-color: white; transform: translateY(-2px); box-shadow: 0 10px 25px -5px rgba(0,0,0,0.05); }
+        .payment-card.selected { border-color: #2e7d32; background-color: #f0fdf4; box-shadow: 0 10px 25px -5px rgba(46,125,50,0.15); }
+        
+        /* Addon Toggle */
+        .addon-card { transition: all 0.3s; border: 2px solid transparent; }
+        .addon-card.selected { border-color: #2e7d32; background-color: #f8fafc; }
+    </style>
+</head>
+<body class="min-h-screen flex flex-col justify-center py-10 md:py-16">
+
+    <!-- Tombol Kembali Melayang -->
+    <a href="detail.html" class="fixed top-6 left-6 md:top-10 md:left-10 z-50 inline-flex items-center gap-2 px-5 py-3 rounded-full bg-white/50 backdrop-blur-md border border-white/40 text-gray-600 font-extrabold shadow-sm hover:shadow-md hover:bg-white transition-all">
+        <i class="bi bi-arrow-left"></i> <span class="hidden sm:inline">Kembali</span>
+    </a>
+
+    <main class="w-full max-w-4xl mx-auto px-4 sm:px-6 relative">
+        
+        <!-- Indikator 4 Langkah (Bulat) -->
+        <div class="relative flex items-center justify-between w-full max-w-lg mx-auto mb-16 mt-4 px-2">
+            <!-- Garis Putus-Putus Background -->
+            <div class="absolute left-6 right-6 top-1/2 -translate-y-1/2 border-t-[3px] border-dashed border-gray-300 z-0"></div>
+            <!-- Garis Progres Hijau -->
+            <div id="progress-line" class="absolute left-6 top-1/2 -translate-y-1/2 h-0 border-t-[3px] border-solid border-holiday z-0 transition-all duration-700 ease-in-out w-0"></div>
+
+            <!-- Circles -->
+            <div class="step-circle relative z-10 w-12 h-12 rounded-full flex items-center justify-center font-extrabold text-lg bg-holiday text-white shadow-glow transition-all duration-500" id="circle-1">1</div>
+            <div class="step-circle relative z-10 w-12 h-12 rounded-full flex items-center justify-center font-extrabold text-lg bg-white text-gray-400 border-[3px] border-gray-200 transition-all duration-500" id="circle-2">2</div>
+            <div class="step-circle relative z-10 w-12 h-12 rounded-full flex items-center justify-center font-extrabold text-lg bg-white text-gray-400 border-[3px] border-gray-200 transition-all duration-500" id="circle-3">3</div>
+            <div class="step-circle relative z-10 w-12 h-12 rounded-full flex items-center justify-center font-extrabold text-lg bg-white text-gray-400 border-[3px] border-gray-200 transition-all duration-500" id="circle-4">4</div>
+        </div>
+
+        <div class="relative overflow-hidden w-full pb-10">
+            <!-- STEP 1: JADWAL & PESERTA -->
+            <div id="step-1" class="step-section w-full">
+                <div class="mb-10 text-center">
+                    <h1 class="text-3xl md:text-5xl font-extrabold text-ink mb-4 tracking-tight">Pilih Jadwal Liburan</h1>
+                    <p class="text-gray-500 font-medium text-lg">Tentukan tanggal dan jumlah peserta untuk petualangan Anda.</p>
+                </div>
+                
+                <div class="grid md:grid-cols-[1.5fr_1fr] gap-8 max-w-4xl mx-auto">
+                    <!-- Kalender -->
+                    <div class="bg-white rounded-[2rem] shadow-soft border border-white p-6 md:p-8">
+                        <div class="flex items-center justify-between mb-6">
+                            <button id="btn-prev-month" class="w-11 h-11 rounded-full bg-gray-50 text-gray-600 flex items-center justify-center hover:bg-holiday hover:text-white transition-colors disabled:opacity-30 disabled:hover:bg-gray-50 disabled:hover:text-gray-600 disabled:cursor-not-allowed border border-gray-100">
+                                <i class="bi bi-chevron-left text-lg"></i>
+                            </button>
+                            <h2 id="calendar-month-year" class="text-xl font-extrabold text-ink tracking-wide">Bulan Tahun</h2>
+                            <button id="btn-next-month" class="w-11 h-11 rounded-full bg-gray-50 text-gray-600 flex items-center justify-center hover:bg-holiday hover:text-white transition-colors disabled:opacity-30 disabled:hover:bg-gray-50 disabled:hover:text-gray-600 disabled:cursor-not-allowed border border-gray-100">
+                                <i class="bi bi-chevron-right text-lg"></i>
+                            </button>
+                        </div>
+                        
+                        <div class="grid grid-cols-7 gap-3 mb-4 text-center text-xs font-extrabold text-gray-400 uppercase tracking-widest">
+                            <div>Min</div><div>Sen</div><div>Sel</div><div>Rab</div><div>Kam</div><div>Jum</div><div>Sab</div>
+                        </div>
+                        <div id="calendar-grid" class="grid grid-cols-7 gap-3">
+                            <!-- Dates will be generated by JS -->
+                        </div>
+                        
+                        <div class="flex items-center justify-center gap-6 mt-8 text-xs font-bold text-gray-500">
+                            <div class="flex items-center gap-2"><div class="w-3 h-3 rounded-full bg-green-100 border border-green-200"></div> Tersedia</div>
+                            <div class="flex items-center gap-2"><div class="w-3 h-3 rounded-full bg-red-50 border border-red-200"></div> Penuh</div>
+                        </div>
+                    </div>
+
+                    <!-- Pilihan Tanggal & Peserta -->
+                    <div class="flex flex-col gap-6">
+                        <!-- Info Tanggal -->
+                        <div class="bg-white rounded-[2rem] shadow-soft p-6 md:p-8 flex flex-col justify-center flex-grow border border-white">
+                            <h3 class="text-sm font-extrabold text-gray-400 uppercase tracking-widest mb-6 border-b border-gray-100 pb-4">Waktu Trip</h3>
+                            <div class="flex justify-between items-center relative">
+                                <div>
+                                    <p class="text-xs font-bold text-gray-400 uppercase mb-1">Mulai</p>
+                                    <p id="display-date-start" class="text-lg font-extrabold text-ink">-</p>
+                                </div>
+                                <div class="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 w-8 h-8 bg-gray-50 rounded-full flex items-center justify-center text-gray-400">
+                                    <i class="bi bi-arrow-right"></i>
+                                </div>
+                                <div class="text-right">
+                                    <p class="text-xs font-bold text-gray-400 uppercase mb-1">Selesai</p>
+                                    <p id="display-date-end" class="text-lg font-extrabold text-ink">-</p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Info Pax -->
+                        <div class="bg-white rounded-[2rem] shadow-soft p-6 md:p-8 flex justify-between items-center border border-white">
+                            <div>
+                                <h3 class="text-sm font-extrabold text-gray-400 uppercase tracking-widest mb-1">Jumlah Peserta</h3>
+                                <p class="font-extrabold text-ink">Private Trip</p>
+                            </div>
+                            <div class="flex items-center gap-3 bg-gray-50 rounded-xl border border-gray-100 p-1.5 shadow-inner">
+                                <button id="btn-min-pax" class="w-10 h-10 flex items-center justify-center rounded-lg text-gray-500 bg-white shadow-sm hover:text-ink transition"><i class="bi bi-dash-lg"></i></button>
+                                <span id="pax-count" class="font-extrabold text-ink w-6 text-center text-lg">1</span>
+                                <button id="btn-add-pax" class="w-10 h-10 flex items-center justify-center rounded-lg text-gray-500 bg-white shadow-sm hover:text-ink transition"><i class="bi bi-plus-lg"></i></button>
+                            </div>
+                        </div>
+
+                        <button onclick="nextStep(2)" id="btn-next-1" class="w-full py-5 bg-ink text-white font-extrabold text-lg rounded-2xl hover:bg-black transition-all shadow-xl hover:-translate-y-1 disabled:opacity-30 disabled:hover:translate-y-0 disabled:cursor-not-allowed" disabled>
+                            Lanjutkan <i class="bi bi-arrow-right ml-2"></i>
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- STEP 2: INFORMASI -->
+            <div id="step-2" class="step-section w-full hidden">
+                <div class="mb-10 text-center max-w-2xl mx-auto">
+                    <h1 class="text-3xl md:text-5xl font-extrabold text-ink mb-4 tracking-tight">Data Diri Anda</h1>
+                    <p class="text-gray-500 font-medium text-lg">Informasi ini diperlukan untuk mengirimkan e-ticket dan menghubungi Anda saat penjemputan.</p>
+                </div>
+
+                <div class="bg-white rounded-[2.5rem] shadow-soft border border-white p-8 md:p-12 max-w-2xl mx-auto">
+                    <form id="form-info" class="space-y-8">
+                        <div>
+                            <label class="block text-sm font-extrabold text-ink mb-3 uppercase tracking-wide">Nama Lengkap Sesuai KTP</label>
+                            <input type="text" id="input-name" class="w-full px-6 py-4 bg-gray-50 border border-gray-200 rounded-2xl font-bold text-gray-900 placeholder-gray-400 transition-colors text-lg" placeholder="Cth: Budi Santoso" required>
+                        </div>
+                        <div>
+                            <label class="block text-sm font-extrabold text-ink mb-3 uppercase tracking-wide">Alamat Email Aktif</label>
+                            <input type="email" id="input-email" class="w-full px-6 py-4 bg-gray-50 border border-gray-200 rounded-2xl font-bold text-gray-900 placeholder-gray-400 transition-colors text-lg" placeholder="Cth: budi@gmail.com" required>
+                            <p class="text-xs font-bold text-gray-400 mt-2"><i class="bi bi-info-circle"></i> E-Ticket akan dikirimkan ke email ini.</p>
+                        </div>
+                        <div>
+                            <label class="block text-sm font-extrabold text-ink mb-3 uppercase tracking-wide">Nomor Telepon (WhatsApp)</label>
+                            <div class="flex shadow-sm rounded-2xl overflow-hidden">
+                                <span class="inline-flex items-center justify-center px-6 bg-gray-100 border border-r-0 border-gray-200 text-gray-500 font-extrabold text-lg">+62</span>
+                                <input type="tel" id="input-phone" class="w-full px-6 py-4 bg-gray-50 border border-gray-200 font-bold text-gray-900 placeholder-gray-400 transition-colors text-lg" placeholder="81234567890" required>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+
+                <div class="flex justify-between items-center max-w-2xl mx-auto mt-10">
+                    <button onclick="prevStep(1)" class="px-8 py-4 text-gray-500 font-extrabold hover:text-ink transition-colors text-lg">
+                        <i class="bi bi-arrow-left mr-2"></i> Kembali
+                    </button>
+                    <button onclick="nextStep(3)" id="btn-next-2" class="px-10 py-4 bg-ink text-white font-extrabold text-lg rounded-2xl hover:bg-black transition-all shadow-xl hover:-translate-y-1 disabled:opacity-30 disabled:hover:translate-y-0 disabled:cursor-not-allowed" disabled>
+                        Lanjutkan <i class="bi bi-arrow-right ml-2"></i>
+                    </button>
+                </div>
+            </div>
+
+            <!-- STEP 3: PEMBAYARAN -->
+            <div id="step-3" class="step-section w-full hidden">
+                <div class="mb-10 text-center max-w-2xl mx-auto">
+                    <h1 class="text-3xl md:text-5xl font-extrabold text-ink mb-4 tracking-tight">Metode Pembayaran</h1>
+                    <p class="text-gray-500 font-medium text-lg">Pilih jalur pembayaran yang paling nyaman untuk Anda.</p>
+                </div>
+
+                <div class="max-w-2xl mx-auto space-y-8">
+                    <div class="bg-white rounded-[2.5rem] p-8 md:p-10 shadow-soft border border-white">
+                        <h3 class="text-sm font-extrabold text-gray-400 tracking-widest uppercase mb-6 flex items-center gap-3">
+                            <i class="bi bi-bank"></i> Transfer Virtual Account
+                        </h3>
+                        <div class="grid grid-cols-2 md:grid-cols-3 gap-5">
+                            <div class="payment-card bg-gray-50 p-5 rounded-2xl flex flex-col items-center justify-center text-center gap-4" data-method="BCA VA">
+                                <div class="w-14 h-14 bg-white rounded-full shadow-sm flex items-center justify-center text-blue-700 text-2xl"><i class="bi bi-bank2"></i></div>
+                                <span class="font-extrabold text-gray-900">BCA</span>
+                            </div>
+                            <div class="payment-card bg-gray-50 p-5 rounded-2xl flex flex-col items-center justify-center text-center gap-4" data-method="Mandiri VA">
+                                <div class="w-14 h-14 bg-white rounded-full shadow-sm flex items-center justify-center text-yellow-600 text-2xl"><i class="bi bi-bank2"></i></div>
+                                <span class="font-extrabold text-gray-900">Mandiri</span>
+                            </div>
+                            <div class="payment-card bg-gray-50 p-5 rounded-2xl flex flex-col items-center justify-center text-center gap-4" data-method="BNI VA">
+                                <div class="w-14 h-14 bg-white rounded-full shadow-sm flex items-center justify-center text-orange-600 text-2xl"><i class="bi bi-bank2"></i></div>
+                                <span class="font-extrabold text-gray-900">BNI</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="bg-white rounded-[2.5rem] p-8 md:p-10 shadow-soft border border-white">
+                        <h3 class="text-sm font-extrabold text-gray-400 tracking-widest uppercase mb-6 flex items-center gap-3">
+                            <i class="bi bi-phone"></i> E-Wallet & QRIS
+                        </h3>
+                        <div class="grid grid-cols-2 md:grid-cols-3 gap-5">
+                            <div class="payment-card bg-gray-50 p-5 rounded-2xl flex flex-col items-center justify-center text-center gap-4" data-method="QRIS">
+                                <div class="w-14 h-14 bg-white rounded-full shadow-sm flex items-center justify-center text-red-500 text-2xl"><i class="bi bi-qr-code-scan"></i></div>
+                                <span class="font-extrabold text-gray-900">QRIS</span>
+                            </div>
+                            <div class="payment-card bg-gray-50 p-5 rounded-2xl flex flex-col items-center justify-center text-center gap-4" data-method="Gopay">
+                                <div class="w-14 h-14 bg-white rounded-full shadow-sm flex items-center justify-center text-blue-400 text-2xl"><i class="bi bi-wallet2"></i></div>
+                                <span class="font-extrabold text-gray-900">Gopay</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="flex justify-between items-center max-w-2xl mx-auto mt-10">
+                    <button onclick="prevStep(2)" class="px-8 py-4 text-gray-500 font-extrabold hover:text-ink transition-colors text-lg">
+                        <i class="bi bi-arrow-left mr-2"></i> Kembali
+                    </button>
+                    <button onclick="nextStep(4)" id="btn-next-3" class="px-10 py-4 bg-ink text-white font-extrabold text-lg rounded-2xl hover:bg-black transition-all shadow-xl hover:-translate-y-1 disabled:opacity-30 disabled:hover:translate-y-0 disabled:cursor-not-allowed" disabled>
+                        Lanjutkan <i class="bi bi-arrow-right ml-2"></i>
+                    </button>
+                </div>
+            </div>
+
+            <!-- STEP 4: FINAL CHECKOUT -->
+            <div id="step-4" class="step-section w-full hidden">
+                <div class="mb-10 text-center">
+                    <h1 class="text-3xl md:text-5xl font-extrabold text-ink mb-4 tracking-tight">Selesaikan Pesanan</h1>
+                    <p class="text-gray-500 font-medium text-lg">Periksa ringkasan dan selesaikan transaksi Anda dengan aman.</p>
+                </div>
+
+                <div class="grid lg:grid-cols-[1.5fr_1fr] gap-8">
+                    <!-- Kolom Kiri: Layanan Tambahan & Info -->
+                    <div class="space-y-8">
+                        <!-- Data Ringkas (Desain Mewah) -->
+                        <div class="bg-white p-8 rounded-[2.5rem] shadow-soft border border-white">
+                            <div class="flex items-center gap-4 mb-8 pb-6 border-b border-gray-100">
+                                <img src="img/djawatan.png" class="w-20 h-20 rounded-2xl object-cover shadow-sm" alt="Trip">
+                                <div>
+                                    <span class="px-3 py-1 bg-gray-100 text-gray-600 rounded-full text-xs font-extrabold uppercase tracking-widest mb-2 inline-block">Paket Terpilih</span>
+                                    <h2 class="text-2xl font-extrabold text-ink">De Djawatan Premium</h2>
+                                </div>
+                            </div>
+                            
+                            <div class="grid grid-cols-2 gap-y-6 gap-x-4">
+                                <div>
+                                    <p class="text-xs font-bold text-gray-400 uppercase tracking-widest mb-2">Pemesan</p>
+                                    <p id="final-name" class="font-extrabold text-gray-900 text-lg">-</p>
+                                </div>
+                                <div>
+                                    <p class="text-xs font-bold text-gray-400 uppercase tracking-widest mb-2">Kontak</p>
+                                    <p id="final-contact" class="font-extrabold text-gray-900 text-lg">-</p>
+                                </div>
+                                <div>
+                                    <p class="text-xs font-bold text-gray-400 uppercase tracking-widest mb-2">Jadwal Keberangkatan</p>
+                                    <p id="final-date" class="font-extrabold text-gray-900 text-lg">-</p>
+                                </div>
+                                <div>
+                                    <p class="text-xs font-bold text-gray-400 uppercase tracking-widest mb-2">Metode Bayar</p>
+                                    <p id="final-payment" class="font-extrabold text-gray-900 text-lg">-</p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Add-ons -->
+                        <div>
+                            <h3 class="text-xl font-extrabold text-ink mb-5 px-2">Layanan Tambahan (Opsional)</h3>
+                            <div class="space-y-4">
+                                <div class="addon-card bg-white p-5 md:p-6 rounded-[2rem] border-gray-200 flex items-center gap-5 shadow-soft hover:shadow-md cursor-pointer" onclick="toggleAddonCard(this, 'Sewa Kamera DSLR', 150000)">
+                                    <div class="w-16 h-16 bg-gray-50 rounded-2xl flex items-center justify-center text-gray-600 text-2xl flex-shrink-0 transition-colors addon-icon-wrapper">
+                                        <i class="bi bi-camera"></i>
+                                    </div>
+                                    <div class="flex-grow">
+                                        <h4 class="font-extrabold text-gray-900 text-lg">Sewa Kamera DSLR</h4>
+                                        <p class="text-sm text-gray-500 font-medium mb-1">Lengkap dengan memori 64GB</p>
+                                        <p class="text-sm font-extrabold text-ink">Rp 150.000 <span class="text-gray-400 font-medium text-xs">/hari</span></p>
+                                    </div>
+                                    <div class="addon-check w-8 h-8 rounded-full border-2 border-gray-200 flex items-center justify-center text-white transition-colors">
+                                        <i class="bi bi-check-lg opacity-0 transition-opacity"></i>
+                                    </div>
+                                </div>
+                                
+                                <div class="addon-card bg-white p-5 md:p-6 rounded-[2rem] border-gray-200 flex items-center gap-5 shadow-soft hover:shadow-md cursor-pointer" onclick="toggleAddonCard(this, 'Jasa Fotografer', 300000)">
+                                    <div class="w-16 h-16 bg-gray-50 rounded-2xl flex items-center justify-center text-gray-600 text-2xl flex-shrink-0 transition-colors addon-icon-wrapper">
+                                        <i class="bi bi-person-video2"></i>
+                                    </div>
+                                    <div class="flex-grow">
+                                        <h4 class="font-extrabold text-gray-900 text-lg">Jasa Fotografer</h4>
+                                        <p class="text-sm text-gray-500 font-medium mb-1">Dokumentasi profesional selama trip</p>
+                                        <p class="text-sm font-extrabold text-ink">Rp 300.000 <span class="text-gray-400 font-medium text-xs">/trip</span></p>
+                                    </div>
+                                    <div class="addon-check w-8 h-8 rounded-full border-2 border-gray-200 flex items-center justify-center text-white transition-colors">
+                                        <i class="bi bi-check-lg opacity-0 transition-opacity"></i>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Kolom Kanan: Rincian Harga -->
+                    <div>
+                        <div class="bg-ink rounded-[2.5rem] shadow-xl p-8 sticky top-24 text-white">
+                            <h3 class="text-xl font-extrabold mb-8">Rincian Pembayaran</h3>
+                            
+                            <div class="space-y-5 mb-8 text-sm font-medium border-b border-gray-700 pb-8">
+                                <div class="flex justify-between items-center">
+                                    <span class="text-gray-400" id="ticket-title">Paket Trip (x1)</span>
+                                    <span class="text-white font-extrabold text-base" id="ticket-price">Rp 850.000</span>
+                                </div>
+                                
+                                <!-- Area Rincian Add-ons -->
+                                <div id="invoice-addons-list" class="space-y-5 text-gray-400"></div>
+                            </div>
+                            
+                            <!-- Voucher -->
+                            <div class="mb-8">
+                                <label class="block text-xs font-bold text-gray-400 mb-3 uppercase tracking-widest">Kode Voucher</label>
+                                <div class="flex gap-2">
+                                    <input type="text" class="flex-grow bg-white/10 border border-white/20 rounded-xl px-4 py-3 text-sm font-bold uppercase text-white placeholder-gray-500 focus:border-holiday focus:ring-0 focus:shadow-none" placeholder="PROMO2026">
+                                    <button class="bg-white text-ink px-5 py-3 rounded-xl font-extrabold hover:bg-gray-200 transition text-sm">Gunakan</button>
+                                </div>
+                            </div>
+                            
+                            <div class="flex flex-col mb-8 bg-black/30 p-5 rounded-2xl">
+                                <span class="text-gray-400 font-bold text-xs uppercase tracking-widest mb-2">Total Tagihan</span>
+                                <span class="text-4xl font-extrabold text-holiday-light" id="grand-total">Rp 850.000</span>
+                            </div>
+                            
+                            <button id="btn-submit-booking" onclick="submitBooking()" class="w-full py-5 bg-holiday text-white font-extrabold text-lg rounded-2xl hover:bg-holiday-dark transition-all shadow-[0_0_20px_rgba(46,125,50,0.4)] hover:shadow-[0_0_30px_rgba(46,125,50,0.6)] hover:-translate-y-1">
+                                Bayar Sekarang
+                            </button>
+                            
+                            <div class="mt-4 flex items-center justify-center gap-2 text-gray-500 text-xs font-bold">
+                                <i class="bi bi-lock-fill"></i> Pembayaran Aman & Terenkripsi
+                            </div>
+                        </div>
+                        
+                        <button onclick="prevStep(3)" class="w-full mt-6 py-4 text-gray-500 font-extrabold hover:text-ink transition-colors text-center">
+                            <i class="bi bi-arrow-left mr-2"></i> Kembali ke Pembayaran
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+    </main>
+
+    <!-- Modal Sukses (Hidden by default) -->
+    <div id="success-modal" class="fixed inset-0 bg-ink/80 backdrop-blur-md z-[100] flex items-center justify-center opacity-0 invisible transition-all duration-300">
+        <div class="bg-white rounded-[3rem] p-12 max-w-md w-full mx-4 text-center transform scale-95 transition-transform duration-500" id="success-modal-content">
+            <div class="w-24 h-24 bg-holiday/10 text-holiday rounded-full flex items-center justify-center mx-auto mb-8 relative">
+                <div class="absolute inset-0 bg-holiday/20 rounded-full animate-ping"></div>
+                <i class="bi bi-check-lg text-5xl relative z-10"></i>
+            </div>
+            <h2 class="text-3xl font-extrabold text-ink mb-3 tracking-tight">Booking Berhasil!</h2>
+            <p class="text-gray-500 font-medium text-base mb-10 leading-relaxed">E-ticket dan instruksi pembayaran selengkapnya telah kami kirim ke <span class="font-bold text-ink" id="success-email"></span>.</p>
+            <a href="index.html" class="block w-full py-5 bg-ink text-white font-extrabold text-lg rounded-2xl hover:bg-black transition-all shadow-xl hover:-translate-y-1">Selesai</a>
+        </div>
+    </div>
+
+    <script>
+        // --- State Management ---
+        const bookingData = {
+            step: 1,
+            dateStr: null,
+            name: '',
+            email: '',
+            phone: '',
+            pax: 1,
+            basePrice: 850000,
+            paymentMethod: null,
+            addons: []
+        };
+
+        const totalSteps = 4;
+
+        // --- Step Transition Logic (GSAP) ---
+        function updateStepIndicator() {
+            const step = bookingData.step;
+            const progressLine = document.getElementById('progress-line');
+            
+            // Width of line (percentage based on steps 1 to 4)
+            // step 1: 0%, step 2: 33%, step 3: 66%, step 4: 100%
+            const percentage = ((step - 1) / (totalSteps - 1)) * 100;
+            progressLine.style.width = percentage + '%';
+
+            // Circles styling
+            for(let i = 1; i <= totalSteps; i++) {
+                const circle = document.getElementById('circle-' + i);
+                if (i <= step) {
+                    circle.classList.add('bg-holiday', 'text-white', 'shadow-glow', 'border-holiday');
+                    circle.classList.remove('bg-white', 'text-gray-400', 'border-gray-200');
+                    // Add check icon for passed steps
+                    if (i < step) {
+                        circle.innerHTML = '<i class="bi bi-check-lg"></i>';
+                    } else {
+                        circle.innerHTML = i;
+                    }
+                } else {
+                    circle.classList.remove('bg-holiday', 'text-white', 'shadow-glow', 'border-holiday');
+                    circle.classList.add('bg-white', 'text-gray-400', 'border-gray-200');
+                    circle.innerHTML = i;
+                }
+            }
+        }
+
+        function transitionStep(currentStepNum, nextStepNum, direction) {
+            const currentEl = document.getElementById('step-' + currentStepNum);
+            const nextEl = document.getElementById('step-' + nextStepNum);
+            
+            // Direction: 1 for forward, -1 for backward
+            const xOffset = direction * 50;
+
+            gsap.to(currentEl, {
+                x: -xOffset, opacity: 0, duration: 0.3, ease: "power2.inOut",
+                onComplete: () => {
+                    currentEl.classList.add('hidden');
+                    // reset position for next time
+                    gsap.set(currentEl, { x: 0 }); 
+                    
+                    nextEl.classList.remove('hidden');
+                    gsap.fromTo(nextEl, 
+                        { x: xOffset, opacity: 0 }, 
+                        { x: 0, opacity: 1, duration: 0.4, ease: "power2.out" }
+                    );
+                    window.scrollTo({ top: 0, behavior: 'smooth' });
+                }
+            });
+        }
+
+        function nextStep(step) {
+            const current = bookingData.step;
+            bookingData.step = step;
+            updateStepIndicator();
+            if(step === 4) renderFinalCheckout();
+            transitionStep(current, step, 1);
+        }
+
+        function prevStep(step) {
+            const current = bookingData.step;
+            bookingData.step = step;
+            updateStepIndicator();
+            transitionStep(current, step, -1);
+        }
+
+        // --- Step 1: Calendar & Pax Logic ---
+        const btnNext1 = document.getElementById('btn-next-1');
+        const calMonthYear = document.getElementById('calendar-month-year');
+        const calGrid = document.getElementById('calendar-grid');
+        const displayDateStart = document.getElementById('display-date-start');
+        const displayDateEnd = document.getElementById('display-date-end');
+        
+        let currentDate = new Date();
+        const maxDate = new Date();
+        maxDate.setMonth(currentDate.getMonth() + 3);
+
+        const monthNames = ["Januari", "Februari", "Maret", "April", "Mei", "Juni", "Juli", "Agustus", "September", "Oktober", "November", "Desember"];
+
+        function renderCalendar(date) {
+            calGrid.innerHTML = '';
+            calMonthYear.textContent = `${monthNames[date.getMonth()]} ${date.getFullYear()}`;
+            
+            const isCurrentMonth = date.getMonth() === new Date().getMonth() && date.getFullYear() === new Date().getFullYear();
+            const isMaxMonth = date.getMonth() === maxDate.getMonth() && date.getFullYear() === maxDate.getFullYear();
+            
+            document.getElementById('btn-prev-month').disabled = isCurrentMonth;
+            document.getElementById('btn-next-month').disabled = isMaxMonth;
+
+            const firstDay = new Date(date.getFullYear(), date.getMonth(), 1).getDay();
+            const daysInMonth = new Date(date.getFullYear(), date.getMonth() + 1, 0).getDate();
+
+            for(let i = 0; i < firstDay; i++) {
+                const emptyDiv = document.createElement('div');
+                emptyDiv.className = 'h-12 rounded-xl cal-day empty';
+                calGrid.appendChild(emptyDiv);
+            }
+
+            for(let i = 1; i <= daysInMonth; i++) {
+                const dayDiv = document.createElement('div');
+                const isPast = isCurrentMonth && i < new Date().getDate();
+                const isFull = (i % 7 === 0) || (i % 11 === 0); 
+                const fullDateStr = `${i} ${monthNames[date.getMonth()]} ${date.getFullYear()}`;
+
+                if(isPast) {
+                    dayDiv.className = 'h-12 rounded-xl flex items-center justify-center text-sm font-extrabold text-gray-200 empty';
+                    dayDiv.textContent = i;
+                } else {
+                    dayDiv.className = `h-12 rounded-xl flex items-center justify-center text-sm font-extrabold cal-day transition-all ${isFull ? 'full' : 'available'}`;
+                    dayDiv.textContent = i;
+                    
+                    if(bookingData.dateStr === fullDateStr) {
+                        dayDiv.classList.add('selected');
+                    }
+
+                    if(!isFull) {
+                        dayDiv.onclick = () => selectDate(fullDateStr, dayDiv);
+                    }
+                }
+                calGrid.appendChild(dayDiv);
+            }
+        }
+
+        function selectDate(fullDateStr, el) {
+            document.querySelectorAll('.cal-day.selected').forEach(d => d.classList.remove('selected'));
+            el.classList.add('selected');
+            
+            bookingData.dateStr = fullDateStr;
+            displayDateStart.textContent = fullDateStr;
+            displayDateEnd.textContent = fullDateStr; 
+            
+            // Bounce animation on text
+            gsap.fromTo([displayDateStart, displayDateEnd], { scale: 1.1, color: '#2e7d32' }, { scale: 1, color: '#151813', duration: 0.4 });
+            
+            btnNext1.disabled = false;
+        }
+
+        document.getElementById('btn-prev-month').onclick = () => {
+            currentDate.setMonth(currentDate.getMonth() - 1);
+            renderCalendar(currentDate);
+        };
+        document.getElementById('btn-next-month').onclick = () => {
+            currentDate.setMonth(currentDate.getMonth() + 1);
+            renderCalendar(currentDate);
+        };
+
+        renderCalendar(currentDate);
+
+        // Pax
+        const paxCountEl = document.getElementById('pax-count');
+        document.getElementById('btn-add-pax').onclick = () => {
+            if(bookingData.pax < 10) {
+                bookingData.pax++;
+                paxCountEl.textContent = bookingData.pax;
+                gsap.fromTo(paxCountEl, { y: -10, opacity: 0 }, { y: 0, opacity: 1, duration: 0.3 });
+            }
+        };
+        document.getElementById('btn-min-pax').onclick = () => {
+            if(bookingData.pax > 1) {
+                bookingData.pax--;
+                paxCountEl.textContent = bookingData.pax;
+                gsap.fromTo(paxCountEl, { y: 10, opacity: 0 }, { y: 0, opacity: 1, duration: 0.3 });
+            }
+        };
+
+        // --- Step 2: Form Validation ---
+        const inputName = document.getElementById('input-name');
+        const inputEmail = document.getElementById('input-email');
+        const inputPhone = document.getElementById('input-phone');
+        const btnNext2 = document.getElementById('btn-next-2');
+
+        function checkFormInfo() {
+            if(inputName.value.trim() !== '' && inputEmail.value.trim() !== '' && inputPhone.value.trim() !== '') {
+                bookingData.name = inputName.value;
+                bookingData.email = inputEmail.value;
+                bookingData.phone = inputPhone.value;
+                btnNext2.disabled = false;
+            } else {
+                btnNext2.disabled = true;
+            }
+        }
+        inputName.addEventListener('input', checkFormInfo);
+        inputEmail.addEventListener('input', checkFormInfo);
+        inputPhone.addEventListener('input', checkFormInfo);
+
+        // --- Step 3: Payment Logic ---
+        const paymentCards = document.querySelectorAll('.payment-card');
+        const btnNext3 = document.getElementById('btn-next-3');
+
+        paymentCards.forEach(card => {
+            card.onclick = () => {
+                paymentCards.forEach(c => c.classList.remove('selected'));
+                card.classList.add('selected');
+                bookingData.paymentMethod = card.getAttribute('data-method');
+                btnNext3.disabled = false;
+            };
+        });
+
+        // --- Step 4: Final Review & Addons ---
+        const formatRupiah = (number) => new Intl.NumberFormat('id-ID', { style: 'currency', currency: 'IDR', minimumFractionDigits: 0 }).format(number);
+
+        function renderFinalCheckout() {
+            document.getElementById('final-name').textContent = bookingData.name;
+            document.getElementById('final-contact').textContent = bookingData.phone;
+            document.getElementById('final-date').textContent = bookingData.dateStr;
+            document.getElementById('final-payment').textContent = bookingData.paymentMethod;
+            
+            document.getElementById('ticket-title').textContent = `Paket Premium (x${bookingData.pax})`;
+            
+            renderInvoiceTotal();
+        }
+
+        function renderInvoiceTotal() {
+            const ticketTotal = bookingData.basePrice * bookingData.pax;
+            document.getElementById('ticket-price').textContent = formatRupiah(ticketTotal);
+
+            const addonsListEl = document.getElementById('invoice-addons-list');
+            addonsListEl.innerHTML = '';
+            
+            let addonsTotal = 0;
+            bookingData.addons.forEach(addon => {
+                addonsTotal += addon.price;
+                addonsListEl.innerHTML += `
+                    <div class="flex justify-between items-center text-gray-400">
+                        <span>+ ${addon.name}</span>
+                        <span class="text-white font-extrabold text-base">${formatRupiah(addon.price)}</span>
+                    </div>
+                `;
+            });
+
+            const grandTotal = ticketTotal + addonsTotal;
+            document.getElementById('grand-total').textContent = formatRupiah(grandTotal);
+        }
+
+        function toggleAddonCard(el, name, price) {
+            const checkIcon = el.querySelector('.addon-check i');
+            const checkContainer = el.querySelector('.addon-check');
+            const iconWrapper = el.querySelector('.addon-icon-wrapper');
+            
+            const existingIndex = bookingData.addons.findIndex(a => a.name === name);
+            if(existingIndex > -1) {
+                // Remove
+                bookingData.addons.splice(existingIndex, 1);
+                el.classList.remove('selected');
+                checkIcon.classList.remove('opacity-100');
+                checkContainer.classList.remove('bg-holiday', 'border-holiday');
+                iconWrapper.classList.remove('bg-holiday/10', 'text-holiday');
+                iconWrapper.classList.add('bg-gray-50', 'text-gray-600');
+            } else {
+                // Add
+                bookingData.addons.push({ name, price });
+                el.classList.add('selected');
+                checkIcon.classList.add('opacity-100');
+                checkContainer.classList.add('bg-holiday', 'border-holiday');
+                iconWrapper.classList.remove('bg-gray-50', 'text-gray-600');
+                iconWrapper.classList.add('bg-holiday/10', 'text-holiday');
+                
+                // Pop animation
+                gsap.fromTo(checkContainer, { scale: 0 }, { scale: 1, duration: 0.3, ease: "back.out(1.7)" });
+            }
+            renderInvoiceTotal();
+        }
+
+        // Submit Booking
+        function submitBooking() {
+            document.getElementById('success-email').textContent = bookingData.email;
+            const modal = document.getElementById('success-modal');
+            const modalContent = document.getElementById('success-modal-content');
+            
+            modal.classList.remove('opacity-0', 'invisible');
+            modal.classList.add('opacity-100', 'visible');
+            
+            setTimeout(() => {
+                modalContent.classList.remove('scale-95');
+                modalContent.classList.add('scale-100');
+            }, 50);
+        }
+
+        // Initialize progress line correctly on load
+        setTimeout(() => {
+            updateStepIndicator();
+        }, 100);
+
+    </script>
+</body>
+</html>

@@ -1,0 +1,264 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Masuk / Daftar - Jadi Berangkat</title>
+    
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:ital,wght@0,200..800;1,200..800&display=swap" rel="stylesheet">
+    
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+    
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: { sans: ['"Plus Jakarta Sans"', 'sans-serif'] },
+                    colors: {
+                        base: '#f9f8f6',
+                        ink: '#151813',
+                        clay: '#b96f3c',
+                        mist: '#dfe8df',
+                        holiday: '#2f6f42', 
+                        'holiday-dark': '#17442a',
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        body { font-family: 'Plus Jakarta Sans', sans-serif; background-color: #f9f8f6; color: #151813; }
+        .slider-elem { transition: all 0.5s ease-in-out; }
+    </style>
+</head>
+<body class="h-screen w-full flex overflow-hidden">
+
+    <!-- Left: Image Slider -->
+    <div class="hidden lg:flex w-1/2 relative bg-ink items-end pb-16 px-16 justify-center">
+        <!-- Overlay gradient -->
+        <div class="absolute inset-0 z-10 bg-gradient-to-t from-ink/90 via-ink/20 to-transparent"></div>
+        
+        <img id="slider-img" src="../img/bluefire (1).png" class="slider-elem absolute inset-0 w-full h-full object-cover opacity-100" alt="Wisata">
+        
+        <div class="relative z-20 w-full">
+            <span class="bg-white/20 backdrop-blur-md text-white text-xs font-bold px-3 py-1 rounded-full mb-4 inline-block border border-white/30">Jelajahi Banyuwangi</span>
+            <h1 id="slider-title" class="slider-elem text-white text-5xl font-black mb-2 transform translate-y-0 opacity-100">Kawah Ijen</h1>
+            <p id="slider-desc" class="slider-elem text-white/80 text-lg transform translate-y-0 opacity-100">Saksikan keajaiban api biru yang memukau dunia.</p>
+        </div>
+    </div>
+
+    <!-- Right: Form -->
+    <div class="w-full lg:w-1/2 flex items-center justify-center p-8 overflow-y-auto">
+        <div class="w-full max-w-md py-10">
+            <a href="../index.html" class="flex items-center gap-2 text-ink/60 hover:text-holiday font-bold mb-10 transition w-max">
+                <i class="bi bi-arrow-left"></i> Kembali ke Beranda
+            </a>
+
+            <!-- Heading -->
+            <div id="form-header">
+                <h2 class="text-3xl font-black mb-2" id="form-title">Selamat Datang Kembali</h2>
+                <p class="text-ink/60" id="form-subtitle">Silakan masuk ke akun Anda untuk melanjutkan pemesanan.</p>
+            </div>
+
+            <!-- Google Button -->
+            <button class="w-full flex items-center justify-center gap-3 bg-white border border-ink/10 rounded-xl py-3.5 mt-8 font-bold hover:bg-mist transition shadow-sm">
+                <svg viewBox="0 0 24 24" class="w-5 h-5">
+                    <path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/>
+                    <path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/>
+                    <path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z"/>
+                    <path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"/>
+                </svg>
+                Lanjutkan dengan Google
+            </button>
+
+            <div class="flex items-center gap-4 my-6">
+                <hr class="flex-1 border-ink/10">
+                <span class="text-xs text-ink/40 font-bold uppercase tracking-wider">ATAU</span>
+                <hr class="flex-1 border-ink/10">
+            </div>
+
+            <form id="auth-form" class="space-y-4">
+                <div id="field-nama" class="hidden">
+                    <label class="block text-sm font-semibold text-ink/80 mb-2">Nama Lengkap</label>
+                    <input type="text" id="input-nama" class="auth-input w-full bg-white border border-ink/10 rounded-xl px-4 py-3.5 focus:outline-none focus:border-holiday focus:ring-1 focus:ring-holiday transition" placeholder="Masukkan nama lengkap">
+                </div>
+                
+                <div>
+                    <label class="block text-sm font-semibold text-ink/80 mb-2">Email</label>
+                    <input type="email" id="input-email" class="auth-input w-full bg-white border border-ink/10 rounded-xl px-4 py-3.5 focus:outline-none focus:border-holiday focus:ring-1 focus:ring-holiday transition" placeholder="email@contoh.com">
+                </div>
+
+                <div>
+                    <label class="block text-sm font-semibold text-ink/80 mb-2">Kata Sandi</label>
+                    <input type="password" id="input-password" class="auth-input w-full bg-white border border-ink/10 rounded-xl px-4 py-3.5 focus:outline-none focus:border-holiday focus:ring-1 focus:ring-holiday transition" placeholder="••••••••">
+                </div>
+
+                <div id="field-confirm" class="hidden">
+                    <label class="block text-sm font-semibold text-ink/80 mb-2">Konfirmasi Kata Sandi</label>
+                    <input type="password" id="input-confirm" class="auth-input w-full bg-white border border-ink/10 rounded-xl px-4 py-3.5 focus:outline-none focus:border-holiday focus:ring-1 focus:ring-holiday transition" placeholder="••••••••">
+                </div>
+
+                <!-- Lupa Password -->
+                <div id="forgot-password" class="text-right">
+                    <a href="#" class="text-sm font-bold text-holiday hover:underline">Lupa Kata Sandi?</a>
+                </div>
+
+                <button type="button" id="btn-submit" onclick="submitAuth()" class="w-full py-4 mt-6 rounded-xl font-bold text-white bg-holiday opacity-50 cursor-not-allowed transition duration-300" disabled>
+                    Masuk Sekarang
+                </button>
+            </form>
+
+            <div class="mt-8 text-center text-sm font-medium text-ink/60">
+                <span id="toggle-text">Belum punya akun?</span>
+                <button onclick="toggleMode()" id="toggle-btn" class="font-bold text-holiday hover:underline ml-1">Daftar di sini</button>
+            </div>
+
+        </div>
+    </div>
+
+    <script>
+        // --- FORM VALIDATION & TOGGLE LOGIC ---
+        let isLoginMode = true;
+        
+        const inputs = document.querySelectorAll('.auth-input');
+        const btnSubmit = document.getElementById('btn-submit');
+
+        function checkInputs() {
+            let isValid = true;
+            const email = document.getElementById('input-email').value.trim();
+            const password = document.getElementById('input-password').value.trim();
+            
+            if (email === '' || password === '') {
+                isValid = false;
+            }
+
+            if (!isLoginMode) {
+                const nama = document.getElementById('input-nama').value.trim();
+                const confirm = document.getElementById('input-confirm').value.trim();
+                if (nama === '' || confirm === '') {
+                    isValid = false;
+                }
+            }
+
+            if (isValid) {
+                btnSubmit.classList.remove('opacity-50', 'cursor-not-allowed');
+                btnSubmit.classList.add('shadow-lg', 'shadow-holiday/30', 'hover:-translate-y-1', 'hover:bg-holiday-dark');
+                btnSubmit.removeAttribute('disabled');
+            } else {
+                btnSubmit.classList.add('opacity-50', 'cursor-not-allowed');
+                btnSubmit.classList.remove('shadow-lg', 'shadow-holiday/30', 'hover:-translate-y-1', 'hover:bg-holiday-dark');
+                btnSubmit.setAttribute('disabled', 'true');
+            }
+        }
+
+        inputs.forEach(input => {
+            input.addEventListener('input', checkInputs);
+        });
+
+        function toggleMode() {
+            isLoginMode = !isLoginMode;
+            
+            const fieldNama = document.getElementById('field-nama');
+            const fieldConfirm = document.getElementById('field-confirm');
+            const forgotPassword = document.getElementById('forgot-password');
+            const title = document.getElementById('form-title');
+            const subtitle = document.getElementById('form-subtitle');
+            const toggleText = document.getElementById('toggle-text');
+            const toggleBtn = document.getElementById('toggle-btn');
+            
+            if (isLoginMode) {
+                // To Login
+                fieldNama.classList.add('hidden');
+                fieldConfirm.classList.add('hidden');
+                forgotPassword.classList.remove('hidden');
+                
+                title.innerText = 'Selamat Datang Kembali';
+                subtitle.innerText = 'Silakan masuk ke akun Anda untuk melanjutkan pemesanan.';
+                btnSubmit.innerText = 'Masuk Sekarang';
+                
+                toggleText.innerText = 'Belum punya akun?';
+                toggleBtn.innerText = 'Daftar di sini';
+                
+                // Clear register inputs
+                document.getElementById('input-nama').value = '';
+                document.getElementById('input-confirm').value = '';
+            } else {
+                // To Register
+                fieldNama.classList.remove('hidden');
+                fieldConfirm.classList.remove('hidden');
+                forgotPassword.classList.add('hidden');
+                
+                title.innerText = 'Daftar Akun Baru';
+                subtitle.innerText = 'Bergabung bersama ribuan wisatawan lainnya.';
+                btnSubmit.innerText = 'Daftar Sekarang';
+                
+                toggleText.innerText = 'Sudah punya akun?';
+                toggleBtn.innerText = 'Masuk di sini';
+            }
+            
+            checkInputs();
+        }
+
+        function submitAuth() {
+            if (!btnSubmit.hasAttribute('disabled')) {
+                window.location.href = '../dashboard/user/dashboard.html';
+            }
+        }
+
+        // --- IMAGE SLIDER LOGIC ---
+        const sliderData = [
+            {
+                src: '../img/bluefire (1).png',
+                title: 'Kawah Ijen',
+                desc: 'Saksikan keajaiban api biru yang memukau dunia.'
+            },
+            {
+                src: '../img/djawatan.png',
+                title: 'Djawatan Benculuk',
+                desc: 'Menjelajahi hutan trembesi ajaib bak di dunia fantasi.'
+            },
+            {
+                src: '../img/pantaiboom.png',
+                title: 'Pantai Boom',
+                desc: 'Menikmati angin laut dan dermaga ikonik di sore hari.'
+            },
+            {
+                src: '../img/kemiren.png',
+                title: 'Desa Kemiren',
+                desc: 'Rasakan otentisitas budaya suku Osing yang masih terjaga.'
+            }
+        ];
+
+        let currentSlide = 0;
+        const imgEl = document.getElementById('slider-img');
+        const titleEl = document.getElementById('slider-title');
+        const descEl = document.getElementById('slider-desc');
+
+        setInterval(() => {
+            // Fade out
+            imgEl.style.opacity = '0';
+            titleEl.style.opacity = '0';
+            descEl.style.opacity = '0';
+            titleEl.style.transform = 'translateY(10px)';
+            descEl.style.transform = 'translateY(10px)';
+            
+            setTimeout(() => {
+                currentSlide = (currentSlide + 1) % sliderData.length;
+                imgEl.src = sliderData[currentSlide].src;
+                titleEl.innerText = sliderData[currentSlide].title;
+                descEl.innerText = sliderData[currentSlide].desc;
+                
+                // Fade in
+                imgEl.style.opacity = '1';
+                titleEl.style.opacity = '1';
+                descEl.style.opacity = '1';
+                titleEl.style.transform = 'translateY(0)';
+                descEl.style.transform = 'translateY(0)';
+            }, 500); 
+        }, 5000);
+    </script>
+</body>
+</html>
