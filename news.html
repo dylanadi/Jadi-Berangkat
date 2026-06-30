@@ -80,46 +80,44 @@
 <body class="bg-[#f8fafc] text-slate-800 font-sans antialiased">
 
     <div id="menu-overlay" class="fixed inset-0 bg-black/60 z-[60] hidden opacity-0 backdrop-blur-sm"></div>
-    <aside id="mobile-sidebar" class="fixed top-0 left-0 h-full w-[80%] max-w-sm bg-base shadow-2xl z-[70] p-8 flex flex-col transform -translate-x-full border-r border-gray-200">
+    <aside id="mobile-sidebar" class="fixed top-0 left-0 h-full w-[84%] max-w-sm bg-base shadow-2xl z-[70] p-8 flex flex-col transform -translate-x-full border-r border-black/10">
         <div class="flex justify-between items-center mb-10">
             <a href="index.html" class="text-2xl font-extrabold flex items-center gap-2">
                 <i class="bi bi-jeep text-holiday"></i> JB.
             </a>
-            <button id="close-menu-btn" class="w-10 h-10 rounded-full bg-gray-100 flex items-center justify-center text-gray-800 hover:bg-holiday hover:text-white transition">
+            <button id="close-menu-btn" class="w-10 h-10 rounded-full bg-white flex items-center justify-center text-gray-800 hover:bg-holiday hover:text-white transition border border-black/10">
                 <i class="bi bi-x-lg"></i>
             </button>
         </div>
         <nav class="flex flex-col gap-6 text-lg font-bold text-gray-700">
             <a href="index.html" class="hover:text-holiday transition flex items-center gap-3"><i class="bi bi-house"></i> Beranda</a>
-            <a href="news.html" class="hover:text-holiday transition flex items-center gap-3"><i class="bi bi-compass"></i> Cerita</a>
-            <a href="#paket" class="hover:text-holiday transition flex items-center gap-3"><i class="bi bi-map"></i> Paket Trip</a>
-            <a href="#armada" class="hover:text-holiday transition flex items-center gap-3"><i class="bi bi-truck"></i> Armada</a>
+            <a href="about.html" class="hover:text-holiday transition flex items-center gap-3"><i class="bi bi-info-circle"></i> Tentang</a>
+            <a href="destinasi.html" class="hover:text-holiday transition flex items-center gap-3"><i class="bi bi-geo-alt"></i> Destinasi</a>
+            <a href="news.html" class="hover:text-holiday transition flex items-center gap-3"><i class="bi bi-newspaper"></i> Baru</a>
         </nav>
         <div class="mt-auto">
-            <a href="detail.html" class="block w-full text-center bg-holiday text-white py-4 rounded-xl font-bold shadow-lg">Booking Sekarang</a>
+            <a href="auth/login.html" class="block w-full text-center bg-holiday text-white py-4 rounded-2xl font-bold shadow-lg shadow-holiday-glow">Login</a>
         </div>
     </aside>
 
     <header id="header-wrapper" class="fixed w-full top-0 z-50 transition-all duration-700 ease-in-out py-3 flex justify-center px-4 md:px-6">
-        <div id="nav-container" class="w-full max-w-[1440px] flex justify-between items-center px-6 md:px-9 py-3.5 transition-all duration-500 text-gray-900 bg-white/90 backdrop-blur-xl rounded-[1.65rem] border border-white/70 shadow-[0_18px_55px_rgba(0,0,0,0.16)]">
+        <div id="nav-container" class="w-full max-w-[1440px] flex justify-between items-center px-6 md:px-9 py-3.5 transition-all duration-500 text-ink bg-white/90 backdrop-blur-xl rounded-[1.65rem] border border-white/70 shadow-[0_18px_55px_rgba(0,0,0,0.16)]">
             <a href="index.html" class="text-2xl font-extrabold tracking-wide flex items-center gap-2">
                 <i class="bi bi-jeep text-holiday"></i> <span class="hidden sm:block">Jadi Berangkat</span><span class="sm:hidden">JB.</span>
             </a>
-
             <nav class="hidden md:flex gap-8 font-semibold items-center text-gray-700">
                 <a href="index.html" class="hover:text-holiday transition">Beranda</a>
-                <a href="news.html" class="hover:text-holiday transition">Cerita</a>
-                <a href="#paket" class="hover:text-holiday transition">Paket Trip</a>
-                <a href="#armada" class="hover:text-holiday transition">Armada</a>
+                <a href="about.html" class="hover:text-holiday transition">Tentang</a>
+                <a href="destinasi.html" class="hover:text-holiday transition">Destinasi</a>
+                <a href="news.html" class="hover:text-holiday transition">Baru</a>
             </nav>
-
             <div class="flex items-center gap-4">
-                <a href="detail.html" class="hidden md:block bg-holiday hover:bg-holiday-dark text-white px-7 py-3 rounded-full transition shadow-lg font-bold">Booking</a>
+                <a href="auth/login.html" class="hidden md:block bg-holiday text-white px-7 py-3 rounded-full transition shadow-lg shadow-holiday-glow font-bold hover:bg-holiday-dark">Login</a>
                 <div class="hidden md:flex items-center gap-3 border-l border-black/10 pl-4" aria-label="Pilihan bahasa">
                     <a href="index.html" class="flag-button flag-id" aria-label="Bahasa Indonesia"></a>
                     <a href="index.html" class="flag-button flag-en" aria-label="English"></a>
                 </div>
-                <button id="open-menu-btn" class="md:hidden w-11 h-11 flex items-center justify-center rounded-full bg-gray-900 text-white border border-black/10 hover:bg-holiday transition">
+                <button id="open-menu-btn" class="md:hidden w-11 h-11 flex items-center justify-center rounded-full bg-ink text-white border border-black/10 hover:bg-holiday transition">
                     <i class="bi bi-list text-2xl"></i>
                 </button>
             </div>
