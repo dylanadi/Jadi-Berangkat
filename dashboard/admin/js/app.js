@@ -7,8 +7,8 @@ document.addEventListener('DOMContentLoaded', () => {
     const pageTitles = {
         'home': 'Dashboard',
         'catalog': 'Katalog Wisata',
-        'bookings': 'Daftar Booking',
-        'validations': 'Validasi Jadwal'
+        'artikel': 'Artikel & Berita',
+        'settings': 'Pengaturan Sistem'
     };
 
     // Load page function

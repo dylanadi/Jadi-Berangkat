@@ -1,0 +1,226 @@
+<div class="flex flex-col md:flex-row justify-between items-start md:items-center mb-8 gap-4">
+    <div class="relative w-full md:w-72">
+        <i class="bi bi-search absolute left-4 top-1/2 -translate-y-1/2 text-gray-400"></i>
+        <input type="text" class="w-full bg-white dark:bg-gray-800 border border-gray-100 dark:border-gray-700 rounded-2xl py-3.5 pl-12 pr-4 text-sm font-bold text-ink dark:text-white placeholder-gray-400 focus:border-holiday outline-none transition-all shadow-[0_4px_20px_rgb(0,0,0,0.02)]" placeholder="Cari artikel...">
+    </div>
+    
+    <div class="flex items-center gap-3 w-full md:w-auto">
+        <!-- View Toggle Apple Style -->
+        <div class="bg-white dark:bg-gray-800 p-1 rounded-2xl border border-gray-100 dark:border-gray-700 shadow-[0_4px_20px_rgb(0,0,0,0.02)] flex gap-1 relative overflow-hidden">
+            <div id="view-indicator-artikel" class="absolute left-1 top-1 bottom-1 w-[42px] bg-gray-100 dark:bg-gray-700 rounded-xl transition-all duration-300 z-0"></div>
+            <button onclick="changeViewArtikel('grid', this)" class="view-btn-artikel w-10 h-10 flex items-center justify-center text-ink dark:text-white relative z-10 font-bold transition-colors"><i class="bi bi-grid-fill"></i></button>
+            <button onclick="changeViewArtikel('list', this)" class="view-btn-artikel w-10 h-10 flex items-center justify-center text-gray-400 hover:text-ink dark:hover:text-white relative z-10 font-bold transition-colors"><i class="bi bi-list-ul text-lg"></i></button>
+        </div>
+        
+        <button onclick="openModal('modal-add-artikel')" class="flex-grow md:flex-grow-0 bg-ink text-white px-6 py-3.5 rounded-2xl font-extrabold text-sm hover:bg-black transition-all shadow-[0_8px_20px_rgb(0,0,0,0.1)] hover:-translate-y-0.5 flex items-center justify-center gap-2">
+            <i class="bi bi-plus-lg"></i> Tambah Artikel
+        </button>
+    </div>
+</div>
+
+<!-- Artikel Container -->
+<div id="artikel-container" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 transition-all duration-500">
+    <!-- Item 1 -->
+    <div class="artikel-card bg-white dark:bg-gray-800 rounded-[2rem] p-5 shadow-[0_8px_30px_rgb(0,0,0,0.02)] dark:shadow-[0_8px_30px_rgb(0,0,0,0.2)] border border-gray-100/50 dark:border-gray-700/50 flex flex-col hover:shadow-[0_8px_30px_rgb(0,0,0,0.06)] dark:hover:shadow-[0_8px_30px_rgb(0,0,0,0.4)] transition-all relative group">
+        <div class="img-wrapper w-full h-56 relative rounded-2xl overflow-hidden mb-5">
+            <img src="../img/bluefire (1).png" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105" alt="Kawah Ijen">
+            <div class="absolute top-3 left-3 px-3 py-1 bg-white/90 backdrop-blur text-green-700 text-[10px] font-extrabold rounded-full uppercase tracking-widest shadow-sm">Published</div>
+        </div>
+        
+        <div class="content-wrapper flex flex-col flex-grow">
+            <div class="flex justify-between items-start mb-2">
+                <h3 class="font-extrabold text-ink dark:text-white text-xl line-clamp-1">Pesona Blue Fire Kawah Ijen</h3>
+                
+                <div class="relative">
+                    <button onclick="toggleActionMenu('menu-art-1')" class="w-8 h-8 rounded-full bg-gray-50 dark:bg-gray-700 text-gray-500 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-600 hover:text-ink dark:hover:text-white flex items-center justify-center transition-colors">
+                        <i class="bi bi-three-dots"></i>
+                    </button>
+                    <!-- Dropdown Content -->
+                    <div id="menu-art-1" class="absolute right-0 top-full mt-2 w-40 bg-white/80 dark:bg-gray-800/90 backdrop-blur-xl border border-gray-100 dark:border-gray-700 rounded-2xl shadow-[0_20px_40px_rgb(0,0,0,0.1)] overflow-hidden z-20 origin-top-right scale-95 opacity-0 invisible transition-all duration-300">
+                        <button onclick="openModal('modal-add-artikel'); toggleActionMenu('menu-art-1')" class="w-full text-left px-4 py-3 text-sm font-bold text-gray-700 dark:text-gray-200 hover:bg-gray-50/80 dark:hover:bg-gray-700 hover:text-blue-600 dark:hover:text-blue-400 transition-colors flex items-center gap-3">
+                            <i class="bi bi-pencil-square"></i> Edit Data
+                        </button>
+                        <div class="h-px bg-gray-100 dark:bg-gray-700 w-full"></div>
+                        <button onclick="openModal('modal-delete-artikel'); toggleActionMenu('menu-art-1')" class="w-full text-left px-4 py-3 text-sm font-bold text-red-600 dark:text-red-400 hover:bg-red-50/80 dark:hover:bg-red-900/30 transition-colors flex items-center gap-3">
+                            <i class="bi bi-trash"></i> Hapus
+                        </button>
+                    </div>
+                </div>
+            </div>
+            <p class="desc text-sm font-medium text-gray-500 dark:text-gray-400 mb-6 line-clamp-2">Tips dan panduan mendaki kawah ijen di malam hari untuk melihat blue fire.</p>
+            
+            <div class="flex justify-between items-end mt-auto pt-4 border-t border-gray-100/50 dark:border-gray-700/50">
+                <div>
+                    <p class="text-[10px] font-bold text-gray-400 uppercase tracking-widest mb-1">Kategori</p>
+                    <span class="font-extrabold text-holiday dark:text-holiday-light text-sm">Tips & Trik</span>
+                </div>
+                <div class="text-right">
+                    <p class="text-[10px] font-bold text-gray-400 uppercase tracking-widest mb-1">Dilihat</p>
+                    <span class="font-extrabold text-gray-700 dark:text-gray-300 text-sm">1.2K kali</span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Item 2 -->
+    <div class="artikel-card bg-white dark:bg-gray-800 rounded-[2rem] p-5 shadow-[0_8px_30px_rgb(0,0,0,0.02)] dark:shadow-[0_8px_30px_rgb(0,0,0,0.2)] border border-gray-100/50 dark:border-gray-700/50 flex flex-col hover:shadow-[0_8px_30px_rgb(0,0,0,0.06)] dark:hover:shadow-[0_8px_30px_rgb(0,0,0,0.4)] transition-all relative group">
+        <div class="img-wrapper w-full h-56 relative rounded-2xl overflow-hidden mb-5 bg-gray-100 dark:bg-gray-900 flex items-center justify-center">
+            <i class="bi bi-image text-4xl text-gray-300 dark:text-gray-700"></i>
+            <div class="absolute top-3 left-3 px-3 py-1 bg-white/90 backdrop-blur text-gray-500 text-[10px] font-extrabold rounded-full uppercase tracking-widest shadow-sm">Draft</div>
+        </div>
+        
+        <div class="content-wrapper flex flex-col flex-grow">
+            <div class="flex justify-between items-start mb-2">
+                <h3 class="font-extrabold text-ink dark:text-white text-xl line-clamp-1">5 Rekomendasi Kuliner</h3>
+                
+                <div class="relative">
+                    <button onclick="toggleActionMenu('menu-art-2')" class="w-8 h-8 rounded-full bg-gray-50 dark:bg-gray-700 text-gray-500 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-600 hover:text-ink dark:hover:text-white flex items-center justify-center transition-colors">
+                        <i class="bi bi-three-dots"></i>
+                    </button>
+                    <div id="menu-art-2" class="absolute right-0 top-full mt-2 w-40 bg-white/80 dark:bg-gray-800/90 backdrop-blur-xl border border-gray-100 dark:border-gray-700 rounded-2xl shadow-[0_20px_40px_rgb(0,0,0,0.1)] overflow-hidden z-20 origin-top-right scale-95 opacity-0 invisible transition-all duration-300">
+                        <button class="w-full text-left px-4 py-3 text-sm font-bold text-gray-700 dark:text-gray-200 hover:bg-gray-50/80 dark:hover:bg-gray-700 hover:text-blue-600 dark:hover:text-blue-400 transition-colors flex items-center gap-3">
+                            <i class="bi bi-pencil-square"></i> Edit Data
+                        </button>
+                        <div class="h-px bg-gray-100 dark:bg-gray-700 w-full"></div>
+                        <button class="w-full text-left px-4 py-3 text-sm font-bold text-red-600 dark:text-red-400 hover:bg-red-50/80 dark:hover:bg-red-900/30 transition-colors flex items-center gap-3">
+                            <i class="bi bi-trash"></i> Hapus
+                        </button>
+                    </div>
+                </div>
+            </div>
+            <p class="desc text-sm font-medium text-gray-500 dark:text-gray-400 mb-6 line-clamp-2">Kuliner khas Banyuwangi yang wajib Anda coba setelah liburan.</p>
+            
+            <div class="flex justify-between items-end mt-auto pt-4 border-t border-gray-100/50 dark:border-gray-700/50">
+                <div>
+                    <p class="text-[10px] font-bold text-gray-400 uppercase tracking-widest mb-1">Kategori</p>
+                    <span class="font-extrabold text-gray-600 dark:text-gray-400 text-sm">Kuliner</span>
+                </div>
+                <div class="text-right">
+                    <p class="text-[10px] font-bold text-gray-400 uppercase tracking-widest mb-1">Dilihat</p>
+                    <span class="font-extrabold text-gray-600 dark:text-gray-400 text-sm">0 kali</span>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    // View Toggle Logic untuk Artikel
+    window.changeViewArtikel = function(type, btn) {
+        const container = document.getElementById('artikel-container');
+        const indicator = document.getElementById('view-indicator-artikel');
+        const btns = document.querySelectorAll('.view-btn-artikel');
+        
+        // Update Buttons Color
+        btns.forEach(b => {
+            b.classList.remove('text-ink');
+            b.classList.add('text-gray-400');
+        });
+        btn.classList.remove('text-gray-400');
+        btn.classList.add('text-ink');
+
+        // Move indicator
+        if(type === 'grid') {
+            indicator.style.transform = 'translateX(0)';
+            
+            gsap.to(container, { opacity: 0, duration: 0.2, onComplete: () => {
+                container.className = 'grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 transition-all duration-500';
+                document.querySelectorAll('.artikel-card').forEach(card => {
+                    card.classList.remove('flex-row', 'items-center', 'h-40');
+                    card.classList.add('flex-col');
+                    card.querySelector('.img-wrapper').className = 'img-wrapper w-full h-56 relative rounded-2xl overflow-hidden mb-5 shrink-0';
+                    card.querySelector('.content-wrapper').classList.remove('ml-6', 'w-full');
+                    card.querySelector('.desc').classList.add('line-clamp-2');
+                    card.querySelector('.desc').classList.remove('line-clamp-1', 'mb-2');
+                });
+                gsap.to(container, { opacity: 1, duration: 0.3 });
+            }});
+
+        } else {
+            indicator.style.transform = 'translateX(46px)';
+            
+            gsap.to(container, { opacity: 0, duration: 0.2, onComplete: () => {
+                container.className = 'flex flex-col gap-4 transition-all duration-500';
+                document.querySelectorAll('.artikel-card').forEach(card => {
+                    card.classList.remove('flex-col');
+                    card.classList.add('flex-row', 'items-center', 'h-40');
+                    card.querySelector('.img-wrapper').className = 'img-wrapper w-48 h-full relative rounded-[1.25rem] overflow-hidden shrink-0 mb-0';
+                    card.querySelector('.content-wrapper').classList.add('ml-6', 'w-full', 'py-1');
+                    card.querySelector('.desc').classList.remove('line-clamp-2');
+                    card.querySelector('.desc').classList.add('line-clamp-1', 'mb-2');
+                });
+                gsap.to(container, { opacity: 1, duration: 0.3 });
+            }});
+        }
+    };
+
+    const modalsArtikelHTML = `
+        <!-- Modal Tambah/Edit Artikel -->
+        <div id="modal-add-artikel" class="fixed inset-0 bg-ink/60 backdrop-blur-md z-[100] hidden items-center justify-center opacity-0 transition-opacity duration-400">
+            <div class="bg-white/90 dark:bg-gray-800/90 backdrop-blur-xl border border-white/50 dark:border-gray-700/50 rounded-[2.5rem] w-full max-w-2xl mx-4 overflow-hidden shadow-[0_30px_60px_rgba(0,0,0,0.12)] modal-content scale-95 opacity-0 transition-all duration-400 flex flex-col max-h-[90vh]">
+                <div class="px-8 py-6 border-b border-gray-200/50 dark:border-gray-700/50 flex justify-between items-center">
+                    <h2 class="text-xl font-extrabold text-ink dark:text-white tracking-tight">Data Artikel</h2>
+                    <button onclick="closeModal('modal-add-artikel')" class="w-8 h-8 rounded-full bg-gray-100 dark:bg-gray-700 flex items-center justify-center text-gray-500 hover:bg-gray-200 dark:hover:bg-gray-600 hover:text-ink dark:hover:text-white transition-colors"><i class="bi bi-x-lg text-sm"></i></button>
+                </div>
+                <div class="p-8 overflow-y-auto flex-grow space-y-6">
+                    <div>
+                        <label class="block text-[10px] font-bold text-gray-400 uppercase tracking-widest mb-2">Judul Artikel</label>
+                        <input type="text" class="w-full bg-white dark:bg-gray-900 border border-gray-200/60 dark:border-gray-700 rounded-2xl px-5 py-4 text-sm font-bold text-ink dark:text-white shadow-sm focus:border-holiday outline-none transition-colors" placeholder="Masukkan judul artikel">
+                    </div>
+                    <div class="grid grid-cols-2 gap-6">
+                        <div>
+                            <label class="block text-[10px] font-bold text-gray-400 uppercase tracking-widest mb-2">Kategori</label>
+                            <select class="w-full bg-white dark:bg-gray-900 border border-gray-200/60 dark:border-gray-700 rounded-2xl px-5 py-4 text-sm font-bold text-ink dark:text-white shadow-sm focus:border-holiday outline-none transition-colors appearance-none">
+                                <option>Tips & Trik</option>
+                                <option>Kuliner</option>
+                                <option>Berita</option>
+                            </select>
+                        </div>
+                        <div>
+                            <label class="block text-[10px] font-bold text-gray-400 uppercase tracking-widest mb-2">Status</label>
+                            <select class="w-full bg-white dark:bg-gray-900 border border-gray-200/60 dark:border-gray-700 rounded-2xl px-5 py-4 text-sm font-bold text-ink dark:text-white shadow-sm focus:border-holiday outline-none transition-colors appearance-none">
+                                <option>Published</option>
+                                <option>Draft</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div>
+                        <label class="block text-[10px] font-bold text-gray-400 uppercase tracking-widest mb-2">Konten Artikel</label>
+                        <textarea class="w-full bg-white dark:bg-gray-900 border border-gray-200/60 dark:border-gray-700 rounded-2xl px-5 py-4 text-sm font-medium text-ink dark:text-white shadow-sm focus:border-holiday outline-none h-32 resize-none transition-colors" placeholder="Tulis isi artikel di sini..."></textarea>
+                    </div>
+                    <div>
+                        <label class="block text-[10px] font-bold text-gray-400 uppercase tracking-widest mb-2">Upload Sampul</label>
+                        <div class="border-2 border-dashed border-gray-300 dark:border-gray-700 rounded-[2rem] p-10 flex flex-col items-center justify-center text-gray-400 bg-gray-50/50 dark:bg-gray-800/50 hover:bg-holiday/5 dark:hover:bg-holiday/10 hover:text-holiday hover:border-holiday transition-all cursor-pointer">
+                            <div class="w-16 h-16 bg-white dark:bg-gray-700 rounded-full shadow-sm flex items-center justify-center mb-4">
+                                <i class="bi bi-image text-2xl text-gray-400 dark:text-gray-300"></i>
+                            </div>
+                            <span class="text-sm font-extrabold text-ink dark:text-white mb-1">Klik untuk upload</span>
+                            <span class="text-xs font-medium">atau seret gambar ke area ini</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="px-8 py-6 border-t border-gray-200/50 dark:border-gray-700/50 flex justify-end gap-3 bg-gray-50/80 dark:bg-gray-800/80">
+                    <button onclick="closeModal('modal-add-artikel')" class="px-8 py-3.5 rounded-2xl font-extrabold text-gray-500 dark:text-gray-400 hover:bg-white dark:hover:bg-gray-700 shadow-sm transition-all text-sm">Batal</button>
+                    <button onclick="closeModal('modal-add-artikel')" class="px-8 py-3.5 rounded-2xl font-extrabold text-white bg-ink hover:bg-black transition-all shadow-[0_8px_20px_rgba(0,0,0,0.15)] hover:-translate-y-0.5 text-sm">Simpan Artikel</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Modal Delete Artikel -->
+        <div id="modal-delete-artikel" class="fixed inset-0 bg-ink/60 backdrop-blur-md z-[100] hidden items-center justify-center opacity-0 transition-opacity duration-400">
+            <div class="bg-white/90 dark:bg-gray-800/90 backdrop-blur-xl border border-white/50 dark:border-gray-700/50 rounded-[2.5rem] w-full max-w-sm mx-4 p-8 text-center shadow-[0_30px_60px_rgba(0,0,0,0.12)] modal-content scale-95 opacity-0 transition-all duration-400">
+                <div class="w-20 h-20 bg-red-50 dark:bg-red-900/30 text-red-600 dark:text-red-400 rounded-full flex items-center justify-center text-3xl mx-auto mb-6 shadow-inner">
+                    <i class="bi bi-trash3-fill"></i>
+                </div>
+                <h2 class="text-2xl font-extrabold text-ink dark:text-white mb-3 tracking-tight">Hapus Artikel?</h2>
+                <p class="text-gray-500 dark:text-gray-400 text-sm font-medium mb-8 leading-relaxed">Artikel ini akan dihapus permanen dari sistem.</p>
+                <div class="flex flex-col gap-3">
+                    <button onclick="closeModal('modal-delete-artikel')" class="w-full py-4 bg-red-600 text-white font-extrabold text-sm rounded-2xl hover:bg-red-700 transition-all shadow-[0_8px_20px_rgba(220,38,38,0.25)] hover:-translate-y-0.5">Ya, Hapus</button>
+                    <button onclick="closeModal('modal-delete-artikel')" class="w-full py-4 bg-gray-100 dark:bg-gray-700 text-gray-600 dark:text-gray-300 font-extrabold text-sm rounded-2xl hover:bg-gray-200 dark:hover:bg-gray-600 transition-all">Batal</button>
+                </div>
+            </div>
+        </div>
+    `;
+
+    document.getElementById('modals-container').innerHTML = modalsArtikelHTML;
+</script>

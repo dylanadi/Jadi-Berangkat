@@ -36,6 +36,7 @@
     <style>
         #navbar { transition: all 0.5s ease; }
     </style>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
 </head>
 <body class="bg-[#fafafa] text-slate-800 font-sans antialiased selection:bg-emerald-500 selection:text-white">
 
@@ -111,7 +112,7 @@
                 </div>
             </div>
             
-            <a href="auth/login.html" class="block w-full text-center bg-ink hover:bg-holiday transition text-white py-4 rounded-2xl font-bold shadow-lg shadow-black/10">Masuk / Login</a>
+            <a href="news.html" class="block w-full text-center bg-ink hover:bg-holiday transition text-white py-4 rounded-2xl font-bold shadow-lg shadow-black/10"><span class="flex items-center justify-center gap-2">Artikel <i class="bi bi-journal-text"></i></span></a>
         </div>
     </aside>
 
@@ -183,7 +184,7 @@
             </nav>
             <div class="flex items-center gap-4">
                 <a href="privasi.html" class="hidden md:flex items-center justify-center w-11 h-11 rounded-full border border-black/10 text-ink hover:text-holiday hover:border-holiday transition bg-white/50 backdrop-blur-md" title="Kebijakan Privasi"><i class="bi bi-shield-check text-xl"></i></a>
-                <a href="auth/login.html" class="hidden md:block bg-holiday text-white px-7 py-3 rounded-full transition shadow-lg shadow-holiday-glow font-bold hover:bg-holiday-dark">Login</a>
+                <a href="news.html" class="hidden md:flex items-center gap-2 bg-holiday text-white px-7 py-3 rounded-full transition shadow-lg shadow-holiday-glow font-bold hover:bg-holiday-dark"><span>Artikel</span> <i class="bi bi-journal-text"></i></a>
                 <div class="hidden md:flex items-center gap-3 border-l border-black/10 pl-4" aria-label="Pilihan bahasa">
                     <a href="index.html" class="w-7 h-7 rounded-full overflow-hidden border border-black/10 hover:opacity-80 transition" aria-label="Bahasa Indonesia"><img src="https://flagcdn.com/id.svg" alt="ID" class="w-full h-full object-cover"></a>
                     <a href="index.html" class="w-7 h-7 rounded-full overflow-hidden border border-black/10 hover:opacity-80 transition" aria-label="English"><img src="https://flagcdn.com/gb.svg" alt="EN" class="w-full h-full object-cover"></a>
@@ -497,6 +498,31 @@
             } else {
                 navbar.classList.remove('max-w-5xl', 'shadow-lg', 'bg-white/95', 'border-slate-200');
                 navbar.classList.add('max-w-7xl', 'rounded-2xl');
+            }
+        });
+    </script>
+
+    <!-- Scroll To Top Button -->
+    <button id="scrollToTopBtn" class="fixed bottom-6 right-6 md:bottom-10 md:right-10 w-12 h-12 md:w-14 md:h-14 bg-holiday text-white rounded-full flex items-center justify-center shadow-xl shadow-holiday/30 z-[90] opacity-0 invisible translate-y-10 hover:bg-[#236026] transition-colors" aria-label="Scroll to top">
+        <i class="bi bi-arrow-up text-xl md:text-2xl font-bold"></i>
+    </button>
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const btn = document.getElementById('scrollToTopBtn');
+            if (btn && typeof gsap !== 'undefined') {
+                let isVisible = false;
+                window.addEventListener('scroll', () => {
+                    if (window.scrollY > 300 && !isVisible) {
+                        isVisible = true;
+                        gsap.to(btn, { autoAlpha: 1, y: 0, duration: 0.5, ease: 'back.out(1.5)' });
+                    } else if (window.scrollY <= 300 && isVisible) {
+                        isVisible = false;
+                        gsap.to(btn, { autoAlpha: 0, y: 40, duration: 0.3, ease: 'power2.in' });
+                    }
+                });
+                btn.addEventListener('click', () => {
+                    window.scrollTo({ top: 0, behavior: 'smooth' });
+                });
             }
         });
     </script>

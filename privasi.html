@@ -370,5 +370,30 @@
         window.addEventListener('scroll', updateActiveLink);
         updateActiveLink(); // run initial active state check
     </script>
+
+    <!-- Scroll To Top Button -->
+    <button id="scrollToTopBtn" class="fixed bottom-6 right-6 md:bottom-10 md:right-10 w-12 h-12 md:w-14 md:h-14 bg-holiday text-white rounded-full flex items-center justify-center shadow-xl shadow-holiday/30 z-[90] opacity-0 invisible translate-y-10 hover:bg-[#236026] transition-colors" aria-label="Scroll to top">
+        <i class="bi bi-arrow-up text-xl md:text-2xl font-bold"></i>
+    </button>
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const btn = document.getElementById('scrollToTopBtn');
+            if (btn && typeof gsap !== 'undefined') {
+                let isVisible = false;
+                window.addEventListener('scroll', () => {
+                    if (window.scrollY > 300 && !isVisible) {
+                        isVisible = true;
+                        gsap.to(btn, { autoAlpha: 1, y: 0, duration: 0.5, ease: 'back.out(1.5)' });
+                    } else if (window.scrollY <= 300 && isVisible) {
+                        isVisible = false;
+                        gsap.to(btn, { autoAlpha: 0, y: 40, duration: 0.3, ease: 'power2.in' });
+                    }
+                });
+                btn.addEventListener('click', () => {
+                    window.scrollTo({ top: 0, behavior: 'smooth' });
+                });
+            }
+        });
+    </script>
 </body>
 </html>

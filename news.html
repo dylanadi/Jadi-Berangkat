@@ -75,6 +75,41 @@
                 linear-gradient(-34deg, transparent 38%, #fff 38% 62%, transparent 62%),
                 #012169;
         }
+
+        /* Sticky filter shadow transition */
+        .sticky-filter { transition: box-shadow 0.3s ease, background-color 0.3s ease; }
+        .sticky-filter.is-pinned {
+            box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1), 0 8px 10px -6px rgba(0, 0, 0, 0.1);
+            background-color: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(12px);
+        }
+        
+        /* VIEW MODES */
+        #article-grid-container { transition: all 0.4s ease; }
+        
+        /* PINTEREST MODE */
+        #article-grid-container.mode-pinterest { column-count: 1; column-gap: 1.5rem; display: block; }
+        @media (min-width: 640px) { #article-grid-container.mode-pinterest { column-count: 2; } }
+        @media (min-width: 1024px) { #article-grid-container.mode-pinterest { column-count: 3; } }
+        #article-grid-container.mode-pinterest #middle-cards, #article-grid-container.mode-pinterest #compact-cards { display: contents; }
+        #article-grid-container.mode-pinterest .news-card { display: flex !important; flex-direction: column !important; height: auto !important; min-height: 250px; break-inside: avoid; margin-bottom: 1.5rem; }
+        #article-grid-container.mode-pinterest .news-card > div.h-56, #article-grid-container.mode-pinterest .news-card > div.w-24 { position: relative !important; width: 100% !important; height: auto !important; padding-top: 60%; }
+        #article-grid-container.mode-pinterest .news-card > div.h-56 > img, #article-grid-container.mode-pinterest .news-card > div.w-24 > img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; }
+        #article-grid-container.mode-pinterest .separator-title { display: none !important; }
+        
+        /* FULL COVER MODE */
+        #article-grid-container.mode-full { display: flex; flex-direction: column; gap: 2rem; }
+        #article-grid-container.mode-full #middle-cards, #article-grid-container.mode-full #compact-cards { display: contents; }
+        #article-grid-container.mode-full .separator-title { display: none !important; }
+        #article-grid-container.mode-full .news-card { height: 55vh !important; min-height: 400px !important; width: 100% !important; display: flex !important; flex-direction: column !important; justify-content: flex-end !important; position: relative; }
+        #article-grid-container.mode-full .news-card .shrink-0, #article-grid-container.mode-full .news-card .h-56 { position: absolute; inset: 0; width: 100% !important; height: 100% !important; }
+        #article-grid-container.mode-full .news-card img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; z-index: 1; }
+        #article-grid-container.mode-full .news-card::before { content: ''; position: absolute; inset: 0; background: linear-gradient(to top, rgba(0,0,0,0.9), rgba(0,0,0,0.3), transparent); z-index: 2; pointer-events: none; }
+        #article-grid-container.mode-full .news-card .flex-1, #article-grid-container.mode-full .news-card .relative.z-20 { position: relative; z-index: 10; background: transparent !important; border: none !important; padding: 2rem !important; }
+        #article-grid-container.mode-full .news-card h3, #article-grid-container.mode-full .news-card h4 { color: white !important; font-size: 2rem !important; line-height: 1.2; }
+        #article-grid-container.mode-full .news-card p { color: rgba(255,255,255,0.85) !important; font-size: 1.1rem !important; display: -webkit-box !important; }
+        #article-grid-container.mode-full .news-card .border-t { border-color: rgba(255,255,255,0.2) !important; color: white !important; }
+        #article-grid-container.mode-full .news-card span.bg-slate-950\/80, #article-grid-container.mode-full .news-card span.bg-\[\#e2f7ea\] { position: absolute; top: 1.5rem; left: 1.5rem; bottom: auto; background: #ef4444 !important; color: white !important; }
     </style>
 </head>
 <body class="bg-[#f8fafc] text-slate-800 font-sans antialiased">
@@ -150,7 +185,7 @@
                 </div>
             </div>
             
-            <a href="auth/login.html" class="block w-full text-center bg-ink hover:bg-holiday transition text-white py-4 rounded-2xl font-bold shadow-lg shadow-black/10">Masuk / Login</a>
+            <a href="artikel.html" class="block w-full text-center bg-ink hover:bg-holiday transition text-white py-4 rounded-2xl font-bold shadow-lg shadow-black/10"><span class="flex items-center justify-center gap-2">Artikel <i class="bi bi-journal-text"></i></span></a>
         </div>
     </aside>
 
@@ -222,7 +257,7 @@
             </nav>
             <div class="flex items-center gap-4">
                 <a href="privasi.html" class="hidden md:flex items-center justify-center w-11 h-11 rounded-full border border-black/10 text-ink hover:text-holiday hover:border-holiday transition bg-white/50 backdrop-blur-md" title="Kebijakan Privasi"><i class="bi bi-shield-check text-xl"></i></a>
-                <a href="auth/login.html" class="hidden md:block bg-holiday text-white px-7 py-3 rounded-full transition shadow-lg shadow-holiday-glow font-bold hover:bg-holiday-dark">Login</a>
+                <a href="artikel.html" class="hidden md:flex items-center gap-2 bg-holiday text-white px-7 py-3 rounded-full transition shadow-lg shadow-holiday-glow font-bold hover:bg-holiday-dark"><span>Artikel</span> <i class="bi bi-journal-text"></i></a>
                 <div class="hidden md:flex items-center gap-3 border-l border-black/10 pl-4" aria-label="Pilihan bahasa">
                     <a href="index.html" class="w-7 h-7 rounded-full overflow-hidden border border-black/10 hover:opacity-80 transition" aria-label="Bahasa Indonesia"><img src="https://flagcdn.com/id.svg" alt="ID" class="w-full h-full object-cover"></a>
                     <a href="index.html" class="w-7 h-7 rounded-full overflow-hidden border border-black/10 hover:opacity-80 transition" aria-label="English"><img src="https://flagcdn.com/gb.svg" alt="EN" class="w-full h-full object-cover"></a>
@@ -281,26 +316,95 @@
     </main>
 
     <!-- MAIN WISATA CONTENT SECTION -->
-    <section class="max-w-7xl mx-auto px-6 md:px-12 py-16">
+    <!-- Breadcrumb -->
+    <div class="w-full max-w-7xl mx-auto px-6 md:px-12 pt-8">
+        <nav class="flex text-sm font-medium text-gray-500">
+            <ol class="inline-flex items-center gap-2">
+                <li class="inline-flex items-center">
+                    <a href="index.html" class="hover:text-holiday transition inline-flex items-center gap-1.5">
+                        <i class="bi bi-house"></i> Beranda
+                    </a>
+                </li>
+                <li>
+                    <div class="flex items-center">
+                        <i class="bi bi-chevron-right text-[10px] mx-2 text-gray-400"></i>
+                        <span class="text-ink font-semibold">Wisata & Berita</span>
+                    </div>
+                </li>
+            </ol>
+        </nav>
+    </div>
+
+    <section class="max-w-7xl mx-auto px-6 md:px-12 pb-16 pt-4">
         
         <!-- Judul Kategori Atas -->
-        <div class="mb-10 text-center md:text-left">
+        <div class="mb-6 text-center md:text-left">
             <span class="text-holiday-600 font-bold text-sm tracking-widest uppercase flex items-center justify-center md:justify-start gap-2 mb-2">
                 <i class="bi bi-grid-3x3-gap-fill"></i> Jelajahi Cerita Baru
             </span>
-            <h2 class="text-3xl font-extrabold text-slate-900 tracking-tight mb-6">Artikel & Kabar Wisata Terbaru</h2>
-            
-            <div class="flex flex-wrap items-center gap-2.5 justify-center md:justify-start" id="filter-buttons">
-                <button class="filter-btn px-5 py-2.5 rounded-full text-xs font-bold uppercase tracking-wider bg-[#0f172a] text-white shadow-sm transition" data-filter="all">Semua Berita</button>
-                <button class="filter-btn px-5 py-2.5 rounded-full text-xs font-bold uppercase tracking-wider bg-white text-[#475569] border border-slate-200 hover:border-holiday-500 hover:text-holiday-600 shadow-sm transition" data-filter="destinasi">Destinasi</button>
-                <button class="filter-btn px-5 py-2.5 rounded-full text-xs font-bold uppercase tracking-wider bg-white text-[#475569] border border-slate-200 hover:border-holiday-500 hover:text-holiday-600 shadow-sm transition" data-filter="kuliner">Kuliner</button>
-                <button class="filter-btn px-5 py-2.5 rounded-full text-xs font-bold uppercase tracking-wider bg-white text-[#475569] border border-slate-200 hover:border-holiday-500 hover:text-holiday-600 shadow-sm transition" data-filter="tips">Tips</button>
-                <button class="filter-btn px-5 py-2.5 rounded-full text-xs font-bold uppercase tracking-wider bg-white text-[#475569] border border-slate-200 hover:border-holiday-500 hover:text-holiday-600 shadow-sm transition" data-filter="event">Event</button>
+            <h2 class="text-3xl font-extrabold text-slate-900 tracking-tight mb-2">Artikel & Kabar Wisata Terbaru</h2>
+        </div>
+        
+        <!-- Sticky Filter, Category, Search, View Mode -->
+        <div id="filter-container" class="w-full z-40 transition-all duration-300 mb-10">
+            <div class="sticky-filter bg-white border border-slate-200 rounded-3xl p-4 flex flex-col md:flex-row items-center justify-between gap-4 w-full shadow-sm">
+                
+                <!-- Left: Search & Category -->
+                <div class="flex flex-col sm:flex-row items-center gap-3 w-full md:w-auto flex-1">
+                    <div class="relative w-full sm:max-w-xs">
+                        <div class="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
+                            <i class="bi bi-search text-gray-400"></i>
+                        </div>
+                        <input type="text" placeholder="Cari artikel..." class="w-full pl-11 pr-4 py-3 bg-slate-50 border border-transparent rounded-2xl focus:bg-white focus:border-holiday-500 focus:ring-2 focus:ring-holiday-500/20 transition-all text-sm font-semibold outline-none text-slate-800">
+                    </div>
+                    
+                    <div class="w-full sm:w-auto overflow-x-auto no-scrollbar">
+                        <div class="flex items-center gap-2 min-w-max" id="filter-buttons">
+                            <button class="filter-btn px-5 py-2.5 rounded-2xl bg-[#0f172a] text-white font-bold text-sm shadow-md transition" data-filter="all">Semua Berita</button>
+                            <button class="filter-btn px-5 py-2.5 rounded-2xl bg-white text-[#475569] border border-slate-200 hover:border-holiday-500 hover:text-holiday-600 font-bold text-sm transition shadow-sm" data-filter="destinasi">Destinasi</button>
+                            <button class="filter-btn px-5 py-2.5 rounded-2xl bg-white text-[#475569] border border-slate-200 hover:border-holiday-500 hover:text-holiday-600 font-bold text-sm transition shadow-sm" data-filter="tips">Tips</button>
+                            <button class="filter-btn px-5 py-2.5 rounded-2xl bg-white text-[#475569] border border-slate-200 hover:border-holiday-500 hover:text-holiday-600 font-bold text-sm transition shadow-sm" data-filter="kuliner">Kuliner</button>
+                            <button class="filter-btn px-5 py-2.5 rounded-2xl bg-white text-[#475569] border border-slate-200 hover:border-holiday-500 hover:text-holiday-600 font-bold text-sm transition shadow-sm" data-filter="event">Event</button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Right: Date Filter & View Toggle -->
+                <div class="flex items-center gap-3 w-full md:w-auto justify-between md:justify-end border-t md:border-t-0 border-slate-100 pt-4 md:pt-0">
+                    <div class="relative">
+                        <select class="appearance-none bg-slate-50 border border-slate-200 rounded-2xl pl-5 pr-10 py-2.5 text-sm font-bold text-slate-700 hover:bg-white transition cursor-pointer outline-none focus:border-holiday-500 focus:ring-2 focus:ring-holiday-500/20">
+                            <option value="baru">Terbaru</option>
+                            <option value="1bulan">1 Bulan Terakhir</option>
+                            <option value="lampau">Terdahulu</option>
+                        </select>
+                        <div class="absolute inset-y-0 right-0 flex items-center pr-4 pointer-events-none">
+                            <i class="bi bi-chevron-down text-[10px] text-gray-500"></i>
+                        </div>
+                    </div>
+                    
+                    <div class="relative">
+                        <button id="view-toggle-btn" class="w-11 h-11 flex items-center justify-center rounded-2xl bg-slate-50 border border-slate-200 hover:bg-white hover:border-holiday-500 text-slate-700 hover:text-holiday-600 transition shadow-sm">
+                            <i class="bi bi-grid-fill text-lg"></i>
+                        </button>
+                        <!-- Dropdown View -->
+                        <div id="view-dropdown" class="absolute right-0 top-full mt-2 w-48 bg-white border border-slate-200 rounded-2xl shadow-xl p-2 opacity-0 invisible transform -translate-y-2 transition-all duration-300 z-50">
+                            <button class="view-option w-full flex items-center gap-3 px-4 py-2.5 rounded-xl hover:bg-slate-50 transition text-sm font-bold text-holiday-600 bg-holiday-500/10" data-view="card">
+                                <i class="bi bi-grid-fill"></i> Mode Card
+                            </button>
+                            <button class="view-option w-full flex items-center gap-3 px-4 py-2.5 rounded-xl hover:bg-slate-50 transition text-sm font-bold text-slate-600 mt-1" data-view="pinterest">
+                                <i class="bi bi-columns-gap"></i> Mode Pinterest
+                            </button>
+                            <button class="view-option w-full flex items-center gap-3 px-4 py-2.5 rounded-xl hover:bg-slate-50 transition text-sm font-bold text-slate-600 mt-1" data-view="full">
+                                <i class="bi bi-image-fill"></i> Mode Full Cover
+                            </button>
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
 
         <!-- GRID SYSTEM UTAMA -->
-        <div class="space-y-8">
+        <div class="space-y-8 mode-card" id="article-grid-container">
             
             <!-- 1 CARD BESAR UTAMA (SUDAH DIPERBAIKI) -->
             <article class="news-card relative bg-slate-900 rounded-3xl overflow-hidden h-[480px] md:h-[520px] group shadow-sm hover:shadow-xl transition-all duration-500 flex items-end" data-cats="destinasi" data-article="sukamade">
@@ -578,6 +682,55 @@
             if(totalSlides > 1) showSlide(next);
         }, 4000);
 
+        
+
+        // --- View Toggle Logic ---
+        const viewToggleBtn = document.getElementById('view-toggle-btn');
+        const viewDropdown = document.getElementById('view-dropdown');
+        const articleGrid = document.getElementById('article-grid-container');
+        const viewOptions = document.querySelectorAll('.view-option');
+        
+        viewToggleBtn.addEventListener('click', (e) => {
+            e.stopPropagation();
+            viewDropdown.classList.toggle('opacity-0');
+            viewDropdown.classList.toggle('invisible');
+            viewDropdown.classList.toggle('translate-y-2');
+            viewDropdown.classList.toggle('translate-y-0');
+        });
+        
+        document.addEventListener('click', (e) => {
+            if (!viewDropdown.contains(e.target) && !viewToggleBtn.contains(e.target)) {
+                viewDropdown.classList.add('opacity-0', 'invisible', '-translate-y-2');
+                viewDropdown.classList.remove('translate-y-0');
+            }
+        });
+        
+        viewOptions.forEach(option => {
+            option.addEventListener('click', () => {
+                const viewType = option.getAttribute('data-view');
+                
+                viewOptions.forEach(opt => {
+                    opt.classList.remove('text-holiday-600', 'bg-holiday-500/10');
+                    opt.classList.add('text-slate-600');
+                });
+                option.classList.remove('text-slate-600');
+                option.classList.add('text-holiday-600', 'bg-holiday-500/10');
+                
+                const icon = viewToggleBtn.querySelector('i');
+                if (viewType === 'full') {
+                    icon.className = 'bi bi-image-fill text-lg';
+                    articleGrid.className = 'space-y-8 mode-full';
+                } else if (viewType === 'pinterest') {
+                    icon.className = 'bi bi-columns-gap text-lg';
+                    articleGrid.className = 'space-y-8 mode-pinterest';
+                } else {
+                    icon.className = 'bi bi-grid-fill text-lg';
+                    articleGrid.className = 'space-y-8 mode-card';
+                }
+                viewDropdown.classList.add('opacity-0', 'invisible', '-translate-y-2');
+            });
+        });
+
         // --- 3. NEWS CATEGORY FILTER LOGIC ---
         const filterButtons = document.querySelectorAll('.filter-btn');
         const newsCards = document.querySelectorAll('.news-card');
@@ -703,6 +856,31 @@
             }
         `;
         document.head.appendChild(style);
+    </script>
+
+    <!-- Scroll To Top Button -->
+    <button id="scrollToTopBtn" class="fixed bottom-6 right-6 md:bottom-10 md:right-10 w-12 h-12 md:w-14 md:h-14 bg-holiday text-white rounded-full flex items-center justify-center shadow-xl shadow-holiday/30 z-[90] opacity-0 invisible translate-y-10 hover:bg-[#236026] transition-colors" aria-label="Scroll to top">
+        <i class="bi bi-arrow-up text-xl md:text-2xl font-bold"></i>
+    </button>
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const btn = document.getElementById('scrollToTopBtn');
+            if (btn && typeof gsap !== 'undefined') {
+                let isVisible = false;
+                window.addEventListener('scroll', () => {
+                    if (window.scrollY > 300 && !isVisible) {
+                        isVisible = true;
+                        gsap.to(btn, { autoAlpha: 1, y: 0, duration: 0.5, ease: 'back.out(1.5)' });
+                    } else if (window.scrollY <= 300 && isVisible) {
+                        isVisible = false;
+                        gsap.to(btn, { autoAlpha: 0, y: 40, duration: 0.3, ease: 'power2.in' });
+                    }
+                });
+                btn.addEventListener('click', () => {
+                    window.scrollTo({ top: 0, behavior: 'smooth' });
+                });
+            }
+        });
     </script>
 </body>
 </html>
