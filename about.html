@@ -41,24 +41,77 @@
 
     <!-- Navbar & Sidebar -->
     <div id="menu-overlay" class="fixed inset-0 bg-black/60 z-[60] hidden opacity-0 backdrop-blur-sm"></div>
-    <aside id="mobile-sidebar" class="fixed top-0 left-0 h-full w-[84%] max-w-sm bg-base shadow-2xl z-[70] p-8 flex flex-col transform -translate-x-full border-r border-black/10">
-        <div class="flex justify-between items-center mb-10">
+    <aside id="mobile-sidebar" class="fixed top-0 left-0 h-full w-[85%] max-w-sm bg-base shadow-2xl z-[70] p-6 flex flex-col transform -translate-x-full border-r border-black/5 overflow-y-auto">
+        <div class="flex justify-between items-center mb-8">
             <a href="index.html" class="text-2xl font-extrabold flex items-center gap-2">
                 <i class="bi bi-jeep text-holiday"></i> JB.
             </a>
-            <button id="close-menu-btn" class="w-10 h-10 rounded-full bg-white flex items-center justify-center text-gray-800 hover:bg-holiday hover:text-white transition border border-black/10">
+            <button id="close-menu-btn" class="w-10 h-10 rounded-full bg-white flex items-center justify-center text-gray-800 hover:bg-holiday hover:text-white transition shadow-sm border border-black/5">
                 <i class="bi bi-x-lg"></i>
             </button>
         </div>
-        <nav class="flex flex-col gap-6 text-lg font-bold text-gray-700">
-            <a href="index.html" class="hover:text-holiday transition flex items-center gap-3"><i class="bi bi-house"></i> Beranda</a>
-            <a href="about.html" class="hover:text-holiday transition flex items-center gap-3"><i class="bi bi-info-circle"></i> Tentang</a>
-            <a href="destinasi.html" class="hover:text-holiday transition flex items-center gap-3"><i class="bi bi-geo-alt"></i> Destinasi</a>
-            <a href="news.html" class="hover:text-holiday transition flex items-center gap-3"><i class="bi bi-newspaper"></i> Baru</a>
-            <a href="privasi.html" class="hover:text-holiday transition flex items-center gap-3"><i class="bi bi-shield-check"></i> Privasi</a>
+        
+        <nav class="flex flex-col gap-3 text-[15px] font-bold text-gray-700">
+            <a href="index.html" class="flex items-center gap-4 p-3 rounded-2xl hover:bg-white hover:text-holiday transition border border-transparent hover:border-black/5 hover:shadow-sm"><i class="bi bi-house text-xl"></i> Beranda</a>
+            <a href="about.html" class="flex items-center gap-4 p-3 rounded-2xl hover:bg-white hover:text-holiday transition border border-transparent hover:border-black/5 hover:shadow-sm"><i class="bi bi-info-circle text-xl"></i> Tentang</a>
+            
+            <!-- Wisata Dropdown Mobile -->
+            <div class="flex flex-col rounded-2xl bg-white/40 border border-black/5 overflow-hidden">
+                <button class="flex items-center justify-between p-3 w-full text-left font-bold hover:text-holiday transition" onclick="this.nextElementSibling.classList.toggle('hidden')">
+                    <span class="flex items-center gap-4"><i class="bi bi-compass text-xl"></i> Wisata</span>
+                    <i class="bi bi-chevron-down text-sm"></i>
+                </button>
+                <div class="hidden flex-col gap-2 p-3 pt-0 border-t border-black/5 mt-2">
+                    <a href="destinasi.html" class="flex items-center gap-3 p-3 rounded-xl bg-white shadow-sm border border-black/5 hover:border-holiday transition">
+                        <div class="w-12 h-12 rounded-lg overflow-hidden shrink-0 border border-black/5">
+                            <img src="img/bluefire (1).png" alt="Destinasi" class="w-full h-full object-cover">
+                        </div>
+                        <div>
+                            <span class="block text-ink text-sm font-extrabold">Destinasi</span>
+                            <span class="text-[10px] text-gray-500 font-medium">Jelajahi surga tersembunyi.</span>
+                        </div>
+                    </a>
+                    <a href="news.html" class="flex items-center gap-3 p-3 rounded-xl bg-white shadow-sm border border-black/5 hover:border-holiday transition">
+                        <div class="w-12 h-12 rounded-lg bg-mist/50 flex items-center justify-center text-holiday shrink-0 border border-black/5">
+                            <i class="bi bi-newspaper text-xl"></i>
+                        </div>
+                        <div>
+                            <span class="block text-ink text-sm font-extrabold">Hal Baru</span>
+                            <span class="text-[10px] text-gray-500 font-medium">Berita & tips terbaru.</span>
+                        </div>
+                    </a>
+                    <a href="galery.html" class="flex items-center gap-3 p-3 rounded-xl bg-ink shadow-sm border border-black/5 hover:bg-holiday transition text-white">
+                        <div class="w-12 h-12 rounded-lg bg-white/10 flex items-center justify-center text-white shrink-0">
+                            <i class="bi bi-images text-xl"></i>
+                        </div>
+                        <div>
+                            <span class="block text-white text-sm font-extrabold">Galery</span>
+                            <span class="text-[10px] text-white/70 font-medium">Koleksi foto perjalanan.</span>
+                        </div>
+                    </a>
+                </div>
+            </div>
+
+            <a href="privasi.html" class="flex items-center gap-4 p-3 rounded-2xl hover:bg-white hover:text-holiday transition border border-transparent hover:border-black/5 hover:shadow-sm"><i class="bi bi-shield-check text-xl"></i> Privasi</a>
         </nav>
-        <div class="mt-auto">
-            <a href="auth/login.html" class="block w-full text-center bg-holiday text-white py-4 rounded-2xl font-bold shadow-lg shadow-holiday-glow">Login</a>
+        
+        <div class="mt-auto pt-8 flex flex-col gap-4">
+            <!-- Mobile Language Selector -->
+            <div class="flex items-center justify-between p-4 rounded-2xl bg-white border border-black/5 shadow-sm">
+                <span class="text-sm font-bold text-gray-700">Bahasa</span>
+                <div class="flex items-center gap-2">
+                    <button class="flex items-center gap-2 bg-base px-3 py-2 rounded-xl border border-black/5 hover:border-holiday transition">
+                        <img src="https://flagcdn.com/id.svg" class="w-5 h-auto rounded-sm shadow-sm" alt="ID">
+                        <span class="font-bold text-sm">ID</span>
+                    </button>
+                    <button class="flex items-center gap-2 bg-transparent px-3 py-2 rounded-xl border border-transparent hover:bg-base hover:border-black/5 transition">
+                        <img src="https://flagcdn.com/gb.svg" class="w-5 h-auto rounded-sm shadow-sm" alt="EN">
+                        <span class="font-bold text-sm text-gray-400 hover:text-ink">EN</span>
+                    </button>
+                </div>
+            </div>
+            
+            <a href="auth/login.html" class="block w-full text-center bg-ink hover:bg-holiday transition text-white py-4 rounded-2xl font-bold shadow-lg shadow-black/10">Masuk / Login</a>
         </div>
     </aside>
 
@@ -70,15 +123,70 @@
             <nav class="hidden md:flex gap-8 font-semibold items-center text-gray-700">
                 <a href="index.html" class="hover:text-holiday transition">Beranda</a>
                 <a href="about.html" class="hover:text-holiday transition">Tentang</a>
-                <a href="destinasi.html" class="hover:text-holiday transition">Destinasi</a>
-                <a href="news.html" class="hover:text-holiday transition">Baru</a>
+                
+                <!-- Dropdown Wisata -->
+                <div class="relative group">
+                    <button class="hover:text-holiday transition flex items-center gap-1 cursor-pointer py-2">
+                        Wisata <i class="bi bi-chevron-down text-[10px] stroke-[2px] transition-transform duration-300 group-hover:rotate-180"></i>
+                    </button>
+                    
+                    <!-- Dropdown Menu -->
+                    <div class="absolute top-full left-1/2 -translate-x-1/2 mt-2 w-[540px] bg-white border border-black/5 rounded-3xl shadow-[0_20px_60px_rgba(0,0,0,0.08)] p-4 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-400 transform origin-top -translate-y-2 group-hover:translate-y-0 z-[60]">
+                        
+                        <!-- Grid Layout -->
+                        <div class="grid grid-cols-5 gap-4 h-[220px]">
+                            
+                            <!-- Left Column -->
+                            <div class="col-span-3 flex flex-col gap-3">
+                                <!-- Destinasi -->
+                                <a href="destinasi.html" class="group/dest flex-1 flex items-center p-3 rounded-2xl bg-base border border-black/5 hover:bg-white hover:shadow-md hover:shadow-black/5 transition-all duration-300 gap-4">
+                                    <div class="w-20 h-20 rounded-xl overflow-hidden shrink-0 shadow-sm border border-black/5">
+                                        <img src="img/bluefire (1).png" alt="Destinasi" class="w-full h-full object-cover group-hover/dest:scale-110 transition duration-700">
+                                    </div>
+                                    <div class="flex-1 pr-1">
+                                        <span class="block font-extrabold text-ink text-[15px] mb-0.5">Destinasi</span>
+                                        <p class="text-[11px] text-gray-500 font-medium leading-snug">Jelajahi surga tersembunyi yang menakjubkan.</p>
+                                    </div>
+                                </a>
+                                
+                                <!-- Hal Baru -->
+                                <a href="news.html" class="group/news flex-1 flex items-center p-3 rounded-2xl bg-base border border-black/5 hover:bg-white hover:shadow-md hover:shadow-black/5 transition-all duration-300 gap-4">
+                                    <div class="w-20 h-20 rounded-xl bg-mist/50 border border-black/5 flex items-center justify-center text-holiday group-hover/news:bg-holiday group-hover/news:text-white transition-all duration-300 shrink-0 shadow-sm">
+                                        <i class="bi bi-newspaper text-2xl"></i>
+                                    </div>
+                                    <div class="flex-1 pr-1">
+                                        <span class="block font-extrabold text-ink text-[15px] mb-0.5">Hal Baru</span>
+                                        <p class="text-[11px] text-gray-500 font-medium leading-snug">Berita, tips, dan update perjalanan terbaru.</p>
+                                    </div>
+                                </a>
+                            </div>
+                            
+                            <!-- Right Column: Gallery -->
+                            <a href="galery.html" class="col-span-2 group/gal relative rounded-2xl overflow-hidden flex flex-col p-4 h-full shadow-sm border border-black/5">
+                                <img src="img/djawatan.jpg" alt="Galeri" class="absolute inset-0 w-full h-full object-cover group-hover/gal:scale-110 transition duration-700">
+                                <div class="absolute inset-0 bg-gradient-to-t from-black/80 via-black/30 to-black/10"></div>
+                                
+                                <div class="relative z-10 flex flex-col h-full justify-between">
+                                    <div class="w-8 h-8 rounded-full bg-white/20 backdrop-blur-md flex items-center justify-center text-white border border-white/30 self-start group-hover/gal:bg-holiday group-hover/gal:border-holiday group-hover/gal:scale-110 transition duration-300">
+                                        <i class="bi bi-arrow-up-right text-xs"></i>
+                                    </div>
+                                    <div>
+                                        <h3 class="text-white font-extrabold text-lg tracking-wide">Galery</h3>
+                                        <p class="text-white/80 text-[10px] font-semibold uppercase tracking-wider mt-0.5 flex items-center">Lihat <i class="bi bi-arrow-right ml-1 transition-transform group-hover/gal:translate-x-1"></i></p>
+                                    </div>
+                                </div>
+                            </a>
+                            
+                        </div>
+                    </div>
+                </div>
             </nav>
             <div class="flex items-center gap-4">
                 <a href="privasi.html" class="hidden md:flex items-center justify-center w-11 h-11 rounded-full border border-black/10 text-ink hover:text-holiday hover:border-holiday transition bg-white/50 backdrop-blur-md" title="Kebijakan Privasi"><i class="bi bi-shield-check text-xl"></i></a>
                 <a href="auth/login.html" class="hidden md:block bg-holiday text-white px-7 py-3 rounded-full transition shadow-lg shadow-holiday-glow font-bold hover:bg-holiday-dark">Login</a>
                 <div class="hidden md:flex items-center gap-3 border-l border-black/10 pl-4" aria-label="Pilihan bahasa">
-                    <a href="index.html" class="flag-button flag-id" aria-label="Bahasa Indonesia"></a>
-                    <a href="index.html" class="flag-button flag-en" aria-label="English"></a>
+                    <a href="index.html" class="w-7 h-7 rounded-full overflow-hidden border border-black/10 hover:opacity-80 transition" aria-label="Bahasa Indonesia"><img src="https://flagcdn.com/id.svg" alt="ID" class="w-full h-full object-cover"></a>
+                    <a href="index.html" class="w-7 h-7 rounded-full overflow-hidden border border-black/10 hover:opacity-80 transition" aria-label="English"><img src="https://flagcdn.com/gb.svg" alt="EN" class="w-full h-full object-cover"></a>
                 </div>
                 <button id="open-menu-btn" class="md:hidden w-11 h-11 flex items-center justify-center rounded-full bg-ink text-white border border-black/10 hover:bg-holiday transition">
                     <i class="bi bi-list text-2xl"></i>

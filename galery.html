@@ -1,0 +1,648 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Galeri - Jadi Berangkat</title>
+    
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:ital,wght@0,200..800;1,200..800&display=swap" rel="stylesheet">
+    
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+    
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: { sans: ['"Plus Jakarta Sans"', 'sans-serif'] },
+                    colors: { base: '#f4f0e7', ink: '#151813', clay: '#b96f3c', mist: '#dfe8df', holiday: '#2f6f42', 'holiday-dark': '#17442a', 'holiday-light': '#b8d9bd', 'holiday-glow': 'rgba(47, 111, 66, 0.28)' }
+                }
+            }
+        }
+    </script>
+    <style>
+        body { font-family: 'Plus Jakarta Sans', sans-serif; background-color: #f4f0e7; color: #151813; overflow-x: hidden; }
+        
+        /* Custom Scrollbar */
+        ::-webkit-scrollbar { width: 8px; }
+        ::-webkit-scrollbar-track { background: rgba(0,0,0,0.04); }
+        ::-webkit-scrollbar-thumb { background: rgba(47, 111, 66, 0.4); border-radius: 10px; }
+        ::-webkit-scrollbar-thumb:hover { background: rgba(47, 111, 66, 0.7); }
+
+        /* Multi-column Layout for Masonry (Pinterest) */
+        .gallery-container {
+            column-count: 2;
+            column-gap: 1.25rem;
+            transition: all 0.5s ease;
+        }
+        @media (min-width: 640px) { .gallery-container { column-count: 2; } }
+        @media (min-width: 768px) { .gallery-container { column-count: 3; } }
+        @media (min-width: 1024px) { .gallery-container { column-count: 4; } }
+        
+        .gallery-container.grid-rata {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 1.25rem;
+            column-count: auto; 
+        }
+        @media (min-width: 640px) { .gallery-container.grid-rata { grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); } }
+        .gallery-container.grid-rata .gallery-item {
+            margin-bottom: 0;
+            height: 320px;
+        }
+
+        .gallery-item {
+            position: relative;
+            border-radius: 1rem;
+            overflow: hidden;
+            background: rgba(0,0,0,0.05);
+            cursor: pointer;
+            transition: transform 0.3s ease, box-shadow 0.3s ease, opacity 0.5s ease;
+            opacity: 0;
+            break-inside: avoid;
+            margin-bottom: 1.25rem;
+            transform: translateY(20px);
+            min-height: 200px;
+        }
+        .gallery-item.in-view {
+            transform: translateY(0);
+            opacity: 1;
+        }
+        .gallery-item:hover {
+            transform: translateY(-5px) scale(1.02);
+            box-shadow: 0 15px 30px rgba(0,0,0,0.15);
+            z-index: 10;
+        }
+        .gallery-item img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: opacity 0.5s ease;
+            opacity: 0;
+            display: block;
+        }
+        .gallery-item img.loaded { opacity: 1; }
+
+        /* Lightbox */
+        #lightbox {
+            transition: opacity 0.4s ease, visibility 0.4s ease;
+            opacity: 0;
+            visibility: hidden;
+        }
+        #lightbox.active {
+            opacity: 1;
+            visibility: visible;
+        }
+        
+        /* Floating Category Sidebar */
+        .cat-sidebar {
+            position: fixed;
+            left: 1.5rem;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 60px;
+            background: rgba(255, 255, 255, 0.3);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border: 1px solid rgba(0,0,0,0.15);
+            border-radius: 1.5rem;
+            padding: 0.5rem;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 0.5rem;
+            transition: width 0.4s cubic-bezier(0.34, 1.56, 0.64, 1), background 0.3s ease;
+            z-index: 40;
+            overflow: hidden;
+        }
+        .cat-sidebar:hover {
+            width: 220px;
+            background: rgba(255, 255, 255, 0.85);
+            box-shadow: 10px 10px 40px rgba(0,0,0,0.1);
+        }
+        .cat-btn {
+            width: 100%;
+            height: 44px;
+            display: flex;
+            align-items: center;
+            padding: 0 10px;
+            border-radius: 999px;
+            color: #4b5563;
+            transition: all 0.3s ease;
+            cursor: pointer;
+            white-space: nowrap;
+        }
+        .cat-btn:hover {
+            background: #2f6f42;
+            color: white;
+        }
+        .cat-icon {
+            width: 24px;
+            text-align: center;
+            font-size: 1.25rem;
+            flex-shrink: 0;
+        }
+        .cat-text {
+            opacity: 0;
+            padding-left: 12px;
+            font-weight: 700;
+            font-size: 0.9rem;
+            transition: opacity 0.3s ease;
+        }
+        .cat-sidebar:hover .cat-text {
+            opacity: 1;
+        }
+        @media (max-width: 768px) {
+            .cat-sidebar {
+                top: auto;
+                bottom: 1.5rem;
+                transform: none;
+                width: 220px;
+                background: rgba(255, 255, 255, 0.85);
+                box-shadow: 10px 10px 40px rgba(0,0,0,0.1);
+            }
+            .cat-text {
+                opacity: 1;
+            }
+        }
+        
+        /* Smooth Scroll Wrapper */
+        #scroll-wrapper {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            overflow: hidden;
+        }
+        #scroll-content {
+            will-change: transform;
+            width: 100%;
+        }
+    </style>
+</head>
+<body class="text-gray-800">
+
+    <!-- Navbar & Sidebar Mobile -->
+    <div id="menu-overlay" class="fixed inset-0 bg-black/60 z-[60] hidden opacity-0 backdrop-blur-sm"></div>
+    <aside id="mobile-sidebar" class="fixed top-0 left-0 h-full w-[85%] max-w-sm bg-base shadow-2xl z-[70] p-6 flex flex-col transform -translate-x-full border-r border-black/5 overflow-y-auto">
+        <div class="flex justify-between items-center mb-8">
+            <a href="index.html" class="text-2xl font-extrabold flex items-center gap-2">
+                <i class="bi bi-jeep text-holiday"></i> JB.
+            </a>
+            <button id="close-menu-btn" class="w-10 h-10 rounded-full bg-white flex items-center justify-center text-gray-800 hover:bg-holiday hover:text-white transition shadow-sm border border-black/5">
+                <i class="bi bi-x-lg"></i>
+            </button>
+        </div>
+        
+        <nav class="flex flex-col gap-3 text-[15px] font-bold text-gray-700">
+            <a href="index.html" class="flex items-center gap-4 p-3 rounded-2xl hover:bg-white hover:text-holiday transition border border-transparent hover:border-black/5 hover:shadow-sm"><i class="bi bi-house text-xl"></i> Beranda</a>
+            <a href="about.html" class="flex items-center gap-4 p-3 rounded-2xl hover:bg-white hover:text-holiday transition border border-transparent hover:border-black/5 hover:shadow-sm"><i class="bi bi-info-circle text-xl"></i> Tentang</a>
+            
+            <!-- Wisata Dropdown Mobile -->
+            <div class="flex flex-col rounded-2xl bg-white/40 border border-black/5 overflow-hidden">
+                <button class="flex items-center justify-between p-3 w-full text-left font-bold hover:text-holiday transition" onclick="this.nextElementSibling.classList.toggle('hidden')">
+                    <span class="flex items-center gap-4"><i class="bi bi-compass text-xl"></i> Wisata</span>
+                    <i class="bi bi-chevron-down text-sm"></i>
+                </button>
+                <div class="hidden flex-col gap-2 p-3 pt-0 border-t border-black/5 mt-2">
+                    <a href="destinasi.html" class="flex items-center gap-3 p-3 rounded-xl bg-white shadow-sm border border-black/5 hover:border-holiday transition">
+                        <div class="w-12 h-12 rounded-lg overflow-hidden shrink-0 border border-black/5">
+                            <img src="img/bluefire (1).png" alt="Destinasi" class="w-full h-full object-cover">
+                        </div>
+                        <div>
+                            <span class="block text-ink text-sm font-extrabold">Destinasi</span>
+                            <span class="text-[10px] text-gray-500 font-medium">Jelajahi surga tersembunyi.</span>
+                        </div>
+                    </a>
+                    <a href="news.html" class="flex items-center gap-3 p-3 rounded-xl bg-white shadow-sm border border-black/5 hover:border-holiday transition">
+                        <div class="w-12 h-12 rounded-lg bg-mist/50 flex items-center justify-center text-holiday shrink-0 border border-black/5">
+                            <i class="bi bi-newspaper text-xl"></i>
+                        </div>
+                        <div>
+                            <span class="block text-ink text-sm font-extrabold">Hal Baru</span>
+                            <span class="text-[10px] text-gray-500 font-medium">Berita & tips terbaru.</span>
+                        </div>
+                    </a>
+                    <a href="galery.html" class="flex items-center gap-3 p-3 rounded-xl bg-ink shadow-sm border border-black/5 hover:bg-holiday transition text-white">
+                        <div class="w-12 h-12 rounded-lg bg-white/10 flex items-center justify-center text-white shrink-0">
+                            <i class="bi bi-images text-xl"></i>
+                        </div>
+                        <div>
+                            <span class="block text-white text-sm font-extrabold">Galery</span>
+                            <span class="text-[10px] text-white/70 font-medium">Koleksi foto perjalanan.</span>
+                        </div>
+                    </a>
+                </div>
+            </div>
+
+            <a href="privasi.html" class="flex items-center gap-4 p-3 rounded-2xl hover:bg-white hover:text-holiday transition border border-transparent hover:border-black/5 hover:shadow-sm"><i class="bi bi-shield-check text-xl"></i> Privasi</a>
+        </nav>
+        
+        <div class="mt-auto pt-8 flex flex-col gap-4">
+            <!-- Mobile Language Selector -->
+            <div class="flex items-center justify-between p-4 rounded-2xl bg-white border border-black/5 shadow-sm">
+                <span class="text-sm font-bold text-gray-700">Bahasa</span>
+                <div class="flex items-center gap-2">
+                    <button class="flex items-center gap-2 bg-base px-3 py-2 rounded-xl border border-black/5 hover:border-holiday transition">
+                        <img src="https://flagcdn.com/id.svg" class="w-5 h-auto rounded-sm shadow-sm" alt="ID">
+                        <span class="font-bold text-sm">ID</span>
+                    </button>
+                    <button class="flex items-center gap-2 bg-transparent px-3 py-2 rounded-xl border border-transparent hover:bg-base hover:border-black/5 transition">
+                        <img src="https://flagcdn.com/gb.svg" class="w-5 h-auto rounded-sm shadow-sm" alt="EN">
+                        <span class="font-bold text-sm text-gray-400 hover:text-ink">EN</span>
+                    </button>
+                </div>
+            </div>
+            
+            <a href="auth/login.html" class="block w-full text-center bg-ink hover:bg-holiday transition text-white py-4 rounded-2xl font-bold shadow-lg shadow-black/10">Masuk / Login</a>
+        </div>
+    </aside>
+
+    <header id="header-wrapper" class="fixed w-full top-0 z-50 transition-all duration-700 ease-in-out py-3 flex justify-center px-4 md:px-6">
+        <div id="nav-container" class="w-full max-w-[1440px] flex justify-between items-center px-6 md:px-9 py-3.5 transition-all duration-500 text-ink bg-white/90 backdrop-blur-xl rounded-[1.65rem] border border-white/70 shadow-[0_18px_55px_rgba(0,0,0,0.16)]">
+            <a href="index.html" class="text-2xl font-extrabold tracking-wide flex items-center gap-2">
+                <i class="bi bi-jeep text-holiday"></i> <span class="hidden sm:block">Jadi Berangkat</span><span class="sm:hidden">JB.</span>
+            </a>
+            <nav class="hidden md:flex gap-8 font-semibold items-center text-gray-700">
+                <a href="index.html" class="hover:text-holiday transition">Beranda</a>
+                <a href="about.html" class="hover:text-holiday transition">Tentang</a>
+                
+                <!-- Dropdown Wisata -->
+                <div class="relative group">
+                    <button class="hover:text-holiday transition flex items-center gap-1 cursor-pointer py-2">
+                        Wisata <i class="bi bi-chevron-down text-[10px] stroke-[2px] transition-transform duration-300 group-hover:rotate-180"></i>
+                    </button>
+                    
+                    <!-- Dropdown Menu -->
+                    <div class="absolute top-full left-1/2 -translate-x-1/2 mt-2 w-[540px] bg-white border border-black/5 rounded-3xl shadow-[0_20px_60px_rgba(0,0,0,0.08)] p-4 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-400 transform origin-top -translate-y-2 group-hover:translate-y-0 z-[60]">
+                        
+                        <!-- Grid Layout -->
+                        <div class="grid grid-cols-5 gap-4 h-[220px]">
+                            
+                            <!-- Left Column -->
+                            <div class="col-span-3 flex flex-col gap-3">
+                                <!-- Destinasi -->
+                                <a href="destinasi.html" class="group/dest flex-1 flex items-center p-3 rounded-2xl bg-base border border-black/5 hover:bg-white hover:shadow-md hover:shadow-black/5 transition-all duration-300 gap-4">
+                                    <div class="w-20 h-20 rounded-xl overflow-hidden shrink-0 shadow-sm border border-black/5">
+                                        <img src="img/bluefire (1).png" alt="Destinasi" class="w-full h-full object-cover group-hover/dest:scale-110 transition duration-700">
+                                    </div>
+                                    <div class="flex-1 pr-1">
+                                        <span class="block font-extrabold text-ink text-[15px] mb-0.5">Destinasi</span>
+                                        <p class="text-[11px] text-gray-500 font-medium leading-snug">Jelajahi surga tersembunyi yang menakjubkan.</p>
+                                    </div>
+                                </a>
+                                
+                                <!-- Hal Baru -->
+                                <a href="news.html" class="group/news flex-1 flex items-center p-3 rounded-2xl bg-base border border-black/5 hover:bg-white hover:shadow-md hover:shadow-black/5 transition-all duration-300 gap-4">
+                                    <div class="w-20 h-20 rounded-xl bg-mist/50 border border-black/5 flex items-center justify-center text-holiday group-hover/news:bg-holiday group-hover/news:text-white transition-all duration-300 shrink-0 shadow-sm">
+                                        <i class="bi bi-newspaper text-2xl"></i>
+                                    </div>
+                                    <div class="flex-1 pr-1">
+                                        <span class="block font-extrabold text-ink text-[15px] mb-0.5">Hal Baru</span>
+                                        <p class="text-[11px] text-gray-500 font-medium leading-snug">Berita, tips, dan update perjalanan terbaru.</p>
+                                    </div>
+                                </a>
+                            </div>
+                            
+                            <!-- Right Column: Gallery -->
+                            <a href="galery.html" class="col-span-2 group/gal relative rounded-2xl overflow-hidden flex flex-col p-4 h-full shadow-sm border border-black/5">
+                                <img src="img/djawatan.jpg" alt="Galeri" class="absolute inset-0 w-full h-full object-cover group-hover/gal:scale-110 transition duration-700">
+                                <div class="absolute inset-0 bg-gradient-to-t from-black/80 via-black/30 to-black/10"></div>
+                                
+                                <div class="relative z-10 flex flex-col h-full justify-between">
+                                    <div class="w-8 h-8 rounded-full bg-white/20 backdrop-blur-md flex items-center justify-center text-white border border-white/30 self-start group-hover/gal:bg-holiday group-hover/gal:border-holiday group-hover/gal:scale-110 transition duration-300">
+                                        <i class="bi bi-arrow-up-right text-xs"></i>
+                                    </div>
+                                    <div>
+                                        <h3 class="text-white font-extrabold text-lg tracking-wide">Galery</h3>
+                                        <p class="text-white/80 text-[10px] font-semibold uppercase tracking-wider mt-0.5 flex items-center">Lihat <i class="bi bi-arrow-right ml-1 transition-transform group-hover/gal:translate-x-1"></i></p>
+                                    </div>
+                                </div>
+                            </a>
+                            
+                        </div>
+                    </div>
+                </div>
+            </nav>
+            <div class="flex items-center gap-4">
+                <a href="privasi.html" class="hidden md:flex items-center justify-center w-11 h-11 rounded-full border border-black/10 text-ink hover:text-holiday hover:border-holiday transition bg-white/50 backdrop-blur-md" title="Kebijakan Privasi"><i class="bi bi-shield-check text-xl"></i></a>
+                <a href="auth/login.html" class="hidden md:block bg-holiday text-white px-7 py-3 rounded-full transition shadow-lg shadow-holiday-glow font-bold hover:bg-holiday-dark">Login</a>
+                <div class="hidden md:flex items-center gap-3 border-l border-black/10 pl-4" aria-label="Pilihan bahasa">
+                    <a href="index.html" class="w-7 h-7 rounded-full overflow-hidden border border-black/10 hover:opacity-80 transition" aria-label="Bahasa Indonesia"><img src="https://flagcdn.com/id.svg" alt="ID" class="w-full h-full object-cover"></a>
+                    <a href="index.html" class="w-7 h-7 rounded-full overflow-hidden border border-black/10 hover:opacity-80 transition" aria-label="English"><img src="https://flagcdn.com/gb.svg" alt="EN" class="w-full h-full object-cover"></a>
+                </div>
+                <button id="open-menu-btn" class="md:hidden w-11 h-11 flex items-center justify-center rounded-full bg-ink text-white border border-black/10 hover:bg-holiday transition">
+                    <i class="bi bi-list text-2xl"></i>
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <!-- Floating Category Sidebar (Absolute / Sticky style on the left) -->
+    <div class="cat-sidebar flex-col">
+        <div class="cat-btn" onclick="filterCat('semua')">
+            <i class="bi bi-grid-fill cat-icon"></i>
+            <span class="cat-text">Semua Galeri</span>
+        </div>
+        <div class="cat-btn" onclick="filterCat('wisata')">
+            <i class="bi bi-image cat-icon"></i>
+            <span class="cat-text">Wisata</span>
+        </div>
+        <div class="cat-btn" onclick="filterCat('armada')">
+            <i class="bi bi-jeep cat-icon"></i>
+            <span class="cat-text">Armada</span>
+        </div>
+        <div class="cat-btn" onclick="filterCat('pelanggan')">
+            <i class="bi bi-people-fill cat-icon"></i>
+            <span class="cat-text">Momen Pelanggan</span>
+        </div>
+    </div>
+
+    <!-- Smooth Scroll Wrapper -->
+    <div id="scroll-wrapper">
+        <div id="scroll-content">
+            
+            <div class="flex min-h-screen relative">
+                
+                <!-- Main Content -->
+                <!-- Menambahkan padding kiri (md:pl-[120px]) agar tidak tertutup sidebar bulat saat layar besar -->
+                <main class="flex-1 w-full px-4 md:pr-8 md:pl-[120px] max-w-[1440px] mx-auto" style="margin-top: 130px;">
+                    
+                    <!-- Top Actions -->
+                    <div class="flex justify-between items-center mb-8 relative z-30">
+                        <div>
+                            <h1 class="text-3xl font-extrabold text-ink">Galeri Eksplorasi</h1>
+                            <p class="text-gray-500 font-medium text-sm mt-1">Momen tak terlupakan bersama Jadi Berangkat</p>
+                        </div>
+                        
+                        <!-- Apple Style Dropdown untuk View Toggle -->
+                        <div class="relative">
+                            <button id="view-toggle-btn" class="flex items-center gap-2 bg-white border border-gray-200 px-4 py-2 rounded-xl text-sm font-bold text-gray-700 shadow-sm hover:bg-gray-50 transition-colors">
+                                <i class="bi bi-columns-gap" id="current-view-icon"></i> <span class="hidden sm:inline">View</span>
+                            </button>
+                            
+                            <!-- Dropdown Menu -->
+                            <div id="view-dropdown" class="absolute right-0 top-full mt-2 w-48 bg-white/90 backdrop-blur-xl border border-gray-200/60 rounded-2xl shadow-[0_8px_30px_rgba(0,0,0,0.12)] overflow-hidden origin-top-right transform scale-95 opacity-0 invisible transition-all duration-300 z-50">
+                                <div class="p-1.5 flex flex-col gap-0.5">
+                                    <button onclick="setViewMode('pinterest')" class="flex items-center gap-3 w-full text-left px-3 py-2.5 rounded-xl text-sm font-bold text-gray-700 hover:bg-black/5 hover:text-black transition-colors">
+                                        <i class="bi bi-columns-gap text-lg w-5"></i> Pinterest
+                                    </button>
+                                    <button onclick="setViewMode('grid')" class="flex items-center gap-3 w-full text-left px-3 py-2.5 rounded-xl text-sm font-bold text-gray-700 hover:bg-black/5 hover:text-black transition-colors">
+                                        <i class="bi bi-grid-fill text-lg w-5"></i> Grid Rata
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Gallery Grid -->
+                    <div id="gallery-container" class="gallery-container mb-20 relative z-[20]">
+                        <!-- Items injected by JS -->
+                    </div>
+
+                    <footer class="pt-10 pb-20 text-center text-gray-400 text-sm border-t border-black/10">
+                        <p>&copy; 2026 Jadi Berangkat. All rights reserved.</p>
+                    </footer>
+                </main>
+            </div>
+            
+        </div>
+    </div>
+
+    <!-- Lightbox Popup -->
+    <div id="lightbox" class="fixed inset-0 z-[100] flex items-center justify-center p-4 md:p-10 backdrop-blur-xl bg-black/90">
+        <button id="close-lightbox" class="absolute top-6 right-6 w-12 h-12 rounded-full bg-white/10 hover:bg-white/30 text-white flex items-center justify-center transition border border-white/20">
+            <i class="bi bi-x-lg text-xl"></i>
+        </button>
+        <div class="w-full max-w-6xl max-h-full flex flex-col md:flex-row bg-ink rounded-3xl overflow-hidden border border-white/10 shadow-2xl" onclick="event.stopPropagation()">
+            <!-- Image Area -->
+            <div class="w-full md:w-2/3 h-[40vh] md:h-[80vh] bg-black flex items-center justify-center relative">
+                <!-- Loading indicator -->
+                <div id="lightbox-loader" class="absolute inset-0 flex items-center justify-center">
+                    <div class="w-8 h-8 border-4 border-holiday/30 border-t-holiday rounded-full animate-spin"></div>
+                </div>
+                <img id="lightbox-img" src="" alt="Gallery Image" class="max-w-full max-h-full object-contain relative z-10 opacity-0 transition-opacity duration-300">
+            </div>
+            <!-- Info Area -->
+            <div class="w-full md:w-1/3 p-8 flex flex-col text-white">
+                <span id="lightbox-cat" class="text-xs font-bold uppercase tracking-widest text-holiday-light mb-2">Kategori</span>
+                <h3 id="lightbox-title" class="text-3xl font-extrabold mb-4">Judul Foto</h3>
+                <p id="lightbox-desc" class="text-gray-400 leading-relaxed mb-8 flex-1">Deskripsi lengkap mengenai foto ini akan ditampilkan di sini.</p>
+                <button class="w-full py-4 rounded-xl bg-holiday text-white font-bold hover:bg-holiday-dark transition shadow-lg shadow-holiday/30">
+                    Booking Jeep Ini
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Data Dummy untuk Galeri menggunakan gambar di img/
+        const galleryData = [
+            { id: 1, src: 'img/bluefire (1).png', title: 'Kawah Ijen', desc: 'Fenomena blue fire yang menakjubkan di malam hari.', cat: 'wisata', height: '350px' },
+            { id: 2, src: 'img/djawatan.jpg', title: 'Hutan De Djawatan', desc: 'Rasakan nuansa magis seperti di film fantasi.', cat: 'wisata', height: '250px' },
+            { id: 3, src: 'img/unsplash_M8drGBgFNZE.png', title: 'Jeep Custom', desc: 'Armada Jeep tangguh siap melibas segala medan.', cat: 'armada', height: '400px' },
+            { id: 4, src: 'img/pantaiboom.png', title: 'Pantai Boom', desc: 'Pemandangan indah saat matahari terbit.', cat: 'wisata', height: '280px' },
+            { id: 5, src: 'img/unsplash_Souw06F1irM.png', title: 'Hardtop Classic', desc: 'Nuansa klasik perjalanan wisata Anda.', cat: 'armada', height: '300px' },
+            { id: 6, src: 'img/jembatan.png', title: 'Momen Melintas Jembatan', desc: 'Pengalaman memacu adrenalin melintasi jembatan gantung.', cat: 'pelanggan', height: '450px' },
+            { id: 7, src: 'img/bluefire (1).png', title: 'Malam di Ijen', desc: 'Camping dan bersiap mendaki Ijen.', cat: 'pelanggan', height: '220px' },
+            { id: 8, src: 'img/djawatan.jpg', title: 'Pohon Raksasa', desc: 'Sangat cocok untuk spot foto instagramable.', cat: 'wisata', height: '320px' },
+            { id: 9, src: 'img/unsplash_M8drGBgFNZE.png', title: 'Gagahnya Jeep Kami', desc: 'Pilihan utama wisatawan.', cat: 'armada', height: '360px' },
+            { id: 10, src: 'img/pantaiboom.png', title: 'Marina Pantai Boom', desc: 'Suasana laut lepas Banyuwangi.', cat: 'wisata', height: '270px' }
+        ];
+
+        const container = document.getElementById('gallery-container');
+        
+        // 1. Render Gallery Placeholders
+        function renderGallery() {
+            container.innerHTML = '';
+            galleryData.forEach(item => {
+                const el = document.createElement('div');
+                el.className = `gallery-item cat-${item.cat}`;
+                el.style.height = item.height; // Set height custom untuk masonry style
+                el.dataset.src = item.src;
+                el.dataset.title = item.title;
+                el.dataset.desc = item.desc;
+                el.dataset.cat = item.cat;
+                
+                // Click to open lightbox
+                el.onclick = () => openLightbox(item);
+                
+                container.appendChild(el);
+            });
+            initObserver();
+        }
+
+        // 2. Intersection Observer for Virtualization & Lazy Load
+        let observer;
+        function initObserver() {
+            if(observer) observer.disconnect();
+            
+            const options = { root: null, rootMargin: '500px', threshold: 0 };
+
+            observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    const el = entry.target;
+                    
+                    if (entry.isIntersecting) {
+                        el.classList.add('in-view');
+                        if (!el.querySelector('img')) {
+                            const img = document.createElement('img');
+                            img.src = el.dataset.src;
+                            img.alt = el.dataset.title;
+                            img.onload = () => img.classList.add('loaded');
+                            el.appendChild(img);
+                        }
+                    } else {
+                        el.classList.remove('in-view');
+                        const img = el.querySelector('img');
+                        if (img) el.removeChild(img);
+                    }
+                });
+            }, options);
+
+            document.querySelectorAll('.gallery-item').forEach(item => {
+                observer.observe(item);
+            });
+        }
+
+        // 3. View Toggle (Apple Style Dropdown)
+        const toggleBtn = document.getElementById('view-toggle-btn');
+        const dropdownMenu = document.getElementById('view-dropdown');
+        const currentIcon = document.getElementById('current-view-icon');
+        let dropdownOpen = false;
+
+        toggleBtn.addEventListener('click', (e) => {
+            e.stopPropagation();
+            dropdownOpen = !dropdownOpen;
+            if (dropdownOpen) {
+                dropdownMenu.classList.remove('opacity-0', 'invisible', 'scale-95');
+                dropdownMenu.classList.add('opacity-100', 'visible', 'scale-100');
+            } else {
+                dropdownMenu.classList.remove('opacity-100', 'visible', 'scale-100');
+                dropdownMenu.classList.add('opacity-0', 'invisible', 'scale-95');
+            }
+        });
+
+        document.addEventListener('click', () => {
+            if (dropdownOpen) {
+                dropdownOpen = false;
+                dropdownMenu.classList.remove('opacity-100', 'visible', 'scale-100');
+                dropdownMenu.classList.add('opacity-0', 'invisible', 'scale-95');
+            }
+        });
+
+        window.setViewMode = function(mode) {
+            if (mode === 'grid') {
+                container.classList.add('grid-rata');
+                currentIcon.className = 'bi bi-grid-fill';
+                // Reset custom height inline styling so CSS grid-auto-rows takes over
+                document.querySelectorAll('.gallery-item').forEach(el => el.style.height = '');
+            } else {
+                container.classList.remove('grid-rata');
+                currentIcon.className = 'bi bi-columns-gap';
+                // Restore custom height inline styling for masonry
+                document.querySelectorAll('.gallery-item').forEach(el => {
+                    const itemData = galleryData.find(d => d.src === el.dataset.src);
+                    if(itemData) el.style.height = itemData.height;
+                });
+            }
+            setTimeout(setBodyHeight, 550); // wait for layout shift
+        };
+
+        // 4. Lightbox Logic
+        const lightbox = document.getElementById('lightbox');
+        const lightboxImg = document.getElementById('lightbox-img');
+        const lightboxTitle = document.getElementById('lightbox-title');
+        const lightboxDesc = document.getElementById('lightbox-desc');
+        const lightboxCat = document.getElementById('lightbox-cat');
+        const lightboxLoader = document.getElementById('lightbox-loader');
+
+        function openLightbox(item) {
+            lightboxImg.style.opacity = '0';
+            lightboxLoader.style.display = 'flex';
+            
+            lightboxImg.onload = () => {
+                lightboxLoader.style.display = 'none';
+                lightboxImg.style.opacity = '1';
+            };
+            lightboxImg.src = item.src;
+            
+            lightboxTitle.textContent = item.title;
+            lightboxDesc.textContent = item.desc;
+            lightboxCat.textContent = item.cat;
+            lightbox.classList.add('active');
+            document.body.style.overflow = 'hidden'; 
+        }
+
+        document.getElementById('close-lightbox').onclick = () => {
+            lightbox.classList.remove('active');
+            document.body.style.overflow = 'auto';
+        };
+        lightbox.onclick = () => {
+            lightbox.classList.remove('active');
+            document.body.style.overflow = 'auto';
+        };
+
+        // 5. Category Filter
+        window.filterCat = function(category) {
+            const items = document.querySelectorAll('.gallery-item');
+            items.forEach(item => {
+                if(category === 'semua' || item.dataset.cat === category) {
+                    item.style.display = 'block';
+                } else {
+                    item.style.display = 'none';
+                }
+            });
+            setTimeout(setBodyHeight, 100);
+        }
+
+        // 6. Mobile menu logic
+        const tlMenu = gsap.timeline({ paused: true });
+        tlMenu.to('#menu-overlay', { display: 'block', opacity: 1, duration: 0.3 })
+              .to('#mobile-sidebar', { x: 0, duration: 0.4, ease: "power3.out", boxShadow: "20px 0 50px rgba(0,0,0,0.5)" }, "<");
+
+        document.getElementById('open-menu-btn').addEventListener('click', () => tlMenu.play());
+        document.getElementById('close-menu-btn').addEventListener('click', () => tlMenu.reverse());
+        document.getElementById('menu-overlay').addEventListener('click', () => tlMenu.reverse());
+
+        // 7. Smooth Scroll (Vanilla Lerp)
+        const scrollContent = document.getElementById('scroll-content');
+        let currentY = 0;
+        let targetY = 0;
+        let ease = 0.08;
+
+        function setBodyHeight() {
+            if (!scrollContent) return;
+            document.body.style.height = `${scrollContent.getBoundingClientRect().height}px`;
+        }
+
+        window.addEventListener('resize', setBodyHeight);
+        
+        function smoothScroll() {
+            targetY = window.scrollY;
+            currentY += (targetY - currentY) * ease;
+            
+            if (Math.abs(targetY - currentY) < 0.1) currentY = targetY;
+            
+            scrollContent.style.transform = `translate3d(0, -${currentY}px, 0)`;
+            requestAnimationFrame(smoothScroll);
+        }
+
+        // Initialize
+        renderGallery();
+        
+        window.addEventListener('load', () => {
+            setBodyHeight();
+            requestAnimationFrame(smoothScroll);
+        });
+
+        const resizeObserver = new ResizeObserver(() => setBodyHeight());
+        resizeObserver.observe(scrollContent);
+
+    </script>
+</body>
+</html>
