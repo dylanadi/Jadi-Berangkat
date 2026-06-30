@@ -185,8 +185,7 @@
                 </div>
             </div>
             
-            <a href="artikel.html" class="block w-full text-center bg-ink hover:bg-holiday transition text-white py-4 rounded-2xl font-bold shadow-lg shadow-black/10"><span class="flex items-center justify-center gap-2">Artikel <i class="bi bi-journal-text"></i></span></a>
-        </div>
+            </div>
     </aside>
 
     <header id="header-wrapper" class="fixed w-full top-0 z-50 transition-all duration-700 ease-in-out py-3 flex justify-center px-4 md:px-6">
@@ -257,7 +256,6 @@
             </nav>
             <div class="flex items-center gap-4">
                 <a href="privasi.html" class="hidden md:flex items-center justify-center w-11 h-11 rounded-full border border-black/10 text-ink hover:text-holiday hover:border-holiday transition bg-white/50 backdrop-blur-md" title="Kebijakan Privasi"><i class="bi bi-shield-check text-xl"></i></a>
-                <a href="artikel.html" class="hidden md:flex items-center gap-2 bg-holiday text-white px-7 py-3 rounded-full transition shadow-lg shadow-holiday-glow font-bold hover:bg-holiday-dark"><span>Artikel</span> <i class="bi bi-journal-text"></i></a>
                 <div class="hidden md:flex items-center gap-3 border-l border-black/10 pl-4" aria-label="Pilihan bahasa">
                     <a href="index.html" class="w-7 h-7 rounded-full overflow-hidden border border-black/10 hover:opacity-80 transition" aria-label="Bahasa Indonesia"><img src="https://flagcdn.com/id.svg" alt="ID" class="w-full h-full object-cover"></a>
                     <a href="index.html" class="w-7 h-7 rounded-full overflow-hidden border border-black/10 hover:opacity-80 transition" aria-label="English"><img src="https://flagcdn.com/gb.svg" alt="EN" class="w-full h-full object-cover"></a>
@@ -470,8 +468,27 @@
             <!-- SEPARATOR JUDUL "ARTIKEL LAINNYA" -->
             <div class="pt-10 pb-3 flex items-center gap-2.5">
                 <span class="w-1.5 h-6 bg-holiday-600 rounded-full"></span>
-                <h3 class="text-lg font-extrabold text-[#0f172a] tracking-tight uppercase">Artikel Lainnya</h3>
             </div>
+
+            <div id="featured-article" class="bg-white dark:bg-gray-800 rounded-[2rem] border border-gray-100 dark:border-gray-700 shadow-[0_8px_30px_rgb(0,0,0,0.02)] overflow-hidden mb-8">
+                <div class="grid grid-cols-1 md:grid-cols-2">
+                    <div class="h-64 md:h-auto">
+                        <img src="img/unsplash_M8drGBgFNZE.png" class="w-full h-full object-cover" alt="Artikel Utama">
+                    </div>
+                    <div class="p-8 flex flex-col justify-center">
+                        <span class="text-[10px] font-bold text-holiday uppercase tracking-widest mb-3">Tips & Trik</span>
+                        <h2 class="text-2xl md:text-3xl font-extrabold text-ink dark:text-white mb-4">Panduan Lengkap Mendaki Kawah Ijen Malam Hari</h2>
+                        <p class="text-gray-600 dark:text-gray-300 text-sm leading-relaxed mb-6">
+                            Mendaki Kawah Ijen di malam hari adalah pengalaman yang tak terlupakan. Disini kita kupas tuntas persiapan, rute, dan tips agar perjalanmu aman dan nyenyak menyaksikan blue fire.
+                        </p>
+                        <a href="artikel_view.html?article=sukamade" class="inline-flex items-center gap-2 bg-holiday text-white px-6 py-3 rounded-full font-bold hover:bg-holiday-dark transition shadow-lg shadow-holiday-glow">
+                            Baca Artikel <i class="bi bi-arrow-right"></i>
+                        </a>
+                    </div>
+                </div>
+            </div>
+
+            <h3 class="text-lg font-extrabold text-[#0f172a] tracking-tight uppercase">Artikel Lainnya</h3>
 
             <!-- COMPACT HORIZONTAL CARD GRID -->
             <div class="grid grid-cols-1 md:grid-cols-3 gap-6" id="compact-cards">
@@ -859,7 +876,7 @@
     </script>
 
     <!-- Scroll To Top Button -->
-    <button id="scrollToTopBtn" class="fixed bottom-6 right-6 md:bottom-10 md:right-10 w-12 h-12 md:w-14 md:h-14 bg-holiday text-white rounded-full flex items-center justify-center shadow-xl shadow-holiday/30 z-[90] opacity-0 invisible translate-y-10 hover:bg-[#236026] transition-colors" aria-label="Scroll to top">
+    <button id="scrollToTopBtn" class="fixed bottom-6 left-6 md:bottom-10 md:left-10 w-12 h-12 md:w-14 md:h-14 bg-holiday text-white rounded-full flex items-center justify-center shadow-xl shadow-holiday/30 z-[90] opacity-0 invisible translate-y-10 hover:bg-[#236026] transition-colors" aria-label="Scroll to top">
         <i class="bi bi-arrow-up text-xl md:text-2xl font-bold"></i>
     </button>
     <script>
@@ -882,5 +899,11 @@
             }
         });
     </script>
+
+    <!-- WhatsApp Button -->
+    <a href="https://wa.me/6281234567890" target="_blank" class="fixed bottom-6 right-6 md:bottom-10 md:right-10 w-12 h-12 md:w-14 md:h-14 bg-green-500 text-white rounded-full flex items-center justify-center shadow-xl shadow-green-500/30 z-[90] hover:bg-green-600 transition-colors" aria-label="WhatsApp">
+        <i class="bi bi-whatsapp text-xl md:text-2xl font-bold"></i>
+    </a>
+
 </body>
 </html>

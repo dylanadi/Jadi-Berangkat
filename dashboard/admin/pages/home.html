@@ -140,6 +140,72 @@
     </div>
 </div>
 
+
+    <!-- Artikel Rekomendasi untuk Anda (Slider mirip slider wisata) -->
+    <div class="mt-8">
+        <div class="flex justify-between items-center mb-4">
+            <h3 class="text-xl font-extrabold text-ink dark:text-white">Artikel Mungkin Cocok Untuk Anda</h3>
+            <div class="flex items-center gap-2">
+                <button id="admin-art-prev" class="w-9 h-9 rounded-full bg-gray-50 dark:bg-gray-700 flex items-center justify-center text-gray-500 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-600 transition-colors">
+                    <i class="bi bi-chevron-left"></i>
+                </button>
+                <button id="admin-art-next" class="w-9 h-9 rounded-full bg-gray-50 dark:bg-gray-700 flex items-center justify-center text-gray-500 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-600 transition-colors">
+                    <i class="bi bi-chevron-right"></i>
+                </button>
+            </div>
+        </div>
+        <div id="admin-art-slider" class="flex gap-4 overflow-x-auto snap-x snap-mandatory no-scrollbar pb-2">
+            <!-- Card 1 -->
+            <div class="snap-center shrink-0 w-80 bg-white dark:bg-gray-800 rounded-[2rem] border border-gray-100/50 dark:border-gray-700/50 shadow-[0_8px_30px_rgb(0,0,0,0.02)] overflow-hidden">
+                <div class="h-40 overflow-hidden">
+                    <img src="../img/bluefire (1).png" class="w-full h-full object-cover" alt="Artikel">
+                </div>
+                <div class="p-5">
+                    <span class="text-[10px] font-bold text-holiday uppercase tracking-widest">Tips & Trik</span>
+                    <h4 class="mt-2 font-extrabold text-ink dark:text-white line-clamp-2">Pesona Blue Fire Kawah Ijen</h4>
+                    <p class="mt-2 text-xs text-gray-500 dark:text-gray-400 line-clamp-2">Tips dan panduan mendaki kawah ijen di malam hari untuk melihat blue fire.</p>
+                    <a href="artikel_view.html?article=sukamade" class="mt-3 inline-flex items-center gap-1 text-xs font-bold text-holiday hover:text-holiday-dark transition">Baca Artikel <i class="bi bi-arrow-right"></i></a>
+                </div>
+            </div>
+            <!-- Card 2 -->
+            <div class="snap-center shrink-0 w-80 bg-white dark:bg-gray-800 rounded-[2rem] border border-gray-100/50 dark:border-gray-700/50 shadow-[0_8px_30px_rgb(0,0,0,0.02)] overflow-hidden">
+                <div class="h-40 overflow-hidden bg-gray-100 dark:bg-gray-900 flex items-center justify-center">
+                    <i class="bi bi-image text-3xl text-gray-300 dark:text-gray-700"></i>
+                </div>
+                <div class="p-5">
+                    <span class="text-[10px] font-bold text-holiday uppercase tracking-widest">Kuliner</span>
+                    <h4 class="mt-2 font-extrabold text-ink dark:text-white line-clamp-2">5 Rekomendasi Kuliner Banyuwangi</h4>
+                    <p class="mt-2 text-xs text-gray-500 dark:text-gray-400 line-clamp-2">Kuliner khas Banyuwangi yang wajib Anda coba setelah liburan.</p>
+                    <a href="artikel_view.html?article=sukamade" class="mt-3 inline-flex items-center gap-1 text-xs font-bold text-holiday hover:text-holiday-dark transition">Baca Artikel <i class="bi bi-arrow-right"></i></a>
+                </div>
+            </div>
+            <!-- Card 3 -->
+            <div class="snap-center shrink-0 w-80 bg-white dark:bg-gray-800 rounded-[2rem] border border-gray-100/50 dark:border-gray-700/50 shadow-[0_8px_30px_rgb(0,0,0,0.02)] overflow-hidden">
+                <div class="h-40 overflow-hidden">
+                    <img src="../img/unsplash_M8drGBgFNZE.png" class="w-full h-full object-cover" alt="Artikel">
+                </div>
+                <div class="p-5">
+                    <span class="text-[10px] font-bold text-holiday uppercase tracking-widest">Wisata</span>
+                    <h4 class="mt-2 font-extrabold text-ink dark:text-white line-clamp-2">Menikmati Matahari Terbit di Pantai Boom</h4>
+                    <p class="mt-2 text-xs text-gray-500 dark:text-gray-400 line-clamp-2">Pengalaman sunrise yang memukau di bibir pantai boom banyuwangi.</p>
+                    <a href="artikel_view.html?article=sukamade" class="mt-3 inline-flex items-center gap-1 text-xs font-bold text-holiday hover:text-holiday-dark transition">Baca Artikel <i class="bi bi-arrow-right"></i></a>
+                </div>
+            </div>
+            <!-- Card 4 -->
+            <div class="snap-center shrink-0 w-80 bg-white dark:bg-gray-800 rounded-[2rem] border border-gray-100/50 dark:border-gray-700/50 shadow-[0_8px_30px_rgb(0,0,0,0.02)] overflow-hidden">
+                <div class="h-40 overflow-hidden">
+                    <img src="../img/djawatan.jpg" class="w-full h-full object-cover" alt="Artikel">
+                </div>
+                <div class="p-5">
+                    <span class="text-[10px] font-bold text-holiday uppercase tracking-widest">Petualangan</span>
+                    <h4 class="mt-2 font-extrabold text-ink dark:text-white line-clamp-2">Jejak Hutan De Djawatan</h4>
+                    <p class="mt-2 text-xs text-gray-500 dark:text-gray-400 line-clamp-2">Menelusuri hutan trembesi raksasa yang menjadi ikon banyuwangi.</p>
+                    <a href="artikel_view.html?article=sukamade" class="mt-3 inline-flex items-center gap-1 text-xs font-bold text-holiday hover:text-holiday-dark transition">Baca Artikel <i class="bi bi-arrow-right"></i></a>
+                </div>
+            </div>
+        </div>
+    </div>
+
 <script>
     // Initialize Chart.js
     (function() {
@@ -256,3 +322,21 @@
         });
     })();
 </script>
+
+    <script>
+        (function() {
+            const slider = document.getElementById('admin-art-slider');
+            const prevBtn = document.getElementById('admin-art-prev');
+            const nextBtn = document.getElementById('admin-art-next');
+            if (!slider || !prevBtn || !nextBtn) return;
+
+            prevBtn.addEventListener('click', () => {
+                slider.scrollBy({ left: slider.clientWidth * -0.5, behavior: 'smooth' });
+            });
+            nextBtn.addEventListener('click', () => {
+                slider.scrollBy({ left: slider.clientWidth * 0.5, behavior: 'smooth' });
+            });
+        })();
+    </script>
+    
+
