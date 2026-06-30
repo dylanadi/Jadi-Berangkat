@@ -40,8 +40,17 @@
     <style>
         body { font-family: 'Plus Jakarta Sans', sans-serif; background-color: #f4f0e7; color: #151813; }
         
-        .no-scrollbar::-webkit-scrollbar { display: none; }
-        .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+        /* Scrollbar styles: hidden on mobile, visible and styled on desktop */
+        @media (max-width: 767px) {
+            .no-scrollbar::-webkit-scrollbar { display: none; }
+            .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+        }
+        @media (min-width: 768px) {
+            .no-scrollbar::-webkit-scrollbar { height: 8px; }
+            .no-scrollbar::-webkit-scrollbar-track { background: rgba(0,0,0,0.04); border-radius: 10px; }
+            .no-scrollbar::-webkit-scrollbar-thumb { background: rgba(47, 111, 66, 0.4); border-radius: 10px; }
+            .no-scrollbar::-webkit-scrollbar-thumb:hover { background: rgba(47, 111, 66, 0.7); }
+        }
 
         .card-gradient { background: linear-gradient(to top, rgba(7,13,9,0.96) 0%, rgba(7,13,9,0.34) 58%, transparent 100%); }
         .hero-gradient { background: linear-gradient(90deg, rgba(10,16,11,0.82) 0%, rgba(10,16,11,0.56) 42%, rgba(10,16,11,0.14) 100%), linear-gradient(to bottom, rgba(0,0,0,0.18) 0%, rgba(0,0,0,0.02) 48%, rgba(0,0,0,0.58) 100%); }
@@ -552,7 +561,15 @@
                 </div>
 
             </div>
-            <div id="dots-paket" class="flex justify-center gap-2 mt-4 relative z-10"></div>
+            
+            <div class="mt-8 flex items-center justify-between relative z-10">
+                <div id="dots-paket" class="flex gap-2 md:hidden"></div>
+                <div class="ml-auto gsap-item">
+                    <a href="destinasi.html" class="inline-flex items-center justify-center gap-2 px-6 py-3 md:px-8 md:py-4 rounded-full bg-white border border-gray-200 !text-gray-600 font-extrabold hover:bg-holiday hover:text-white hover:border-holiday transition-all shadow-sm hover:shadow-lg group text-sm md:text-base">
+                        Lihat Lebih Banyak <i class="bi bi-arrow-right transition-transform group-hover:translate-x-1"></i>
+                    </a>
+                </div>
+            </div>
         </div>
     </section>
 
@@ -666,7 +683,7 @@
             </div>
             
             <!-- Dots Indicator for Armada -->
-            <div id="dots-armada" class="flex justify-center gap-2 mt-4 relative z-10"></div>
+            <div id="dots-armada" class="flex justify-center gap-2 mt-4 relative z-10 md:hidden"></div>
         </div>
     </section>
 

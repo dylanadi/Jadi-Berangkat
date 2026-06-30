@@ -1,0 +1,525 @@
+<!DOCTYPE html>
+<html lang="id" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard Akun - Jadi Berangkat</title>
+    
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:ital,wght@0,200..800;1,200..800&display=swap" rel="stylesheet">
+    
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+    
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+    
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['"Plus Jakarta Sans"', 'sans-serif'],
+                    },
+                    colors: {
+                        base: '#f9f8f6',
+                        ink: '#151813',
+                        clay: '#b96f3c',
+                        mist: '#dfe8df',
+                        holiday: '#2f6f42', 
+                        'holiday-dark': '#17442a',
+                        'holiday-light': '#b8d9bd',
+                        'holiday-glow': 'rgba(47, 111, 66, 0.28)'
+                    }
+                }
+            }
+        }
+    </script>
+
+    <style>
+        body { font-family: 'Plus Jakarta Sans', sans-serif; background-color: #f9f8f6; color: #151813; overflow-x: hidden; }
+        
+        .btn-primary { background: #2f6f42; color: #fff; box-shadow: 0 8px 24px rgba(47, 111, 66, 0.26); transition: all 0.3s; }
+        .btn-primary:hover { background: #17442a; transform: translateY(-2px); box-shadow: 0 12px 32px rgba(47, 111, 66, 0.35); }
+        
+        .surface-card { background: rgba(255,255,255,0.72); border: 1px solid rgba(21,24,19,0.08); box-shadow: 0 20px 70px rgba(36, 45, 34, 0.08); backdrop-filter: blur(16px); }
+        
+        .booking-card { transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1); cursor: pointer; border: 1px solid rgba(21,24,19,0.08); }
+        .booking-card:hover { transform: translateY(-4px); box-shadow: 0 16px 40px rgba(47, 111, 66, 0.12); border-color: #2f6f42; background: rgba(255,255,255,0.9); }
+        
+        /* Slide Up Booking Detail */
+        #booking-detail-slider {
+            position: fixed;
+            bottom: -100vh;
+            left: 0;
+            width: 100%;
+            height: 100vh;
+            background: #f9f8f6;
+            z-index: 100;
+            overflow-y: auto;
+            border-top-left-radius: 2rem;
+            border-top-right-radius: 2rem;
+            box-shadow: 0 -20px 60px rgba(0,0,0,0.15);
+        }
+        
+        /* Slide Right History */
+        #history-panel {
+            position: fixed;
+            top: 0;
+            right: -100%;
+            width: 100%;
+            max-width: 480px;
+            height: 100vh;
+            background: #fff;
+            z-index: 90;
+            box-shadow: -10px 0 40px rgba(0,0,0,0.1);
+            overflow-y: auto;
+        }
+
+        .overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.4);
+            backdrop-filter: blur(4px);
+            z-index: 80;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.3s;
+        }
+        .overlay.active {
+            opacity: 1;
+            pointer-events: auto;
+        }
+
+        /* Custom Scrollbar */
+        ::-webkit-scrollbar { width: 8px; }
+        ::-webkit-scrollbar-track { background: rgba(0,0,0,0.04); }
+        ::-webkit-scrollbar-thumb { background: rgba(47, 111, 66, 0.4); border-radius: 10px; }
+        ::-webkit-scrollbar-thumb:hover { background: rgba(47, 111, 66, 0.7); }
+    </style>
+</head>
+<body class="antialiased">
+
+    <!-- Header -->
+    <header class="fixed w-full top-0 z-40 bg-[#f9f8f6]/80 backdrop-blur-md border-b border-ink/10">
+        <div class="max-w-7xl mx-auto px-6 h-20 flex items-center justify-between">
+            <a href="../../index.html" class="flex items-center gap-3 text-ink hover:text-holiday transition">
+                <i class="bi bi-arrow-left text-xl"></i>
+                <span class="font-bold tracking-tight">Beranda</span>
+            </a>
+            <div class="flex items-center gap-3">
+                <a href="../admin/dashboard.html" class="w-10 h-10 rounded-full bg-white border border-ink/10 shadow-sm flex items-center justify-center text-ink hover:text-holiday hover:border-holiday hover:shadow-md transition text-lg" title="Ke Halaman Admin">
+                    <i class="bi bi-person-badge"></i>
+                </a>
+                <button onclick="toggleHistory(true)" class="flex items-center gap-2 bg-white px-5 py-2.5 rounded-full border border-ink/10 shadow-sm hover:shadow-md hover:border-holiday transition text-sm font-semibold">
+                    <i class="bi bi-clock-history text-holiday"></i>
+                    <span class="hidden sm:inline">Riwayat Booking</span>
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <main class="max-w-7xl mx-auto px-6 pt-32 pb-20">
+        <div class="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-16">
+            
+            <!-- Profil Akun (Cleaner View) -->
+            <div class="lg:col-span-4">
+                <div class="sticky top-32">
+                    <div class="flex items-center justify-between mb-8">
+                        <h2 class="text-3xl font-bold tracking-tight">Profil Akun</h2>
+                        <button id="btn-edit-profile" onclick="toggleEditProfile()" class="text-holiday hover:bg-holiday/10 px-4 py-2 rounded-full transition text-sm font-bold flex items-center gap-2">
+                            <i class="bi bi-pencil-square"></i> Ubah
+                        </button>
+                    </div>
+                    
+                    <div class="flex items-center gap-5 mb-10">
+                        <div class="relative group cursor-pointer w-20 h-20 shrink-0">
+                            <div class="w-full h-full rounded-full overflow-hidden border-2 border-white shadow-sm bg-mist">
+                                <img src="https://api.dicebear.com/7.x/avataaars/svg?seed=Felix" alt="Profile" class="w-full h-full object-cover">
+                            </div>
+                            <div class="absolute inset-0 bg-black/40 rounded-full flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity">
+                                <i class="bi bi-camera-fill text-white text-lg"></i>
+                            </div>
+                        </div>
+                        <div>
+                            <p class="text-xl font-bold" id="display-nama-header">Budi Santoso</p>
+                            <p class="text-sm text-ink/60">Member sejak 2023</p>
+                        </div>
+                    </div>
+
+                    <!-- View Mode -->
+                    <div id="profile-view" class="space-y-6">
+                        <div>
+                            <p class="text-xs font-bold text-ink/50 uppercase tracking-wider mb-1">Nama Lengkap</p>
+                            <p class="font-semibold text-lg" id="display-nama">Budi Santoso</p>
+                        </div>
+                        <div>
+                            <p class="text-xs font-bold text-ink/50 uppercase tracking-wider mb-1">Email</p>
+                            <p class="font-semibold text-lg" id="display-email">budi.santoso@example.com</p>
+                        </div>
+                        <div>
+                            <p class="text-xs font-bold text-ink/50 uppercase tracking-wider mb-1">Nomor Telepon</p>
+                            <p class="font-semibold text-lg" id="display-telp">081234567890</p>
+                        </div>
+                    </div>
+
+                    <!-- Edit Mode -->
+                    <form id="profile-edit" class="space-y-5 hidden">
+                        <div>
+                            <label class="block text-sm font-semibold text-ink/80 mb-2">Nama Lengkap</label>
+                            <input type="text" id="input-nama" value="Budi Santoso" class="w-full bg-white border border-ink/10 rounded-xl px-4 py-3 focus:outline-none focus:border-holiday focus:ring-1 focus:ring-holiday transition">
+                        </div>
+                        <div>
+                            <label class="block text-sm font-semibold text-ink/80 mb-2">Email</label>
+                            <input type="email" id="input-email" value="budi.santoso@example.com" class="w-full bg-white border border-ink/10 rounded-xl px-4 py-3 focus:outline-none focus:border-holiday focus:ring-1 focus:ring-holiday transition">
+                        </div>
+                        <div>
+                            <label class="block text-sm font-semibold text-ink/80 mb-2">Nomor Telepon</label>
+                            <input type="tel" id="input-telp" value="081234567890" class="w-full bg-white border border-ink/10 rounded-xl px-4 py-3 focus:outline-none focus:border-holiday focus:ring-1 focus:ring-holiday transition">
+                        </div>
+                        <div class="flex gap-3 mt-8">
+                            <button type="button" onclick="toggleEditProfile()" class="w-full bg-white border border-ink/20 py-3.5 rounded-xl font-bold hover:bg-mist transition">Batal</button>
+                            <button type="button" onclick="saveProfile()" class="btn-primary w-full py-3.5 rounded-xl font-bold shadow-lg shadow-holiday/20">Simpan</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+
+            <!-- Booking Sedang Berjalan -->
+            <div class="lg:col-span-8 space-y-6">
+                <div class="flex items-center justify-between mb-2">
+                    <h2 class="text-2xl font-bold tracking-tight">Booking Berjalan</h2>
+                </div>
+
+                <!-- Card Booking 1 -->
+                <div onclick="openBookingDetail('JB-20231015-001', 'Aktif')" class="booking-card bg-white rounded-[2rem] p-6 md:p-8 relative overflow-hidden group">
+                    <div class="absolute top-0 right-0 bg-holiday text-white text-xs font-bold px-5 py-2 rounded-bl-3xl">Aktif</div>
+                    <div class="flex flex-col md:flex-row md:items-center gap-6">
+                        <div class="w-16 h-16 rounded-2xl bg-mist flex items-center justify-center shrink-0 group-hover:bg-holiday/10 transition">
+                            <i class="bi bi-car-front-fill text-2xl text-holiday"></i>
+                        </div>
+                        <div class="flex-1">
+                            <p class="text-xs font-bold text-ink/50 mb-1">JB-20231015-001</p>
+                            <h3 class="text-xl font-bold mb-2">Jeep Premium - Kawah Ijen</h3>
+                            <div class="flex flex-wrap gap-4 text-sm text-ink/70">
+                                <span class="flex items-center gap-1.5"><i class="bi bi-calendar-event"></i> 15 Okt 2023</span>
+                                <span class="flex items-center gap-1.5"><i class="bi bi-people"></i> 4 Orang</span>
+                            </div>
+                        </div>
+                        <div class="text-right mt-4 md:mt-0">
+                            <p class="text-sm text-ink/60 mb-1">Total</p>
+                            <p class="font-black text-xl text-holiday">Rp 850.000</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Card Booking 2 -->
+                <div onclick="openBookingDetail('JB-20231018-042', 'Aktif')" class="booking-card bg-white rounded-[2rem] p-6 md:p-8 relative overflow-hidden group">
+                    <div class="absolute top-0 right-0 bg-holiday text-white text-xs font-bold px-5 py-2 rounded-bl-3xl">Aktif</div>
+                    <div class="flex flex-col md:flex-row md:items-center gap-6">
+                        <div class="w-16 h-16 rounded-2xl bg-mist flex items-center justify-center shrink-0 group-hover:bg-holiday/10 transition">
+                            <i class="bi bi-car-front-fill text-2xl text-holiday"></i>
+                        </div>
+                        <div class="flex-1">
+                            <p class="text-xs font-bold text-ink/50 mb-1">JB-20231018-042</p>
+                            <h3 class="text-xl font-bold mb-2">Jeep Standar - Baluran</h3>
+                            <div class="flex flex-wrap gap-4 text-sm text-ink/70">
+                                <span class="flex items-center gap-1.5"><i class="bi bi-calendar-event"></i> 20 Okt 2023</span>
+                                <span class="flex items-center gap-1.5"><i class="bi bi-people"></i> 2 Orang</span>
+                            </div>
+                        </div>
+                        <div class="text-right mt-4 md:mt-0">
+                            <p class="text-sm text-ink/60 mb-1">Total</p>
+                            <p class="font-black text-xl text-holiday">Rp 600.000</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Tombol Selengkapnya -->
+                <div class="pt-6">
+                    <a href="book_list.html" class="flex items-center justify-center w-max mx-auto gap-2 text-ink/60 hover:text-holiday font-bold transition">
+                        Lihat Semua Booking Aktif <i class="bi bi-arrow-right"></i>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- Overlay Background -->
+    <div id="main-overlay" class="overlay" onclick="closeAllPanels()"></div>
+
+    <!-- History Panel (Side Right) -->
+    <div id="history-panel" class="flex flex-col">
+        <div class="p-6 border-b border-ink/10 flex items-center justify-between bg-white sticky top-0 z-10">
+            <h3 class="text-xl font-bold">Riwayat Booking</h3>
+            <button onclick="toggleHistory(false)" class="w-10 h-10 rounded-full bg-base flex items-center justify-center hover:bg-mist transition">
+                <i class="bi bi-x-lg"></i>
+            </button>
+        </div>
+        <div class="p-6 space-y-4 flex-1">
+            <!-- Riwayat Item -->
+            <div onclick="openBookingDetail('JB-20230910-101', 'Selesai')" class="booking-card bg-base rounded-2xl p-5 relative overflow-hidden">
+                <div class="absolute top-0 right-0 bg-ink/20 text-ink/70 text-xs font-bold px-3 py-1 rounded-bl-xl">Selesai</div>
+                <p class="text-xs font-bold text-ink/50 mb-1">JB-20230910-101</p>
+                <h4 class="font-bold mb-3">Jeep Premium - Kawah Ijen</h4>
+                <div class="flex justify-between items-end">
+                    <div class="text-xs text-ink/70 space-y-1">
+                        <p><i class="bi bi-calendar-check mr-1"></i> 10 Sep 2023</p>
+                    </div>
+                    <p class="font-bold text-sm">Rp 850.000</p>
+                </div>
+            </div>
+
+            <!-- Riwayat Item 2 -->
+            <div onclick="openBookingDetail('JB-20230805-022', 'Selesai')" class="booking-card bg-base rounded-2xl p-5 relative overflow-hidden">
+                <div class="absolute top-0 right-0 bg-ink/20 text-ink/70 text-xs font-bold px-3 py-1 rounded-bl-xl">Selesai</div>
+                <p class="text-xs font-bold text-ink/50 mb-1">JB-20230805-022</p>
+                <h4 class="font-bold mb-3">Jeep Standar - Baluran</h4>
+                <div class="flex justify-between items-end">
+                    <div class="text-xs text-ink/70 space-y-1">
+                        <p><i class="bi bi-calendar-check mr-1"></i> 05 Ags 2023</p>
+                    </div>
+                    <p class="font-bold text-sm">Rp 600.000</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Booking Detail Slider (Bottom to Top) -->
+    <div id="booking-detail-slider" class="flex flex-col">
+        <!-- Sticky Header with Close Button -->
+        <div class="sticky top-0 bg-[#f9f8f6]/90 backdrop-blur-xl border-b border-ink/10 z-20 px-6 py-4 flex items-center justify-between shadow-sm">
+            <h3 class="text-xl font-bold">Detail Pesanan</h3>
+            <button onclick="closeBookingDetail()" class="flex items-center gap-2 bg-white px-5 py-2 rounded-full border border-ink/10 shadow-sm hover:shadow-md hover:bg-mist transition text-sm font-bold">
+                Kembali
+            </button>
+        </div>
+        
+        <div class="flex-1 p-6 lg:p-10 max-w-4xl mx-auto w-full">
+            
+            <div class="flex flex-col md:flex-row md:items-end justify-between mb-10 gap-4">
+                <div>
+                    <p class="text-sm font-bold text-ink/50 mb-1 uppercase tracking-wider">Nomor Pesanan</p>
+                    <h2 class="text-3xl lg:text-4xl font-black text-holiday" id="detail-order-number">JB-20231015-001</h2>
+                </div>
+                <div id="detail-status" class="bg-holiday text-white px-6 py-2 rounded-full font-bold shadow-lg shadow-holiday/30 w-max">
+                    Status: Aktif
+                </div>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-8 mb-10">
+                <!-- Info Booking -->
+                <div class="surface-card p-6 rounded-3xl hover:-translate-y-1 transition duration-300">
+                    <div class="flex items-center gap-3 mb-6">
+                        <div class="w-10 h-10 rounded-full bg-holiday/10 flex items-center justify-center text-holiday">
+                            <i class="bi bi-map-fill"></i>
+                        </div>
+                        <h3 class="text-lg font-bold">Informasi Perjalanan</h3>
+                    </div>
+                    <div class="space-y-4">
+                        <div>
+                            <p class="text-xs text-ink/60 mb-1">Destinasi</p>
+                            <p class="font-bold text-lg">Kawah Ijen (Blue Fire)</p>
+                        </div>
+                        <div>
+                            <p class="text-xs text-ink/60 mb-1">Tipe Jeep</p>
+                            <p class="font-bold">Premium Jeep (Hardtop)</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Info User -->
+                <div class="surface-card p-6 rounded-3xl hover:-translate-y-1 transition duration-300">
+                    <div class="flex items-center gap-3 mb-6">
+                        <div class="w-10 h-10 rounded-full bg-holiday/10 flex items-center justify-center text-holiday">
+                            <i class="bi bi-person-lines-fill"></i>
+                        </div>
+                        <h3 class="text-lg font-bold">Data Pemesan</h3>
+                    </div>
+                    <div class="space-y-4">
+                        <div>
+                            <p class="text-xs text-ink/60 mb-1">Nama Lengkap</p>
+                            <p class="font-bold text-lg">Budi Santoso</p>
+                        </div>
+                        <div>
+                            <p class="text-xs text-ink/60 mb-1">Telepon & Email</p>
+                            <p class="font-bold">081234567890</p>
+                            <p class="font-medium text-ink/80 text-sm">budi.santoso@example.com</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Tambahan & Tanggal -->
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-8 mb-10">
+                <div class="surface-card p-6 rounded-3xl hover:-translate-y-1 transition duration-300">
+                    <div class="flex items-center gap-3 mb-6">
+                        <div class="w-10 h-10 rounded-full bg-holiday/10 flex items-center justify-center text-holiday">
+                            <i class="bi bi-plus-square-fill"></i>
+                        </div>
+                        <h3 class="text-lg font-bold">Tambahan (Add-ons)</h3>
+                    </div>
+                    <ul class="space-y-4">
+                        <li class="flex items-center justify-between border-b border-ink/5 pb-3">
+                            <span class="font-medium text-ink/80"><i class="bi bi-check-circle-fill text-holiday mr-2"></i> Masker Gas</span>
+                            <span class="font-bold bg-base px-3 py-1 rounded-lg">2x</span>
+                        </li>
+                        <li class="flex items-center justify-between border-b border-ink/5 pb-3">
+                            <span class="font-medium text-ink/80"><i class="bi bi-check-circle-fill text-holiday mr-2"></i> Fotografer</span>
+                            <span class="font-bold bg-base px-3 py-1 rounded-lg">1x</span>
+                        </li>
+                    </ul>
+                </div>
+
+                <div class="surface-card p-6 rounded-3xl hover:-translate-y-1 transition duration-300">
+                    <div class="flex items-center gap-3 mb-6">
+                        <div class="w-10 h-10 rounded-full bg-holiday/10 flex items-center justify-center text-holiday">
+                            <i class="bi bi-calendar2-week-fill"></i>
+                        </div>
+                        <h3 class="text-lg font-bold">Rincian Waktu</h3>
+                    </div>
+                    <div class="grid grid-cols-2 gap-y-6 gap-x-4">
+                        <div>
+                            <p class="text-xs text-ink/60 mb-1">Tgl Pemesanan</p>
+                            <p class="font-bold text-sm">12 Okt 2023</p>
+                        </div>
+                        <div>
+                            <p class="text-xs text-ink/60 mb-1">Tgl Pembayaran</p>
+                            <p class="font-bold text-sm text-holiday">12 Okt 2023</p>
+                        </div>
+                        <div class="bg-holiday/5 p-3 rounded-xl border border-holiday/10">
+                            <p class="text-xs text-ink/60 mb-1">Tgl Booking</p>
+                            <p class="font-bold text-sm">15 Okt 2023 (00:00)</p>
+                        </div>
+                        <div class="bg-ink/5 p-3 rounded-xl border border-ink/10">
+                            <p class="text-xs text-ink/60 mb-1">Tgl Pulang</p>
+                            <p class="font-bold text-sm">15 Okt 2023 (10:00)</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Rincian Harga -->
+            <div class="bg-white rounded-3xl p-6 md:p-8 border border-ink/10 shadow-sm mb-20 hover:-translate-y-1 transition duration-300">
+                <h3 class="text-xl font-bold mb-6 border-b border-ink/10 pb-4">Rincian Pembayaran</h3>
+                
+                <div class="space-y-4 mb-6 text-sm">
+                    <div class="flex justify-between items-center">
+                        <span class="text-ink/80">Premium Jeep (Kawah Ijen)</span>
+                        <span class="font-bold">Rp 650.000</span>
+                    </div>
+                    <div class="flex justify-between items-center">
+                        <span class="text-ink/80">Masker Gas (2x @ Rp 25.000)</span>
+                        <span class="font-bold">Rp 50.000</span>
+                    </div>
+                    <div class="flex justify-between items-center">
+                        <span class="text-ink/80">Fotografer (1x)</span>
+                        <span class="font-bold">Rp 150.000</span>
+                    </div>
+                </div>
+                
+                <div class="border-t border-ink/10 pt-6 flex flex-col md:flex-row md:justify-between md:items-center gap-4">
+                    <div>
+                        <p class="text-sm text-ink/60">Total Pembayaran</p>
+                        <p class="text-xs text-holiday font-bold bg-holiday/10 px-2 py-1 rounded mt-1 inline-block"><i class="bi bi-shield-check mr-1"></i> LUNAS</p>
+                    </div>
+                    <p class="text-3xl md:text-4xl font-black text-holiday">Rp 850.000</p>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+    <script>
+        const overlay = document.getElementById('main-overlay');
+        
+        function toggleHistory(show) {
+            if (show) {
+                overlay.classList.add('active');
+                gsap.to('#history-panel', { right: 0, duration: 0.5, ease: "power3.out" });
+            } else {
+                overlay.classList.remove('active');
+                gsap.to('#history-panel', { right: "-100%", duration: 0.4, ease: "power3.in" });
+            }
+        }
+
+        function openBookingDetail(orderId, status) {
+            // Update UI here with orderId
+            document.getElementById('detail-order-number').innerText = orderId;
+            const statusBadge = document.getElementById('detail-status');
+            
+            if (status === 'Selesai') {
+                statusBadge.innerHTML = 'Status: Selesai';
+                statusBadge.className = 'bg-ink/60 text-white px-6 py-2 rounded-full font-bold shadow-lg w-max';
+            } else {
+                statusBadge.innerHTML = 'Status: Aktif';
+                statusBadge.className = 'bg-holiday text-white px-6 py-2 rounded-full font-bold shadow-lg shadow-holiday/30 w-max';
+            }
+            
+            // Tutup panel riwayat jika terbuka
+            toggleHistory(false);
+            
+            // Animasi slider naik
+            gsap.to('#booking-detail-slider', { bottom: 0, duration: 0.6, ease: "expo.out" });
+            
+            // Disable body scroll
+            document.body.style.overflow = 'hidden';
+        }
+
+        function closeBookingDetail() {
+            gsap.to('#booking-detail-slider', { bottom: "-100vh", duration: 0.5, ease: "expo.inOut" });
+            // Enable body scroll
+            document.body.style.overflow = '';
+        }
+
+        function closeAllPanels() {
+            toggleHistory(false);
+            closeBookingDetail();
+        }
+
+        // Profile Toggle Functions
+        function toggleEditProfile() {
+            const viewMode = document.getElementById('profile-view');
+            const editMode = document.getElementById('profile-edit');
+            const btnEdit = document.getElementById('btn-edit-profile');
+            
+            if (viewMode.classList.contains('hidden')) {
+                // Sembunyikan Edit, Tampilkan View
+                viewMode.classList.remove('hidden');
+                editMode.classList.add('hidden');
+                btnEdit.style.display = 'flex';
+                
+                // Animasi halus
+                gsap.fromTo(viewMode, {opacity: 0, y: 10}, {opacity: 1, y: 0, duration: 0.3});
+            } else {
+                // Sembunyikan View, Tampilkan Edit
+                viewMode.classList.add('hidden');
+                editMode.classList.remove('hidden');
+                btnEdit.style.display = 'none';
+                
+                // Animasi halus
+                gsap.fromTo(editMode, {opacity: 0, y: 10}, {opacity: 1, y: 0, duration: 0.3});
+            }
+        }
+
+        function saveProfile() {
+            // Ambil data dari input
+            const nama = document.getElementById('input-nama').value;
+            const email = document.getElementById('input-email').value;
+            const telp = document.getElementById('input-telp').value;
+            
+            // Perbarui tampilan View
+            document.getElementById('display-nama').innerText = nama;
+            document.getElementById('display-nama-header').innerText = nama;
+            document.getElementById('display-email').innerText = email;
+            document.getElementById('display-telp').innerText = telp;
+            
+            // Kembali ke mode View
+            toggleEditProfile();
+        }
+    </script>
+</body>
+</html>

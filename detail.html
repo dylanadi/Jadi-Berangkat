@@ -154,9 +154,33 @@
         </div>
     </header>
 
-
-    <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8" style="margin-top: 100px;">
+    <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8" style="margin-top: 110px;">
         
+        <!-- NAVIGATION AREA: Back Button & Breadcrumb -->
+        <div class="mb-6 relative z-10">
+            <!-- Back Button -->
+            <a href="destinasi.html" class="inline-flex items-center gap-2 px-5 py-2.5 bg-white border border-gray-200 text-gray-700 rounded-full font-bold shadow-sm hover:shadow-md hover:bg-gray-50 hover:text-holiday transition-all text-sm mb-4 w-fit">
+                <i class="bi bi-arrow-left"></i> Kembali
+            </a>
+            
+            <!-- Breadcrumb -->
+            <nav class="text-sm font-medium text-gray-500" aria-label="Breadcrumb">
+                <ol class="list-none p-0 inline-flex items-center flex-wrap gap-y-2">
+                    <li class="flex items-center">
+                        <a href="index.html" class="hover:text-holiday transition">Beranda</a>
+                        <i class="bi bi-chevron-right mx-2 text-xs"></i>
+                    </li>
+                    <li class="flex items-center">
+                        <a href="destinasi.html" class="hover:text-holiday transition">Destinasi</a>
+                        <i class="bi bi-chevron-right mx-2 text-xs"></i>
+                    </li>
+                    <li class="flex items-center">
+                        <span class="text-ink font-bold">De Djawatan</span>
+                    </li>
+                </ol>
+            </nav>
+        </div>
+
         <!-- Hero Section -->
         <section class="w-full h-[35vh] md:h-[55vh] rounded-[20px] overflow-hidden relative shadow-lg gsap-section">
             <img src="img/djawatan.png" alt="Hero Destination" class="w-full h-full object-cover">
@@ -417,7 +441,7 @@
                     </div>
 
                     <!-- Tombol Utama Booking -->
-                    <button onclick="window.location.href='detail.html'" class="w-full py-4 rounded-2xl bg-holiday text-white font-extrabold text-lg hover:bg-holiday-dark transition shadow-md shadow-holiday-glow flex items-center justify-center gap-2 group">
+                    <button onclick="window.location.href='booking.html'" class="w-full py-4 rounded-2xl bg-holiday text-white font-extrabold text-lg hover:bg-holiday-dark transition shadow-md shadow-holiday-glow flex items-center justify-center gap-2 group">
                         <i class="bi bi-calendar2-check group-hover:scale-110 transition-transform"></i> Pesan Sekarang
                     </button>
                 </div>
