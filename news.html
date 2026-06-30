@@ -240,16 +240,16 @@
             
             <!-- Slide 1: Pantai Boom Banyuwangi -->
             <div class="hero-slide absolute inset-0 w-full h-full opacity-100 transition-opacity duration-1000 ease-in-out">
-                <div class="absolute inset-0 bg-gradient-to-t from-slate-950/80 via-slate-950/40 to-transparent z-10"></div>
+                <div class="absolute inset-0 bg-gradient-to-t from-black/90 via-slate-950/50 to-slate-900/20 z-10"></div>
                 <img src="img/pantaiboom.png" class="w-full h-full object-cover" alt="Sunrise Pantai Boom Banyuwangi">
-                <div class="absolute inset-0 z-20 flex flex-col justify-end pb-24 px-6 max-w-7xl mx-auto">
-                    <span class="text-holiday-400 font-semibold tracking-wider uppercase mb-2 flex items-center gap-2">
+                <div style="margin-left: -50px;" class="absolute inset-0 z-20 flex flex-col justify-end pb-24 px-8 md:px-16 lg:px-24 max-w-5xl mx-auto w-full">
+                    <span class="text-yellow-300 font-bold tracking-wider uppercase mb-2 flex items-center gap-2 drop-shadow-lg">
                         <i class="bi bi-sun-fill"></i> Sunrise of Java
                     </span>
-                    <h1 class="text-3xl md:text-5xl font-extrabold text-white max-w-2xl leading-tight mb-4">
-                        Saksikan Fajar Emas di <span class="text-holiday-400">Pantai Boom</span> Banyuwangi
+                    <h1 class="text-3xl md:text-5xl font-extrabold text-white max-w-2xl leading-tight mb-4 drop-shadow-lg">
+                        Saksikan Fajar Emas di <span class="text-yellow-300">Pantai Boom</span> Banyuwangi
                     </h1>
-                    <p class="text-slate-200 text-sm md:text-base max-w-lg mb-2">
+                    <p class="text-white/80 text-sm md:text-base max-w-xl mb-2 drop-shadow">
                         Nikmati pesona siluet ikonik berlatar belakang selat Bali yang megah, tempat keindahan mentari terbit pertama kali menyapa Pulau Jawa.
                     </p>
                 </div>
@@ -257,16 +257,16 @@
 
             <!-- Slide 2: Kawah Ijen Banyuwangi -->
             <div class="hero-slide absolute inset-0 w-full h-full opacity-0 transition-opacity duration-1000 ease-in-out pointer-events-none">
-                <div class="absolute inset-0 bg-gradient-to-t from-slate-950/80 via-slate-950/40 to-transparent z-10"></div>
+                <div class="absolute inset-0 bg-gradient-to-t from-black/90 via-slate-950/50 to-slate-900/20 z-10"></div>
                 <img src="img/bluefire (1).png" class="w-full h-full object-cover" alt="Kawah Ijen Banyuwangi">
-                <div class="absolute inset-0 z-20 flex flex-col justify-end pb-24 px-6 max-w-7xl mx-auto">
-                    <span class="text-holiday-400 font-semibold tracking-wider uppercase mb-2 flex items-center gap-2">
+                <div style="margin-left: -50px;" class="absolute inset-0 z-20 flex flex-col justify-end pb-24 px-8 md:px-16 lg:px-24 max-w-5xl mx-auto w-full">
+                    <span class="text-cyan-300 font-bold tracking-wider uppercase mb-2 flex items-center gap-2 drop-shadow-lg">
                         <i class="bi bi-fire"></i> Fenomena Api Biru Langka
                     </span>
-                    <h1 class="text-3xl md:text-5xl font-extrabold text-white max-w-2xl leading-tight mb-4">
-                        Petualangan Mistis <span class="text-holiday-400">Blue Fire</span> Kawah Ijen
+                    <h1 class="text-3xl md:text-5xl font-extrabold text-white max-w-2xl leading-tight mb-4 drop-shadow-lg">
+                        Petualangan Mistis <span class="text-cyan-300">Blue Fire</span> Kawah Ijen
                     </h1>
-                    <p class="text-slate-200 text-sm md:text-base max-w-lg mb-2">
+                    <p class="text-white/80 text-sm md:text-base max-w-xl mb-2 drop-shadow">
                         Mendaki menembus dingin malam lereng Ijen untuk menyaksikan langsung salah satu dari dua fenomena api biru abadi yang ada di dunia.
                     </p>
                 </div>
@@ -290,12 +290,12 @@
             </span>
             <h2 class="text-3xl font-extrabold text-slate-900 tracking-tight mb-6">Artikel & Kabar Wisata Terbaru</h2>
             
-            <div class="flex flex-wrap items-center gap-2.5 justify-center md:justify-start">
-                <button class="px-5 py-2.5 rounded-full text-xs font-bold uppercase tracking-wider bg-[#0f172a] text-white shadow-sm transition">Semua Berita</button>
-                <button class="px-5 py-2.5 rounded-full text-xs font-bold uppercase tracking-wider bg-white text-[#475569] border border-slate-200 hover:border-holiday-500 hover:text-holiday-600 shadow-sm transition">Destinasi</button>
-                <button class="px-5 py-2.5 rounded-full text-xs font-bold uppercase tracking-wider bg-white text-[#475569] border border-slate-200 hover:border-holiday-500 hover:text-holiday-600 shadow-sm transition">Kuliner</button>
-                <button class="px-5 py-2.5 rounded-full text-xs font-bold uppercase tracking-wider bg-white text-[#475569] border border-slate-200 hover:border-holiday-500 hover:text-holiday-600 shadow-sm transition">Tips</button>
-                <button class="px-5 py-2.5 rounded-full text-xs font-bold uppercase tracking-wider bg-white text-[#475569] border border-slate-200 hover:border-holiday-500 hover:text-holiday-600 shadow-sm transition">Event</button>
+            <div class="flex flex-wrap items-center gap-2.5 justify-center md:justify-start" id="filter-buttons">
+                <button class="filter-btn px-5 py-2.5 rounded-full text-xs font-bold uppercase tracking-wider bg-[#0f172a] text-white shadow-sm transition" data-filter="all">Semua Berita</button>
+                <button class="filter-btn px-5 py-2.5 rounded-full text-xs font-bold uppercase tracking-wider bg-white text-[#475569] border border-slate-200 hover:border-holiday-500 hover:text-holiday-600 shadow-sm transition" data-filter="destinasi">Destinasi</button>
+                <button class="filter-btn px-5 py-2.5 rounded-full text-xs font-bold uppercase tracking-wider bg-white text-[#475569] border border-slate-200 hover:border-holiday-500 hover:text-holiday-600 shadow-sm transition" data-filter="kuliner">Kuliner</button>
+                <button class="filter-btn px-5 py-2.5 rounded-full text-xs font-bold uppercase tracking-wider bg-white text-[#475569] border border-slate-200 hover:border-holiday-500 hover:text-holiday-600 shadow-sm transition" data-filter="tips">Tips</button>
+                <button class="filter-btn px-5 py-2.5 rounded-full text-xs font-bold uppercase tracking-wider bg-white text-[#475569] border border-slate-200 hover:border-holiday-500 hover:text-holiday-600 shadow-sm transition" data-filter="event">Event</button>
             </div>
         </div>
 
@@ -303,7 +303,7 @@
         <div class="space-y-8">
             
             <!-- 1 CARD BESAR UTAMA (SUDAH DIPERBAIKI) -->
-            <div class="relative bg-slate-900 rounded-3xl overflow-hidden h-[480px] md:h-[520px] group shadow-sm hover:shadow-xl transition-all duration-500 flex items-end">
+            <article class="news-card relative bg-slate-900 rounded-3xl overflow-hidden h-[480px] md:h-[520px] group shadow-sm hover:shadow-xl transition-all duration-500 flex items-end" data-cats="destinasi" data-article="sukamade">
                 <div class="absolute inset-0 bg-gradient-to-t from-slate-950 via-slate-900/40 to-transparent z-10"></div>
                 <img src="img/Pantaisukamade.png" class="absolute inset-0 w-full h-full object-cover object-center group-hover:scale-105 transition-transform duration-700" alt="Sukamade Ekowisata">
                 
@@ -319,15 +319,15 @@
                     </p>
                     <div class="flex items-center justify-between pt-4 border-t border-white/10 text-xs text-slate-300">
                         <span><i class="bi bi-calendar3 text-holiday-400 mr-1"></i> 25 September 2025</span>
-                        <a href="detail.html" class="text-holiday-400 font-bold flex items-center gap-1">Baca Artikel <i class="bi bi-arrow-right"></i></a>
+                        <a href="artikel_view.html?article=sukamade" class="text-holiday-400 font-bold flex items-center gap-1">Baca Artikel <i class="bi bi-arrow-right"></i></a>
                     </div>
                 </div>
-            </div>
+            </article>
 
             <!-- 2 CARD TENGAH -->
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-8" id="middle-cards">
                 <!-- Card Kiri -->
-                <div class="bg-white rounded-3xl overflow-hidden shadow-sm border border-slate-100 flex flex-col justify-between group">
+                <article class="news-card bg-white rounded-3xl overflow-hidden shadow-sm border border-slate-100 flex flex-col justify-between group" data-cats="destinasi,kuliner" data-article="kuliner-rujaksoto">
                     <div class="relative h-56 overflow-hidden">
                         <img src="img/rujaksoto.png" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700" alt="Kuliner">
                         <span class="absolute bottom-4 left-4 bg-slate-950/80 backdrop-blur-sm text-white text-[10px] font-black uppercase tracking-wider px-2.5 py-1 rounded-md">KULINER</span>
@@ -339,13 +339,13 @@
                         </div>
                         <div class="pt-4 border-t border-slate-100 text-xs text-slate-400 flex items-center justify-between">
                             <span><i class="bi bi-geo-alt-fill text-holiday-500 mr-1"></i> Resto Tosari</span>
-                            <span class="text-holiday-600 font-bold">Lihat Menu <i class="bi bi-chevron-right"></i></span>
+                            <a href="artikel_view.html?article=kuliner-rujaksoto" class="text-holiday-600 font-bold">Lihat Menu <i class="bi bi-chevron-right"></i></a>
                         </div>
                     </div>
-                </div>
+                </article>
 
                 <!-- Card Kanan -->
-                <div class="bg-white rounded-3xl overflow-hidden shadow-sm border border-slate-100 flex flex-col justify-between group">
+                <article class="news-card bg-white rounded-3xl overflow-hidden shadow-sm border border-slate-100 flex flex-col justify-between group" data-cats="destinasi" data-article="pelengkung">
                     <div class="relative h-56 overflow-hidden">
                         <img src="img/pantaipelengkung.png" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700" alt="Hutan">
                         <span class="absolute bottom-4 left-4 bg-slate-950/80 backdrop-blur-sm text-white text-[10px] font-black uppercase tracking-wider px-2.5 py-1 rounded-md">DESTINASI</span>
@@ -357,10 +357,10 @@
                         </div>
                         <div class="pt-4 border-t border-slate-100 text-xs text-slate-400 flex items-center justify-between">
                             <span><i class="bi bi-geo-alt-fill text-holiday-500 mr-1"></i> Rute Selatan</span>
-                            <span class="text-holiday-600 font-bold">Detail Rute <i class="bi bi-chevron-right"></i></span>
+                            <a href="artikel_view.html?article=pelengkung" class="text-holiday-600 font-bold">Detail Rute <i class="bi bi-chevron-right"></i></a>
                         </div>
                     </div>
-                </div>
+                </article>
             </div>
 
             <!-- SEPARATOR JUDUL "ARTIKEL LAINNYA" -->
@@ -370,87 +370,83 @@
             </div>
 
             <!-- COMPACT HORIZONTAL CARD GRID -->
-            <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-6" id="compact-cards">
                 
                 <!-- Card 1 -->
-                <div class="bg-white p-4 rounded-3xl border border-slate-100 shadow-sm hover:shadow-md transition-all duration-300 flex gap-4 group items-center">
+                <article class="news-card bg-white p-4 rounded-3xl border border-slate-100 shadow-sm hover:shadow-md transition-all duration-300 flex gap-4 group items-center" data-cats="tips" data-article="tips-sewa-jeep">
                     <div class="w-24 h-24 md:w-28 md:h-28 rounded-2xl overflow-hidden shrink-0">
                         <img src="https://images.unsplash.com/photo-1544620347-c4fd4a3d5957?q=80&w=400" class="w-full h-full object-cover" alt="Tips">
                     </div>
-                    <div class="flex flex-col justify-between py-1 h-24 md:h-28">
+                    <div class="flex flex-col justify-between py-1 h-24 md:h-28 flex-1">
                         <div>
                             <span class="inline-block bg-[#e2f7ea] text-holiday-700 text-[10px] font-black px-2 py-0.5 rounded uppercase tracking-wider mb-1.5">TIPS</span>
                             <h4 class="font-extrabold text-[#0f172a] text-sm md:text-[14px] leading-snug group-hover:text-holiday-600 transition-colors line-clamp-2">
                                 Panduan Sewa Jeep Banyuwangi: Tips Memilih, Harga, dan Apa yang Harus...
                             </h4>
                         </div>
-                        <div class="flex items-center gap-2 text-xs text-slate-400 font-medium">
-                            <span>1 Agu</span>
-                            <span>•</span>
-                            <span>7 min</span>
+                        <div class="flex items-center justify-between gap-2 text-xs text-slate-400 font-medium">
+                            <span><span>1 Agu</span> <span>•</span> <span>7 min</span></span>
+                            <a href="artikel_view.html?article=tips-sewa-jeep" class="text-holiday-600 font-bold hover:underline">Baca</a>
                         </div>
                     </div>
-                </div>
+                </article>
 
                 <!-- Card 2 -->
-                <div class="bg-white p-4 rounded-3xl border border-slate-100 shadow-sm hover:shadow-md transition-all duration-300 flex gap-4 group items-center">
+                <article class="news-card bg-white p-4 rounded-3xl border border-slate-100 shadow-sm hover:shadow-md transition-all duration-300 flex gap-4 group items-center" data-cats="" data-article="baluran">
                     <div class="w-24 h-24 md:w-28 md:h-28 rounded-2xl overflow-hidden shrink-0">
                         <img src="https://images.unsplash.com/photo-1506744038136-46273834b3fb?q=80&w=400" class="w-full h-full object-cover" alt="Destinasi">
                     </div>
-                    <div class="flex flex-col justify-between py-1 h-24 md:h-28">
+                    <div class="flex flex-col justify-between py-1 h-24 md:h-28 flex-1">
                         <div>
                             <span class="inline-block bg-[#e2f7ea] text-holiday-700 text-[10px] font-black px-2 py-0.5 rounded uppercase tracking-wider mb-1.5">DESTINASI</span>
                             <h4 class="font-extrabold text-[#0f172a] text-sm md:text-[14px] leading-snug group-hover:text-holiday-600 transition-colors line-clamp-2">
                                 Taman Nasional Baluran: Safari "Afrika"-nya Indonesia di Banyuwangi
                             </h4>
                         </div>
-                        <div class="flex items-center gap-2 text-xs text-slate-400 font-medium">
-                            <span>15 Jul</span>
-                            <span>•</span>
-                            <span>5 min</span>
+                        <div class="flex items-center justify-between gap-2 text-xs text-slate-400 font-medium">
+                            <span><span>15 Jul</span> <span>•</span> <span>5 min</span></span>
+                            <a href="artikel_view.html?article=baluran" class="text-holiday-600 font-bold hover:underline">Baca</a>
                         </div>
                     </div>
-                </div>
+                </article>
 
                 <!-- Card 3 -->
-                <div class="bg-white p-4 rounded-3xl border border-slate-100 shadow-sm hover:shadow-md transition-all duration-300 flex gap-4 group items-center">
+                <article class="news-card bg-white p-4 rounded-3xl border border-slate-100 shadow-sm hover:shadow-md transition-all duration-300 flex gap-4 group items-center" data-cats="event" data-article="festival-banyuwangi">
                     <div class="w-24 h-24 md:w-28 md:h-28 rounded-2xl overflow-hidden shrink-0">
                         <img src="https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?q=80&w=400" class="w-full h-full object-cover" alt="Event">
                     </div>
-                    <div class="flex flex-col justify-between py-1 h-24 md:h-28">
+                    <div class="flex flex-col justify-between py-1 h-24 md:h-28 flex-1">
                         <div>
                             <span class="inline-block bg-[#e2f7ea] text-holiday-700 text-[10px] font-black px-2 py-0.5 rounded uppercase tracking-wider mb-1.5">EVENT</span>
                             <h4 class="font-extrabold text-[#0f172a] text-sm md:text-[14px] leading-snug group-hover:text-holiday-600 transition-colors line-clamp-2">
                                 Festival Banyuwangi 2025–2026: Jadwal Lengkap & Cara Hadir
                             </h4>
                         </div>
-                        <div class="flex items-center gap-2 text-xs text-slate-400 font-medium">
-                            <span>1 Jul</span>
-                            <span>•</span>
-                            <span>5 min</span>
+                        <div class="flex items-center justify-between gap-2 text-xs text-slate-400 font-medium">
+                            <span><span>1 Jul</span> <span>•</span> <span>5 min</span></span>
+                            <a href="artikel_view.html?article=festival-banyuwangi" class="text-holiday-600 font-bold hover:underline">Baca</a>
                         </div>
                     </div>
-                </div>
+                </article>
 
                 <!-- Card 4 -->
-                <div class="bg-white p-4 rounded-3xl border border-slate-100 shadow-sm hover:shadow-md transition-all duration-300 flex gap-4 group items-center">
+                <article class="news-card bg-white p-4 rounded-3xl border border-slate-100 shadow-sm hover:shadow-md transition-all duration-300 flex gap-4 group items-center" data-cats="destinasi" data-article="kawah-ijen">
                     <div class="w-24 h-24 md:w-28 md:h-28 rounded-2xl overflow-hidden shrink-0">
                         <img src="img/bluefire (1).png" class="w-full h-full object-cover" alt="Destinasi">
                     </div>
-                    <div class="flex flex-col justify-between py-1 h-24 md:h-28">
+                    <div class="flex flex-col justify-between py-1 h-24 md:h-28 flex-1">
                         <div>
                             <span class="inline-block bg-[#e2f7ea] text-holiday-700 text-[10px] font-black px-2 py-0.5 rounded uppercase tracking-wider mb-1.5">DESTINASI</span>
                             <h4 class="font-extrabold text-[#0f172a] text-sm md:text-[14px] leading-snug group-hover:text-holiday-600 transition-colors line-clamp-2">
                                 Kawah Ijen Blue Fire: Panduan Lengkap Trekking 2025
                             </h4>
                         </div>
-                        <div class="flex items-center gap-2 text-xs text-slate-400 font-medium">
-                            <span>10 Jun</span>
-                            <span>•</span>
-                            <span>6 min</span>
+                        <div class="flex items-center justify-between gap-2 text-xs text-slate-400 font-medium">
+                            <span><span>10 Jun</span> <span>•</span> <span>6 min</span></span>
+                            <a href="artikel_view.html?article=kawah-ijen" class="text-holiday-600 font-bold hover:underline">Baca</a>
                         </div>
                     </div>
-                </div>
+                </article>
 
             </div>
 
@@ -502,7 +498,7 @@
         </div>
     </footer>
     <!-- INTERACTION JAVASCRIPT -->
-    <script>
+<script>
         // --- 1. NAVBAR SCROLL EFFECT ---
         // const navbar = document.getElementById('navbar');
         // const headerContainer = document.getElementById('header-container');
@@ -581,6 +577,132 @@
             let next = (currentSlide + 1) % totalSlides;
             if(totalSlides > 1) showSlide(next);
         }, 4000);
+
+        // --- 3. NEWS CATEGORY FILTER LOGIC ---
+        const filterButtons = document.querySelectorAll('.filter-btn');
+        const newsCards = document.querySelectorAll('.news-card');
+        const contentWrapper = document.querySelector('.space-y-8');
+        let tempBigCard = null;
+
+        const bigCardData = {
+            kuliner: {
+                img: 'img/rujaksoto.png',
+                alt: 'Kuliner Khas Banyuwangi',
+                badge: 'KULINER',
+                title: 'Sajian Kuliner Khas Banyuwangi Jawa Timur',
+                desc: 'Nikmati Rujak Soto Perpaduan unik antara rujak cingur/sayur yang disiram dengan kuah soto daging sapi yang gurih dan hangat.',
+                loc: 'Resto Tosari',
+                article: 'kuliner-rujaksoto'
+            },
+            tips: {
+                img: 'https://images.unsplash.com/photo-1544620347-c4fd4a3d5957?q=80&w=800',
+                alt: 'Tips Sewa Jeep',
+                badge: 'TIPS',
+                title: 'Panduan Sewa Jeep Banyuwangi: Tips Memilih, Harga, dan Apa yang Harus Diperhatikan',
+                desc: 'Banyuwangi menawarkan berbagai destinasi wisata alam yang menakjubkan. Berikut panduan lengkap sewa jeep di Banyuwangi.',
+                loc: '1 Agu 2025',
+                article: 'tips-sewa-jeep'
+            },
+            event: {
+                img: 'https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?q=80&w=800',
+                alt: 'Festival Banyuwangi',
+                badge: 'EVENT',
+                title: 'Festival Banyuwangi 2025–2026: Jadwal Lengkap dan Cara Hadir',
+                desc: 'Banyuwangi dikenal dengan segudang festival budayanya yang digelar sepanjang tahun, dari tradisional hingga kontemporer.',
+                loc: '1 Jul 2025',
+                article: 'festival-banyuwangi'
+            }
+        };
+
+        function createBigCard(data) {
+            const card = document.createElement('article');
+            card.className = 'news-card relative bg-slate-900 rounded-3xl overflow-hidden h-[480px] md:h-[520px] group shadow-sm hover:shadow-xl transition-all duration-500 flex items-end';
+            card.style.animation = 'fadeIn 0.3s ease-out';
+            card.style.cursor = 'pointer';
+            card.innerHTML = `
+                <div class="absolute inset-0 bg-gradient-to-t from-slate-950 via-slate-900/40 to-transparent z-10"></div>
+                <img src="${data.img}" class="absolute inset-0 w-full h-full object-cover object-center group-hover:scale-105 transition-transform duration-700" alt="${data.alt}">
+                <div class="relative z-20 p-8 md:p-10 w-full">
+                    <div class="flex items-center gap-2 mb-4">
+                        <span class="bg-holiday-500 text-white text-[10px] font-black uppercase tracking-wider px-2.5 py-1 rounded-md">${data.badge}</span>
+                    </div>
+                    <h3 class="text-2xl md:text-3xl font-extrabold text-white mb-3 leading-tight">${data.title}</h3>
+                    <p class="text-slate-300 text-sm max-w-3xl mb-5 line-clamp-2">${data.desc}</p>
+                    <div class="flex items-center justify-between pt-4 border-t border-white/10 text-xs text-slate-300">
+                        <span><i class="bi bi-calendar3 text-holiday-400 mr-1"></i> ${data.loc}</span>
+                        <span class="text-holiday-400 font-bold flex items-center gap-1">Baca Artikel <i class="bi bi-arrow-right"></i></span>
+                    </div>
+                </div>
+            `;
+            card.addEventListener('click', () => {
+                window.location.href = 'artikel_view.html?article=' + data.article;
+            });
+            return card;
+        }
+
+        filterButtons.forEach(btn => {
+            btn.addEventListener('click', () => {
+                const filter = btn.dataset.filter;
+                
+                filterButtons.forEach(b => {
+                    b.classList.remove('bg-[#0f172a]', 'text-white');
+                    b.classList.add('bg-white', 'text-[#475569]', 'border', 'border-slate-200');
+                });
+                btn.classList.remove('bg-white', 'text-[#475569]', 'border', 'border-slate-200');
+                btn.classList.add('bg-[#0f172a]', 'text-white');
+
+                newsCards.forEach(card => { card.style.display = ''; card.style.animation = ''; });
+
+                if (tempBigCard) { tempBigCard.remove(); tempBigCard = null; }
+
+                if (filter === 'all') {
+                    newsCards.forEach(card => { card.style.display = ''; card.style.animation = 'fadeIn 0.3s ease-out'; });
+                    return;
+                }
+
+                // Single-card filters: show as big card
+                if (bigCardData[filter]) {
+                    newsCards.forEach(card => { card.style.display = 'none'; });
+                    const big = createBigCard(bigCardData[filter]);
+                    contentWrapper.prepend(big);
+                    tempBigCard = big;
+                    return;
+                }
+
+                // Multi-card filter (destinasi)
+                newsCards.forEach(card => {
+                    const cats = (card.dataset.cats || '').split(',');
+                    if (cats.includes(filter)) {
+                        card.style.display = '';
+                        card.style.animation = 'fadeIn 0.3s ease-out';
+                    } else {
+                        card.style.display = 'none';
+                    }
+                });
+            });
+        });
+
+        // Make all cards clickable — click anywhere on the card opens the article
+        newsCards.forEach(card => {
+            card.style.cursor = 'pointer';
+            card.addEventListener('click', function(e) {
+                if (e.target.closest('a')) return; // ignore clicks on existing links
+                const article = this.dataset.article;
+                if (article) {
+                    window.location.href = 'artikel_view.html?article=' + article;
+                }
+            });
+        });
+
+        // Add fade-in animation
+        const style = document.createElement('style');
+        style.textContent = `
+            @keyframes fadeIn {
+                from { opacity: 0; transform: translateY(10px); }
+                to { opacity: 1; transform: translateY(0); }
+            }
+        `;
+        document.head.appendChild(style);
     </script>
 </body>
 </html>
