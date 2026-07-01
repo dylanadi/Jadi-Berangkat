@@ -104,6 +104,38 @@
         }
         .gallery-item img.loaded { opacity: 1; }
 
+        .gallery-item .overlay {
+            position: absolute;
+            inset: 0;
+            background: rgba(0,0,0,0.4);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+            z-index: 5;
+            pointer-events: none;
+        }
+        .gallery-item .overlay span {
+            color: white;
+            font-weight: 700;
+            font-size: 0.85rem;
+            padding: 8px 18px;
+            border: 2px solid rgba(255,255,255,0.8);
+            border-radius: 999px;
+            backdrop-filter: blur(4px);
+            background: rgba(0,0,0,0.25);
+            letter-spacing: 0.5px;
+            transform: translateY(10px);
+            transition: transform 0.3s ease;
+        }
+        .gallery-item:hover .overlay {
+            opacity: 1;
+        }
+        .gallery-item:hover .overlay span {
+            transform: translateY(0);
+        }
+
         /* Lightbox */
         #lightbox {
             transition: opacity 0.4s ease, visibility 0.4s ease;
@@ -218,7 +250,7 @@
             <span class="cat-text">Wisata</span>
         </div>
         <div class="cat-btn" onclick="filterCat('armada')">
-            <i class="bi bi-jeep cat-icon"></i>
+            <i class="bi bi-car-front-fill cat-icon"></i>
             <span class="cat-text">Armada</span>
         </div>
         <div class="cat-btn" onclick="filterCat('pelanggan')">
@@ -334,6 +366,13 @@
                 el.dataset.cat = item.cat;
                 
                 // Click to open lightbox
+                const overlay = document.createElement('div');
+                overlay.className = 'overlay';
+                const span = document.createElement('span');
+                span.textContent = 'Lihat Gambar';
+                overlay.appendChild(span);
+                el.appendChild(overlay);
+                
                 el.onclick = () => openLightbox(item);
                 
                 container.appendChild(el);
