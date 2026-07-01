@@ -1,0 +1,666 @@
+<!DOCTYPE html>
+<html lang="id" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Detail Destinasi - Jadi Berangkat</title>
+    
+    <!-- Google Fonts: Plus Jakarta Sans -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:ital,wght@0,200..800;1,200..800&display=swap" rel="stylesheet">
+    
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- Bootstrap Icons -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+    
+    <!-- GSAP & ScrollTrigger -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>
+
+    
+    
+    <!-- Custom Tailwind Configuration -->
+        <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['"Plus Jakarta Sans"', 'sans-serif'],
+                    },
+                    colors: {
+                        base: '#f4f0e7',
+                        ink: '#151813',
+                        clay: '#b96f3c',
+                        mist: '#dfe8df',
+                        holiday: {
+                            DEFAULT: '#2f6f42',
+                            50: '#f0fdf4',
+                            100: '#dcfce7',
+                            500: '#22c55e',
+                            600: '#16a34a',
+                            700: '#15803d',
+                        },
+                        'holiday-dark': '#17442a',
+                        'holiday-light': '#b8d9bd',
+                        'holiday-glow': 'rgba(47, 111, 66, 0.28)'
+                    }
+                }
+            }
+        }
+    </script>
+
+    <style>
+        body { font-family: 'Plus Jakarta Sans', sans-serif; background-color: #F6F5ED; }
+        .no-scrollbar::-webkit-scrollbar { display: none; }
+        .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+        .hero-gradient { background: linear-gradient(to bottom, rgba(0,0,0,0.2) 0%, rgba(0,0,0,0.6) 100%); }
+        .smooth-scroll-x { scroll-behavior: smooth; }
+        .gsap-item { opacity: 0; visibility: hidden; }
+        
+        /* Animasi masuk untuk item invoice */
+        @keyframes fadeInDown {
+            from { opacity: 0; transform: translateY(-10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        .invoice-item-enter { animation: fadeInDown 0.3s ease-out forwards; }
+        
+        /* Line styling untuk Itinerary timeline */
+        .timeline-line::before {
+            content: '';
+            position: absolute;
+            top: 24px;
+            bottom: -24px;
+            left: 23px;
+            width: 2px;
+            background-color: #e5e7eb;
+            z-index: 0;
+        }
+        .timeline-item:last-child .timeline-line::before {
+            display: none;
+        }
+
+          @keyframes marquee {
+            0% { transform: translateX(0); }
+            100% { transform: translateX(-50%); } 
+        }
+        
+        /* Initial state for GSAP */
+        .gsap-item { opacity: 0; visibility: hidden; }
+        
+        /* Smooth scrolling behavior specifically for slider container */
+        .smooth-scroll-x { scroll-behavior: smooth; }
+        .flag-button {
+            width: 28px;
+            height: 28px;
+            border-radius: 999px;
+            border: 1px solid rgba(21, 24, 19, 0.1);
+            box-shadow: inset 0 0 0 1px rgba(255,255,255,0.65);
+            overflow: hidden;
+        }
+        .flag-id { background: linear-gradient(to bottom, #ef3340 0 50%, #fff 50% 100%); }
+        .flag-en {
+            background:
+                linear-gradient(to bottom, transparent 41%, #c8102e 41% 59%, transparent 59%),
+                linear-gradient(to right, transparent 42%, #c8102e 42% 58%, transparent 58%),
+                linear-gradient(to bottom, transparent 32%, #fff 32% 68%, transparent 68%),
+                linear-gradient(to right, transparent 34%, #fff 34% 66%, transparent 66%),
+                linear-gradient(34deg, transparent 44%, #c8102e 44% 56%, transparent 56%),
+                linear-gradient(-34deg, transparent 44%, #c8102e 44% 56%, transparent 56%),
+                linear-gradient(34deg, transparent 38%, #fff 38% 62%, transparent 62%),
+                linear-gradient(-34deg, transparent 38%, #fff 38% 62%, transparent 62%),
+                #012169;
+        }
+    </style>
+</head>
+<body class="text-gray-800 antialiased pt-6 pb-20">
+
+    <div id="header-placeholder"></div>
+
+    <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8" style="margin-top: 110px;">
+        
+        <!-- NAVIGATION AREA: Back Button & Breadcrumb -->
+        <div class="mb-6 relative z-10">
+            <!-- Back Button -->
+            <a href="destinasi.html" class="inline-flex items-center gap-2 px-5 py-2.5 bg-white border border-gray-200 text-gray-700 rounded-full font-bold shadow-sm hover:shadow-md hover:bg-gray-50 hover:text-holiday transition-all text-sm mb-4 w-fit">
+                <i class="bi bi-arrow-left"></i> Kembali
+            </a>
+            
+            <!-- Breadcrumb -->
+            <nav class="text-sm font-medium text-gray-500" aria-label="Breadcrumb">
+                <ol class="list-none p-0 inline-flex items-center flex-wrap gap-y-2">
+                    <li class="flex items-center">
+                        <a href="index.html" class="hover:text-holiday transition">Beranda</a>
+                        <i class="bi bi-chevron-right mx-2 text-xs"></i>
+                    </li>
+                    <li class="flex items-center">
+                        <a href="destinasi.html" class="hover:text-holiday transition">Destinasi</a>
+                        <i class="bi bi-chevron-right mx-2 text-xs"></i>
+                    </li>
+                    <li class="flex items-center">
+                        <span class="text-ink font-bold">De Djawatan</span>
+                    </li>
+                </ol>
+            </nav>
+        </div>
+
+        <!-- Hero Section -->
+        <section class="w-full h-[35vh] md:h-[55vh] rounded-[20px] overflow-hidden relative shadow-lg gsap-section">
+            <img src="img/djawatan.jpg" alt="Hero Destination" class="w-full h-full object-cover">
+            <div class="absolute inset-0 hero-gradient flex items-end p-6 md:p-10">
+                <div class="text-white gsap-item">
+                    <span class="px-3 py-1 rounded-full bg-white/20 backdrop-blur text-xs font-bold tracking-wide border border-white/20 uppercase">Premium Trip</span>
+                    <h1 class="text-3xl md:text-5xl font-extrabold mt-3 drop-shadow-md">Petualangan Eksklusif De Djawatan</h1>
+                </div>
+            </div>
+        </section>
+
+        <!-- Main Content Area: Grid System -->
+        <section class="grid grid-cols-1 lg:grid-cols-3 gap-8 mt-10 items-start gsap-section">
+            
+            <!-- Bagian Kiri: Deskripsi & Paket Tambahan -->
+            <div class="lg:col-span-2 space-y-10">
+                
+                <!-- Deskripsi Utama -->
+                <div class="bg-white p-6 md:p-8 rounded-[2rem] shadow-sm border border-gray-200/60 gsap-item">
+                    <h2 class="text-2xl font-extrabold text-gray-900 mb-4 flex items-center gap-2">
+                        <i class="bi bi-file-text text-holiday"></i> Deskripsi Perjalanan
+                    </h2>
+                    <div class="!text-gray-600 leading-relaxed space-y-4 font-medium text-sm md:text-base mb-10">
+                        <p>
+                            Nikmati keindahan magis Hutan De Djawatan yang terkenal dengan pohon-pohon trembesi raksasa berlumut menyerupai latar film fantasi. Perjalanan ini dirancang khusus untuk Anda yang mendambakan petualangan alam terbuka yang estetik sekaligus menantang menggunakan armada Jeep premium kami.
+                        </p>
+                        <p>
+                            Selama trip berlangsung, Anda akan dipandu oleh driver profesional yang juga siap membantu mengambil dokumentasi terbaik di spot-spot ikonik tersembunyi. Kendaraan dipastikan dalam kondisi prima demi menjamin keamanan dan kenyamanan maksimal sepanjang rute petualangan.
+                        </p>
+                    </div>
+
+                    <!-- Itinerary / Jadwal Perjalanan -->
+                    <h3 class="text-xl font-extrabold text-gray-900 mb-6 flex items-center gap-2">
+                        <i class="bi bi-clock-history text-holiday"></i> Jadwal Perjalanan
+                    </h3>
+                    
+                    <div class="space-y-0 pl-2">
+                        <!-- Day 1 -->
+                        <div class="relative timeline-item pb-8">
+                            <div class="timeline-line relative z-10 flex gap-5">
+                                <div class="w-12 h-12 rounded-full bg-holiday-light/30 flex items-center justify-center shrink-0 border-[3px] border-white shadow-sm">
+                                    <i class="bi bi-1-circle-fill text-holiday text-2xl"></i>
+                                </div>
+                                <div class="pt-2">
+                                    <h4 class="text-lg font-extrabold text-gray-900 mb-1">Eksplorasi Hutan Purba</h4>
+                                    <p class="text-sm text-gray-500 font-medium">Penjemputan di meeting point, perjalanan menuju Hutan De Djawatan menggunakan Jeep, sesi foto di area trembesi raksasa, dan istirahat makan siang ala piknik.</p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Day 2 -->
+                        <div class="relative timeline-item pb-8">
+                            <div class="timeline-line relative z-10 flex gap-5">
+                                <div class="w-12 h-12 rounded-full bg-holiday-light/30 flex items-center justify-center shrink-0 border-[3px] border-white shadow-sm">
+                                    <i class="bi bi-2-circle-fill text-holiday text-2xl"></i>
+                                </div>
+                                <div class="pt-2">
+                                    <h4 class="text-lg font-extrabold text-gray-900 mb-1">Menyusuri Jalur Offroad</h4>
+                                    <p class="text-sm text-gray-500 font-medium">Petualangan memacu adrenalin menyusuri jalur lumpur dan sungai dangkal, diakhiri dengan menikmati sunset di area bukit terbuka.</p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Day 3 -->
+                        <div class="relative timeline-item">
+                            <div class="timeline-line relative z-10 flex gap-5">
+                                <div class="w-12 h-12 rounded-full bg-holiday-light/30 flex items-center justify-center shrink-0 border-[3px] border-white shadow-sm">
+                                    <i class="bi bi-3-circle-fill text-holiday text-2xl"></i>
+                                </div>
+                                <div class="pt-2">
+                                    <h4 class="text-lg font-extrabold text-gray-900 mb-1">Budaya & Kepulangan</h4>
+                                    <p class="text-sm text-gray-500 font-medium">Kunjungan singkat ke desa wisata untuk melihat pembuatan kopi tradisional, belanja oleh-oleh, dan kembali ke titik penurunan.</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Fasilitas: Termasuk & Tidak Termasuk -->
+                    <div class="mt-12 pt-8 border-t border-gray-100">
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-8 bg-transparent">
+                            <!-- Termasuk -->
+                            <div>
+                                <h4 class="text-sm font-extrabold text-gray-900 uppercase tracking-wider mb-4 flex items-center gap-2">
+                                    <i class="bi bi-check-circle text-holiday text-lg"></i> Termasuk
+                                </h4>
+                                <ul class="space-y-3">
+                                    <li class="flex items-start gap-2 text-sm text-gray-600 font-medium">
+                                        <i class="bi bi-check2 text-holiday mt-0.5"></i> Transportasi Jeep 4x4 Premium
+                                    </li>
+                                    <li class="flex items-start gap-2 text-sm text-gray-600 font-medium">
+                                        <i class="bi bi-check2 text-holiday mt-0.5"></i> Driver berpengalaman & Guide
+                                    </li>
+                                    <li class="flex items-start gap-2 text-sm text-gray-600 font-medium">
+                                        <i class="bi bi-check2 text-holiday mt-0.5"></i> Tiket masuk destinasi utama
+                                    </li>
+                                    <li class="flex items-start gap-2 text-sm text-gray-600 font-medium">
+                                        <i class="bi bi-check2 text-holiday mt-0.5"></i> BBM & Biaya Parkir
+                                    </li>
+                                    <li class="flex items-start gap-2 text-sm text-gray-600 font-medium">
+                                        <i class="bi bi-check2 text-holiday mt-0.5"></i> Air mineral & Snack box
+                                    </li>
+                                </ul>
+                            </div>
+                            
+                            <!-- Tidak Termasuk -->
+                            <div>
+                                <h4 class="text-sm font-extrabold text-gray-900 uppercase tracking-wider mb-4 flex items-center gap-2">
+                                    <i class="bi bi-x-circle text-red-500 text-lg"></i> Tidak Termasuk
+                                </h4>
+                                <ul class="space-y-3">
+                                    <li class="flex items-start gap-2 text-sm text-gray-600 font-medium">
+                                        <i class="bi bi-x text-red-400 mt-0.5 text-lg leading-none"></i> Tiket pesawat/kereta api
+                                    </li>
+                                    <li class="flex items-start gap-2 text-sm text-gray-600 font-medium">
+                                        <i class="bi bi-x text-red-400 mt-0.5 text-lg leading-none"></i> Pengeluaran pribadi (Oleh-oleh)
+                                    </li>
+                                    <li class="flex items-start gap-2 text-sm text-gray-600 font-medium">
+                                        <i class="bi bi-x text-red-400 mt-0.5 text-lg leading-none"></i> Makanan di luar itinerary
+                                    </li>
+                                    <li class="flex items-start gap-2 text-sm text-gray-600 font-medium">
+                                        <i class="bi bi-x text-red-400 mt-0.5 text-lg leading-none"></i> Tips untuk Driver & Guide
+                                    </li>
+                                    <li class="flex items-start gap-2 text-sm text-gray-600 font-medium">
+                                        <i class="bi bi-x text-red-400 mt-0.5 text-lg leading-none"></i> Dokumentasi Drone (Opsi Tambahan)
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+
+                <!-- Paket Tambahan (Add-ons) -->
+                <div class="bg-white p-6 md:p-8 rounded-[2rem] shadow-sm border border-gray-200/60 space-y-6 gsap-item">
+                    <div>
+                        <h2 class="text-2xl font-extrabold text-gray-900 flex items-center gap-2">
+                            <i class="bi bi-plus-circle text-holiday"></i> Layanan & Perlengkapan
+                        </h2>
+                        <p class="text-sm text-gray-500 mt-1 font-medium">Sempurnakan trip Anda dengan menambahkan opsi kebutuhan di bawah ini</p>
+                    </div>
+
+                    <div class="space-y-4">
+                        <!-- Opsi Tambahan 1 -->
+                        <div class="flex items-center justify-between p-4 bg-base rounded-2xl border border-gray-200/80 hover:border-holiday/30 transition">
+                            <div class="flex items-center gap-4">
+                                <div class="w-12 h-12 rounded-xl bg-white flex items-center justify-center text-holiday text-xl shadow-sm">
+                                    <i class="bi bi-camera-reels"></i>
+                                </div>
+                                <div>
+                                    <h4 class="font-extrabold !text-gray-900 text-sm md:text-base">Dokumentasi Drone 4K</h4>
+                                    <p class="text-xs text-gray-500 font-medium">Video udara durasi 3 menit & foto</p>
+                                </div>
+                            </div>
+                            <div class="flex items-center gap-4">
+                                <div class="text-right hidden sm:block">
+                                    <p class="text-sm font-extrabold text-holiday">+Rp 350.000</p>
+                                    <span class="text-[10px] text-gray-400 font-bold uppercase tracking-wider">Per Paket</span>
+                                </div>
+                                <button class="addon-btn w-10 h-10 rounded-full bg-holiday text-white flex items-center justify-center hover:bg-holiday-dark transition shadow-md" data-id="add-drone" data-name="Dokumentasi Drone 4K" data-price="350000">
+                                    <i class="bi bi-plus-lg text-lg"></i>
+                                </button>
+                            </div>
+                        </div>
+
+                        <!-- Opsi Tambahan 2 -->
+                        <div class="flex items-center justify-between p-4 bg-base rounded-2xl border border-gray-200/80 hover:border-holiday/30 transition">
+                            <div class="flex items-center gap-4">
+                                <div class="w-12 h-12 rounded-xl bg-white flex items-center justify-center text-holiday text-xl shadow-sm">
+                                    <i class="bi bi-fire"></i>
+                                </div>
+                                <div>
+                                    <h4 class="font-extrabold !text-gray-900 text-sm md:text-base">Set Camping Mandiri</h4>
+                                    <p class="text-xs text-gray-500 font-medium">Tenda, matras, dan kompor</p>
+                                </div>
+                            </div>
+                            <div class="flex items-center gap-4">
+                                <div class="text-right hidden sm:block">
+                                    <p class="text-sm font-extrabold text-holiday">+Rp 150.000</p>
+                                    <span class="text-[10px] text-gray-400 font-bold uppercase tracking-wider">Per Paket</span>
+                                </div>
+                                <button class="addon-btn w-10 h-10 rounded-full bg-holiday text-white flex items-center justify-center hover:bg-holiday-dark transition shadow-md" data-id="add-camp" data-name="Set Camping Mandiri" data-price="150000">
+                                    <i class="bi bi-plus-lg text-lg"></i>
+                                </button>
+                            </div>
+                        </div>
+
+                        <!-- Opsi Tambahan 3 -->
+                        <div class="flex items-center justify-between p-4 bg-base rounded-2xl border border-gray-200/80 hover:border-holiday/30 transition">
+                            <div class="flex items-center gap-4">
+                                <div class="w-12 h-12 rounded-xl bg-white flex items-center justify-center text-holiday text-xl shadow-sm">
+                                    <i class="bi bi-shield-check"></i>
+                                </div>
+                                <div>
+                                    <h4 class="font-extrabold !text-gray-900 text-sm md:text-base">Asuransi Premium</h4>
+                                    <p class="text-xs text-gray-500 font-medium">Perlindungan jaminan ekstra</p>
+                                </div>
+                            </div>
+                            <div class="flex items-center gap-4">
+                                <div class="text-right hidden sm:block">
+                                    <p class="text-sm font-extrabold text-holiday">+Rp 50.000</p>
+                                    <span class="text-[10px] text-gray-400 font-bold uppercase tracking-wider">Per Orang</span>
+                                </div>
+                                <button class="addon-btn w-10 h-10 rounded-full bg-holiday text-white flex items-center justify-center hover:bg-holiday-dark transition shadow-md" data-id="add-ins" data-name="Asuransi Premium" data-price="50000">
+                                    <i class="bi bi-plus-lg text-lg"></i>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+
+            <!-- Bagian Kanan: Sticky Booking / Invoice Container -->
+            <div class="lg:col-span-1 lg:sticky lg:top-24 gsap-item">
+                <div class="bg-white p-6 md:p-8 rounded-[2rem] shadow-xl border border-gray-200/80">
+                    
+                    <h3 class="text-xl font-extrabold text-gray-900 mb-5 pb-3 border-b border-gray-100 flex items-center gap-2">
+                        <i class="bi bi-receipt"></i> Rincian Booking
+                    </h3>
+
+                    <!-- Invoice Items -->
+                    <div class="space-y-4 mb-6">
+                        <!-- Harga Dasar -->
+                        <div class="flex justify-between items-start">
+                            <div>
+                                <span class="block text-sm font-bold text-gray-800">Paket Jeep De Djawatan</span>
+                                <span class="text-xs text-gray-400 font-medium">1x Armada (Termasuk Driver)</span>
+                            </div>
+                            <span class="text-sm font-extrabold text-gray-900" id="base-price" data-value="1250000">Rp 1.250.000</span>
+                        </div>
+
+                        <!-- Container untuk item tambahan -->
+                        <div id="invoice-addons-container" class="space-y-3 pt-3 border-t border-dashed border-gray-200 empty:hidden">
+                            <!-- JS akan menyuntikkan HTML kesini -->
+                        </div>
+                    </div>
+
+                    <!-- Detail Fasilitas Ringkas (What's Included) -->
+                    <div class="bg-base rounded-2xl p-4 mb-6 space-y-3">
+                        <h4 class="text-[11px] font-extrabold text-gray-500 uppercase tracking-widest">Fasilitas Utama:</h4>
+                        <div class="grid grid-cols-1 gap-2">
+                            <div class="flex items-center gap-2 text-xs font-semibold text-gray-700">
+                                <i class="bi bi-check-circle-fill text-holiday"></i> Jeep Terbuka 4x4
+                            </div>
+                            <div class="flex items-center gap-2 text-xs font-semibold text-gray-700">
+                                <i class="bi bi-check-circle-fill text-holiday"></i> BBM & Parkir Utama
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Total Keseluruhan -->
+                    <div class="border-t-2 border-gray-100 pt-5 flex justify-between items-end mb-6">
+                        <div>
+                            <span class="text-xs text-gray-500 font-bold uppercase tracking-widest block mb-1">Total Biaya</span>
+                            <span class="text-[10px] text-gray-400 font-medium">Termasuk PPN</span>
+                        </div>
+                        <span id="grand-total" class="text-2xl md:text-3xl font-extrabold text-orange-600">Rp 1.250.000</span>
+                    </div>
+
+                    <!-- Tombol Utama Booking -->
+                    <button onclick="window.location.href='booking.html'" class="w-full py-4 rounded-2xl bg-holiday text-white font-extrabold text-lg hover:bg-holiday-dark transition shadow-md shadow-holiday-glow flex items-center justify-center gap-2 group">
+                        <i class="bi bi-calendar2-check group-hover:scale-110 transition-transform"></i> Pesan Sekarang
+                    </button>
+                </div>
+            </div>
+
+        </section>
+
+        <!-- Section Slider Trip Lainnya -->
+        <section class="py-16 mt-10 relative gsap-section">
+            <div class="flex justify-between items-end mb-8">
+                <div class="gsap-item">
+                    <span class="text-holiday font-extrabold tracking-wider text-sm uppercase">Rekomendasi</span>
+                    <h2 class="text-2xl md:text-3xl font-extrabold text-gray-900 mt-1">Jelajahi Trip Lainnya</h2>
+                </div>
+                <div class="gsap-item flex gap-2">
+                    <button id="btn-prev-other" class="w-10 h-10 rounded-full bg-white shadow-md flex items-center justify-center text-gray-600 hover:text-white hover:bg-holiday transition cursor-pointer"><i class="bi bi-chevron-left"></i></button>
+                    <button id="btn-next-other" class="w-10 h-10 rounded-full bg-white shadow-md flex items-center justify-center text-gray-600 hover:text-white hover:bg-holiday transition cursor-pointer"><i class="bi bi-chevron-right"></i></button>
+                </div>
+            </div>
+
+            <div id="other-slider" class="gsap-item flex overflow-x-auto gap-6 pb-6 pt-2 snap-x snap-mandatory no-scrollbar -mx-4 px-4 md:mx-0 md:px-0 items-stretch w-full smooth-scroll-x">
+                
+                <div class="w-[85vw] sm:w-[290px] lg:w-[288px] flex-shrink-0 bg-white rounded-3xl shadow-md border border-gray-200/60 overflow-hidden snap-center group hover:-translate-y-1.5 transition-transform duration-300 flex flex-col">
+                    <div class="relative w-full h-44 overflow-hidden bg-gray-100">
+                        <img src="img/kemiren.png" alt="Trip 1" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110">
+                    </div>
+                    <div class="p-5 flex-grow flex flex-col justify-between">
+                        <div>
+                            <h3 class="font-extrabold text-gray-900 text-base mb-1 group-hover:text-holiday transition-colors line-clamp-1">Desa Wisata Kemiren</h3>
+                            <p class="text-xs text-gray-500 flex items-center gap-1 font-medium"><i class="bi bi-geo-alt-fill"></i> Suku Osing</p>
+                        </div>
+                        <div class="pt-3 mt-3 border-t border-gray-100 flex items-center justify-between">
+                            <span class="text-xs font-extrabold text-orange-600">Rp 450.000</span>
+                            <button onclick="window.location.href='detail.html'" class="text-xs font-bold bg-holiday/10 text-holiday px-3 py-1.5 rounded-xl hover:bg-holiday hover:text-white transition">Detail</button>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="w-[85vw] sm:w-[290px] lg:w-[288px] flex-shrink-0 bg-white rounded-3xl shadow-md border border-gray-200/60 overflow-hidden snap-center group hover:-translate-y-1.5 transition-transform duration-300 flex flex-col">
+                    <div class="relative w-full h-44 overflow-hidden bg-gray-100">
+                        <img src="img/jembatan.png" alt="Trip 2" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110">
+                    </div>
+                    <div class="p-5 flex-grow flex flex-col justify-between">
+                        <div>
+                            <h3 class="font-extrabold text-gray-900 text-base mb-1 group-hover:text-holiday transition-colors line-clamp-1">Eksplorasi Sejarah</h3>
+                            <p class="text-xs text-gray-500 flex items-center gap-1 font-medium"><i class="bi bi-geo-alt-fill"></i> Jalur Kolonial</p>
+                        </div>
+                        <div class="pt-3 mt-3 border-t border-gray-100 flex items-center justify-between">
+                            <span class="text-xs font-extrabold text-orange-600">Rp 650.000</span>
+                            <button onclick="window.location.href='detail.html'" class="text-xs font-bold bg-holiday/10 text-holiday px-3 py-1.5 rounded-xl hover:bg-holiday hover:text-white transition">Detail</button>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="w-[85vw] sm:w-[290px] lg:w-[288px] flex-shrink-0 bg-white rounded-3xl shadow-md border border-gray-200/60 overflow-hidden snap-center group hover:-translate-y-1.5 transition-transform duration-300 flex flex-col">
+                    <div class="relative w-full h-44 overflow-hidden bg-gray-100">
+                        <img src="img/laut.png" alt="Trip 3" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110">
+                    </div>
+                    <div class="p-5 flex-grow flex flex-col justify-between">
+                        <div>
+                            <h3 class="font-extrabold text-gray-900 text-base mb-1 group-hover:text-holiday transition-colors line-clamp-1">Pantai Selatan</h3>
+                            <p class="text-xs text-gray-500 flex items-center gap-1 font-medium"><i class="bi bi-geo-alt-fill"></i> Pesisir Pantai</p>
+                        </div>
+                        <div class="pt-3 mt-3 border-t border-gray-100 flex items-center justify-between">
+                            <span class="text-xs font-extrabold text-orange-600">Rp 950.000</span>
+                            <button onclick="window.location.href='detail.html'" class="text-xs font-bold bg-holiday/10 text-holiday px-3 py-1.5 rounded-xl hover:bg-holiday hover:text-white transition">Detail</button>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="w-[85vw] sm:w-[290px] lg:w-[288px] flex-shrink-0 bg-white rounded-3xl shadow-md border border-gray-200/60 overflow-hidden snap-center group hover:-translate-y-1.5 transition-transform duration-300 flex flex-col">
+                    <div class="relative w-full h-44 overflow-hidden bg-gray-100">
+                        <img src="img/Tarian_Gandrung_sewu_03 1.png" alt="Trip 4" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110">
+                    </div>
+                    <div class="p-5 flex-grow flex flex-col justify-between">
+                        <div>
+                            <h3 class="font-extrabold text-gray-900 text-base mb-1 group-hover:text-holiday transition-colors line-clamp-1">Festival Gandrung</h3>
+                            <p class="text-xs text-gray-500 flex items-center gap-1 font-medium"><i class="bi bi-geo-alt-fill"></i> Pantai Boom</p>
+                        </div>
+                        <div class="pt-3 mt-3 border-t border-gray-100 flex items-center justify-between">
+                            <span class="text-xs font-extrabold text-orange-600">Rp 350.000</span>
+                            <button onclick="window.location.href='detail.html'" class="text-xs font-bold bg-holiday/10 text-holiday px-3 py-1.5 rounded-xl hover:bg-holiday hover:text-white transition">Detail</button>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </section>
+
+        
+    </main>
+
+    
+
+    <!-- Scripts -->
+    <script>
+
+           
+
+      
+        // INISIALISASI GSAP
+        gsap.registerPlugin(ScrollTrigger);
+        gsap.utils.toArray('.gsap-section').forEach(section => {
+            const items = section.querySelectorAll('.gsap-item');
+            if(items.length > 0) {
+                gsap.fromTo(items, 
+                    { y: 30, autoAlpha: 0 }, 
+                    {
+                        scrollTrigger: { trigger: section, start: "top 85%" },
+                        y: 0, autoAlpha: 1, duration: 0.6, stagger: 0.1, ease: "power2.out"
+                    }
+                );
+            }
+        });
+
+        // SLIDER TRIP LAINNYA
+        const otherSlider = document.getElementById('other-slider');
+        const btnPrevOther = document.getElementById('btn-prev-other');
+        const btnNextOther = document.getElementById('btn-next-other');
+
+        if(otherSlider && btnPrevOther && btnNextOther) {
+            const getScrollAmount = () => {
+                const firstCard = otherSlider.querySelector('div');
+                return firstCard ? firstCard.offsetWidth + 24 : 300;
+            };
+            btnPrevOther.addEventListener('click', () => {
+                otherSlider.scrollBy({ left: -getScrollAmount(), behavior: 'smooth' });
+            });
+            btnNextOther.addEventListener('click', () => {
+                otherSlider.scrollBy({ left: getScrollAmount(), behavior: 'smooth' });
+            });
+        }
+
+        // ==========================================
+        // LOGIKA INVOICE & ADD-ONS (LOCAL STORAGE)
+        // ==========================================
+        const basePriceElement = document.getElementById('base-price');
+        const basePrice = parseInt(basePriceElement.getAttribute('data-value'));
+        const grandTotalElement = document.getElementById('grand-total');
+        const invoiceContainer = document.getElementById('invoice-addons-container');
+        const addonButtons = document.querySelectorAll('.addon-btn');
+
+        const storageKey = 'jadiBerangkat_Addons_Djawatan';
+        let selectedAddons = JSON.parse(localStorage.getItem(storageKey)) || [];
+
+        function formatRupiah(number) {
+            return new Intl.NumberFormat('id-ID', { style: 'currency', currency: 'IDR', minimumFractionDigits: 0 }).format(number);
+        }
+
+        function renderInvoice() {
+            invoiceContainer.innerHTML = '';
+            let totalAddonsPrice = 0;
+
+            if (selectedAddons.length > 0) {
+                invoiceContainer.classList.remove('hidden');
+                selectedAddons.forEach(addon => {
+                    totalAddonsPrice += addon.price;
+                    const itemHTML = `
+                        <div class="flex justify-between items-center invoice-item-enter">
+                            <div class="flex items-center gap-2">
+                                <button onclick="removeAddon('${addon.id}')" class="text-red-400 hover:text-red-600 transition p-1">
+                                    <i class="bi bi-x-circle-fill"></i>
+                                </button>
+                                <span class="text-xs font-bold text-gray-700">${addon.name}</span>
+                            </div>
+                            <span class="text-xs font-extrabold text-gray-900">${formatRupiah(addon.price)}</span>
+                        </div>
+                    `;
+                    invoiceContainer.innerHTML += itemHTML;
+                });
+            } else {
+                invoiceContainer.classList.add('hidden');
+            }
+
+            const grandTotal = basePrice + totalAddonsPrice;
+            grandTotalElement.textContent = formatRupiah(grandTotal);
+
+            addonButtons.forEach(btn => {
+                const id = btn.getAttribute('data-id');
+                const isAdded = selectedAddons.some(a => a.id === id);
+                
+                if (isAdded) {
+                    btn.innerHTML = '<i class="bi bi-check-lg text-xl"></i>';
+                    btn.classList.replace('bg-holiday', 'bg-gray-300');
+                    btn.classList.replace('hover:bg-holiday-dark', 'hover:bg-red-400');
+                    btn.title = "Hapus layanan";
+                } else {
+                    btn.innerHTML = '<i class="bi bi-plus-lg text-lg"></i>';
+                    btn.classList.replace('bg-gray-300', 'bg-holiday');
+                    btn.classList.replace('hover:bg-red-400', 'hover:bg-holiday-dark');
+                    btn.title = "Tambah layanan";
+                }
+            });
+        }
+
+        function toggleAddon(id, name, price) {
+            const index = selectedAddons.findIndex(a => a.id === id);
+            if (index > -1) {
+                selectedAddons.splice(index, 1);
+            } else {
+                selectedAddons.push({ id, name, price: parseInt(price) });
+            }
+            localStorage.setItem(storageKey, JSON.stringify(selectedAddons));
+            renderInvoice();
+        }
+
+        window.removeAddon = function(id) {
+            selectedAddons = selectedAddons.filter(a => a.id !== id);
+            localStorage.setItem(storageKey, JSON.stringify(selectedAddons));
+            renderInvoice();
+        };
+
+        addonButtons.forEach(btn => {
+            btn.addEventListener('click', function() {
+                const id = this.getAttribute('data-id');
+                const name = this.getAttribute('data-name');
+                const price = this.getAttribute('data-price');
+                toggleAddon(id, name, price);
+            });
+        });
+
+        renderInvoice();
+    </script>
+
+    <!-- Scroll To Top Button -->
+    <button id="scrollToTopBtn" class="fixed bottom-6 left-6 md:bottom-10 md:left-10 w-12 h-12 md:w-14 md:h-14 bg-holiday text-white rounded-full flex items-center justify-center shadow-xl shadow-holiday/30 z-[90] opacity-0 invisible translate-y-10 hover:bg-[#236026] transition-colors" aria-label="Scroll to top">
+        <i class="bi bi-arrow-up text-xl md:text-2xl font-bold"></i>
+    </button>
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const btn = document.getElementById('scrollToTopBtn');
+            if (btn && typeof gsap !== 'undefined') {
+                let isVisible = false;
+                window.addEventListener('scroll', () => {
+                    if (window.scrollY > 300 && !isVisible) {
+                        isVisible = true;
+                        gsap.to(btn, { autoAlpha: 1, y: 0, duration: 0.5, ease: 'back.out(1.5)' });
+                    } else if (window.scrollY <= 300 && isVisible) {
+                        isVisible = false;
+                        gsap.to(btn, { autoAlpha: 0, y: 40, duration: 0.3, ease: 'power2.in' });
+                    }
+                });
+                btn.addEventListener('click', () => {
+                    window.scrollTo({ top: 0, behavior: 'smooth' });
+                });
+            }
+        });
+    </script>
+
+    <!-- WhatsApp Button -->
+    <a href="https://wa.me/6281234567890" target="_blank" class="fixed bottom-6 right-6 md:bottom-10 md:right-10 w-12 h-12 md:w-14 md:h-14 bg-green-500 text-white rounded-full flex items-center justify-center shadow-xl shadow-green-500/30 z-[90] hover:bg-green-600 transition-colors" aria-label="WhatsApp">
+        <i class="bi bi-whatsapp text-xl md:text-2xl font-bold"></i>
+    </a>
+
+    <script src="header.js"></script>
+    <script src="js/translator.js"></script></body>
+</html>
