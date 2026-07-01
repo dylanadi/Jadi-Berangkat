@@ -20,7 +20,7 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
     
     <!-- Custom Tailwind Configuration -->
-    <script>
+        <script>
         tailwind.config = {
             theme: {
                 extend: {
@@ -28,15 +28,21 @@
                         sans: ['"Plus Jakarta Sans"', 'sans-serif'],
                     },
                     colors: {
-                        base: '#F6F5ED',
+                        base: '#f4f0e7',
                         ink: '#151813',
-                        holiday: '#2e7d32', 
-                        'holiday-dark': '#1b5e20',
-                        'holiday-light': '#a5d6a7',
-                    },
-                    boxShadow: {
-                        'soft': '0 10px 40px -10px rgba(0,0,0,0.05)',
-                        'glow': '0 0 20px rgba(46,125,50,0.3)'
+                        clay: '#b96f3c',
+                        mist: '#dfe8df',
+                        holiday: {
+                            DEFAULT: '#2f6f42',
+                            50: '#f0fdf4',
+                            100: '#dcfce7',
+                            500: '#22c55e',
+                            600: '#16a34a',
+                            700: '#15803d',
+                        },
+                        'holiday-dark': '#17442a',
+                        'holiday-light': '#b8d9bd',
+                        'holiday-glow': 'rgba(47, 111, 66, 0.28)'
                     }
                 }
             }
@@ -744,5 +750,6 @@
         <i class="bi bi-whatsapp text-xl md:text-2xl font-bold"></i>
     </a>
 
+    <script src="header.js"></script>
 </body>
 </html>
