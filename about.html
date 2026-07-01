@@ -34,11 +34,12 @@
         }
     </script>
     <style>
+        html { min-height: 100%; background-color: #fafafa; }
         #navbar { transition: all 0.5s ease; }
     </style>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
 </head>
-<body class="bg-[#fafafa] text-slate-800 font-sans antialiased selection:bg-emerald-500 selection:text-white">
+<body class="bg-[#fafafa] text-slate-800 font-sans antialiased selection:bg-emerald-500 selection:text-white min-h-screen flex flex-col">
 
     <!-- Navbar & Sidebar -->
     <div id="menu-overlay" class="fixed inset-0 bg-black/60 z-[60] hidden opacity-0 backdrop-blur-sm"></div>
@@ -194,6 +195,7 @@
         </div>
     </header>
 
+    <main class="flex-1">
     <!-- NEW HERO SECTION & TENTANG KAMI (SPLIT LAYOUT STYLE) -->
     <section class="relative min-h-screen pt-32 pb-20 flex items-center bg-gradient-to-tr from-slate-50 via-white to-amber-50/30 overflow-hidden">
         <!-- Elemen Dekoratif Background -->
@@ -447,6 +449,8 @@
 
         </div>
     </section>
+
+    </main>
 
     <!-- FOOTER UTAMA -->
     <footer class="bg-slate-950 text-white pt-16 pb-8 border-t border-slate-900">

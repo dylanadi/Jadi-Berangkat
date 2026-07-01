@@ -43,6 +43,7 @@
     </script>
     <style>
         * { box-sizing: border-box; }
+        html { min-height: 100%; background-color: #f8fafc; }
         body { margin: 0; padding: 0; }
          @keyframes marquee {
             0% { transform: translateX(0); }
@@ -112,7 +113,7 @@
         #article-grid-container.mode-full .news-card span.bg-slate-950\/80, #article-grid-container.mode-full .news-card span.bg-\[\#e2f7ea\] { position: absolute; top: 1.5rem; left: 1.5rem; bottom: auto; background: #ef4444 !important; color: white !important; }
     </style>
 </head>
-<body class="bg-[#f8fafc] text-slate-800 font-sans antialiased">
+<body class="bg-[#f8fafc] text-slate-800 font-sans antialiased min-h-screen flex flex-col">
 
     <div id="menu-overlay" class="fixed inset-0 bg-black/60 z-[60] hidden opacity-0 backdrop-blur-sm"></div>
     <aside id="mobile-sidebar" class="fixed top-0 left-0 h-full w-[85%] max-w-sm bg-base shadow-2xl z-[70] p-6 flex flex-col transform -translate-x-full border-r border-black/5 overflow-y-auto">
@@ -267,8 +268,9 @@
         </div>
     </header>
 
+    <main class="flex-1">
     <!-- HERO SECTION SLIDER -->
-    <main class="relative h-[85vh] w-full overflow-hidden bg-slate-900">
+    <div class="relative h-[85vh] w-full overflow-hidden bg-slate-900">
         <div id="hero-slider" class="relative h-full w-full">
             
             <!-- Slide 1: Pantai Boom Banyuwangi -->
@@ -311,7 +313,7 @@
             <button onclick="goToSlide(0)" class="hero-dot w-10 h-2.5 rounded-full bg-white transition-all duration-300"></button>
             <button onclick="goToSlide(1)" class="hero-dot w-2.5 h-2.5 rounded-full bg-white/50 hover:bg-white/80 transition-all duration-300"></button>
         </div>
-    </main>
+    </div>
 
     <!-- MAIN WISATA CONTENT SECTION -->
     <!-- Breadcrumb -->
@@ -573,6 +575,8 @@
 
         </div>
     </section>
+
+    </main>
 
       <footer class="bg-gray-900 text-white pt-20 pb-8 border-t-[6px] border-holiday">
         <div class="max-w-7xl mx-auto px-6 md:px-10">

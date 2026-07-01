@@ -38,6 +38,7 @@
     </script>
     <style>
         * { box-sizing: border-box; }
+        html { min-height: 100%; background-color: #f8fafc; }
         body { margin: 0; padding: 0; font-family: 'Plus Jakarta Sans', sans-serif; }
         .article-content p { margin-bottom: 1.5rem; line-height: 1.8; color: #334155; font-size: 1rem; }
         .article-content h2 { font-size: 1.5rem; font-weight: 800; margin-top: 2rem; margin-bottom: 1rem; color: #0f172a; }
@@ -65,7 +66,7 @@
         }
     </style>
 </head>
-<body class="bg-[#f8fafc] text-slate-800 font-sans antialiased">
+<body class="bg-[#f8fafc] text-slate-800 font-sans antialiased min-h-screen flex flex-col">
 
     <div id="menu-overlay" class="fixed inset-0 bg-black/60 z-[60] hidden opacity-0 backdrop-blur-sm"></div>
     <aside id="mobile-sidebar" class="fixed top-0 left-0 h-full w-[84%] max-w-sm bg-base shadow-2xl z-[70] p-8 flex flex-col transform -translate-x-full border-r border-black/10">
@@ -112,6 +113,7 @@
         </div>
     </header>
 
+    <main class="flex-1">
     <!-- Article Hero Section -->
     <div id="article-hero" class="relative w-full h-[70vh] md:h-[80vh] overflow-hidden bg-slate-900">
         <div class="absolute inset-0 bg-gradient-to-t from-slate-950/90 via-slate-950/50 to-transparent z-10"></div>
@@ -141,6 +143,8 @@
             </a>
         </div>
     </section>
+
+    </main>
 
     <footer class="bg-gray-900 text-white pt-20 pb-8 border-t-[6px] border-holiday">
         <div class="max-w-7xl mx-auto px-6 md:px-10">
