@@ -40,17 +40,9 @@
     <style>
         body { font-family: 'Plus Jakarta Sans', sans-serif; background-color: #f4f0e7; color: #151813; }
         
-        /* Scrollbar styles: hidden on mobile, visible and styled on desktop */
-        @media (max-width: 767px) {
-            .no-scrollbar::-webkit-scrollbar { display: none; }
-            .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
-        }
-        @media (min-width: 768px) {
-            .no-scrollbar::-webkit-scrollbar { height: 8px; }
-            .no-scrollbar::-webkit-scrollbar-track { background: rgba(0,0,0,0.04); border-radius: 10px; }
-            .no-scrollbar::-webkit-scrollbar-thumb { background: rgba(47, 111, 66, 0.4); border-radius: 10px; }
-            .no-scrollbar::-webkit-scrollbar-thumb:hover { background: rgba(47, 111, 66, 0.7); }
-        }
+        /* Scrollbar styles: hidden on all screens */
+        .no-scrollbar::-webkit-scrollbar { display: none; }
+        .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
 
         .card-gradient { background: linear-gradient(to top, rgba(7,13,9,0.96) 0%, rgba(7,13,9,0.34) 58%, transparent 100%); }
         .hero-gradient { background: linear-gradient(90deg, rgba(10,16,11,0.82) 0%, rgba(10,16,11,0.56) 42%, rgba(10,16,11,0.14) 100%), linear-gradient(to bottom, rgba(0,0,0,0.18) 0%, rgba(0,0,0,0.02) 48%, rgba(0,0,0,0.58) 100%); }
@@ -344,15 +336,16 @@
         </div>
     </header>
 
-    <section class="relative min-h-[100dvh] w-full overflow-hidden flex items-start md:items-center">
-        <div class="absolute inset-0 w-full h-full overflow-hidden bg-slate-950 pointer-events-none z-0">
-            <iframe class="absolute top-1/2 left-1/2 w-[300vw] h-[300vh] min-w-[100vw] min-h-[100vh] -translate-x-1/2 -translate-y-1/2 opacity-90"
-                src="https://www.youtube.com/embed/JMEblTftPmI?autoplay=1&mute=1&controls=0&loop=1&playlist=JMEblTftPmI&rel=0&showinfo=0"
-                title="YouTube video player" frameborder="0"
-                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                allowfullscreen>
-            </iframe>
-        </div>
+    <main class="flex-1">
+        <section class="relative min-h-[100dvh] w-full overflow-hidden flex items-start md:items-center">
+          <div class="absolute inset-0 w-full h-full overflow-hidden bg-slate-950 pointer-events-none z-0">
+              <iframe id="hero-video" class="absolute top-1/2 left-1/2 w-[300vw] h-[300vh] min-w-[100vw] min-h-[100vh] -translate-x-1/2 -translate-y-1/2 opacity-90"
+                  src="https://www.youtube.com/embed/qNVdijuWwGo?si=U2tgFi7R09gKy6Pi&autoplay=1&controls=0&loop=1&playlist=qNVdijuWwGo&rel=0&showinfo=0"
+                  title="YouTube video player" frameborder="0"
+                  allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                  allowfullscreen>
+              </iframe>
+          </div>
         <div class="absolute inset-0 hero-gradient"></div>
         <div class="relative z-10 text-white section-shell w-full pt-28 md:pt-28 pb-16 md:pb-20 gsap-section">
             <div class="max-w-3xl">
@@ -376,15 +369,15 @@
             </div>
             <div class="gsap-item mt-10 md:mt-14 grid grid-cols-3 max-w-2xl divide-x divide-white/18 rounded-[1.5rem] border border-white/14 bg-black/24 p-4 text-white backdrop-blur-md">
                 <div class="px-3">
-                    <p class="text-2xl md:text-3xl font-extrabold">25+</p>
+                    <p class="text-2xl md:text-3xl font-extrabold"><span class="hero-stat" data-target="25" data-suffix="+">0</span></p>
                     <p class="text-xs text-white/65 font-bold">Destinasi</p>
                 </div>
                 <div class="px-3">
-                    <p class="text-2xl md:text-3xl font-extrabold">120+</p>
+                    <p class="text-2xl md:text-3xl font-extrabold"><span class="hero-stat" data-target="120" data-suffix="+">0</span></p>
                     <p class="text-xs text-white/65 font-bold">Armada</p>
                 </div>
                 <div class="px-3">
-                    <p class="text-2xl md:text-3xl font-extrabold">4.9</p>
+                    <p class="text-2xl md:text-3xl font-extrabold"><span class="hero-stat" data-target="4.9" data-decimal="1">0</span></p>
                     <p class="text-xs text-white/65 font-bold">Rating</p>
                 </div>
             </div>
@@ -1017,6 +1010,79 @@
             });
         }
 
+        // Animasi Stat Counter
+        document.addEventListener('DOMContentLoaded', () => {
+            const counters = document.querySelectorAll('.stat-counter');
+            
+            const animateCounter = (el) => {
+                const target = +el.getAttribute('data-target');
+                const duration = 2000;
+                const increment = target / (duration / 16);
+                let current = 0;
+                
+                const updateCounter = () => {
+                    current += increment;
+                    if (current < target) {
+                        el.innerText = Math.ceil(current);
+                        requestAnimationFrame(updateCounter);
+                    } else {
+                        el.innerText = target;
+                    }
+                };
+                
+                updateCounter();
+            };
+
+            const observer = new IntersectionObserver((entries, observer) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        animateCounter(entry.target);
+                        observer.unobserve(entry.target);
+                    }
+                });
+            }, { threshold: 0.5 });
+
+            counters.forEach(counter => {
+                observer.observe(counter);
+            });
+        });
+
+        // Hero Stat Counter Animation
+        document.addEventListener('DOMContentLoaded', () => {
+            const heroStats = document.querySelectorAll('.hero-stat');
+
+            const animateHeroStat = (el) => {
+                const target = parseFloat(el.getAttribute('data-target'));
+                const suffix = el.getAttribute('data-suffix') || '';
+                const decimal = parseInt(el.getAttribute('data-decimal')) || 0;
+                const duration = 2000;
+                const step = target / (duration / 16);
+                let current = 0;
+
+                const update = () => {
+                    current += step;
+                    if (current < target) {
+                        el.innerText = decimal > 0 ? current.toFixed(decimal) : Math.ceil(current);
+                        requestAnimationFrame(update);
+                    } else {
+                        el.innerText = target + suffix;
+                    }
+                };
+
+                update();
+            };
+
+            const heroObserver = new IntersectionObserver((entries, obs) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        animateHeroStat(entry.target);
+                        obs.unobserve(entry.target);
+                    }
+                });
+            }, { threshold: 0.5 });
+
+            heroStats.forEach(stat => heroObserver.observe(stat));
+        });
         // Navbar Sticky Logic
         const headerWrapper = document.getElementById('header-wrapper');
         const navContainer = document.getElementById('nav-container');

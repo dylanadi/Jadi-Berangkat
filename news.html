@@ -54,6 +54,8 @@
         
         /* Smooth scrolling behavior specifically for slider container */
         .smooth-scroll-x { scroll-behavior: smooth; }
+        .no-scrollbar::-webkit-scrollbar { display: none; }
+        .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
         .flag-button {
             width: 28px;
             height: 28px;
@@ -84,32 +86,7 @@
             backdrop-filter: blur(12px);
         }
         
-        /* VIEW MODES */
-        #article-grid-container { transition: all 0.4s ease; }
-        
-        /* PINTEREST MODE */
-        #article-grid-container.mode-pinterest { column-count: 1; column-gap: 1.5rem; display: block; }
-        @media (min-width: 640px) { #article-grid-container.mode-pinterest { column-count: 2; } }
-        @media (min-width: 1024px) { #article-grid-container.mode-pinterest { column-count: 3; } }
-        #article-grid-container.mode-pinterest #middle-cards, #article-grid-container.mode-pinterest #compact-cards { display: contents; }
-        #article-grid-container.mode-pinterest .news-card { display: flex !important; flex-direction: column !important; height: auto !important; min-height: 250px; break-inside: avoid; margin-bottom: 1.5rem; }
-        #article-grid-container.mode-pinterest .news-card > div.h-56, #article-grid-container.mode-pinterest .news-card > div.w-24 { position: relative !important; width: 100% !important; height: auto !important; padding-top: 60%; }
-        #article-grid-container.mode-pinterest .news-card > div.h-56 > img, #article-grid-container.mode-pinterest .news-card > div.w-24 > img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; }
-        #article-grid-container.mode-pinterest .separator-title { display: none !important; }
-        
-        /* FULL COVER MODE */
-        #article-grid-container.mode-full { display: flex; flex-direction: column; gap: 2rem; }
-        #article-grid-container.mode-full #middle-cards, #article-grid-container.mode-full #compact-cards { display: contents; }
-        #article-grid-container.mode-full .separator-title { display: none !important; }
-        #article-grid-container.mode-full .news-card { height: 55vh !important; min-height: 400px !important; width: 100% !important; display: flex !important; flex-direction: column !important; justify-content: flex-end !important; position: relative; }
-        #article-grid-container.mode-full .news-card .shrink-0, #article-grid-container.mode-full .news-card .h-56 { position: absolute; inset: 0; width: 100% !important; height: 100% !important; }
-        #article-grid-container.mode-full .news-card img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; z-index: 1; }
-        #article-grid-container.mode-full .news-card::before { content: ''; position: absolute; inset: 0; background: linear-gradient(to top, rgba(0,0,0,0.9), rgba(0,0,0,0.3), transparent); z-index: 2; pointer-events: none; }
-        #article-grid-container.mode-full .news-card .flex-1, #article-grid-container.mode-full .news-card .relative.z-20 { position: relative; z-index: 10; background: transparent !important; border: none !important; padding: 2rem !important; }
-        #article-grid-container.mode-full .news-card h3, #article-grid-container.mode-full .news-card h4 { color: white !important; font-size: 2rem !important; line-height: 1.2; }
-        #article-grid-container.mode-full .news-card p { color: rgba(255,255,255,0.85) !important; font-size: 1.1rem !important; display: -webkit-box !important; }
-        #article-grid-container.mode-full .news-card .border-t { border-color: rgba(255,255,255,0.2) !important; color: white !important; }
-        #article-grid-container.mode-full .news-card span.bg-slate-950\/80, #article-grid-container.mode-full .news-card span.bg-\[\#e2f7ea\] { position: absolute; top: 1.5rem; left: 1.5rem; bottom: auto; background: #ef4444 !important; color: white !important; }
+
     </style>
 </head>
 <body class="bg-[#f8fafc] text-slate-800 font-sans antialiased">
@@ -355,7 +332,7 @@
                         <div class="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
                             <i class="bi bi-search text-gray-400"></i>
                         </div>
-                        <input type="text" placeholder="Cari artikel..." class="w-full pl-11 pr-4 py-3 bg-slate-50 border border-transparent rounded-2xl focus:bg-white focus:border-holiday-500 focus:ring-2 focus:ring-holiday-500/20 transition-all text-sm font-semibold outline-none text-slate-800">
+                        <input id="search-input" type="text" placeholder="Cari artikel..." class="w-full pl-11 pr-4 py-3 bg-slate-50 border border-transparent rounded-2xl focus:bg-white focus:border-holiday-500 focus:ring-2 focus:ring-holiday-500/20 transition-all text-sm font-semibold outline-none text-slate-800">
                     </div>
                     
                     <div class="w-full sm:w-auto overflow-x-auto no-scrollbar">
@@ -369,10 +346,10 @@
                     </div>
                 </div>
 
-                <!-- Right: Date Filter & View Toggle -->
+                <!-- Right: Date Filter -->
                 <div class="flex items-center gap-3 w-full md:w-auto justify-between md:justify-end border-t md:border-t-0 border-slate-100 pt-4 md:pt-0">
                     <div class="relative">
-                        <select class="appearance-none bg-slate-50 border border-slate-200 rounded-2xl pl-5 pr-10 py-2.5 text-sm font-bold text-slate-700 hover:bg-white transition cursor-pointer outline-none focus:border-holiday-500 focus:ring-2 focus:ring-holiday-500/20">
+                        <select id="date-filter" class="appearance-none bg-slate-50 border border-slate-200 rounded-2xl pl-5 pr-10 py-2.5 text-sm font-bold text-slate-700 hover:bg-white transition cursor-pointer outline-none focus:border-holiday-500 focus:ring-2 focus:ring-holiday-500/20">
                             <option value="baru">Terbaru</option>
                             <option value="1bulan">1 Bulan Terakhir</option>
                             <option value="lampau">Terdahulu</option>
@@ -381,33 +358,15 @@
                             <i class="bi bi-chevron-down text-[10px] text-gray-500"></i>
                         </div>
                     </div>
-                    
-                    <div class="relative">
-                        <button id="view-toggle-btn" class="w-11 h-11 flex items-center justify-center rounded-2xl bg-slate-50 border border-slate-200 hover:bg-white hover:border-holiday-500 text-slate-700 hover:text-holiday-600 transition shadow-sm">
-                            <i class="bi bi-grid-fill text-lg"></i>
-                        </button>
-                        <!-- Dropdown View -->
-                        <div id="view-dropdown" class="absolute right-0 top-full mt-2 w-48 bg-white border border-slate-200 rounded-2xl shadow-xl p-2 opacity-0 invisible transform -translate-y-2 transition-all duration-300 z-50">
-                            <button class="view-option w-full flex items-center gap-3 px-4 py-2.5 rounded-xl hover:bg-slate-50 transition text-sm font-bold text-holiday-600 bg-holiday-500/10" data-view="card">
-                                <i class="bi bi-grid-fill"></i> Mode Card
-                            </button>
-                            <button class="view-option w-full flex items-center gap-3 px-4 py-2.5 rounded-xl hover:bg-slate-50 transition text-sm font-bold text-slate-600 mt-1" data-view="pinterest">
-                                <i class="bi bi-columns-gap"></i> Mode Pinterest
-                            </button>
-                            <button class="view-option w-full flex items-center gap-3 px-4 py-2.5 rounded-xl hover:bg-slate-50 transition text-sm font-bold text-slate-600 mt-1" data-view="full">
-                                <i class="bi bi-image-fill"></i> Mode Full Cover
-                            </button>
-                        </div>
-                    </div>
                 </div>
             </div>
         </div>
 
         <!-- GRID SYSTEM UTAMA -->
-        <div class="space-y-8 mode-card" id="article-grid-container">
+        <div class="space-y-8" id="article-grid-container">
             
             <!-- 1 CARD BESAR UTAMA (SUDAH DIPERBAIKI) -->
-            <article class="news-card relative bg-slate-900 rounded-3xl overflow-hidden h-[480px] md:h-[520px] group shadow-sm hover:shadow-xl transition-all duration-500 flex items-end" data-cats="destinasi" data-article="sukamade">
+            <article class="news-card relative bg-slate-900 rounded-3xl overflow-hidden h-[480px] md:h-[520px] group shadow-sm hover:shadow-xl transition-all duration-500 flex items-end" data-cats="destinasi" data-date="2025-09-25" data-article="sukamade">
                 <div class="absolute inset-0 bg-gradient-to-t from-slate-950 via-slate-900/40 to-transparent z-10"></div>
                 <img src="img/Pantaisukamade.png" class="absolute inset-0 w-full h-full object-cover object-center group-hover:scale-105 transition-transform duration-700" alt="Sukamade Ekowisata">
                 
@@ -431,7 +390,7 @@
             <!-- 2 CARD TENGAH -->
             <div class="grid grid-cols-1 md:grid-cols-2 gap-8" id="middle-cards">
                 <!-- Card Kiri -->
-                <article class="news-card bg-white rounded-3xl overflow-hidden shadow-sm border border-slate-100 flex flex-col justify-between group" data-cats="destinasi,kuliner" data-article="kuliner-rujaksoto">
+                <article class="news-card bg-white rounded-3xl overflow-hidden shadow-sm border border-slate-100 flex flex-col justify-between group" data-cats="destinasi,kuliner" data-date="2025-09-10" data-article="kuliner-rujaksoto">
                     <div class="relative h-56 overflow-hidden">
                         <img src="img/rujaksoto.png" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700" alt="Kuliner">
                         <span class="absolute bottom-4 left-4 bg-slate-950/80 backdrop-blur-sm text-white text-[10px] font-black uppercase tracking-wider px-2.5 py-1 rounded-md">KULINER</span>
@@ -449,7 +408,7 @@
                 </article>
 
                 <!-- Card Kanan -->
-                <article class="news-card bg-white rounded-3xl overflow-hidden shadow-sm border border-slate-100 flex flex-col justify-between group" data-cats="destinasi" data-article="pelengkung">
+                <article class="news-card bg-white rounded-3xl overflow-hidden shadow-sm border border-slate-100 flex flex-col justify-between group" data-cats="destinasi" data-date="2025-08-20" data-article="pelengkung">
                     <div class="relative h-56 overflow-hidden">
                         <img src="img/pantaipelengkung.png" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700" alt="Hutan">
                         <span class="absolute bottom-4 left-4 bg-slate-950/80 backdrop-blur-sm text-white text-[10px] font-black uppercase tracking-wider px-2.5 py-1 rounded-md">DESTINASI</span>
@@ -467,17 +426,34 @@
                 </article>
             </div>
 
-            <!-- SEPARATOR JUDUL "ARTIKEL LAINNYA" -->
-            <div class="pt-10 pb-3 flex items-center gap-2.5">
+                        <div class="pt-10 pb-3 flex items-center gap-2.5">
                 <span class="w-1.5 h-6 bg-holiday-600 rounded-full"></span>
-                <h3 class="text-lg font-extrabold text-[#0f172a] tracking-tight uppercase">Artikel Lainnya</h3>
             </div>
 
+            <div id="featured-article" class="bg-white dark:bg-gray-800 rounded-[2rem] border border-gray-100 dark:border-gray-700 shadow-[0_8px_30px_rgb(0,0,0,0.02)] overflow-hidden mb-8 news-card" data-cats="tips" data-date="2025-09-05" data-article="panduan-ijen">
+                <div class="grid grid-cols-1 md:grid-cols-2">
+                    <div class="h-64 md:h-auto">
+                        <img src="img/unsplash_M8drGBgFNZE.png" class="w-full h-full object-cover" alt="Artikel Utama">
+                    </div>
+                    <div class="p-8 flex flex-col justify-center">
+                        <span class="text-[10px] font-bold text-holiday uppercase tracking-widest mb-3">Tips & Trik</span>
+                        <h2 class="text-2xl md:text-3xl font-extrabold text-ink dark:text-white mb-4">Panduan Lengkap Mendaki Kawah Ijen Malam Hari</h2>
+                        <p class="text-gray-600 dark:text-gray-300 text-sm leading-relaxed mb-6">
+                            Mendaki Kawah Ijen di malam hari adalah pengalaman yang tak terlupakan. Disini kita kupas tuntas persiapan, rute, dan tips agar perjalanmu aman dan nyenyak menyaksikan blue fire.
+                        </p>
+                        <a href="artikel_view.html?article=panduan-ijen" class="inline-flex items-center gap-2 bg-holiday text-white px-6 py-3 rounded-full font-bold hover:bg-holiday-dark transition shadow-lg shadow-holiday-glow">
+                            Baca Artikel <i class="bi bi-arrow-right"></i>
+                        </a>
+                    </div>
+                </div>
+            </div>
+
+            <h3 class="text-lg font-extrabold text-[#0f172a] tracking-tight uppercase">Artikel Lainnya</h3>
             <!-- COMPACT HORIZONTAL CARD GRID -->
             <div class="grid grid-cols-1 md:grid-cols-3 gap-6" id="compact-cards">
                 
                 <!-- Card 1 -->
-                <article class="news-card bg-white p-4 rounded-3xl border border-slate-100 shadow-sm hover:shadow-md transition-all duration-300 flex gap-4 group items-center" data-cats="tips" data-article="tips-sewa-jeep">
+                <article class="news-card bg-white p-4 rounded-3xl border border-slate-100 shadow-sm hover:shadow-md transition-all duration-300 flex gap-4 group items-center" data-cats="tips" data-date="2025-08-01" data-article="tips-sewa-jeep">
                     <div class="w-24 h-24 md:w-28 md:h-28 rounded-2xl overflow-hidden shrink-0">
                         <img src="https://images.unsplash.com/photo-1544620347-c4fd4a3d5957?q=80&w=400" class="w-full h-full object-cover" alt="Tips">
                     </div>
@@ -496,7 +472,7 @@
                 </article>
 
                 <!-- Card 2 -->
-                <article class="news-card bg-white p-4 rounded-3xl border border-slate-100 shadow-sm hover:shadow-md transition-all duration-300 flex gap-4 group items-center" data-cats="" data-article="baluran">
+                <article class="news-card bg-white p-4 rounded-3xl border border-slate-100 shadow-sm hover:shadow-md transition-all duration-300 flex gap-4 group items-center" data-cats="destinasi" data-date="2025-07-15" data-article="baluran">
                     <div class="w-24 h-24 md:w-28 md:h-28 rounded-2xl overflow-hidden shrink-0">
                         <img src="https://images.unsplash.com/photo-1506744038136-46273834b3fb?q=80&w=400" class="w-full h-full object-cover" alt="Destinasi">
                     </div>
@@ -515,7 +491,7 @@
                 </article>
 
                 <!-- Card 3 -->
-                <article class="news-card bg-white p-4 rounded-3xl border border-slate-100 shadow-sm hover:shadow-md transition-all duration-300 flex gap-4 group items-center" data-cats="event" data-article="festival-banyuwangi">
+                <article class="news-card bg-white p-4 rounded-3xl border border-slate-100 shadow-sm hover:shadow-md transition-all duration-300 flex gap-4 group items-center" data-cats="event" data-date="2025-07-01" data-article="festival-banyuwangi">
                     <div class="w-24 h-24 md:w-28 md:h-28 rounded-2xl overflow-hidden shrink-0">
                         <img src="https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?q=80&w=400" class="w-full h-full object-cover" alt="Event">
                     </div>
@@ -534,7 +510,7 @@
                 </article>
 
                 <!-- Card 4 -->
-                <article class="news-card bg-white p-4 rounded-3xl border border-slate-100 shadow-sm hover:shadow-md transition-all duration-300 flex gap-4 group items-center" data-cats="destinasi" data-article="kawah-ijen">
+                <article class="news-card bg-white p-4 rounded-3xl border border-slate-100 shadow-sm hover:shadow-md transition-all duration-300 flex gap-4 group items-center" data-cats="destinasi" data-date="2025-06-10" data-article="kawah-ijen">
                     <div class="w-24 h-24 md:w-28 md:h-28 rounded-2xl overflow-hidden shrink-0">
                         <img src="img/bluefire (1).png" class="w-full h-full object-cover" alt="Destinasi">
                     </div>
@@ -684,119 +660,60 @@
 
         
 
-        // --- View Toggle Logic ---
-        const viewToggleBtn = document.getElementById('view-toggle-btn');
-        const viewDropdown = document.getElementById('view-dropdown');
-        const articleGrid = document.getElementById('article-grid-container');
-        const viewOptions = document.querySelectorAll('.view-option');
-        
-        viewToggleBtn.addEventListener('click', (e) => {
-            e.stopPropagation();
-            viewDropdown.classList.toggle('opacity-0');
-            viewDropdown.classList.toggle('invisible');
-            viewDropdown.classList.toggle('translate-y-2');
-            viewDropdown.classList.toggle('translate-y-0');
-        });
-        
-        document.addEventListener('click', (e) => {
-            if (!viewDropdown.contains(e.target) && !viewToggleBtn.contains(e.target)) {
-                viewDropdown.classList.add('opacity-0', 'invisible', '-translate-y-2');
-                viewDropdown.classList.remove('translate-y-0');
-            }
-        });
-        
-        viewOptions.forEach(option => {
-            option.addEventListener('click', () => {
-                const viewType = option.getAttribute('data-view');
-                
-                viewOptions.forEach(opt => {
-                    opt.classList.remove('text-holiday-600', 'bg-holiday-500/10');
-                    opt.classList.add('text-slate-600');
-                });
-                option.classList.remove('text-slate-600');
-                option.classList.add('text-holiday-600', 'bg-holiday-500/10');
-                
-                const icon = viewToggleBtn.querySelector('i');
-                if (viewType === 'full') {
-                    icon.className = 'bi bi-image-fill text-lg';
-                    articleGrid.className = 'space-y-8 mode-full';
-                } else if (viewType === 'pinterest') {
-                    icon.className = 'bi bi-columns-gap text-lg';
-                    articleGrid.className = 'space-y-8 mode-pinterest';
-                } else {
-                    icon.className = 'bi bi-grid-fill text-lg';
-                    articleGrid.className = 'space-y-8 mode-card';
-                }
-                viewDropdown.classList.add('opacity-0', 'invisible', '-translate-y-2');
-            });
-        });
-
-        // --- 3. NEWS CATEGORY FILTER LOGIC ---
+        // --- 3. SEARCH, CATEGORY & DATE FILTER LOGIC ---
+        const searchInput = document.getElementById('search-input');
         const filterButtons = document.querySelectorAll('.filter-btn');
         const newsCards = document.querySelectorAll('.news-card');
-        const contentWrapper = document.querySelector('.space-y-8');
-        let tempBigCard = null;
+        const dateFilter = document.getElementById('date-filter');
 
-        const bigCardData = {
-            kuliner: {
-                img: 'img/rujaksoto.png',
-                alt: 'Kuliner Khas Banyuwangi',
-                badge: 'KULINER',
-                title: 'Sajian Kuliner Khas Banyuwangi Jawa Timur',
-                desc: 'Nikmati Rujak Soto Perpaduan unik antara rujak cingur/sayur yang disiram dengan kuah soto daging sapi yang gurih dan hangat.',
-                loc: 'Resto Tosari',
-                article: 'kuliner-rujaksoto'
-            },
-            tips: {
-                img: 'https://images.unsplash.com/photo-1544620347-c4fd4a3d5957?q=80&w=800',
-                alt: 'Tips Sewa Jeep',
-                badge: 'TIPS',
-                title: 'Panduan Sewa Jeep Banyuwangi: Tips Memilih, Harga, dan Apa yang Harus Diperhatikan',
-                desc: 'Banyuwangi menawarkan berbagai destinasi wisata alam yang menakjubkan. Berikut panduan lengkap sewa jeep di Banyuwangi.',
-                loc: '1 Agu 2025',
-                article: 'tips-sewa-jeep'
-            },
-            event: {
-                img: 'https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?q=80&w=800',
-                alt: 'Festival Banyuwangi',
-                badge: 'EVENT',
-                title: 'Festival Banyuwangi 2025–2026: Jadwal Lengkap dan Cara Hadir',
-                desc: 'Banyuwangi dikenal dengan segudang festival budayanya yang digelar sepanjang tahun, dari tradisional hingga kontemporer.',
-                loc: '1 Jul 2025',
-                article: 'festival-banyuwangi'
-            }
-        };
+        let activeCat = 'all';
 
-        function createBigCard(data) {
-            const card = document.createElement('article');
-            card.className = 'news-card relative bg-slate-900 rounded-3xl overflow-hidden h-[480px] md:h-[520px] group shadow-sm hover:shadow-xl transition-all duration-500 flex items-end';
-            card.style.animation = 'fadeIn 0.3s ease-out';
-            card.style.cursor = 'pointer';
-            card.innerHTML = `
-                <div class="absolute inset-0 bg-gradient-to-t from-slate-950 via-slate-900/40 to-transparent z-10"></div>
-                <img src="${data.img}" class="absolute inset-0 w-full h-full object-cover object-center group-hover:scale-105 transition-transform duration-700" alt="${data.alt}">
-                <div class="relative z-20 p-8 md:p-10 w-full">
-                    <div class="flex items-center gap-2 mb-4">
-                        <span class="bg-holiday-500 text-white text-[10px] font-black uppercase tracking-wider px-2.5 py-1 rounded-md">${data.badge}</span>
-                    </div>
-                    <h3 class="text-2xl md:text-3xl font-extrabold text-white mb-3 leading-tight">${data.title}</h3>
-                    <p class="text-slate-300 text-sm max-w-3xl mb-5 line-clamp-2">${data.desc}</p>
-                    <div class="flex items-center justify-between pt-4 border-t border-white/10 text-xs text-slate-300">
-                        <span><i class="bi bi-calendar3 text-holiday-400 mr-1"></i> ${data.loc}</span>
-                        <span class="text-holiday-400 font-bold flex items-center gap-1">Baca Artikel <i class="bi bi-arrow-right"></i></span>
-                    </div>
-                </div>
-            `;
-            card.addEventListener('click', () => {
-                window.location.href = 'artikel_view.html?article=' + data.article;
+        function applyFilters() {
+            const query = searchInput.value.toLowerCase().trim();
+            const dateVal = dateFilter.value;
+
+            const container = document.getElementById('article-grid-container');
+            const oneMonthAgo = new Date();
+            oneMonthAgo.setMonth(oneMonthAgo.getMonth() - 1);
+
+            let visible = Array.from(newsCards).filter(card => {
+                const cats = (card.dataset.cats || '').split(',');
+                const matchesCat = activeCat === 'all' || cats.includes(activeCat);
+                const matchesSearch = !query || card.textContent.toLowerCase().includes(query);
+                const cardDate = card.dataset.date || '';
+                const d = new Date(cardDate);
+                let matchesDate = true;
+                if (dateVal === '1bulan') {
+                    matchesDate = !isNaN(d.getTime()) && d >= oneMonthAgo;
+                }
+                return matchesCat && matchesSearch && matchesDate;
             });
-            return card;
+
+            // Reorder by date if needed
+            if (dateVal === 'baru' || dateVal === '1bulan') {
+                visible.sort((a, b) => (b.dataset.date || '').localeCompare(a.dataset.date || ''));
+            } else if (dateVal === 'lampau') {
+                visible.sort((a, b) => (a.dataset.date || '').localeCompare(b.dataset.date || ''));
+            }
+
+            newsCards.forEach(card => { card.style.display = 'none'; });
+
+            visible.forEach((card, i) => {
+                card.style.display = '';
+                card.style.animation = 'fadeIn 0.3s ease-out';
+                card.style.animationDelay = (i * 0.05) + 's';
+                container.appendChild(card);
+            });
         }
 
+        // Search input listener
+        searchInput.addEventListener('input', applyFilters);
+
+        // Category filter buttons
         filterButtons.forEach(btn => {
             btn.addEventListener('click', () => {
-                const filter = btn.dataset.filter;
-                
+                activeCat = btn.dataset.filter;
+
                 filterButtons.forEach(b => {
                     b.classList.remove('bg-[#0f172a]', 'text-white');
                     b.classList.add('bg-white', 'text-[#475569]', 'border', 'border-slate-200');
@@ -804,42 +721,18 @@
                 btn.classList.remove('bg-white', 'text-[#475569]', 'border', 'border-slate-200');
                 btn.classList.add('bg-[#0f172a]', 'text-white');
 
-                newsCards.forEach(card => { card.style.display = ''; card.style.animation = ''; });
-
-                if (tempBigCard) { tempBigCard.remove(); tempBigCard = null; }
-
-                if (filter === 'all') {
-                    newsCards.forEach(card => { card.style.display = ''; card.style.animation = 'fadeIn 0.3s ease-out'; });
-                    return;
-                }
-
-                // Single-card filters: show as big card
-                if (bigCardData[filter]) {
-                    newsCards.forEach(card => { card.style.display = 'none'; });
-                    const big = createBigCard(bigCardData[filter]);
-                    contentWrapper.prepend(big);
-                    tempBigCard = big;
-                    return;
-                }
-
-                // Multi-card filter (destinasi)
-                newsCards.forEach(card => {
-                    const cats = (card.dataset.cats || '').split(',');
-                    if (cats.includes(filter)) {
-                        card.style.display = '';
-                        card.style.animation = 'fadeIn 0.3s ease-out';
-                    } else {
-                        card.style.display = 'none';
-                    }
-                });
+                applyFilters();
             });
         });
 
-        // Make all cards clickable — click anywhere on the card opens the article
+        // Date filter listener
+        dateFilter.addEventListener('change', applyFilters);
+
+        // Make all cards clickable
         newsCards.forEach(card => {
             card.style.cursor = 'pointer';
             card.addEventListener('click', function(e) {
-                if (e.target.closest('a')) return; // ignore clicks on existing links
+                if (e.target.closest('a')) return;
                 const article = this.dataset.article;
                 if (article) {
                     window.location.href = 'artikel_view.html?article=' + article;
