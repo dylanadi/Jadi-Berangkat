@@ -144,7 +144,7 @@
     <!-- Artikel Rekomendasi untuk Anda (Slider mirip slider wisata) -->
     <div class="mt-8">
         <div class="flex justify-between items-center mb-4">
-            <h3 class="text-xl font-extrabold text-ink dark:text-white">Artikel Mungkin Cocok Untuk Anda</h3>
+            <h3 class="text-xl font-extrabold text-ink dark:text-white">Artikel Rekomendasi</h3>
             <div class="flex items-center gap-2">
                 <button id="admin-art-prev" class="w-9 h-9 rounded-full bg-gray-50 dark:bg-gray-700 flex items-center justify-center text-gray-500 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-600 transition-colors">
                     <i class="bi bi-chevron-left"></i>
@@ -154,7 +154,7 @@
                 </button>
             </div>
         </div>
-        <div id="admin-art-slider" class="flex gap-4 overflow-x-auto snap-x snap-mandatory no-scrollbar pb-2">
+        <div id="admin-art-slider" class="flex gap-4 overflow-x-auto snap-x snap-mandatory no-scrollbar pb-2 smooth-scroll-x">
             <!-- Card 1 -->
             <div class="snap-center shrink-0 w-80 bg-white dark:bg-gray-800 rounded-[2rem] border border-gray-100/50 dark:border-gray-700/50 shadow-[0_8px_30px_rgb(0,0,0,0.02)] overflow-hidden">
                 <div class="h-40 overflow-hidden">
@@ -204,6 +204,7 @@
                 </div>
             </div>
         </div>
+        <div id="admin-art-dots" class="flex justify-center gap-2 mt-4 md:hidden"></div>
     </div>
 
 <script>
@@ -328,13 +329,53 @@
             const slider = document.getElementById('admin-art-slider');
             const prevBtn = document.getElementById('admin-art-prev');
             const nextBtn = document.getElementById('admin-art-next');
+            const dotsContainer = document.getElementById('admin-art-dots');
             if (!slider || !prevBtn || !nextBtn) return;
 
+            const cards = slider.querySelectorAll('.snap-center');
+            if (cards.length === 0) return;
+
+            // Generate dots
+            if (dotsContainer) {
+                dotsContainer.innerHTML = '';
+                cards.forEach((_, i) => {
+                    const dot = document.createElement('button');
+                    dot.className = 'slider-dot w-2 h-2 rounded-full bg-gray-300 hover:bg-gray-400 focus:outline-none';
+                    dot.addEventListener('click', () => {
+                        cards[i].scrollIntoView({ behavior: 'smooth', block: 'nearest', inline: 'start' });
+                    });
+                    dotsContainer.appendChild(dot);
+                });
+            }
+
+            const getCardDistance = () => {
+                return cards.length > 1 ? (cards[1].offsetLeft - cards[0].offsetLeft) : cards[0].offsetWidth;
+            };
+
+            const updateDots = () => {
+                if (!dotsContainer) return;
+                const scrollLeft = slider.scrollLeft;
+                const cardDistance = getCardDistance();
+                let activeIndex = Math.round(scrollLeft / cardDistance);
+                if (activeIndex >= cards.length) activeIndex = cards.length - 1;
+                if (activeIndex < 0) activeIndex = 0;
+                Array.from(dotsContainer.children).forEach((dot, i) => {
+                    dot.className = i === activeIndex
+                        ? 'slider-dot w-6 h-2 rounded-full bg-holiday focus:outline-none shadow-md shadow-holiday/50'
+                        : 'slider-dot w-2 h-2 rounded-full bg-gray-300 hover:bg-gray-400 focus:outline-none';
+                });
+            };
+
+            slider.addEventListener('scroll', updateDots);
+            setTimeout(updateDots, 100);
+
             prevBtn.addEventListener('click', () => {
-                slider.scrollBy({ left: slider.clientWidth * -0.5, behavior: 'smooth' });
+                const cardDistance = getCardDistance();
+                slider.scrollBy({ left: -cardDistance, behavior: 'smooth' });
             });
             nextBtn.addEventListener('click', () => {
-                slider.scrollBy({ left: slider.clientWidth * 0.5, behavior: 'smooth' });
+                const cardDistance = getCardDistance();
+                slider.scrollBy({ left: cardDistance, behavior: 'smooth' });
             });
         })();
     </script>
