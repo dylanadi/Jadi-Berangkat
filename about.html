@@ -13,29 +13,21 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
     
-        <script>
+    <script>
         tailwind.config = {
             theme: {
                 extend: {
                     fontFamily: {
-                        sans: ['"Plus Jakarta Sans"', 'sans-serif'],
+                        sans: ['Plus Jakarta Sans', 'sans-serif'],
                     },
                     colors: {
-                        base: '#f4f0e7',
-                        ink: '#151813',
-                        clay: '#b96f3c',
-                        mist: '#dfe8df',
                         holiday: {
-                            DEFAULT: '#2f6f42',
                             50: '#f0fdf4',
                             100: '#dcfce7',
                             500: '#22c55e',
                             600: '#16a34a',
                             700: '#15803d',
-                        },
-                        'holiday-dark': '#17442a',
-                        'holiday-light': '#b8d9bd',
-                        'holiday-glow': 'rgba(47, 111, 66, 0.28)'
+                        }
                     }
                 }
             }
@@ -44,11 +36,29 @@
     <style>
         #navbar { transition: all 0.5s ease; }
     </style>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
 </head>
 <body class="bg-[#fafafa] text-slate-800 font-sans antialiased selection:bg-emerald-500 selection:text-white">
 
-    <div id="header-placeholder"></div>
+    <!-- HEADER / NAVBAR -->
+    <header id="header-container" class="fixed top-0 left-0 right-0 z-50 p-4">
+        <nav id="navbar" class="max-w-7xl mx-auto px-6 py-4 flex items-center justify-between bg-white/80 backdrop-blur-lg w-full border border-slate-200/50 shadow-sm rounded-2xl">
+            <a href="#" class="flex items-center gap-2 font-bold text-xl text-holiday-700 tracking-tight">
+                <i class="bi bi-compass-fill text-holiday-600"></i>
+                <span>GoJeep<span class="text-holiday-500">Holiday</span></span>
+            </a>
+            <div class="hidden md:flex items-center gap-8 font-medium text-sm text-slate-600">
+                <a href="#" class="hover:text-holiday-600 transition-colors">Beranda</a>
+                <a href="#" class="hover:text-holiday-600 transition-colors">Destinasi</a>
+                <a href="#" class="hover:text-holiday-600 transition-colors">Paket Jeep</a>
+                <a href="#" class="text-holiday-600 font-semibold">Tentang Kami</a>
+            </div>
+            <div>
+                <a href="#" class="bg-holiday-600 hover:bg-holiday-700 text-white px-5 py-2.5 rounded-xl text-sm font-semibold transition-all shadow-md flex items-center gap-2">
+                    <i class="bi bi-calendar-check"></i> Book Now
+                </a>
+            </div>
+        </nav>
+    </header>
 
     <!-- NEW HERO SECTION & TENTANG KAMI (SPLIT LAYOUT STYLE) -->
     <section class="relative min-h-screen pt-32 pb-20 flex items-center bg-gradient-to-tr from-slate-50 via-white to-amber-50/30 overflow-hidden">
@@ -355,37 +365,5 @@
             }
         });
     </script>
-
-    <!-- Scroll To Top Button -->
-    <button id="scrollToTopBtn" class="fixed bottom-6 left-6 md:bottom-10 md:left-10 w-12 h-12 md:w-14 md:h-14 bg-holiday text-white rounded-full flex items-center justify-center shadow-xl shadow-holiday/30 z-[90] opacity-0 invisible translate-y-10 hover:bg-[#236026] transition-colors" aria-label="Scroll to top">
-        <i class="bi bi-arrow-up text-xl md:text-2xl font-bold"></i>
-    </button>
-    <script>
-        document.addEventListener('DOMContentLoaded', () => {
-            const btn = document.getElementById('scrollToTopBtn');
-            if (btn && typeof gsap !== 'undefined') {
-                let isVisible = false;
-                window.addEventListener('scroll', () => {
-                    if (window.scrollY > 300 && !isVisible) {
-                        isVisible = true;
-                        gsap.to(btn, { autoAlpha: 1, y: 0, duration: 0.5, ease: 'back.out(1.5)' });
-                    } else if (window.scrollY <= 300 && isVisible) {
-                        isVisible = false;
-                        gsap.to(btn, { autoAlpha: 0, y: 40, duration: 0.3, ease: 'power2.in' });
-                    }
-                });
-                btn.addEventListener('click', () => {
-                    window.scrollTo({ top: 0, behavior: 'smooth' });
-                });
-            }
-        });
-    </script>
-
-    <!-- WhatsApp Button -->
-    <a href="https://wa.me/6281234567890" target="_blank" class="fixed bottom-6 right-6 md:bottom-10 md:right-10 w-12 h-12 md:w-14 md:h-14 bg-green-500 text-white rounded-full flex items-center justify-center shadow-xl shadow-green-500/30 z-[90] hover:bg-green-600 transition-colors" aria-label="WhatsApp">
-        <i class="bi bi-whatsapp text-xl md:text-2xl font-bold"></i>
-    </a>
-
-    <script src="header.js"></script>
-    <script src="js/translator.js"></script></body>
+</body>
 </html>
