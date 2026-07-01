@@ -59,11 +59,11 @@
             <div class="flex items-center justify-between p-4 rounded-2xl !bg-white border !border-black/5 shadow-sm">
                 <span class="text-sm font-bold !text-gray-700">Bahasa</span>
                 <div class="flex items-center gap-2">
-                    <button class="flex items-center gap-2 !bg-base px-3 py-2 rounded-xl border !border-black/5 hover:!border-holiday transition">
+                    <button onclick="switchLanguage('id')" class="lang-selector-id-mob flex items-center gap-2 !bg-base px-3 py-2 rounded-xl border !border-black/5 hover:!border-holiday transition">
                         <img src="https://flagcdn.com/id.svg" class="w-5 h-auto rounded-sm shadow-sm" alt="ID">
                         <span class="font-bold text-sm">ID</span>
                     </button>
-                    <button class="flex items-center gap-2 !bg-transparent px-3 py-2 rounded-xl border !border-transparent hover:!bg-base hover:!border-black/5 transition">
+                    <button onclick="switchLanguage('en')" class="lang-selector-en-mob flex items-center gap-2 !bg-transparent px-3 py-2 rounded-xl border !border-transparent hover:!bg-base hover:!border-black/5 transition">
                         <img src="https://flagcdn.com/gb.svg" class="w-5 h-auto rounded-sm shadow-sm" alt="EN">
                         <span class="font-bold text-sm !text-gray-400 hover:!text-ink">EN</span>
                     </button>
@@ -142,8 +142,8 @@
             <div class="flex items-center gap-4">
                 <a href="privasi.html" class="hidden md:flex items-center justify-center w-11 h-11 rounded-full border !border-black/10 !text-ink hover:!text-holiday hover:!border-holiday transition !bg-white/50 backdrop-blur-md" title="Kebijakan Privasi"><i class="bi bi-shield-check text-xl"></i></a>
                 <div class="hidden md:flex items-center gap-3 border-l !border-black/10 pl-4" aria-label="Pilihan bahasa">
-                    <a href="index.html" class="w-7 h-7 rounded-full overflow-hidden border !border-black/10 hover:opacity-80 transition" aria-label="Bahasa Indonesia"><img src="https://flagcdn.com/id.svg" alt="ID" class="w-full h-full object-cover"></a>
-                    <a href="index.html" class="w-7 h-7 rounded-full overflow-hidden border !border-black/10 hover:opacity-80 transition" aria-label="English"><img src="https://flagcdn.com/gb.svg" alt="EN" class="w-full h-full object-cover"></a>
+                    <button onclick="switchLanguage('id')" class="lang-selector-id w-7 h-7 rounded-full overflow-hidden border !border-black/10 hover:opacity-80 transition" aria-label="Bahasa Indonesia"><img src="https://flagcdn.com/id.svg" alt="ID" class="w-full h-full object-cover"></button>
+                    <button onclick="switchLanguage('en')" class="lang-selector-en w-7 h-7 rounded-full overflow-hidden border !border-black/10 hover:opacity-80 transition" aria-label="English"><img src="https://flagcdn.com/gb.svg" alt="EN" class="w-full h-full object-cover"></button>
                 </div>
                 <button id="open-menu-btn" class="md:hidden w-11 h-11 flex items-center justify-center rounded-full !bg-ink !text-white border !border-black/10 hover:!bg-holiday transition">
                     <i class="bi bi-list text-2xl"></i>
