@@ -13,6 +13,16 @@
     @endif
 
     <div class="bg-white rounded-lg shadow p-6 max-w-3xl">
+        <div class="flex items-center justify-between mb-6">
+            <h2 class="text-lg font-semibold text-gray-800">Optimasi Gambar</h2>
+            <button id="convertWebpBtn" onclick="convertToWebp()" class="px-4 py-2 bg-holiday text-white rounded-lg hover:bg-holiday-dark transition text-sm font-semibold flex items-center gap-2">
+                <i class="bi bi-images"></i> Konversi ke WebP
+            </button>
+        </div>
+        <div id="webp-result" class="hidden p-4 rounded-lg mb-4 text-sm"></div>
+    </div>
+
+    <div class="bg-white rounded-lg shadow p-6 max-w-3xl">
         <form action="{{ route('admin.pengaturan.update') }}" method="POST" class="space-y-6">
             @csrf
 
@@ -87,4 +97,40 @@
         </form>
     </div>
 </div>
+<script>
+function convertToWebp() {
+    var btn = document.getElementById('convertWebpBtn');
+    var result = document.getElementById('webp-result');
+    btn.disabled = true;
+    btn.innerHTML = '<i class="bi bi-arrow-clockwise animate-spin"></i> Mengkonversi...';
+    result.className = 'hidden p-4 rounded-lg mb-4 text-sm';
+    fetch('{{ route("admin.convert.webp") }}', {
+        method: 'POST',
+        headers: {
+            'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').content,
+            'Accept': 'application/json'
+        }
+    })
+    .then(function(r) { return r.json(); })
+    .then(function(data) {
+        btn.disabled = false;
+        btn.innerHTML = '<i class="bi bi-images"></i> Konversi ke WebP';
+        if (data.success) {
+            result.className = 'p-4 rounded-lg mb-4 text-sm bg-green-100 text-green-700';
+            result.innerHTML = '<i class="bi bi-check-circle mr-1"></i> ' + data.message;
+        } else {
+            result.className = 'p-4 rounded-lg mb-4 text-sm bg-red-100 text-red-700';
+            result.innerHTML = '<i class="bi bi-exclamation-circle mr-1"></i> ' + data.message;
+        }
+        result.classList.remove('hidden');
+    })
+    .catch(function() {
+        btn.disabled = false;
+        btn.innerHTML = '<i class="bi bi-images"></i> Konversi ke WebP';
+        result.className = 'p-4 rounded-lg mb-4 text-sm bg-red-100 text-red-700';
+        result.innerHTML = '<i class="bi bi-exclamation-circle mr-1"></i> Gagal mengkonversi';
+        result.classList.remove('hidden');
+    });
+}
+</script>
 @endsection

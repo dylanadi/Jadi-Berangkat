@@ -101,12 +101,13 @@
         html { scroll-padding-top: 100px; }
         .img-edit-overlay { position:absolute;top:0;right:0;z-index:999;opacity:0;transition:opacity 0.2s; }
         .img-wrapper:hover .img-edit-overlay { opacity:1; }
+        .edit-mode-active .img-edit-overlay { opacity:1; }
         .img-edit-overlay button { width:36px;height:36px;background:#2f6f42;color:#fff;border:none;border-radius:0 0 0 8px;cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:16px;box-shadow:0 2px 8px rgba(0,0,0,0.3); }
         .img-edit-overlay button:hover { background:#17442a; }
     </style>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/tinymce/6.8.3/tinymce.min.js" referrerpolicy="origin"></script>
 </head>
-<body class="text-gray-800 overflow-x-hidden antialiased min-h-screen flex flex-col">
+<body class="text-gray-800 overflow-x-hidden antialiased min-h-screen flex flex-col" @auth style="color: {{ Auth::user()->text_color ?? '#151813' }} !important;" @endauth>
 
     {{-- Navbar & Sidebar --}}
     <div id="menu-overlay" class="fixed inset-0 !bg-black/60 z-[60] hidden opacity-0 backdrop-blur-sm"></div>
@@ -379,9 +380,17 @@
       <a href="/admin/pengaturan" class="text-xs text-gray-300 hover:text-white transition font-medium"><i class="bi bi-gear"></i> Pengaturan</a>
     </div>
     <div class="flex items-center gap-3">
-      <button onclick="toggleEditMode()" id="editModeBtnInToolbar" class="text-xs bg-holiday text-white px-3 py-1.5 rounded-full font-bold hover:bg-holiday-dark transition flex items-center gap-1.5">
-        <i class="bi bi-pencil-square"></i> <span id="editModeLabel">Mode Edit</span>
-      </button>
+      <div class="flex items-center gap-2">
+        <div id="colorPickerGroup" class="hidden flex items-center gap-1.5 bg-gray-800 rounded-full px-2 py-1">
+          <input type="color" id="textColorPicker" value="#2f6f42" class="w-7 h-7 rounded-full cursor-pointer border-0 p-0.5" title="Warna teks">
+          <button onclick="applyColorToSelection()" class="text-xs bg-holiday text-white px-2 py-1 rounded-full font-bold hover:bg-holiday-dark transition flex items-center gap-1" title="Terapkan warna ke teks terpilih">
+            <i class="bi bi-palette"></i>
+          </button>
+        </div>
+        <button onclick="toggleEditMode()" id="editModeBtnInToolbar" class="text-xs bg-holiday text-white px-3 py-1.5 rounded-full font-bold hover:bg-holiday-dark transition flex items-center gap-1.5">
+          <i class="bi bi-pencil-square"></i> <span id="editModeLabel">Mode Edit</span>
+        </button>
+      </div>
       <form method="POST" action="{{ route('logout') }}" class="inline">
         @csrf
         <button type="submit" class="text-xs text-gray-400 hover:text-red-400 transition"><i class="bi bi-box-arrow-right"></i></button>
@@ -417,6 +426,8 @@ document.getElementById('adminToolbar').style.display = 'block';
 function toggleEditMode() {
   editMode = !editMode;
   document.getElementById('editModeLabel').textContent = editMode ? 'Selesai Edit' : 'Mode Edit';
+  document.body.classList.toggle('edit-mode-active', editMode);
+  document.getElementById('colorPickerGroup').classList.toggle('hidden', !editMode);
 
   if (editMode) {
     document.querySelectorAll('[data-edit]').forEach(el => makeEditable(el));
@@ -426,6 +437,28 @@ function toggleEditMode() {
     finishEditMode();
     saveAllDirty();
   }
+}
+
+function applyColorToSelection() {
+  var sel = window.getSelection();
+  if (!sel.rangeCount || sel.isCollapsed) {
+    showToast('Blok dulu teks yang ingin diwarnai', 'error');
+    return;
+  }
+  var range = sel.getRangeAt(0);
+  var color = document.getElementById('textColorPicker').value;
+  var span = document.createElement('span');
+  span.style.color = color;
+  try {
+    range.surroundContents(span);
+  } catch(e) {
+    var fragment = range.extractContents();
+    span.appendChild(fragment);
+    range.insertNode(span);
+  }
+  sel.removeAllRanges();
+  sel.addRange(range);
+  showToast('Warna diterapkan: ' + color, 'success');
 }
 
 function initTinyMCE() {
@@ -458,7 +491,11 @@ function getContent(el) {
     }
     return el.innerHTML.trim();
   }
-  return el.innerText.trim();
+  var val = el.innerHTML.trim();
+  if (el.dataset.editType === 'number') {
+    val = val.replace(/[^0-9]/g, '');
+  }
+  return val;
 }
 
 function setContent(el, val) {
@@ -469,13 +506,18 @@ function setContent(el, val) {
     }
     el.innerHTML = val;
   } else {
-    el.textContent = val;
+    el.innerHTML = val;
   }
 }
 
 function makeEditable(el) {
-  if (el.dataset.editType === 'html') return; // handled by TinyMCE
-  el.dataset.originalValue = getContent(el);
+  if (el.dataset.editType === 'html') return;
+  var val = getContent(el);
+  if (el.dataset.editType === 'number') {
+    val = val.replace(/[^0-9]/g, '');
+  }
+  el.dataset.originalValue = val;
+  el.innerHTML = val;
   el.contentEditable = true;
   el.classList.add('ring-2', 'ring-[#2f6f42]', 'ring-offset-2', 'rounded', 'px-1');
 }
@@ -571,89 +613,122 @@ document.addEventListener('keydown', function(e) {
   }
 });
 
-// Image editing overlay
+// Image editing overlay with gallery picker
 (function() {
-  var uploadModal = null;
+  var imagePickerModal = null;
   var currentImg = null;
   var currentField = null;
 
-  function createUploadModal() {
+  function createImagePickerModal() {
     var modal = document.createElement('div');
-    modal.id = 'image-upload-modal';
+    modal.id = 'image-picker-modal';
     modal.style.cssText = 'position:fixed;inset:0;z-index:99999;background:rgba(0,0,0,0.6);display:none;align-items:center;justify-content:center;backdrop-filter:blur(4px);';
-    modal.innerHTML = '<div style="background:#fff;border-radius:16px;padding:32px;max-width:480px;width:90%;box-shadow:0 24px 48px rgba(0,0,0,0.3);text-align:center;">' +
-      '<h3 style="font-size:18px;font-weight:800;margin-bottom:4px;color:#151813;">Upload Gambar</h3>' +
-      '<p style="font-size:12px;color:#6b7280;margin-bottom:20px;">Klik atau drag & drop file gambar di sini</p>' +
-      '<div id="upload-dropzone" style="border:2px dashed #d1d5db;border-radius:12px;padding:40px 20px;cursor:pointer;transition:all 0.2s;background:#f9fafb;">' +
-        '<i class="bi bi-cloud-upload" style="font-size:40px;color:#2f6f42;display:block;margin-bottom:12px;"></i>' +
-        '<p style="font-size:13px;color:#6b7280;font-weight:500;">Tarik file ke sini atau klik untuk memilih</p>' +
-        '<p style="font-size:11px;color:#9ca3af;margin-top:6px;">PNG, JPG, WebP — Maks 5MB</p>' +
-        '<input type="file" id="upload-input" accept="image/*" style="display:none;">' +
+    modal.innerHTML = '<div style="background:#fff;border-radius:16px;padding:24px;max-width:720px;width:95%;max-height:90vh;overflow-y:auto;box-shadow:0 24px 48px rgba(0,0,0,0.3);">' +
+      '<div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:16px;">' +
+        '<h3 style="font-size:18px;font-weight:800;color:#151813;">Pilih Gambar</h3>' +
+        '<button id="picker-close-btn" style="width:32px;height:32px;border:none;background:#f3f4f6;border-radius:8px;cursor:pointer;font-size:18px;display:flex;align-items:center;justify-content:center;color:#6b7280;"><i class="bi bi-x"></i></button>' +
       '</div>' +
-      '<div id="upload-preview" style="display:none;margin-top:16px;position:relative;">' +
-        '<img id="upload-preview-img" style="max-height:200px;border-radius:8px;margin:0 auto;display:block;">' +
-        '<div id="upload-progress" style="display:none;margin-top:12px;height:4px;background:#e5e7eb;border-radius:4px;overflow:hidden;"><div style="height:100%;width:0%;background:#2f6f42;transition:width 0.3s;"></div></div>' +
+      '<div style="display:flex;gap:8px;margin-bottom:16px;flex-wrap:wrap;">' +
+        '<button id="picker-tab-gallery" style="padding:8px 16px;border:none;border-radius:8px;font-size:13px;font-weight:700;cursor:pointer;background:#2f6f42;color:#fff;">Galeri</button>' +
+        '<button id="picker-tab-upload" style="padding:8px 16px;border:1px solid #d1d5db;border-radius:8px;font-size:13px;font-weight:600;cursor:pointer;background:#fff;color:#374151;">Upload Baru</button>' +
       '</div>' +
-      '<div style="display:flex;gap:10px;margin-top:20px;justify-content:center;">' +
-        '<button id="upload-cancel-btn" style="padding:10px 24px;border:1px solid #d1d5db;border-radius:10px;font-size:13px;font-weight:600;cursor:pointer;background:#fff;color:#374151;">Batal</button>' +
-        '<button id="upload-save-btn" style="padding:10px 24px;border:none;border-radius:10px;font-size:13px;font-weight:700;cursor:pointer;background:#2f6f42;color:#fff;display:none;">Simpan</button>' +
+      '<div id="picker-gallery-view">' +
+        '<div id="picker-gallery-grid" style="display:grid;grid-template-columns:repeat(auto-fill,minmax(120px,1fr));gap:10px;max-height:400px;overflow-y:auto;padding:4px;">' +
+          '<div style="grid-column:1/-1;text-align:center;padding:40px 0;color:#9ca3af;font-size:14px;"><i class="bi bi-arrow-clockwise" style="display:block;font-size:24px;margin-bottom:8px;"></i>Memuat gambar...</div>' +
+        '</div>' +
+      '</div>' +
+      '<div id="picker-upload-view" style="display:none;">' +
+        '<div style="border:2px dashed #d1d5db;border-radius:12px;padding:32px 20px;cursor:pointer;transition:all 0.2s;background:#f9fafb;text-align:center;" id="picker-dropzone">' +
+          '<i class="bi bi-cloud-upload" style="font-size:36px;color:#2f6f42;display:block;margin-bottom:8px;"></i>' +
+          '<p style="font-size:13px;color:#6b7280;font-weight:500;">Tarik file ke sini atau klik untuk memilih</p>' +
+          '<p style="font-size:11px;color:#9ca3af;margin-top:4px;">PNG, JPG, WebP — Maks 5MB</p>' +
+          '<input type="file" id="picker-file-input" accept="image/*" style="display:none;">' +
+        '</div>' +
+        '<div id="picker-upload-preview" style="display:none;margin-top:12px;text-align:center;">' +
+          '<img id="picker-preview-img" style="max-height:180px;border-radius:8px;margin:0 auto;display:block;max-width:100%;">' +
+          '<div id="picker-upload-progress" style="display:none;margin-top:10px;height:4px;background:#e5e7eb;border-radius:4px;overflow:hidden;"><div style="height:100%;width:0%;background:#2f6f42;transition:width 0.3s;"></div></div>' +
+          '<button id="picker-upload-btn" style="margin-top:12px;padding:10px 24px;border:none;border-radius:10px;font-size:13px;font-weight:700;cursor:pointer;background:#2f6f42;color:#fff;display:none;">Upload & Pilih</button>' +
+        '</div>' +
       '</div>' +
     '</div>';
     document.body.appendChild(modal);
 
-    var dropzone = modal.querySelector('#upload-dropzone');
-    var input = modal.querySelector('#upload-input');
-    var preview = modal.querySelector('#upload-preview');
-    var previewImg = modal.querySelector('#upload-preview-img');
-    var progress = modal.querySelector('#upload-progress');
-    var progressBar = progress.querySelector('div');
-    var saveBtn = modal.querySelector('#upload-save-btn');
-    var cancelBtn = modal.querySelector('#upload-cancel-btn');
+    var closeBtn = modal.querySelector('#picker-close-btn');
+    var tabGallery = modal.querySelector('#picker-tab-gallery');
+    var tabUpload = modal.querySelector('#picker-tab-upload');
+    var galleryView = modal.querySelector('#picker-gallery-view');
+    var uploadView = modal.querySelector('#picker-upload-view');
+    var galleryGrid = modal.querySelector('#picker-gallery-grid');
+    var dropzone = modal.querySelector('#picker-dropzone');
+    var fileInput = modal.querySelector('#picker-file-input');
+    var uploadPreview = modal.querySelector('#picker-upload-preview');
+    var previewImg = modal.querySelector('#picker-preview-img');
+    var uploadProgress = modal.querySelector('#picker-upload-progress');
+    var progressBar = uploadProgress.querySelector('div');
+    var uploadBtn = modal.querySelector('#picker-upload-btn');
 
-    dropzone.addEventListener('click', function() { input.click(); });
+    closeBtn.addEventListener('click', closeModal);
+    modal.addEventListener('click', function(e) { if (e.target === modal) closeModal(); });
+
+    tabGallery.addEventListener('click', function() {
+      tabGallery.style.background = '#2f6f42'; tabGallery.style.color = '#fff';
+      tabUpload.style.background = '#fff'; tabUpload.style.color = '#374151'; tabUpload.style.borderColor = '#d1d5db';
+      galleryView.style.display = 'block';
+      uploadView.style.display = 'none';
+    });
+
+    tabUpload.addEventListener('click', function() {
+      tabUpload.style.background = '#2f6f42'; tabUpload.style.color = '#fff';
+      tabGallery.style.background = '#fff'; tabGallery.style.color = '#374151'; tabGallery.style.borderColor = '#d1d5db';
+      galleryView.style.display = 'none';
+      uploadView.style.display = 'block';
+    });
+
+    dropzone.addEventListener('click', function() { fileInput.click(); });
     dropzone.addEventListener('dragover', function(e) { e.preventDefault(); dropzone.style.borderColor = '#2f6f42'; dropzone.style.background = '#f0fdf4'; });
     dropzone.addEventListener('dragleave', function() { dropzone.style.borderColor = '#d1d5db'; dropzone.style.background = '#f9fafb'; });
-    dropzone.addEventListener('drop', function(e) { e.preventDefault(); dropzone.style.borderColor = '#d1d5db'; dropzone.style.background = '#f9fafb'; if (e.dataTransfer.files.length) handleFile(e.dataTransfer.files[0]); });
-    input.addEventListener('change', function() { if (this.files.length) handleFile(this.files[0]); });
+    dropzone.addEventListener('drop', function(e) { e.preventDefault(); dropzone.style.borderColor = '#d1d5db'; dropzone.style.background = '#f9fafb'; if (e.dataTransfer.files.length) handlePickerFile(e.dataTransfer.files[0]); });
+    fileInput.addEventListener('change', function() { if (this.files.length) handlePickerFile(this.files[0]); });
 
-    function handleFile(file) {
+    function handlePickerFile(file) {
       if (!file.type.startsWith('image/')) { showToast('Hanya file gambar yang diizinkan', 'error'); return; }
       if (file.size > 5 * 1024 * 1024) { showToast('Maksimal 5MB', 'error'); return; }
       var reader = new FileReader();
       reader.onload = function(e) {
         previewImg.src = e.target.result;
-        preview.style.display = 'block';
-        saveBtn.style.display = 'inline-block';
-        saveBtn._file = file;
+        uploadPreview.style.display = 'block';
+        uploadBtn.style.display = 'inline-block';
+        uploadBtn._file = file;
       };
       reader.readAsDataURL(file);
     }
 
-    saveBtn.addEventListener('click', function() {
-      var file = saveBtn._file;
+    uploadBtn.addEventListener('click', function() {
+      var file = uploadBtn._file;
       if (!file) return;
       var fd = new FormData();
       fd.append('image', file);
       fd.append('field', currentField || '');
+      fd.append('tipe', currentImg && currentImg.dataset.editTipe || '');
       fd.append('_token', document.querySelector('meta[name="csrf-token"]').content);
-      progress.style.display = 'block';
-      saveBtn.disabled = true;
-      saveBtn.textContent = 'Mengupload...';
+      uploadProgress.style.display = 'block';
+      uploadBtn.disabled = true;
+      uploadBtn.textContent = 'Mengupload...';
       var xhr = new XMLHttpRequest();
       xhr.open('POST', '/admin/upload-image');
       xhr.upload.onprogress = function(e) {
         if (e.lengthComputable) progressBar.style.width = (e.loaded / e.total * 100) + '%';
       };
       xhr.onload = function() {
-        saveBtn.disabled = false;
-        saveBtn.textContent = 'Simpan';
-        progress.style.display = 'none';
+        uploadBtn.disabled = false;
+        uploadBtn.textContent = 'Upload & Pilih';
+        uploadProgress.style.display = 'none';
         progressBar.style.width = '0%';
         if (xhr.status === 200) {
           var res = JSON.parse(xhr.responseText);
           if (res.url && currentImg) {
             currentImg.src = res.url;
-            showToast('Gambar berhasil diupload', 'success');
+            showToast('Gambar berhasil diganti', 'success');
             closeModal();
           } else {
             showToast(res.error || 'Gagal upload', 'error');
@@ -662,25 +737,92 @@ document.addEventListener('keydown', function(e) {
           showToast('Gagal upload gambar', 'error');
         }
       };
-      xhr.onerror = function() { showToast('Gagal upload gambar', 'error'); saveBtn.disabled = false; saveBtn.textContent = 'Simpan'; };
+      xhr.onerror = function() { showToast('Gagal upload gambar', 'error'); uploadBtn.disabled = false; uploadBtn.textContent = 'Upload & Pilih'; };
       xhr.send(fd);
     });
 
-    cancelBtn.addEventListener('click', closeModal);
-    modal.addEventListener('click', function(e) { if (e.target === modal) closeModal(); });
+    function loadGallery() {
+      galleryGrid.innerHTML = '<div style="grid-column:1/-1;text-align:center;padding:40px 0;color:#9ca3af;font-size:14px;"><i class="bi bi-arrow-clockwise" style="display:block;font-size:24px;margin-bottom:8px;"></i>Memuat gambar...</div>';
+      fetch('/admin/images', {
+        headers: { 'Accept': 'application/json', 'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').content }
+      })
+      .then(function(r) { return r.json(); })
+      .then(function(data) {
+        if (!data.images || !data.images.length) {
+          galleryGrid.innerHTML = '<div style="grid-column:1/-1;text-align:center;padding:40px 0;color:#9ca3af;font-size:14px;"><i class="bi bi-image" style="display:block;font-size:24px;margin-bottom:8px;"></i>Belum ada gambar</div>';
+          return;
+        }
+        galleryGrid.innerHTML = '';
+          data.images.forEach(function(img) {
+            var item = document.createElement('div');
+            item.style.cssText = 'border:2px solid #e5e7eb;border-radius:10px;overflow:hidden;cursor:pointer;position:relative;aspect-ratio:1;background:#f9fafb;transition:border-color 0.2s;';
+            item.innerHTML = '<img src="' + img.url + '" style="width:100%;height:100%;object-fit:cover;" loading="lazy" onerror="this.style.display=\'none\'">';
+            item.addEventListener('click', function() {
+              if (currentImg) {
+                currentImg.src = img.url;
+                if (currentImg.dataset.editField) {
+                  var imgField = currentImg.dataset.editField;
+                  currentImg.dataset.editValue = img.path;
+                  var saveData = { field: imgField, value: String(img.image_id || img.path), tipe: currentImg.dataset.editTipe || 'tentang' };
+                  if (img.image_id) saveData.image_id = img.image_id;
+                  fetch('/admin/inline-update', {
+                    method: 'POST',
+                    headers: {
+                      'Content-Type': 'application/json',
+                      'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').content,
+                      'Accept': 'application/json'
+                    },
+                    body: JSON.stringify(saveData)
+                  })
+                  .then(function(r) { return r.json(); })
+                  .then(function(res) {
+                    if (res.success) showToast('Gambar berhasil dipilih', 'success');
+                    else showToast('Gagal menyimpan', 'error');
+                  })
+                  .catch(function() { showToast('Gagal menyimpan gambar', 'error'); });
+                }
+                closeModal();
+              }
+            });
+            galleryGrid.appendChild(item);
+          });
+      })
+      .catch(function() {
+        galleryGrid.innerHTML = '<div style="grid-column:1/-1;text-align:center;padding:40px 0;color:#ef4444;font-size:14px;"><i class="bi bi-exclamation-triangle" style="display:block;font-size:24px;margin-bottom:8px;"></i>Gagal memuat gambar</div>';
+      });
+    }
 
-    function closeModal() { modal.style.display = 'none'; currentImg = null; currentField = null; preview.style.display = 'none'; saveBtn.style.display = 'none'; saveBtn._file = null; dropzone.style.borderColor = '#d1d5db'; dropzone.style.background = '#f9fafb'; }
+    function closeModal() {
+      modal.style.display = 'none';
+      currentImg = null;
+      currentField = null;
+      uploadPreview.style.display = 'none';
+      uploadBtn.style.display = 'none';
+      uploadBtn._file = null;
+      uploadProgress.style.display = 'none';
+      progressBar.style.width = '0%';
+      dropzone.style.borderColor = '#d1d5db';
+      dropzone.style.background = '#f9fafb';
+    }
+
+    modal._open = function(img, field) {
+      currentImg = img;
+      currentField = field || '';
+      modal.style.display = 'flex';
+      tabGallery.click();
+      loadGallery();
+    };
 
     return modal;
   }
 
   document.addEventListener('DOMContentLoaded', function() {
-    uploadModal = createUploadModal();
+    imagePickerModal = createImagePickerModal();
     document.querySelectorAll('[data-image-edit]').forEach(function(img) {
       if (img.parentElement.classList.contains('img-wrapper')) return;
       var wrapper = document.createElement('div');
       wrapper.className = 'img-wrapper';
-      wrapper.style.cssText = 'position:relative;display:inline-block;';
+      wrapper.style.cssText = 'position:relative;display:inline-block;max-width:100%;';
       img.parentNode.insertBefore(wrapper, img);
       wrapper.appendChild(img);
 
@@ -688,7 +830,7 @@ document.addEventListener('keydown', function(e) {
       overlay.className = 'img-edit-overlay';
       var btn = document.createElement('button');
       btn.innerHTML = '<i class="bi bi-pencil-square"></i>';
-      btn.title = 'Edit gambar';
+      btn.title = 'Ganti gambar';
       btn.addEventListener('click', function(e) {
         e.preventDefault();
         e.stopPropagation();
@@ -696,9 +838,7 @@ document.addEventListener('keydown', function(e) {
         if (url) {
           window.open(url, '_blank');
         } else {
-          currentImg = img;
-          currentField = img.dataset.editField || '';
-          uploadModal.style.display = 'flex';
+          imagePickerModal._open(img, img.dataset.editField || '');
         }
       });
       overlay.appendChild(btn);

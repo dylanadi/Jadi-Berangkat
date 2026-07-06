@@ -4,22 +4,25 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Models\Destinasi;
-use App\Models\JadwalPerjalanan;
-use App\Models\IncludeModel;
-use App\Models\UnInclude;
+use App\Models\Image;
 use Illuminate\Http\Request;
+use Illuminate\Support\Str;
 
 class DestinasiController extends Controller
 {
     public function index()
     {
-        $destinasi = Destinasi::latest()->paginate(10);
+        $destinasi = Destinasi::with('image')->latest()->paginate(10);
         return view('admin.destinasi.index', compact('destinasi'));
     }
 
     public function create()
     {
-        return view('admin.destinasi.create');
+        $images = Image::latest()->get();
+        $kategoriList = Destinasi::KATEGORI;
+        $durasiList = Destinasi::DURASI;
+        $moodList = Destinasi::MOOD;
+        return view('admin.destinasi.create', compact('images', 'kategoriList', 'durasiList', 'moodList'));
     }
 
     public function store(Request $request)
@@ -27,19 +30,24 @@ class DestinasiController extends Controller
         $validated = $request->validate([
             'kategori' => 'required|string',
             'nama' => 'required|string|max:255',
-            'slug' => 'required|string|max:255|unique:destinasi',
             'deskripsi' => 'nullable|string',
             'lokasi' => 'nullable|string|max:255',
             'harga' => 'nullable|numeric',
-            'gambar' => 'nullable|image|mimes:jpeg,png,jpg|max:2048',
+            'image_id' => 'nullable|exists:images,id',
             'status' => 'required|string|in:aktif,nonaktif',
             'durasi' => 'nullable|string|max:50',
             'mood' => 'nullable|string|max:50',
             'rating' => 'nullable|string|max:10',
         ]);
 
-        if ($request->hasFile('gambar')) {
-            $validated['gambar'] = $request->file('gambar')->store('destinasi', 'public');
+        $validated['slug'] = Str::slug($validated['nama']);
+        
+        // Ensure slug is unique
+        $originalSlug = $validated['slug'];
+        $counter = 1;
+        while (Destinasi::where('slug', $validated['slug'])->exists()) {
+            $validated['slug'] = $originalSlug . '-' . $counter;
+            $counter++;
         }
 
         Destinasi::create($validated);
@@ -48,7 +56,11 @@ class DestinasiController extends Controller
 
     public function edit(Destinasi $destinasi)
     {
-        return view('admin.destinasi.edit', compact('destinasi'));
+        $images = Image::latest()->get();
+        $kategoriList = Destinasi::KATEGORI;
+        $durasiList = Destinasi::DURASI;
+        $moodList = Destinasi::MOOD;
+        return view('admin.destinasi.edit', compact('destinasi', 'images', 'kategoriList', 'durasiList', 'moodList'));
     }
 
     public function update(Request $request, Destinasi $destinasi)
@@ -56,19 +68,24 @@ class DestinasiController extends Controller
         $validated = $request->validate([
             'kategori' => 'required|string',
             'nama' => 'required|string|max:255',
-            'slug' => 'required|string|max:255|unique:destinasi,slug,' . $destinasi->id,
             'deskripsi' => 'nullable|string',
             'lokasi' => 'nullable|string|max:255',
             'harga' => 'nullable|numeric',
-            'gambar' => 'nullable|image|mimes:jpeg,png,jpg|max:2048',
+            'image_id' => 'nullable|exists:images,id',
             'status' => 'required|string|in:aktif,nonaktif',
             'durasi' => 'nullable|string|max:50',
             'mood' => 'nullable|string|max:50',
             'rating' => 'nullable|string|max:10',
         ]);
 
-        if ($request->hasFile('gambar')) {
-            $validated['gambar'] = $request->file('gambar')->store('destinasi', 'public');
+        $validated['slug'] = Str::slug($validated['nama']);
+        
+        // Ensure slug is unique
+        $originalSlug = $validated['slug'];
+        $counter = 1;
+        while (Destinasi::where('slug', $validated['slug'])->where('id', '!=', $destinasi->id)->exists()) {
+            $validated['slug'] = $originalSlug . '-' . $counter;
+            $counter++;
         }
 
         $destinasi->update($validated);

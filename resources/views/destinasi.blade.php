@@ -3,253 +3,256 @@
 @section('title', 'Destinasi Pilihan - Jadiberangkat')
 
 @push('styles')
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
 <style>
-    .hero-destinasi {
-        position: relative; height: 60vh; min-height: 420px;
-        background: url('{{ asset('img/hero-destinasi.jpg') }}') center/cover no-repeat;
-        display: flex; align-items: center; justify-content: center;
+    /* View Toggle Styles */
+    #destinasi-grid {
+        transition: opacity 0.3s ease;
     }
-    .hero-destinasi::before {
-        content: ''; position: absolute; inset: 0;
-        background: linear-gradient(135deg, rgba(47,111,66,0.75) 0%, rgba(0,0,0,0.45) 100%);
+    
+    /* Uniform View */
+    .view-uniform {
+        column-count: auto !important;
+        display: grid !important;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 1rem;
     }
-    .hero-destinasi .hero-content { position: relative; z-index: 2; text-align: center; color: #fff; }
-    .hero-destinasi h1 { font-size: clamp(2rem, 5vw, 4rem); font-weight: 800; letter-spacing: -0.02em; margin-bottom: 0.5rem; text-shadow: 0 2px 20px rgba(0,0,0,0.3); }
-    .hero-destinasi p { font-size: clamp(0.95rem, 1.5vw, 1.2rem); opacity: 0.9; max-width: 600px; margin: 0 auto; }
+    @media (min-width: 768px) { .view-uniform { grid-template-columns: repeat(4, minmax(0, 1fr)); } }
+    @media (min-width: 1024px) { .view-uniform { grid-template-columns: repeat(6, minmax(0, 1fr)); } }
+    
+    .view-uniform > div {
+        height: 280px !important;
+        margin-bottom: 0 !important;
+    }
+    
+    .view-uniform > div > a {
+        height: 100% !important;
+    }
 
-    .cat-btn { padding: 8px 22px; border-radius: 50px; font-size: 14px; font-weight: 600; transition: all 0.3s ease; cursor: pointer; border: 2px solid #ddd; background: transparent; color: #555; }
-    .cat-btn:hover, .cat-btn.active { border-color: #2f6f42; background: #2f6f42; color: #fff; }
-
-    .view-btn { padding: 8px 14px; border-radius: 8px; border: 1px solid #ddd; background: #fff; color: #555; cursor: pointer; transition: all 0.2s; }
-    .view-btn.active { border-color: #2f6f42; background: #2f6f42; color: #fff; }
-    .view-btn:hover:not(.active) { border-color: #2f6f42; color: #2f6f42; }
-
-    .dest-card { border-radius: 16px; overflow: hidden; background: #fff; box-shadow: 0 4px 20px rgba(0,0,0,0.06); transition: all 0.4s cubic-bezier(0.25,0.46,0.45,0.94); cursor: pointer; }
-    .dest-card:hover { transform: translateY(-6px); box-shadow: 0 12px 40px rgba(47,111,66,0.15); }
-    .dest-card .card-img { position: relative; overflow: hidden; aspect-ratio: 4/3; }
-    .dest-card .card-img img { width: 100%; height: 100%; object-fit: cover; transition: transform 0.6s; }
-    .dest-card:hover .card-img img { transform: scale(1.08); }
-    .dest-card .card-badge { position: absolute; top: 12px; left: 12px; padding: 4px 14px; border-radius: 50px; font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px; background: rgba(47,111,66,0.9); color: #fff; backdrop-filter: blur(4px); }
-    .dest-card .card-rating { position: absolute; top: 12px; right: 12px; display: flex; align-items: center; gap: 4px; padding: 4px 10px; border-radius: 50px; font-size: 12px; font-weight: 700; background: rgba(255,255,255,0.9); color: #f59e0b; backdrop-filter: blur(4px); }
-    .dest-card .card-body { padding: 18px; }
-    .dest-card .card-body h3 { font-size: 18px; font-weight: 700; color: #1a1a2e; margin-bottom: 4px; }
-    .dest-card .card-body .location { font-size: 13px; color: #888; display: flex; align-items: center; gap: 5px; margin-bottom: 10px; }
-    .dest-card .card-body .location i { color: #2f6f42; }
-    .dest-card .card-body .meta { display: flex; flex-wrap: wrap; gap: 12px; font-size: 12px; color: #888; margin-bottom: 12px; }
-    .dest-card .card-body .meta span { display: flex; align-items: center; gap: 4px; }
-    .dest-card .card-body .meta i { color: #2f6f42; }
-    .dest-card .card-body .price { font-size: 20px; font-weight: 800; color: #2f6f42; }
-    .dest-card .card-body .price small { font-size: 12px; font-weight: 400; color: #888; }
-
-    .featured-card-large { grid-column: span 2; grid-row: span 2; }
-    .featured-card-large .card-img { aspect-ratio: auto; height: 100%; }
-    .featured-card-large .card-body { position: absolute; bottom: 0; left: 0; right: 0; background: linear-gradient(transparent, rgba(0,0,0,0.75)); color: #fff; padding: 30px 24px 20px; }
-    .featured-card-large .card-body h3 { color: #fff; font-size: 24px; }
-    .featured-card-large .card-body .location, .featured-card-large .card-body .meta { color: rgba(255,255,255,0.8); }
-    .featured-card-large .card-body .price { color: #fff; }
-    .featured-card-large .card-body .price small { color: rgba(255,255,255,0.7); }
-
-    .grid-pinterest .dest-card:nth-child(3n+1) .card-img { aspect-ratio: 3/4; }
-    .grid-pinterest .dest-card:nth-child(3n+2) .card-img { aspect-ratio: 1/1; }
-    .grid-pinterest .dest-card:nth-child(3n+3) .card-img { aspect-ratio: 4/3; }
-
-    .grid-uniform .dest-card .card-img { aspect-ratio: 4/3; }
-
-    .grid-card .dest-card { display: flex; flex-direction: row; }
-    .grid-card .dest-card .card-img { min-width: 280px; aspect-ratio: auto; height: 200px; }
-    .grid-card .dest-card .card-body { flex: 1; display: flex; flex-direction: column; justify-content: center; }
-
-    .search-box { position: relative; }
-    .search-box input { width: 100%; padding: 14px 20px 14px 50px; border-radius: 60px; border: 2px solid #e0e0e0; background: #fff; font-size: 15px; outline: none; transition: all 0.3s; }
-    .search-box input:focus { border-color: #2f6f42; box-shadow: 0 0 0 4px rgba(47,111,66,0.1); }
-    .search-box i { position: absolute; left: 20px; top: 50%; transform: translateY(-50%); color: #999; font-size: 18px; }
-
-    @media (max-width: 768px) {
-        .grid-card .dest-card { flex-direction: column; }
-        .grid-card .dest-card .card-img { min-width: auto; }
+    /* Card View */
+    .view-card {
+        column-count: auto !important;
+        display: grid !important;
+        grid-template-columns: repeat(1, minmax(0, 1fr));
+        gap: 1.5rem;
+    }
+    @media (min-width: 640px) { .view-card { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+    @media (min-width: 768px) { .view-card { grid-template-columns: repeat(3, minmax(0, 1fr)); } }
+    @media (min-width: 1024px) { .view-card { grid-template-columns: repeat(4, minmax(0, 1fr)); } }
+    
+    .view-card > div {
+        height: auto !important;
+        margin-bottom: 0 !important;
+    }
+    .view-card > div > a {
+        height: auto !important;
+        background-color: white !important;
+        border: 1px solid #e5e7eb;
+        display: flex;
+        flex-direction: column;
+    }
+    .view-card > div > a > img {
+        position: relative !important;
+        height: 200px !important;
+    }
+    .view-card > div > a > div:nth-child(2) {
+        display: none !important;
+    }
+    .view-card > div > a > div:nth-child(3) {
+        position: relative !important;
+        padding: 1.25rem !important;
+        background: transparent !important;
+    }
+    .view-card > div > a h4 {
+        color: #151813 !important;
+    }
+    .view-card > div > a p {
+        color: #4b5563 !important;
+        max-width: none !important; 
     }
 </style>
 @endpush
 
 @section('content')
-<section class="hero-destinasi">
-    <div class="hero-content px-4">
-        <h1>Destinasi Pilihan</h1>
-        <p>Temukan pengalaman perjalanan tak terlupakan bersama Jadiberangkat</p>
-    </div>
+<!-- HERO SECTION SLIDER -->
+<section class="relative h-[65vh] w-full mt-0 overflow-hidden bg-ink" id="hero-slider">
+    @if(isset($slider_destinasi) && $slider_destinasi->count() > 0)
+        @foreach($slider_destinasi as $index => $slide)
+        <div class="hero-slide absolute inset-0 w-full h-full transition-opacity duration-1000 ease-in-out {{ $index === 0 ? 'opacity-100 z-10' : 'opacity-0 z-0 pointer-events-none' }}" data-slide="{{ $index }}">
+            <img src="{{ $slide->image ? $slide->image->url : asset('img/placeholder.png') }}" alt="{{ $slide->nama }}" class="absolute inset-0 w-full h-full object-cover object-center transform transition-transform duration-[8000ms] ease-out {{ $index === 0 ? 'scale-105' : 'scale-100' }}">
+            <div class="absolute inset-0 bg-gradient-to-t from-ink via-ink/60 to-black/30"></div>
+            <div class="absolute inset-0 flex flex-col justify-center items-center text-center px-6 mt-16">
+                <div class="slide-content transform transition-all duration-1000 ease-out {{ $index === 0 ? 'translate-y-0 opacity-100' : 'translate-y-8 opacity-0' }} max-w-4xl">
+                    <span class="inline-block text-holiday-light font-bold text-sm tracking-widest uppercase mb-4 drop-shadow-md bg-black/20 px-4 py-1.5 rounded-full backdrop-blur-sm">{{ $slide->kategori }}</span>
+                    <h1 class="text-4xl md:text-6xl lg:text-7xl font-extrabold text-white drop-shadow-2xl mb-4 leading-tight">{{ $slide->nama }}</h1>
+                    <p class="text-white/90 text-base md:text-lg lg:text-xl font-medium max-w-2xl mx-auto drop-shadow-md line-clamp-2">
+                        {{ $slide->deskripsi_singkat ?? Str::limit(strip_tags($slide->deskripsi), 120) }}
+                    </p>
+                    <div class="mt-8">
+                        <a href="{{ route('destinasi.show', $slide->slug) }}" class="inline-flex items-center gap-2 px-8 py-3.5 bg-holiday hover:bg-holiday-dark text-white font-bold rounded-full transition-all duration-300 transform hover:-translate-y-1 shadow-lg shadow-holiday/30">
+                            Jelajahi <i class="bi bi-arrow-right"></i>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+        @endforeach
+        
+        <!-- Slider Navigation -->
+        <div class="absolute bottom-8 left-0 right-0 z-20 flex justify-center gap-2.5">
+            @foreach($slider_destinasi as $index => $slide)
+            <button class="slider-dot w-2.5 h-2.5 rounded-full transition-all duration-300 {{ $index === 0 ? 'bg-holiday w-8' : 'bg-white/50 hover:bg-white' }}" data-target="{{ $index }}" aria-label="Slide {{ $index + 1 }}"></button>
+            @endforeach
+        </div>
+        
+        <!-- Slider Controls -->
+        <button id="slider-prev" class="absolute left-4 md:left-8 top-1/2 -translate-y-1/2 z-20 w-12 h-12 rounded-full bg-white/10 hover:bg-white/20 backdrop-blur-md text-white flex items-center justify-center transition-all duration-300 opacity-0 group-hover:opacity-100 hidden md:flex">
+            <i class="bi bi-chevron-left text-xl"></i>
+        </button>
+        <button id="slider-next" class="absolute right-4 md:right-8 top-1/2 -translate-y-1/2 z-20 w-12 h-12 rounded-full bg-white/10 hover:bg-white/20 backdrop-blur-md text-white flex items-center justify-center transition-all duration-300 opacity-0 group-hover:opacity-100 hidden md:flex">
+            <i class="bi bi-chevron-right text-xl"></i>
+        </button>
+    @else
+        <!-- Fallback static hero -->
+        <img src="{{ asset('img/bluefire (1).png') }}" class="absolute inset-0 w-full h-full object-cover object-center">
+        <div class="absolute inset-0 bg-gradient-to-t from-ink via-ink/40 to-black/30"></div>
+        <div class="absolute inset-0 flex flex-col justify-center items-center text-center px-6 mt-16">
+            <h1 class="text-5xl md:text-7xl font-extrabold text-white drop-shadow-2xl">Destinasi Pilihan</h1>
+        </div>
+    @endif
 </section>
 
-<div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
-    <nav class="breadcrumb" aria-label="Breadcrumb">
-        <a href="{{ route('home') }}">Beranda</a>
-        <span class="sep">›</span>
-        <span>Destinasi</span>
-    </nav>
-</div>
+<main class="max-w-7xl mx-auto px-6 md:px-12 py-16">
+    
+    <!-- UNTUK ANDA -->
+    <section class="mb-16">
+        <h2 data-edit="destinasi_untuk_anda_judul" data-edit-type="text" data-edit-tipe="destinasi" class="text-3xl md:text-4xl font-extrabold text-ink mb-8">{!! $data->destinasi_untuk_anda_judul ?? 'Untuk Anda' !!}</h2>
+        <div class="grid lg:grid-cols-[1.05fr_1fr] gap-5 lg:gap-6">
+            <!-- Kiri: 1 Card -->
+            @if($featured_destinasi->count() > 0)
+            <a href="{{ route('destinasi.show', $featured_destinasi[0]->slug) }}" class="group relative min-h-[400px] lg:min-h-[520px] overflow-hidden rounded-[1.75rem] bg-ink text-white shadow-md hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-2">
+                <img src="{{ $featured_destinasi[0]->image ? $featured_destinasi[0]->image->url : asset('img/placeholder.png') }}" alt="{{ $featured_destinasi[0]->nama }}" class="absolute inset-0 h-full w-full object-cover transition-transform duration-700 group-hover:scale-105">
+                <div class="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent"></div>
+                <div class="absolute left-6 right-6 top-6 flex items-center justify-between">
+                    <span class="rounded-full bg-white/16 px-4 py-2 text-xs font-extrabold uppercase tracking-[0.16em] backdrop-blur-md">Rekomendasi</span>
+                </div>
+                <div class="absolute bottom-0 left-0 right-0 p-8">
+                    <h3 class="text-4xl md:text-5xl font-extrabold leading-tight">{{ $featured_destinasi[0]->nama }}</h3>
+                </div>
+            </a>
+            @endif
+            
+            <!-- Kanan: 2 Cards -->
+            <div class="grid gap-5 lg:gap-6 grid-rows-2">
+                @if($featured_destinasi->count() > 1)
+                <a href="{{ route('destinasi.show', $featured_destinasi[1]->slug) }}" class="group relative min-h-[200px] lg:min-h-[250px] overflow-hidden rounded-[1.5rem] bg-ink text-white shadow-md hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-1">
+                    <img src="{{ $featured_destinasi[1]->image ? $featured_destinasi[1]->image->url : asset('img/placeholder.png') }}" alt="{{ $featured_destinasi[1]->nama }}" class="absolute inset-0 h-full w-full object-cover transition-transform duration-700 group-hover:scale-105">
+                    <div class="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent"></div>
+                    <div class="absolute bottom-0 left-0 right-0 p-6 z-10">
+                        <h3 class="text-2xl font-extrabold">{{ $featured_destinasi[1]->nama }}</h3>
+                    </div>
+                </a>
+                @endif
+                @if($featured_destinasi->count() > 2)
+                <a href="{{ route('destinasi.show', $featured_destinasi[2]->slug) }}" class="group relative min-h-[200px] lg:min-h-[250px] overflow-hidden rounded-[1.5rem] bg-ink text-white shadow-md hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-1">
+                    <img src="{{ $featured_destinasi[2]->image ? $featured_destinasi[2]->image->url : asset('img/placeholder.png') }}" alt="{{ $featured_destinasi[2]->nama }}" class="absolute inset-0 h-full w-full object-cover transition-transform duration-700 group-hover:scale-105">
+                    <div class="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent"></div>
+                    <div class="absolute bottom-0 left-0 right-0 p-6 z-10">
+                        <h3 class="text-2xl font-extrabold">{{ $featured_destinasi[2]->nama }}</h3>
+                    </div>
+                </a>
+                @endif
+            </div>
+        </div>
+    </section>
 
-<section class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pb-8">
-    <div class="flex items-center justify-between mb-6">
-        <h2 class="text-2xl font-bold text-[#1a1a2e] flex items-center gap-2">
-            <i class="bi bi-star-fill text-[#2f6f42]"></i> Untuk Anda
-        </h2>
+    <!-- KATEGORI & SEARCH -->
+    <div class="flex flex-col md:flex-row justify-between items-center mb-6 gap-4 border-t border-black/10 pt-10">
+        <!-- Categories -->
+        <div class="flex gap-2 overflow-x-auto w-full md:w-auto pb-2 md:pb-0 no-scrollbar" id="categoryFilters">
+            <button class="cat-btn active px-5 py-2.5 rounded-full text-xs font-bold uppercase tracking-wider bg-holiday text-white shadow-sm transition whitespace-nowrap" data-cat="semua" onclick="filterCategory('semua', this)">Semua</button>
+            <button class="cat-btn px-5 py-2.5 rounded-full text-xs font-bold uppercase tracking-wider bg-white text-gray-600 border border-gray-200 hover:border-holiday hover:text-holiday shadow-sm transition whitespace-nowrap" data-cat="alam" onclick="filterCategory('alam', this)">Alam</button>
+            <button class="cat-btn px-5 py-2.5 rounded-full text-xs font-bold uppercase tracking-wider bg-white text-gray-600 border border-gray-200 hover:border-holiday hover:text-holiday shadow-sm transition whitespace-nowrap" data-cat="budaya" onclick="filterCategory('budaya', this)">Budaya</button>
+            <button class="cat-btn px-5 py-2.5 rounded-full text-xs font-bold uppercase tracking-wider bg-white text-gray-600 border border-gray-200 hover:border-holiday hover:text-holiday shadow-sm transition whitespace-nowrap" data-cat="pantai" onclick="filterCategory('pantai', this)">Pantai</button>
+            <button class="cat-btn px-5 py-2.5 rounded-full text-xs font-bold uppercase tracking-wider bg-white text-gray-600 border border-gray-200 hover:border-holiday hover:text-holiday shadow-sm transition whitespace-nowrap" data-cat="kuliner" onclick="filterCategory('kuliner', this)">Kuliner</button>
+        </div>
+        
+        <!-- Search Bar -->
+        <div class="relative w-full md:w-72">
+            <input type="text" id="searchDestinasi" oninput="filterDestinasi()" placeholder="Cari destinasi wisata..." class="w-full pl-11 pr-4 py-3 rounded-full border border-gray-200 focus:outline-none focus:border-holiday focus:ring-1 focus:ring-holiday text-sm bg-white font-medium">
+            <i class="bi bi-search absolute left-4 top-1/2 -translate-y-1/2 text-gray-400 text-lg"></i>
+        </div>
     </div>
-    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5 auto-rows-[280px]">
-        <a href="{{ route('destinasi.show', 'kawah-ijen') }}" class="dest-card featured-card-large relative overflow-hidden rounded-2xl group">
-            <div class="card-img absolute inset-0">
-                <img src="{{ asset('img/kawah-ijen.jpg') }}" alt="Kawah Ijen" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700">
-            </div>
-            <div class="absolute inset-0 bg-gradient-to-t from-black/70 via-black/20 to-transparent"></div>
-            <div class="relative z-10 mt-auto p-6 text-white">
-                <span class="inline-block px-3 py-1 text-xs font-bold uppercase bg-[#2f6f42]/90 rounded-full mb-3">Alam</span>
-                <h3 class="text-2xl font-bold mb-1">Kawah Ijen</h3>
-                <p class="flex items-center gap-1 text-sm text-white/80 mb-2"><i class="bi bi-geo-alt"></i> Banyuwangi, Jawa Timur</p>
-                <div class="flex items-center gap-4 text-xs text-white/70 mb-3">
-                    <span><i class="bi bi-clock"></i> 3 Hari</span>
-                    <span><i class="bi bi-emoji-smile"></i> Petualangan</span>
-                    <span class="flex items-center gap-1 text-yellow-400"><i class="bi bi-star-fill"></i> 4.8</span>
-                </div>
-                <div class="text-2xl font-bold">Rp 1.250K <small class="text-sm font-normal text-white/60">/orang</small></div>
-            </div>
-        </a>
 
-        <a href="{{ route('destinasi.show', 'de-djawatan') }}" class="dest-card rounded-2xl overflow-hidden group">
-            <div class="card-img h-[280px]">
-                <img src="{{ asset('img/de-djawatan.jpg') }}" alt="De Djawatan" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700">
-            </div>
-            <div class="p-4 bg-white">
-                <span class="inline-block px-3 py-1 text-xs font-bold uppercase bg-[#2f6f42]/90 text-white rounded-full mb-2">Alam</span>
-                <h3 class="text-lg font-bold text-[#1a1a2e]">De Djawatan</h3>
-                <p class="flex items-center gap-1 text-sm text-gray-500"><i class="bi bi-geo-alt text-[#2f6f42]"></i> Banyuwangi</p>
-                <div class="flex items-center gap-3 text-xs text-gray-400 mt-2 mb-2">
-                    <span><i class="bi bi-clock"></i> 1 Hari</span>
-                    <span class="flex items-center gap-1 text-yellow-400"><i class="bi bi-star-fill"></i> 4.6</span>
-                </div>
-                <div class="text-lg font-bold text-[#2f6f42]">Rp 350K <small class="text-xs font-normal text-gray-400">/org</small></div>
-            </div>
-        </a>
+    <!-- BREADCRUMB & VIEW TOGGLE -->
+    <div class="flex justify-between items-center mb-8 relative">
+        <nav class="text-sm font-medium text-gray-500" aria-label="Breadcrumb">
+            <ol class="list-none p-0 inline-flex items-center">
+                <li class="flex items-center">
+                    <a href="{{ route('home') }}" class="hover:text-holiday transition">Beranda</a>
+                    <i class="bi bi-chevron-right mx-2 text-xs"></i>
+                </li>
+                <li class="flex items-center">
+                    <span class="text-ink font-bold">Destinasi</span>
+                </li>
+            </ol>
+        </nav>
 
-        <a href="{{ route('destinasi.show', 'pantai-boom') }}" class="dest-card rounded-2xl overflow-hidden group">
-            <div class="card-img h-[130px]">
-                <img src="{{ asset('img/pantai-boom.jpg') }}" alt="Pantai Boom" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700">
-            </div>
-            <div class="p-4 bg-white">
-                <span class="inline-block px-3 py-1 text-xs font-bold uppercase bg-blue-500 text-white rounded-full mb-2">Pantai</span>
-                <h3 class="text-lg font-bold text-[#1a1a2e]">Pantai Boom</h3>
-                <p class="flex items-center gap-1 text-sm text-gray-500"><i class="bi bi-geo-alt text-[#2f6f42]"></i> Banyuwangi</p>
-                <div class="flex items-center gap-3 text-xs text-gray-400 mt-2 mb-2">
-                    <span><i class="bi bi-clock"></i> 1 Hari</span>
-                    <span class="flex items-center gap-1 text-yellow-400"><i class="bi bi-star-fill"></i> 4.5</span>
-                </div>
-                <div class="text-lg font-bold text-[#2f6f42]">Rp 250K <small class="text-xs font-normal text-gray-400">/org</small></div>
-            </div>
-        </a>
-
-        <a href="{{ route('destinasi.show', 'pulau-merah') }}" class="dest-card rounded-2xl overflow-hidden group">
-            <div class="card-img h-[130px]">
-                <img src="{{ asset('img/pulau-merah.jpg') }}" alt="Pulau Merah" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700">
-            </div>
-            <div class="p-4 bg-white">
-                <span class="inline-block px-3 py-1 text-xs font-bold uppercase bg-blue-500 text-white rounded-full mb-2">Pantai</span>
-                <h3 class="text-lg font-bold text-[#1a1a2e]">Pulau Merah</h3>
-                <p class="flex items-center gap-1 text-sm text-gray-500"><i class="bi bi-geo-alt text-[#2f6f42]"></i> Banyuwangi</p>
-                <div class="flex items-center gap-3 text-xs text-gray-400 mt-2 mb-2">
-                    <span><i class="bi bi-clock"></i> 1 Hari</span>
-                    <span class="flex items-center gap-1 text-yellow-400"><i class="bi bi-star-fill"></i> 4.7</span>
-                </div>
-                <div class="text-lg font-bold text-[#2f6f42]">Rp 300K <small class="text-xs font-normal text-gray-400">/org</small></div>
-            </div>
-        </a>
-
-        <a href="{{ route('destinasi.show', 'ijen-blaster') }}" class="dest-card rounded-2xl overflow-hidden group">
-            <div class="card-img h-[130px]">
-                <img src="{{ asset('img/ijen-blaster.jpg') }}" alt="Ijen Blaster" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700">
-            </div>
-            <div class="p-4 bg-white">
-                <span class="inline-block px-3 py-1 text-xs font-bold uppercase bg-purple-600 text-white rounded-full mb-2">Budaya</span>
-                <h3 class="text-lg font-bold text-[#1a1a2e]">Ijen Blaster</h3>
-                <p class="flex items-center gap-1 text-sm text-gray-500"><i class="bi bi-geo-alt text-[#2f6f42]"></i> Banyuwangi</p>
-                <div class="flex items-center gap-3 text-xs text-gray-400 mt-2 mb-2">
-                    <span><i class="bi bi-clock"></i> 2 Hari</span>
-                    <span class="flex items-center gap-1 text-yellow-400"><i class="bi bi-star-fill"></i> 4.9</span>
-                </div>
-                <div class="text-lg font-bold text-[#2f6f42]">Rp 850K <small class="text-xs font-normal text-gray-400">/org</small></div>
-            </div>
-        </a>
-    </div>
-</section>
-
-<section class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pb-12">
-    <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 mb-8">
-        <div class="flex items-center gap-3">
-            <h2 class="text-2xl font-bold text-[#1a1a2e]">Semua Destinasi</h2>
+        <!-- Apple Style Dropdown -->
+        <div class="relative flex items-center gap-2">
             @auth
-            <a href="{{ route('admin.destinasi.create') }}" class="inline-flex items-center gap-1.5 px-4 py-2 bg-[#2f6f42] text-white text-xs font-bold rounded-full hover:bg-[#255a35] transition shadow-md">
-                <i class="bi bi-plus-lg"></i> Tambah Destinasi
+            <a href="{{ route('admin.destinasi.create') }}" class="flex items-center gap-2 bg-holiday border border-holiday px-4 py-2 rounded-xl text-sm font-bold text-white shadow-sm hover:bg-holiday-dark transition-colors">
+                <i class="bi bi-plus-lg"></i> <span class="hidden sm:inline">Tambah</span>
             </a>
             @endauth
-        </div>
-        <div class="flex items-center gap-3">
-            <div class="search-box flex-1 sm:w-64">
-                <i class="bi bi-search"></i>
-                <input type="text" id="searchDestinasi" placeholder="Cari destinasi..." oninput="filterDestinasi()">
-            </div>
-            <div class="flex gap-1" id="viewToggle">
-                <button class="view-btn active" data-view="uniform" title="Uniform Grid" onclick="setView('uniform', this)"><i class="bi bi-grid-3x3-gap-fill"></i></button>
-                <button class="view-btn" data-view="pinterest" title="Pinterest" onclick="setView('pinterest', this)"><i class="bi bi-grid-1x2-fill"></i></button>
-                <button class="view-btn" data-view="card" title="Card List" onclick="setView('card', this)"><i class="bi bi-view-list"></i></button>
-            </div>
-        </div>
-    </div>
-
-    <div class="flex flex-wrap gap-2 mb-6" id="categoryFilters">
-        <button class="cat-btn active" data-cat="semua" onclick="filterCategory('semua', this)">Semua</button>
-        <button class="cat-btn" data-cat="alam" onclick="filterCategory('alam', this)">Alam</button>
-        <button class="cat-btn" data-cat="budaya" onclick="filterCategory('budaya', this)">Budaya</button>
-        <button class="cat-btn" data-cat="pantai" onclick="filterCategory('pantai', this)">Pantai</button>
-        <button class="cat-btn" data-cat="kuliner" onclick="filterCategory('kuliner', this)">Kuliner</button>
-    </div>
-
-    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-5" id="destinasiGrid">
-        @foreach($destinasi as $item)
-        <div class="relative">
-            <a href="{{ route('destinasi.show', $item->slug) }}" class="dest-card" data-kategori="{{ $item->kategori }}" data-nama="{{ strtolower($item->nama) }}">
-                <div class="card-img">
-                    <img src="{{ asset($item->gambar) }}" alt="{{ $item->nama }}" loading="lazy">
-                    @if($item->kategori)
-                    <span class="card-badge">{{ $item->kategori }}</span>
-                    @endif
-                    @if($item->rating)
-                    <span class="card-rating"><i class="bi bi-star-fill"></i> {{ number_format($item->rating, 1) }}</span>
-                    @endif
+            <button id="view-toggle-btn" class="flex items-center gap-2 bg-white border border-gray-200 px-4 py-2 rounded-xl text-sm font-bold text-gray-700 shadow-sm hover:bg-gray-50 transition-colors">
+                <i class="bi bi-columns-gap" id="current-view-icon"></i> <span class="hidden sm:inline">View</span>
+            </button>
+            
+            <!-- Dropdown Menu -->
+            <div id="view-dropdown" class="absolute right-0 top-full mt-2 w-48 bg-white/90 backdrop-blur-xl border border-gray-200/60 rounded-2xl shadow-[0_8px_30px_rgba(0,0,0,0.12)] overflow-hidden origin-top-right transform scale-95 opacity-0 invisible transition-all duration-300 z-50">
+                <div class="p-1.5 flex flex-col gap-0.5">
+                    <button onclick="setView('pinterest')" class="flex items-center gap-3 w-full text-left px-3 py-2.5 rounded-xl text-sm font-bold text-gray-700 hover:bg-black/5 hover:text-black transition-colors">
+                        <i class="bi bi-columns-gap text-lg w-5"></i> Pinterest
+                    </button>
+                    <button onclick="setView('uniform')" class="flex items-center gap-3 w-full text-left px-3 py-2.5 rounded-xl text-sm font-bold text-gray-700 hover:bg-black/5 hover:text-black transition-colors">
+                        <i class="bi bi-grid-fill text-lg w-5"></i> Uniform
+                    </button>
+                    <button onclick="setView('card')" class="flex items-center gap-3 w-full text-left px-3 py-2.5 rounded-xl text-sm font-bold text-gray-700 hover:bg-black/5 hover:text-black transition-colors">
+                        <i class="bi bi-card-list text-lg w-5"></i> Card
+                    </button>
                 </div>
-                <div class="card-body">
-                    <h3>{{ $item->nama }}</h3>
-                    @if($item->lokasi)
-                    <p class="location"><i class="bi bi-geo-alt"></i> {{ $item->lokasi }}</p>
-                    @endif
-                    <div class="meta">
-                        @if($item->durasi)
-                        <span><i class="bi bi-clock"></i> {{ $item->durasi }}</span>
-                        @endif
-                        @if($item->mood)
-                        <span><i class="bi bi-emoji-smile"></i> {{ $item->mood }}</span>
-                        @endif
-                    </div>
-                    @if($item->harga)
-                    <div class="price">Rp {{ number_format($item->harga, 0, ',', '.') }} <small>/orang</small></div>
-                    @endif
+            </div>
+        </div>
+    </div>
+
+    <!-- PINTEREST GRID -->
+    @php
+        $heights = ['h-[250px]', 'h-[300px]', 'h-[200px]', 'h-[350px]', 'h-[400px]', 'h-[250px]'];
+    @endphp
+    
+    <div id="destinasi-grid" class="columns-2 md:columns-4 lg:columns-6 gap-4 space-y-4">
+        @foreach($destinasi as $index => $item)
+        @php
+            $h = $heights[$index % count($heights)];
+        @endphp
+        <div class="dest-card-container break-inside-avoid relative mb-4" data-kategori="{{ strtolower($item->kategori) }}" data-nama="{{ strtolower($item->nama) }}">
+            <a href="{{ route('destinasi.show', $item->slug) }}" class="block relative group overflow-hidden rounded-2xl shadow-sm hover:shadow-xl transition-all duration-300 hover:-translate-y-1 bg-gray-200 {{ $h }}">
+                <img src="{{ $item->image ? $item->image->url : asset('img/placeholder.png') }}" loading="lazy" class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105" alt="{{ $item->nama }}">
+                <div class="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent opacity-90 group-hover:opacity-100 transition-opacity duration-300"></div>
+                <div class="absolute bottom-0 left-0 right-0 p-4">
+                    <h4 class="text-white font-extrabold text-lg leading-tight mb-1">{{ $item->nama }}</h4>
+                    <p class="text-gray-300 text-sm inline-block max-w-full truncate">{{ Str::limit($item->lokasi, 25) }}</p>
                 </div>
             </a>
             @auth
-            <div class="absolute top-2 right-2 flex gap-1.5 z-10">
-                <a href="{{ route('admin.destinasi.edit', $item->id) }}" class="text-xs bg-yellow-100 text-yellow-700 rounded-full px-2.5 py-1 font-bold hover:bg-yellow-200 transition shadow-sm">
-                    <i class="bi bi-pencil"></i> Edit
+            <div class="absolute top-2 right-2 flex gap-1.5 z-10 opacity-0 group-hover:opacity-100 transition-opacity" style="opacity: 1;">
+                <a href="{{ route('admin.destinasi.edit', $item->id) }}" class="text-xs bg-white text-gray-700 rounded-full w-8 h-8 flex items-center justify-center font-bold hover:bg-gray-100 transition shadow-sm">
+                    <i class="bi bi-pencil"></i>
                 </a>
                 <form action="{{ route('admin.destinasi.destroy', $item->id) }}" method="POST" onsubmit="return confirm('Hapus destinasi ini?')" class="inline">
                     @csrf @method('DELETE')
-                    <button type="submit" class="text-xs bg-red-100 text-red-700 rounded-full px-2.5 py-1 font-bold hover:bg-red-200 transition shadow-sm">
-                        <i class="bi bi-trash"></i> Hapus
+                    <button type="submit" class="text-xs bg-red-500 text-white rounded-full w-8 h-8 flex items-center justify-center font-bold hover:bg-red-600 transition shadow-sm">
+                        <i class="bi bi-trash"></i>
                     </button>
                 </form>
             </div>
@@ -261,62 +264,189 @@
     <div class="mt-10">
         {{ $destinasi->links() }}
     </div>
-</section>
+
+</main>
+@endsection
 
 @push('scripts')
 <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
 <script>
-    gsap.registerPlugin(ScrollTrigger);
+    // Hero Slider Logic
+    document.addEventListener('DOMContentLoaded', () => {
+        const slides = document.querySelectorAll('.hero-slide');
+        const dots = document.querySelectorAll('.slider-dot');
+        const prevBtn = document.getElementById('slider-prev');
+        const nextBtn = document.getElementById('slider-next');
+        let currentSlide = 0;
+        let slideInterval;
 
-    gsap.from('.hero-destinasi .hero-content', {
-        opacity: 0, y: 40, duration: 1, ease: 'power3.out'
-    });
+        if(slides.length === 0) return;
 
-    gsap.from('.featured-card-large', {
-        scrollTrigger: { trigger: '.featured-card-large', start: 'top 90%' },
-        opacity: 0, y: 30, duration: 0.6
-    });
+        function goToSlide(index) {
+            slides[currentSlide].classList.remove('opacity-100', 'z-10');
+            slides[currentSlide].classList.add('opacity-0', 'z-0', 'pointer-events-none');
+            
+            const currentContent = slides[currentSlide].querySelector('.slide-content');
+            if(currentContent) {
+                currentContent.classList.remove('translate-y-0', 'opacity-100');
+                currentContent.classList.add('translate-y-8', 'opacity-0');
+            }
+            
+            const currentImg = slides[currentSlide].querySelector('img');
+            if(currentImg) {
+                currentImg.classList.remove('scale-105');
+                currentImg.classList.add('scale-100');
+            }
 
-    document.querySelectorAll('.dest-card:not(.featured-card-large)').forEach((el,i) => {
-        gsap.from(el, {
-            scrollTrigger: { trigger: el, start: 'top 95%' },
-            opacity: 0, y: 30, duration: 0.5, delay: i*0.05
+            if(dots.length > 0) {
+                dots[currentSlide].classList.remove('bg-holiday', 'w-8');
+                dots[currentSlide].classList.add('bg-white/50');
+            }
+
+            currentSlide = index;
+
+            slides[currentSlide].classList.remove('opacity-0', 'z-0', 'pointer-events-none');
+            slides[currentSlide].classList.add('opacity-100', 'z-10');
+            
+            const newContent = slides[currentSlide].querySelector('.slide-content');
+            if(newContent) {
+                setTimeout(() => {
+                    newContent.classList.remove('translate-y-8', 'opacity-0');
+                    newContent.classList.add('translate-y-0', 'opacity-100');
+                }, 100);
+            }
+            
+            const newImg = slides[currentSlide].querySelector('img');
+            if(newImg) {
+                newImg.classList.remove('scale-100');
+                newImg.classList.add('scale-105');
+            }
+
+            if(dots.length > 0) {
+                dots[currentSlide].classList.remove('bg-white/50');
+                dots[currentSlide].classList.add('bg-holiday', 'w-8');
+            }
+        }
+
+        function nextSlide() {
+            goToSlide((currentSlide + 1) % slides.length);
+        }
+
+        function prevSlide() {
+            goToSlide((currentSlide - 1 + slides.length) % slides.length);
+        }
+
+        function resetInterval() {
+            clearInterval(slideInterval);
+            slideInterval = setInterval(nextSlide, 5000);
+        }
+
+        if(nextBtn && prevBtn) {
+            nextBtn.addEventListener('click', () => { nextSlide(); resetInterval(); });
+            prevBtn.addEventListener('click', () => { prevSlide(); resetInterval(); });
+        }
+
+        dots.forEach((dot, index) => {
+            dot.addEventListener('click', () => {
+                if(currentSlide !== index) {
+                    goToSlide(index);
+                    resetInterval();
+                }
+            });
         });
+
+        resetInterval();
     });
+
+    // View Toggle Logic
+    const viewToggleBtn = document.getElementById('view-toggle-btn');
+    const viewDropdown = document.getElementById('view-dropdown');
+    const destinasiGrid = document.getElementById('destinasi-grid');
+    const currentViewIcon = document.getElementById('current-view-icon');
+    
+    let dropdownOpen = false;
+
+    if (viewToggleBtn) {
+        viewToggleBtn.addEventListener('click', (e) => {
+            e.stopPropagation();
+            dropdownOpen = !dropdownOpen;
+            if (dropdownOpen) {
+                viewDropdown.classList.remove('opacity-0', 'invisible', 'scale-95');
+                viewDropdown.classList.add('opacity-100', 'visible', 'scale-100');
+            } else {
+                viewDropdown.classList.add('opacity-0', 'invisible', 'scale-95');
+                viewDropdown.classList.remove('opacity-100', 'visible', 'scale-100');
+            }
+        });
+
+        document.addEventListener('click', (e) => {
+            if (dropdownOpen && !viewDropdown.contains(e.target)) {
+                dropdownOpen = false;
+                viewDropdown.classList.add('opacity-0', 'invisible', 'scale-95');
+                viewDropdown.classList.remove('opacity-100', 'visible', 'scale-100');
+            }
+        });
+    }
+
+    function setView(viewMode) {
+        destinasiGrid.style.opacity = 0;
+        
+        setTimeout(() => {
+            destinasiGrid.classList.remove('view-uniform', 'view-card', 'columns-2', 'md:columns-4', 'lg:columns-6', 'gap-4', 'space-y-4');
+            
+            if (viewMode === 'pinterest') {
+                destinasiGrid.classList.add('columns-2', 'md:columns-4', 'lg:columns-6', 'gap-4', 'space-y-4');
+                currentViewIcon.className = 'bi bi-columns-gap';
+            } else if (viewMode === 'uniform') {
+                destinasiGrid.classList.add('view-uniform');
+                currentViewIcon.className = 'bi bi-grid-fill';
+            } else if (viewMode === 'card') {
+                destinasiGrid.classList.add('view-card');
+                currentViewIcon.className = 'bi bi-card-list';
+            }
+            
+            destinasiGrid.style.opacity = 1;
+        }, 300);
+        
+        dropdownOpen = false;
+        if(viewDropdown) {
+            viewDropdown.classList.add('opacity-0', 'invisible', 'scale-95');
+            viewDropdown.classList.remove('opacity-100', 'visible', 'scale-100');
+        }
+    }
 
     let currentCategory = 'semua';
-    let currentView = 'uniform';
-
     function filterCategory(cat, btn) {
         currentCategory = cat;
-        document.querySelectorAll('#categoryFilters .cat-btn').forEach(b => b.classList.remove('active'));
-        btn.classList.add('active');
+        document.querySelectorAll('#categoryFilters .cat-btn').forEach(b => {
+            b.classList.remove('bg-holiday', 'text-white');
+            b.classList.add('bg-white', 'text-gray-600');
+        });
+        btn.classList.remove('bg-white', 'text-gray-600');
+        btn.classList.add('bg-holiday', 'text-white');
         filterDestinasi();
     }
 
     function filterDestinasi() {
         const search = (document.getElementById('searchDestinasi').value || '').toLowerCase();
-        document.querySelectorAll('#destinasiGrid .dest-card').forEach(card => {
+        document.querySelectorAll('#destinasi-grid .dest-card-container').forEach(card => {
             const cat = (card.dataset.kategori || '').toLowerCase();
             const nama = (card.dataset.nama || '');
             const matchCat = currentCategory === 'semua' || cat === currentCategory;
             const matchSearch = nama.includes(search);
-            card.style.display = (matchCat && matchSearch) ? '' : 'none';
+            
+            if (matchCat && matchSearch) {
+                card.style.display = '';
+            } else {
+                card.style.display = 'none';
+            }
         });
     }
 
-    function setView(view, btn) {
-        currentView = view;
-        document.querySelectorAll('#viewToggle .view-btn').forEach(b => b.classList.remove('active'));
-        btn.classList.add('active');
-        const grid = document.getElementById('destinasiGrid');
-        grid.className = 'grid gap-5 ' + (
-            view === 'uniform' ? 'grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 grid-uniform' :
-            view === 'pinterest' ? 'grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 grid-pinterest' :
-            'grid-cols-1 grid-card'
-        );
+    // GSAP Animations
+    if (typeof gsap !== 'undefined' && typeof ScrollTrigger !== 'undefined') {
+        gsap.registerPlugin(ScrollTrigger);
     }
 </script>
 @endpush
-@endsection
