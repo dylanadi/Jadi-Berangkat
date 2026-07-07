@@ -552,10 +552,10 @@
             card.style.display = '';
             card.style.animation = 'fadeIn 0.3s ease-out';
             card.style.animationDelay = (i * 0.05) + 's';
-            if (card.parentElement.id === 'article-grid-container') {
-                container.appendChild(card);
-            } else if (card.parentElement.id === 'compact-cards') {
-                // Keep it in its original grid parent if it's there
+            
+            // Reordering via flex order if the parent is a grid
+            if (card.parentElement.classList.contains('grid')) {
+                card.style.order = i;
             }
         });
 
