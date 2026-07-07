@@ -220,8 +220,8 @@
                 <h3 class="text-2xl md:text-3xl font-extrabold text-white mb-3 leading-tight">
                     {{ $featured->judul }}
                 </h3>
-                <p class="text-slate-300 text-sm max-w-3xl mb-5 line-clamp-2">
-                    {{ Str::limit(strip_tags($featured->konten), 160) }}
+                <p class="text-slate-300 text-sm max-w-3xl mb-5 line-clamp-3">
+                    {{ Str::limit(strip_tags($featured->konten), 250) }}
                 </p>
                 <div class="flex items-center justify-between pt-4 border-t border-white/10 text-xs text-slate-300">
                     <span><i class="bi bi-calendar3 text-holiday-400 mr-1"></i> {{ $featured->tanggal_terbit ? $featured->tanggal_terbit->format('d F Y') : '-' }}</span>
@@ -363,20 +363,23 @@
             @php $otherArticles = $artikel->skip(3); @endphp
             @forelse($otherArticles as $item)
             <!-- Card DB -->
-            <article class="news-card bg-white p-4 rounded-3xl border border-slate-100 shadow-sm hover:shadow-md transition-all duration-300 flex gap-4 group items-center" data-cats="{{ strtolower($item->kategori) }}" data-date="{{ $item->tanggal_terbit ? $item->tanggal_terbit->format('Y-m-d') : '' }}" data-article="{{ $item->slug }}">
-                <div class="w-24 h-24 md:w-28 md:h-28 rounded-2xl overflow-hidden shrink-0">
-                    <img src="{{ $item->image_url }}" class="w-full h-full object-cover" alt="{{ $item->judul }}">
+            <article class="news-card bg-white rounded-3xl overflow-hidden shadow-sm border border-slate-100 flex flex-col justify-between group cursor-pointer" onclick="window.location.href='{{ route('artikel.show', $item->slug) }}'" data-cats="{{ strtolower($item->kategori) }}" data-date="{{ $item->tanggal_terbit ? $item->tanggal_terbit->format('Y-m-d') : '' }}" data-article="{{ $item->slug }}">
+                <div class="relative h-48 overflow-hidden shrink-0">
+                    <img src="{{ $item->image_url }}" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700" alt="{{ $item->judul }}">
+                    <span class="absolute bottom-3 left-3 bg-slate-950/80 backdrop-blur-sm text-white text-[10px] font-black uppercase tracking-wider px-2.5 py-1 rounded-md">{{ strtoupper($item->kategori ?? 'TIPS') }}</span>
                 </div>
-                <div class="flex flex-col justify-between py-1 h-24 md:h-28 flex-1">
+                <div class="p-5 flex-1 flex flex-col justify-between">
                     <div>
-                        <span class="inline-block bg-[#e2f7ea] text-holiday-700 text-[10px] font-black px-2 py-0.5 rounded uppercase tracking-wider mb-1.5">{{ strtoupper($item->kategori ?? 'TIPS') }}</span>
-                        <h4 class="font-extrabold text-[#0f172a] text-sm md:text-[14px] leading-snug group-hover:text-holiday-600 transition-colors line-clamp-2">
+                        <h4 class="font-extrabold text-[#0f172a] text-base md:text-lg leading-snug group-hover:text-holiday-600 transition-colors line-clamp-2 mb-2">
                             {{ $item->judul }}
                         </h4>
+                        <p class="text-sm text-slate-500 line-clamp-2 mb-4">
+                            {{ Str::limit(strip_tags($item->konten), 120) }}
+                        </p>
                     </div>
-                    <div class="flex items-center justify-between gap-2 text-xs text-slate-400 font-medium">
-                        <span><span>{{ $item->tanggal_terbit ? $item->tanggal_terbit->format('j M') : '-' }}</span> <span>•</span> <span>{{ max(1, ceil(str_word_count(strip_tags($item->konten)) / 200)) }} min</span></span>
-                        <a href="{{ route('artikel.show', $item->slug) }}" class="text-holiday-600 font-bold hover:underline">Baca</a>
+                    <div class="pt-4 border-t border-slate-100 text-xs text-slate-400 flex items-center justify-between">
+                        <span><i class="bi bi-calendar3 text-holiday-500 mr-1"></i> {{ $item->tanggal_terbit ? $item->tanggal_terbit->format('d M Y') : '-' }}</span>
+                        <span class="text-holiday-600 font-bold hover:underline">Baca <i class="bi bi-chevron-right"></i></span>
                     </div>
                 </div>
             </article>
