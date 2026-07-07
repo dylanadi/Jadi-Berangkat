@@ -79,7 +79,7 @@
 @section('content')
 
 <!-- HERO SECTION SLIDER -->
-<main class="relative h-[85vh] w-full overflow-hidden bg-slate-900 mt-20 md:mt-24">
+<section class="relative h-[85vh] w-full overflow-hidden bg-slate-900 -mt-24">
     <div id="hero-slider" class="relative h-full w-full">
         
         <!-- Slide 1: Pantai Boom Banyuwangi -->
@@ -122,7 +122,7 @@
         <button onclick="goToSlide(0)" class="hero-dot w-10 h-2.5 rounded-full bg-white transition-all duration-300"></button>
         <button onclick="goToSlide(1)" class="hero-dot w-2.5 h-2.5 rounded-full bg-white/50 hover:bg-white/80 transition-all duration-300"></button>
     </div>
-</main>
+</section>
 
 <!-- MAIN WISATA CONTENT SECTION -->
 <!-- Breadcrumb -->
@@ -196,7 +196,16 @@
 
     <!-- GRID SYSTEM UTAMA -->
     <div class="space-y-8" id="article-grid-container">
-        
+
+        <!-- EMPTY STATE: muncul kalau filter kategori/pencarian tidak ada hasilnya -->
+        <div id="empty-state" class="hidden flex-col items-center justify-center text-center py-20 px-6 bg-white rounded-3xl border border-dashed border-slate-200">
+            <div class="w-16 h-16 rounded-full bg-holiday-50 flex items-center justify-center mb-4">
+                <i class="bi bi-journal-x text-3xl text-holiday-500"></i>
+            </div>
+            <h3 class="text-lg font-extrabold text-[#0f172a] mb-2">Artikel Belum Tersedia</h3>
+            <p class="text-sm text-slate-500 max-w-sm">Kami sedang menyiapkan artikel menarik untuk kategori ini. Nantikan update selanjutnya, ya!</p>
+        </div>
+
         <!-- 1 CARD BESAR UTAMA -->
         @if($artikel->count() > 0)
         @php $featured = $artikel->first(); @endphp
@@ -222,7 +231,7 @@
         </article>
         @else
         <!-- Fallback Besar -->
-        <article class="news-card relative bg-slate-900 rounded-3xl overflow-hidden h-[480px] md:h-[520px] group shadow-sm hover:shadow-xl transition-all duration-500 flex items-end" data-cats="destinasi" data-date="2025-09-25" data-article="sukamade">
+        <article class="news-card relative bg-slate-900 rounded-3xl overflow-hidden h-[480px] md:h-[520px] group shadow-sm hover:shadow-xl transition-all duration-500 flex items-end" data-cats="destinasi" data-date="2025-09-25" data-article="">
             <div class="absolute inset-0 bg-gradient-to-t from-slate-950 via-slate-900/40 to-transparent z-10"></div>
             <img src="{{ asset('img/Pantaisukamade.png') }}" class="absolute inset-0 w-full h-full object-cover object-center group-hover:scale-105 transition-transform duration-700" alt="Sukamade Ekowisata" onerror="this.src='{{ asset('img/bluefire (1).png') }}'">
             
@@ -238,7 +247,7 @@
                 </p>
                 <div class="flex items-center justify-between pt-4 border-t border-white/10 text-xs text-slate-300">
                     <span><i class="bi bi-calendar3 text-holiday-400 mr-1"></i> 25 September 2025</span>
-                    <a href="#" class="text-holiday-400 font-bold flex items-center gap-1">Baca Artikel <i class="bi bi-arrow-right"></i></a>
+                    <a href="{{ route('artikel.index') }}" class="text-holiday-400 font-bold flex items-center gap-1">Baca Artikel <i class="bi bi-arrow-right"></i></a>
                 </div>
             </div>
         </article>
@@ -267,7 +276,7 @@
                 @endforeach
             @else
                 <!-- Fallback 2 Card Tengah -->
-                <article class="news-card bg-white rounded-3xl overflow-hidden shadow-sm border border-slate-100 flex flex-col justify-between group" data-cats="destinasi,kuliner" data-date="2025-09-10" data-article="kuliner-rujaksoto">
+                <article class="news-card bg-white rounded-3xl overflow-hidden shadow-sm border border-slate-100 flex flex-col justify-between group" data-cats="destinasi,kuliner" data-date="2025-09-10" data-article="">
                     <div class="relative h-56 overflow-hidden">
                         <img src="{{ asset('img/rujaksoto.png') }}" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700" alt="Kuliner" onerror="this.src='https://images.unsplash.com/photo-1544620347-c4fd4a3d5957?q=80&w=400'">
                         <span class="absolute bottom-4 left-4 bg-slate-950/80 backdrop-blur-sm text-white text-[10px] font-black uppercase tracking-wider px-2.5 py-1 rounded-md">KULINER</span>
@@ -279,11 +288,11 @@
                         </div>
                         <div class="pt-4 border-t border-slate-100 text-xs text-slate-400 flex items-center justify-between">
                             <span><i class="bi bi-geo-alt-fill text-holiday-500 mr-1"></i> Resto Tosari</span>
-                            <a href="#" class="text-holiday-600 font-bold">Lihat Menu <i class="bi bi-chevron-right"></i></a>
+                            <a href="{{ route('artikel.index') }}" class="text-holiday-600 font-bold">Lihat Menu <i class="bi bi-chevron-right"></i></a>
                         </div>
                     </div>
                 </article>
-                <article class="news-card bg-white rounded-3xl overflow-hidden shadow-sm border border-slate-100 flex flex-col justify-between group" data-cats="destinasi" data-date="2025-08-20" data-article="pelengkung">
+                <article class="news-card bg-white rounded-3xl overflow-hidden shadow-sm border border-slate-100 flex flex-col justify-between group" data-cats="destinasi" data-date="2025-08-20" data-article="">
                     <div class="relative h-56 overflow-hidden">
                         <img src="{{ asset('img/pantaipelengkung.png') }}" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700" alt="Pantai Plengkung" onerror="this.src='https://images.unsplash.com/photo-1506744038136-46273834b3fb?q=80&w=400'">
                         <span class="absolute bottom-4 left-4 bg-slate-950/80 backdrop-blur-sm text-white text-[10px] font-black uppercase tracking-wider px-2.5 py-1 rounded-md">DESTINASI</span>
@@ -295,7 +304,7 @@
                         </div>
                         <div class="pt-4 border-t border-slate-100 text-xs text-slate-400 flex items-center justify-between">
                             <span><i class="bi bi-geo-alt-fill text-holiday-500 mr-1"></i> Rute Selatan</span>
-                            <a href="#" class="text-holiday-600 font-bold">Detail Rute <i class="bi bi-chevron-right"></i></a>
+                            <a href="{{ route('artikel.index') }}" class="text-holiday-600 font-bold">Detail Rute <i class="bi bi-chevron-right"></i></a>
                         </div>
                     </div>
                 </article>
@@ -327,7 +336,7 @@
             </div>
         @else
             <!-- Fallback Featured Article -->
-            <div id="featured-article" class="bg-white dark:bg-gray-800 rounded-[2rem] border border-gray-100 dark:border-gray-700 shadow-[0_8px_30px_rgb(0,0,0,0.02)] overflow-hidden mb-8 news-card" data-cats="tips" data-date="2025-09-05" data-article="panduan-ijen">
+            <div id="featured-article" class="bg-white dark:bg-gray-800 rounded-[2rem] border border-gray-100 dark:border-gray-700 shadow-[0_8px_30px_rgb(0,0,0,0.02)] overflow-hidden mb-8 news-card" data-cats="tips" data-date="2025-09-05" data-article="">
                 <div class="grid grid-cols-1 md:grid-cols-2">
                     <div class="h-64 md:h-auto">
                         <img src="{{ asset('img/unsplash_M8drGBgFNZE.png') }}" class="w-full h-full object-cover" alt="Artikel Utama" onerror="this.src='{{ asset('img/bluefire (1).png') }}'">
@@ -338,7 +347,7 @@
                         <p class="text-gray-600 dark:text-gray-300 text-sm leading-relaxed mb-6">
                             Mendaki Kawah Ijen di malam hari adalah pengalaman yang tak terlupakan. Disini kita kupas tuntas persiapan, rute, dan tips agar perjalanmu aman dan nyenyak menyaksikan blue fire.
                         </p>
-                        <a href="#" class="inline-flex items-center gap-2 bg-holiday text-white px-6 py-3 rounded-full font-bold hover:bg-holiday-dark transition shadow-lg shadow-holiday-glow w-max">
+                        <a href="{{ route('artikel.index') }}" class="inline-flex items-center gap-2 bg-holiday text-white px-6 py-3 rounded-full font-bold hover:bg-holiday-dark transition shadow-lg shadow-holiday-glow w-max">
                             Baca Artikel <i class="bi bi-arrow-right"></i>
                         </a>
                     </div>
@@ -351,7 +360,7 @@
         <!-- COMPACT HORIZONTAL CARD GRID -->
         <div class="grid grid-cols-1 md:grid-cols-3 gap-6" id="compact-cards">
             
-            @php $otherArticles = $artikel->skip($artikel->count() > 3 ? 4 : 1); @endphp
+            @php $otherArticles = $artikel->skip(3); @endphp
             @forelse($otherArticles as $item)
             <!-- Card DB -->
             <article class="news-card bg-white p-4 rounded-3xl border border-slate-100 shadow-sm hover:shadow-md transition-all duration-300 flex gap-4 group items-center" data-cats="{{ strtolower($item->kategori) }}" data-date="{{ $item->tanggal_terbit ? $item->tanggal_terbit->format('Y-m-d') : '' }}" data-article="{{ $item->slug }}">
@@ -366,14 +375,14 @@
                         </h4>
                     </div>
                     <div class="flex items-center justify-between gap-2 text-xs text-slate-400 font-medium">
-                        <span><span>{{ $item->tanggal_terbit ? $item->tanggal_terbit->format('d M Y') : '-' }}</span></span>
+                        <span><span>{{ $item->tanggal_terbit ? $item->tanggal_terbit->format('j M') : '-' }}</span> <span>•</span> <span>{{ max(1, ceil(str_word_count(strip_tags($item->konten)) / 200)) }} min</span></span>
                         <a href="{{ route('artikel.show', $item->slug) }}" class="text-holiday-600 font-bold hover:underline">Baca</a>
                     </div>
                 </div>
             </article>
             @empty
             <!-- Fallback Static Cards -->
-            <article class="news-card bg-white p-4 rounded-3xl border border-slate-100 shadow-sm hover:shadow-md transition-all duration-300 flex gap-4 group items-center" data-cats="tips" data-date="2025-08-01" data-article="tips-sewa-jeep">
+            <article class="news-card bg-white p-4 rounded-3xl border border-slate-100 shadow-sm hover:shadow-md transition-all duration-300 flex gap-4 group items-center" data-cats="tips" data-date="2025-08-01" data-article="">
                 <div class="w-24 h-24 md:w-28 md:h-28 rounded-2xl overflow-hidden shrink-0">
                     <img src="https://images.unsplash.com/photo-1544620347-c4fd4a3d5957?q=80&w=400" class="w-full h-full object-cover" alt="Tips">
                 </div>
@@ -386,12 +395,12 @@
                     </div>
                     <div class="flex items-center justify-between gap-2 text-xs text-slate-400 font-medium">
                         <span><span>1 Agu</span> <span>•</span> <span>7 min</span></span>
-                        <a href="#" class="text-holiday-600 font-bold hover:underline">Baca</a>
+                        <a href="{{ route('artikel.index') }}" class="text-holiday-600 font-bold hover:underline">Baca</a>
                     </div>
                 </div>
             </article>
 
-            <article class="news-card bg-white p-4 rounded-3xl border border-slate-100 shadow-sm hover:shadow-md transition-all duration-300 flex gap-4 group items-center" data-cats="destinasi" data-date="2025-07-15" data-article="baluran">
+            <article class="news-card bg-white p-4 rounded-3xl border border-slate-100 shadow-sm hover:shadow-md transition-all duration-300 flex gap-4 group items-center" data-cats="destinasi" data-date="2025-07-15" data-article="">
                 <div class="w-24 h-24 md:w-28 md:h-28 rounded-2xl overflow-hidden shrink-0">
                     <img src="https://images.unsplash.com/photo-1506744038136-46273834b3fb?q=80&w=400" class="w-full h-full object-cover" alt="Destinasi">
                 </div>
@@ -404,12 +413,12 @@
                     </div>
                     <div class="flex items-center justify-between gap-2 text-xs text-slate-400 font-medium">
                         <span><span>15 Jul</span> <span>•</span> <span>5 min</span></span>
-                        <a href="#" class="text-holiday-600 font-bold hover:underline">Baca</a>
+                        <a href="{{ route('artikel.index') }}" class="text-holiday-600 font-bold hover:underline">Baca</a>
                     </div>
                 </div>
             </article>
 
-            <article class="news-card bg-white p-4 rounded-3xl border border-slate-100 shadow-sm hover:shadow-md transition-all duration-300 flex gap-4 group items-center" data-cats="event" data-date="2025-07-01" data-article="festival-banyuwangi">
+            <article class="news-card bg-white p-4 rounded-3xl border border-slate-100 shadow-sm hover:shadow-md transition-all duration-300 flex gap-4 group items-center" data-cats="event" data-date="2025-07-01" data-article="">
                 <div class="w-24 h-24 md:w-28 md:h-28 rounded-2xl overflow-hidden shrink-0">
                     <img src="https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?q=80&w=400" class="w-full h-full object-cover" alt="Event">
                 </div>
@@ -422,12 +431,12 @@
                     </div>
                     <div class="flex items-center justify-between gap-2 text-xs text-slate-400 font-medium">
                         <span><span>1 Jul</span> <span>•</span> <span>5 min</span></span>
-                        <a href="#" class="text-holiday-600 font-bold hover:underline">Baca</a>
+                        <a href="{{ route('artikel.index') }}" class="text-holiday-600 font-bold hover:underline">Baca</a>
                     </div>
                 </div>
             </article>
 
-            <article class="news-card bg-white p-4 rounded-3xl border border-slate-100 shadow-sm hover:shadow-md transition-all duration-300 flex gap-4 group items-center" data-cats="destinasi" data-date="2025-06-10" data-article="kawah-ijen">
+            <article class="news-card bg-white p-4 rounded-3xl border border-slate-100 shadow-sm hover:shadow-md transition-all duration-300 flex gap-4 group items-center" data-cats="destinasi" data-date="2025-06-10" data-article="">
                 <div class="w-24 h-24 md:w-28 md:h-28 rounded-2xl overflow-hidden shrink-0">
                     <img src="{{ asset('img/bluefire (1).png') }}" class="w-full h-full object-cover" alt="Destinasi">
                 </div>
@@ -440,7 +449,7 @@
                     </div>
                     <div class="flex items-center justify-between gap-2 text-xs text-slate-400 font-medium">
                         <span><span>10 Jun</span> <span>•</span> <span>6 min</span></span>
-                        <a href="#" class="text-holiday-600 font-bold hover:underline">Baca</a>
+                        <a href="{{ route('artikel.index') }}" class="text-holiday-600 font-bold hover:underline">Baca</a>
                     </div>
                 </div>
             </article>
@@ -518,8 +527,8 @@
         oneMonthAgo.setMonth(oneMonthAgo.getMonth() - 1);
 
         let visible = Array.from(newsCards).filter(card => {
-            const cats = (card.dataset.cats || '').split(',');
-            const matchesCat = activeCat === 'all' || cats.includes(activeCat);
+            const cats = (card.dataset.cats || '').split(',').map(c => c.trim());
+            const matchesCat = activeCat === 'all' || cats.some(c => c.includes(activeCat));
             const matchesSearch = !query || card.textContent.toLowerCase().includes(query);
             const cardDate = card.dataset.date || '';
             const d = new Date(cardDate);
@@ -549,6 +558,18 @@
                 // Keep it in its original grid parent if it's there
             }
         });
+
+        // Tampilkan pesan "Belum Tersedia" kalau tidak ada artikel yang cocok
+        const emptyState = document.getElementById('empty-state');
+        if (emptyState) {
+            if (visible.length === 0) {
+                emptyState.classList.remove('hidden');
+                emptyState.classList.add('flex');
+            } else {
+                emptyState.classList.add('hidden');
+                emptyState.classList.remove('flex');
+            }
+        }
     }
 
     // Search input listener

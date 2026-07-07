@@ -43,7 +43,15 @@
                         ink: '#151813',
                         clay: '#b96f3c',
                         mist: '#dfe8df',
-                        holiday: '#2f6f42',
+                        holiday: {
+                            DEFAULT: '#2f6f42',
+                            50: '#f0fdf4',
+                            100: '#dcfce7',
+                            400: '#4ade80',
+                            500: '#22c55e',
+                            600: '#16a34a',
+                            700: '#15803d',
+                        },
                         'holiday-dark': '#17442a',
                         'holiday-light': '#b8d9bd',
                         'holiday-glow': 'rgba(47, 111, 66, 0.28)'
