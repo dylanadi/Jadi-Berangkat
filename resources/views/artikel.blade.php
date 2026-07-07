@@ -521,6 +521,20 @@
 
     let activeCat = 'all';
 
+    function extractCardData(card) {
+        const img = card.querySelector('img');
+        const heading = card.querySelector('h2, h3, h4');
+        const paragraphs = card.querySelectorAll('p');
+        return {
+            imgSrc: img ? (img.getAttribute('src') || img.src || '') : '',
+            title: heading ? heading.textContent.trim() : '',
+            excerpt: paragraphs.length > 0 ? paragraphs[0].textContent.trim() : '',
+            slug: card.dataset.article || '',
+            kategori: (card.dataset.cats || '').split(',')[0].trim().toUpperCase() || 'WISATA',
+            date: card.dataset.date || ''
+        };
+    }
+
     function applyFilters() {
         const query = searchInput.value.toLowerCase().trim();
         const dateVal = dateFilter.value;
@@ -542,35 +556,117 @@
             return matchesCat && matchesSearch && matchesDate;
         });
 
-        // Reorder by date if needed
+        // Sort by date
         if (dateVal === 'baru' || dateVal === '1bulan') {
             visible.sort((a, b) => (b.dataset.date || '').localeCompare(a.dataset.date || ''));
         } else if (dateVal === 'lampau') {
             visible.sort((a, b) => (a.dataset.date || '').localeCompare(b.dataset.date || ''));
         }
 
-        newsCards.forEach(card => { card.style.display = 'none'; });
+        // Remove old dynamic layout
+        const oldLayout = document.getElementById('filtered-layout');
+        if (oldLayout) oldLayout.remove();
 
-        visible.forEach((card, i) => {
-            card.style.display = '';
-            card.style.animation = 'fadeIn 0.3s ease-out';
-            card.style.animationDelay = (i * 0.05) + 's';
-            
-            // Reordering via flex order if the parent is a grid
-            if (card.parentElement.classList.contains('grid')) {
-                card.style.order = i;
+        if (activeCat === 'all') {
+            // ====== SEMUA BERITA: Original Layout ======
+            newsCards.forEach(card => { card.style.display = ''; });
+            visible.forEach((card, i) => {
+                card.style.animation = 'fadeIn 0.3s ease-out';
+                card.style.animationDelay = (i * 0.05) + 's';
+                if (card.parentElement.classList.contains('grid')) {
+                    card.style.order = i;
+                }
+            });
+            const emptyState = document.getElementById('empty-state');
+            if (emptyState) {
+                if (visible.length === 0) {
+                    emptyState.classList.remove('hidden');
+                    emptyState.classList.add('flex');
+                } else {
+                    emptyState.classList.add('hidden');
+                    emptyState.classList.remove('flex');
+                }
             }
-        });
+        } else {
+            // ====== FILTERED (Destinasi/Tips/Kuliner/Event) ======
+            const featuredCard = document.querySelector('.news-card[data-featured="true"]');
+            const heading = Array.from(container.querySelectorAll('h3')).find(h => h.textContent.trim() === 'Artikel Lainnya');
 
-        // Tampilkan pesan "Belum Tersedia" kalau tidak ada artikel yang cocok
-        const emptyState = document.getElementById('empty-state');
-        if (emptyState) {
+            // Hide all original sections
+            document.querySelectorAll('#middle-cards, #featured-article, #compact-cards').forEach(el => {
+                if (el) el.style.display = 'none';
+            });
+            newsCards.forEach(card => { card.style.display = 'none'; });
+
+            const emptyState = document.getElementById('empty-state');
             if (visible.length === 0) {
-                emptyState.classList.remove('hidden');
-                emptyState.classList.add('flex');
+                if (emptyState) { emptyState.classList.remove('hidden'); emptyState.classList.add('flex'); }
+                if (heading) heading.style.display = 'none';
+                return;
+            }
+            if (emptyState) emptyState.classList.add('hidden');
+            if (heading) heading.style.display = '';
+
+            const layout = document.createElement('div');
+            layout.id = 'filtered-layout';
+
+            const baseUrl = '{{ url('artikel') }}';
+            const heroData = extractCardData(visible[0]);
+            const slug = visible[0].dataset.article || '';
+
+            // --- Hero card: clone featured template ---
+            let heroEl;
+            if (featuredCard) {
+                heroEl = featuredCard.cloneNode(true);
+                heroEl.style.display = '';
+                heroEl.removeAttribute('data-featured');
+                const img = heroEl.querySelector('img');
+                if (img) {
+                    img.src = heroData.imgSrc;
+                    img.alt = heroData.title;
+                    img.onerror = null;
+                }
+                const badge = heroEl.querySelector('[class*="bg-holiday"]');
+                if (badge) badge.textContent = heroData.kategori;
+                const title = heroEl.querySelector('h3');
+                if (title) title.textContent = heroData.title;
+                const excerpt = heroEl.querySelector('p');
+                if (excerpt) excerpt.textContent = heroData.excerpt;
+                heroEl.removeAttribute('onclick');
+                heroEl.onclick = function() { window.location.href = baseUrl + '/' + slug; };
+                const link = heroEl.querySelector('a');
+                if (link) link.href = baseUrl + '/' + slug;
+                const icon = heroEl.querySelector('.bi-calendar3');
+                if (icon && icon.parentElement) {
+                    const d = heroData.date ? new Date(heroData.date).toLocaleDateString('id-ID', { day: 'numeric', month: 'long', year: 'numeric' }) : '-';
+                    icon.parentElement.innerHTML = '<i class="bi bi-calendar3 text-holiday-400 mr-1"></i> ' + d;
+                }
+            }
+            if (heroEl) layout.appendChild(heroEl);
+
+            // --- Compact cards: clone originals ---
+            if (visible.length > 1) {
+                const grid = document.createElement('div');
+                grid.className = 'grid grid-cols-1 md:grid-cols-3 gap-6 mt-8';
+                visible.slice(1).forEach((card, i) => {
+                    const clone = card.cloneNode(true);
+                    clone.style.display = '';
+                    clone.style.animation = 'fadeIn 0.3s ease-out';
+                    clone.style.animationDelay = (i * 0.05) + 's';
+                    clone.removeAttribute('onclick');
+                    clone.onclick = function() {
+                        const s = this.dataset.article;
+                        if (s) window.location.href = baseUrl + '/' + s;
+                    };
+                    grid.appendChild(clone);
+                });
+                layout.appendChild(grid);
+            }
+
+            if (heading) {
+                container.insertBefore(layout, heading);
             } else {
-                emptyState.classList.add('hidden');
-                emptyState.classList.remove('flex');
+                container.appendChild(layout);
             }
         }
     }
