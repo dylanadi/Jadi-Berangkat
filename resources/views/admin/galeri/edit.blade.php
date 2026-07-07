@@ -41,9 +41,9 @@
 
             <div>
                 <label class="block text-sm font-medium text-gray-700 mb-1">Gambar</label>
-                @if($galeri->gambar)
+                @if($galeri->image)
                 <div class="mb-2">
-                    <img src="{{ asset('storage/' . $galeri->gambar) }}" class="h-32 w-32 object-cover rounded-lg">
+                    <img src="{{ $galeri->image_url }}" class="h-32 w-32 object-cover rounded-lg" alt="{{ $galeri->judul }}">
                 </div>
                 @endif
                 <input type="file" name="gambar" class="w-full border border-gray-300 rounded-lg px-3 py-2 focus:ring-admin-500 focus:border-holiday @error('gambar') border-red-500 @enderror">

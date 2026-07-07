@@ -14,12 +14,12 @@ class HomeController extends Controller
 {
     public function index()
     {
-        $destinasi = Destinasi::where('status', 'aktif')->take(6)->get();
+        $destinasi = Destinasi::where('status', 'aktif')->with('image')->take(6)->get();
         $paket = $destinasi;
-        $armada = Destinasi::where('status', 'aktif')->take(4)->get();
+        $armada = Destinasi::where('status', 'aktif')->with('image')->take(4)->get();
         $ulasan = Ulasan::where('ditampilkan', true)->get();
-        $galeri = Galeri::take(8)->get();
-        $artikel = Artikel::where('status', 'terbit')->latest()->take(3)->get();
+        $galeri = Galeri::with('image')->take(8)->get();
+        $artikel = Artikel::where('status', 'terbit')->with('image')->latest()->take(3)->get();
         $mediaSosial = MediaSosial::where('aktif', true)->get();
         $page = HalamanStatis::where('tipe', 'beranda')->first();
         $pengaturan = (object) ($page ? json_decode($page->konten, true) : []);

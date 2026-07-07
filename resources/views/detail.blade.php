@@ -66,7 +66,7 @@
         </a>
     </div>
     @endauth
-    <img src="{{ asset($destinasi->gambar) }}" alt="{{ $destinasi->nama }}">
+    <img src="{{ $destinasi->image_url }}" alt="{{ $destinasi->nama }}">
     <div class="overlay"></div>
     <div class="hero-bottom max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <a href="{{ route('destinasi.index') }}" class="back-btn mb-4"><i class="bi bi-arrow-left"></i> Kembali</a>
@@ -228,7 +228,7 @@
         <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5">
             @foreach($lainnya as $item)
             <a href="{{ route('destinasi.show', $item->slug) }}" class="lainnya-card">
-                <img src="{{ asset($item->gambar) }}" alt="{{ $item->nama }}" loading="lazy">
+                <img src="{{ $item->image_url }}" alt="{{ $item->nama }}" loading="lazy">
                 <div class="card-body">
                     <h4>{{ $item->nama }}</h4>
                     <p class="text-xs text-gray-400 flex items-center gap-1 mt-1"><i class="bi bi-geo-alt"></i> {{ $item->lokasi }}</p>

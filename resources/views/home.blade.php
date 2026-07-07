@@ -77,7 +77,7 @@
                 @foreach($destinasi as $key => $item)
                     @if($loop->first)
                     <a href="{{ url('/destinasi/' . $item->slug) }}" class="group relative min-h-[520px] overflow-hidden rounded-[1.75rem] bg-ink text-white shadow-[0_28px_90px_rgba(21,24,19,0.18)]">
-                        <img src="{{ asset('img/' . ($item->gambar ?? 'unsplash_M8drGBgFNZE.png')) }}" alt="{{ $item->nama }}" data-image-edit data-edit-url="{{ route('admin.destinasi.edit', $item->id) }}" class="absolute inset-0 h-full w-full object-cover transition-transform duration-700 group-hover:scale-105">
+                        <img src="{{ $item->image_url }}" alt="{{ $item->nama }}" data-image-edit data-edit-url="{{ route('admin.destinasi.edit', $item->id) }}" class="absolute inset-0 h-full w-full object-cover transition-transform duration-700 group-hover:scale-105">
                         <div class="absolute inset-0 bg-gradient-to-t from-black/95 via-black/70 to-black/30"></div>
                         <div class="absolute left-6 right-6 top-6 flex items-center justify-between">
                             <span class="rounded-full bg-white/16 px-4 py-2 text-xs font-extrabold uppercase tracking-[0.16em] backdrop-blur-md">Rute utama</span>
@@ -108,7 +108,7 @@
                     @foreach($destinasi as $key => $item)
                         @if(!$loop->first)
                         <a href="{{ url('/destinasi/' . $item->slug) }}" class="group relative min-h-[250px] overflow-hidden rounded-[1.5rem] bg-ink text-white">
-                            <img src="{{ asset('img/' . ($item->gambar ?? 'djawatan.jpg')) }}" alt="{{ $item->nama }}" data-image-edit data-edit-url="{{ route('admin.destinasi.edit', $item->id) }}" class="absolute inset-0 h-full w-full object-cover transition-transform duration-700 group-hover:scale-105">
+                            <img src="{{ $item->image_url }}" alt="{{ $item->nama }}" data-image-edit data-edit-url="{{ route('admin.destinasi.edit', $item->id) }}" class="absolute inset-0 h-full w-full object-cover transition-transform duration-700 group-hover:scale-105">
                             <div class="absolute inset-0 bg-gradient-to-t from-black/95 via-black/70 to-black/30"></div>
                             <div class="absolute bottom-0 left-0 right-0 p-5">
                                 <p class="text-xs font-extrabold uppercase tracking-[0.14em] text-holiday-light">{{ $item->kategori ?? 'Wisata' }}</p>
@@ -199,7 +199,7 @@
             @forelse($paket ?? [] as $item)
             <div class="slider-card-native w-full md:w-[340px] flex-shrink-0 surface-card rounded-[1.5rem] overflow-hidden snap-center group flex flex-col">
                 <div class="relative w-full h-52 overflow-hidden bg-gray-200 flex-shrink-0">
-                    <img src="{{ asset('img/' . ($item->gambar ?? 'unsplash_M8drGBgFNZE.png')) }}" alt="{{ $item->nama }}" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110">
+                    <img src="{{ $item->image_url }}" alt="{{ $item->nama }}" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110">
                     <div class="absolute top-4 left-4 bg-white/90 backdrop-blur text-gray-900 text-xs font-extrabold px-3 py-1.5 rounded-full flex items-center gap-1 shadow">
                         <i class="bi bi-clock text-holiday"></i> {{ $item->durasi ?? '1 Hari' }}
                     </div>
@@ -374,7 +374,7 @@
         <div id="slider-armada" class="gsap-item flex overflow-x-auto gap-4 md:gap-8 pb-6 snap-x snap-mandatory no-scrollbar -mx-6 px-6 md:mx-0 md:px-0 md:justify-start items-stretch w-auto smooth-scroll-x relative">
             @forelse($armada ?? [] as $item)
             <div class="slider-card-native w-full md:w-[360px] flex-shrink-0 surface-card rounded-[1.5rem] p-5 flex flex-col items-center snap-center group hover:border-holiday/50 transition-all">
-                <img src="{{ asset('img/' . ($item->gambar ?? 'unsplash_M8drGBgFNZE.png')) }}" alt="{{ $item->nama }}" class="w-full object-cover h-48 md:h-56 mb-6 rounded-2xl transition-transform duration-500 group-hover:scale-105 relative z-10 flex-shrink-0">
+                <img src="{{ $item->image_url }}" alt="{{ $item->nama }}" class="w-full object-cover h-48 md:h-56 mb-6 rounded-2xl transition-transform duration-500 group-hover:scale-105 relative z-10 flex-shrink-0">
                 <div class="relative z-10 text-center w-full flex-grow flex flex-col justify-between">
                     <div>
                         <h3 class="text-2xl font-extrabold text-gray-900 mb-2">{{ $item->nama }}</h3>

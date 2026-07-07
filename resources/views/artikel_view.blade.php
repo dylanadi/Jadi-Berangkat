@@ -74,7 +74,7 @@
         </a>
     </div>
     @endauth
-    <img src="{{ asset($artikel->gambar) }}" alt="{{ $artikel->judul }}">
+    <img src="{{ $artikel->image_url }}" alt="{{ $artikel->judul }}">
     <div class="overlay"></div>
     <div class="hero-bottom max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <a href="{{ route('artikel.index') }}" class="back-btn mb-4"><i class="bi bi-arrow-left"></i> Semua Artikel</a>
@@ -130,7 +130,7 @@
         <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5">
             @foreach($lainnya as $item)
             <a href="{{ route('artikel.show', $item->slug) }}" class="related-card">
-                <img src="{{ asset($item->gambar) }}" alt="{{ $item->judul }}" loading="lazy">
+                <img src="{{ $item->image_url }}" alt="{{ $item->judul }}" loading="lazy">
                 <div class="card-body">
                     @if($item->kategori)
                     <span class="inline-block px-2 py-0.5 text-[10px] font-bold uppercase bg-[#2f6f42]/10 text-[#2f6f42] rounded-full mb-2">{{ $item->kategori }}</span>

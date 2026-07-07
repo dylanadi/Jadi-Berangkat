@@ -13,8 +13,28 @@ class Destinasi extends Model
 
     protected $fillable = [
         'kategori', 'nama', 'slug', 'deskripsi', 'deskripsi_singkat', 'lokasi', 'harga',
-        'gambar', 'status', 'durasi', 'mood', 'rating', 'label', 'rute', 'jml_ulasan', 'tipe'
+        'image_id', 'status', 'durasi', 'mood', 'rating', 'label', 'rute', 'jml_ulasan', 'tipe'
     ];
+
+    /**
+     * Relasi ke tabel images terpusat.
+     */
+    public function image()
+    {
+        return $this->belongsTo(Image::class);
+    }
+
+    /**
+     * Ambil URL gambar dari tabel images terpusat.
+     * Fallback ke gambar default jika image_id belum diset.
+     */
+    public function getImageUrlAttribute(): string
+    {
+        if ($this->image) {
+            return $this->image->url();
+        }
+        return asset('img/unsplash_M8drGBgFNZE.png');
+    }
 
     public function jadwalPerjalanan()
     {

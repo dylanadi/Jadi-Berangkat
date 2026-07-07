@@ -9,7 +9,7 @@ class GaleriController extends Controller
 {
     public function index()
     {
-        $galeri = Galeri::latest()->get();
+        $galeri = Galeri::with('image')->latest()->get();
         $mediaSosial = MediaSosial::where('aktif', true)->get();
         return view('galeri', compact('galeri', 'mediaSosial'));
     }

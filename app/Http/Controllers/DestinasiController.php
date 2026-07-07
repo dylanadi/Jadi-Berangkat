@@ -9,16 +9,18 @@ class DestinasiController extends Controller
 {
     public function index()
     {
-        $destinasi = Destinasi::where('status', 'aktif')->paginate(12);
+        $destinasi = Destinasi::where('status', 'aktif')->with('image')->paginate(12);
         $mediaSosial = MediaSosial::where('aktif', true)->get();
         return view('destinasi', compact('destinasi', 'mediaSosial'));
     }
 
     public function show($slug)
     {
-        $destinasi = Destinasi::where('slug', $slug)->where('status', 'aktif')->firstOrFail();
-        $destinasi->load(['jadwalPerjalanan', 'includes', 'unIncludes']);
-        $lainnya = Destinasi::where('status', 'aktif')->where('id', '!=', $destinasi->id)->take(4)->get();
+        $destinasi = Destinasi::where('slug', $slug)->where('status', 'aktif')
+            ->with(['image', 'jadwalPerjalanan', 'includes', 'unIncludes'])
+            ->firstOrFail();
+        $lainnya = Destinasi::where('status', 'aktif')->where('id', '!=', $destinasi->id)
+            ->with('image')->take(4)->get();
         $mediaSosial = MediaSosial::where('aktif', true)->get();
         return view('detail', compact('destinasi', 'lainnya', 'mediaSosial'));
     }

@@ -37,8 +37,8 @@
                         <td class="px-4 py-3">{{ $item->judul }}</td>
                         <td class="px-4 py-3">{{ $item->kategori }}</td>
                         <td class="px-4 py-3">
-                            @if($item->gambar)
-                            <img src="{{ asset('storage/' . $item->gambar) }}" class="h-12 w-16 object-cover rounded">
+                            @if($item->image)
+                            <img src="{{ $item->image_url }}" class="h-12 w-16 object-cover rounded" alt="{{ $item->judul }}">
                             @else
                             <span class="text-gray-400">-</span>
                             @endif
