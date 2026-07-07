@@ -11,5 +11,10 @@ class Galeri extends Model
 
     protected $table = 'galeri';
 
-    protected $fillable = ['kategori', 'judul', 'gambar', 'deskripsi', 'slug'];
+    protected $fillable = ['kategori', 'judul', 'image_id', 'deskripsi', 'slug'];
+
+    public function image()
+    {
+        return $this->belongsTo(Image::class, 'image_id');
+    }
 }

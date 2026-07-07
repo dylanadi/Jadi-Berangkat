@@ -28,7 +28,7 @@
                     @forelse($halaman as $item)
                     <tr class="border-b hover:bg-gray-50">
                         <td class="px-4 py-3">{{ $loop->iteration }}</td>
-                        <td class="px-4 py-3">{{ $item->judul }}</td>
+                        <td class="px-4 py-3">{!! $item->judul !!}</td>
                         <td class="px-4 py-3">{{ $item->slug }}</td>
                         <td class="px-4 py-3">{{ $item->tipe ?? '-' }}</td>
                         <td class="px-4 py-3">

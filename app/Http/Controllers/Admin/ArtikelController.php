@@ -25,7 +25,7 @@ class ArtikelController extends Controller
             'judul' => 'required|string|max:255',
             'slug' => 'required|string|max:255|unique:artikel',
             'konten' => 'required|string',
-            'gambar' => 'nullable|image|mimes:jpeg,png,jpg|max:2048',
+            'image_id' => 'nullable|exists:images,id',
             'kategori' => 'nullable|string|max:50',
             'penulis' => 'nullable|string|max:100',
             'durasi_baca' => 'nullable|integer',
@@ -33,9 +33,7 @@ class ArtikelController extends Controller
             'tanggal_terbit' => 'nullable|date',
         ]);
 
-        if ($request->hasFile('gambar')) {
-            $validated['gambar'] = $request->file('gambar')->store('artikel', 'public');
-        }
+
 
         Artikel::create($validated);
         return redirect()->route('admin.artikel.index')->with('success', 'Artikel berhasil ditambahkan');
@@ -52,7 +50,7 @@ class ArtikelController extends Controller
             'judul' => 'required|string|max:255',
             'slug' => 'required|string|max:255|unique:artikel,slug,' . $artikel->id,
             'konten' => 'required|string',
-            'gambar' => 'nullable|image|mimes:jpeg,png,jpg|max:2048',
+            'image_id' => 'nullable|exists:images,id',
             'kategori' => 'nullable|string|max:50',
             'penulis' => 'nullable|string|max:100',
             'durasi_baca' => 'nullable|integer',
@@ -60,9 +58,7 @@ class ArtikelController extends Controller
             'tanggal_terbit' => 'nullable|date',
         ]);
 
-        if ($request->hasFile('gambar')) {
-            $validated['gambar'] = $request->file('gambar')->store('artikel', 'public');
-        }
+
 
         $artikel->update($validated);
         return redirect()->route('admin.artikel.index')->with('success', 'Artikel berhasil diupdate');

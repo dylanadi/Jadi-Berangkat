@@ -172,7 +172,7 @@
         @if($featured)
         <div class="relative">
             <a href="{{ route('artikel.show', $featured->slug) }}" class="artikel-card-featured" data-kategori="{{ strtolower($featured->kategori) }}" data-judul="{{ strtolower($featured->judul) }}">
-                <img src="{{ asset($featured->gambar) }}" alt="{{ $featured->judul }}" loading="lazy">
+                <img src="{{ ($featured->image ? $featured->image->url : '') }}" alt="{{ $featured->judul }}" loading="lazy">
                 <div class="card-body">
                     @if($featured->kategori)<span class="cat-badge">{{ $featured->kategori }}</span>@endif
                     <h3>{{ $featured->judul }}</h3>
@@ -205,10 +205,10 @@
             @foreach($artikel->take(6) as $item)
             <div class="relative">
                 <a href="{{ route('artikel.show', $item->slug) }}" class="artikel-card-middle" data-kategori="{{ strtolower($item->kategori) }}" data-judul="{{ strtolower($item->judul) }}">
-                    <img src="{{ asset($item->gambar) }}" alt="{{ $item->judul }}" loading="lazy">
+                    <img src="{{ ($item->image ? $item->image->url : '') }}" alt="{{ $item->judul }}" loading="lazy">
                     <div class="card-body">
                         @if($item->kategori)<span class="cat-badge">{{ $item->kategori }}</span>@endif
-                        <h3>{{ $item->judul }}</h3>
+                        <h3>{!! $item->judul !!}</h3>
                         <div class="flex items-center gap-3 text-xs text-gray-400 mt-2">
                             @if($item->durasi_baca)<span><i class="bi bi-clock"></i> {{ $item->durasi_baca }} Min Read</span>@endif
                             @if($item->tanggal_terbit)<span><i class="bi bi-calendar"></i> {{ $item->tanggal_terbit->format('d M Y') }}</span>@endif
@@ -241,9 +241,9 @@
             @foreach($compact as $item)
             <div class="relative">
                 <a href="{{ route('artikel.show', $item->slug) }}" class="artikel-card-compact" data-kategori="{{ strtolower($item->kategori) }}" data-judul="{{ strtolower($item->judul) }}">
-                    <img src="{{ asset($item->gambar) }}" alt="{{ $item->judul }}" loading="lazy">
+                    <img src="{{ ($item->image ? $item->image->url : '') }}" alt="{{ $item->judul }}" loading="lazy">
                     <div class="card-body flex-1">
-                        <h4>{{ $item->judul }}</h4>
+                        <h4>{!! $item->judul !!}</h4>
                         <div class="meta">
                             @if($item->kategori)<span>{{ $item->kategori }}</span>@endif
                             @if($item->tanggal_terbit)<span>{{ $item->tanggal_terbit->format('d M Y') }}</span>@endif

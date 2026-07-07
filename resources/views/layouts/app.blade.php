@@ -254,10 +254,9 @@
                         <div class="w-10 h-10 bg-holiday rounded-xl flex items-center justify-center shadow-lg">
                             <i class="bi bi-jeep text-white text-xl"></i>
                         </div>
-                        <span data-edit="footer_judul" data-edit-type="text" data-edit-tipe="beranda">{{ $footerData['footer_judul'] ?? 'Jadi Berangkat' }}</span>
+                        <span data-edit="footer_judul" data-edit-type="text" data-edit-tipe="beranda">{!! $footerData['footer_judul'] ?? 'Jadi Berangkat' !!}</span>
                     </a>
-                    <p data-edit="footer_tentang" data-edit-type="text" data-edit-tipe="beranda" class="text-gray-400 text-sm leading-relaxed mb-8 font-medium">
-                        {{ $footerData['footer_tentang'] ?? 'Platform penyedia layanan penyewaan Jeep wisata premium.' }}
+                    <p data-edit="footer_tentang" data-edit-type="text" data-edit-tipe="beranda" class="text-gray-400 text-sm leading-relaxed mb-8 font-medium">{!! $footerData['footer_tentang'] ?? 'Platform penyedia layanan penyewaan Jeep wisata premium.' !!}
                     </p>
                     <div class="flex gap-4">
                         <a href="https://www.instagram.com/jadiberangkat/" target="_blank" rel="noopener noreferrer" aria-label="Instagram Jadi Berangkat" class="w-10 h-10 rounded-full bg-white/10 flex items-center justify-center text-white hover:bg-holiday hover:scale-110 transition-all"><i class="bi bi-instagram"></i></a>
@@ -283,7 +282,7 @@
                 </div>
             </div>
             <div class="text-center md:text-left flex flex-col md:flex-row justify-between items-center text-sm text-gray-500 pt-8 border-t border-gray-800 font-medium">
-                <p data-edit="footer_copyright" data-edit-type="text" data-edit-tipe="beranda">{{ $footerData['footer_copyright'] ?? '&copy; ' . date('Y') . ' Jadi Berangkat. All rights reserved.' }}</p>
+                <p data-edit="footer_copyright" data-edit-type="text" data-edit-tipe="beranda">{!! $footerData['footer_copyright'] ?? '&copy; ' . date('Y') . ' Jadi Berangkat. All rights reserved.' !!}</p>
                 <p class="mt-2 md:mt-0">Jeep trip Banyuwangi, siap dipesan online.</p>
             </div>
         </div>

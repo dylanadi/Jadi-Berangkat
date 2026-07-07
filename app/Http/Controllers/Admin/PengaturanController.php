@@ -58,7 +58,7 @@ class PengaturanController extends Controller
         $tipe = $request->tipe ?? '';
         $imageId = $request->image_id;
 
-        $imageFields = ['tentang_hero_img', 'tentang_kisah_img_1', 'tentang_kisah_img_2', 'tentang_galeri_img_1', 'tentang_galeri_img_2'];
+        $imageFields = ['tentang_hero_img', 'tentang_kisah_img_1', 'tentang_kisah_img_2', 'tentang_galeri_img_1', 'tentang_galeri_img_2', 'tentang_galeri_img_3', 'tentang_galeri_img_4', 'tentang_galeri_img_5'];
         if (!$imageId && in_array($field, $imageFields) && $value) {
             $image = Image::firstOrCreate(
                 ['path' => $value],
@@ -83,6 +83,11 @@ class PengaturanController extends Controller
                 $page->update(['konten' => json_encode($data, JSON_UNESCAPED_UNICODE)]);
             }
             $this->syncHomeSection($field, $value);
+        } elseif ($tipe === 'galeri' && preg_match('/^galeri_img_(\d+)$/', $field, $m) && $imageId) {
+            $galeri = \App\Models\Galeri::find((int) $m[1]);
+            if ($galeri) {
+                $galeri->update(['image_id' => (int) $imageId]);
+            }
         } else {
             PengaturanHalamanDepan::updateOrCreate(
                 ['key' => $field],
@@ -271,21 +276,24 @@ class PengaturanController extends Controller
             SectKisah::firstOrCreate([])->update(['gambar_1_id' => (int) $imageId]);
         } elseif ($field === 'tentang_kisah_img_2' && $imageId) {
             SectKisah::firstOrCreate([])->update(['gambar_2_id' => (int) $imageId]);
-        } elseif ($field === 'tentang_galeri_img_1' && $imageId) {
+        } elseif (preg_match('/^tentang_galeri_img_(\d+)$/', $field, $m) && $imageId) {
             $galeri = SectGaleriAbout::first();
             if ($galeri) {
-                $galeri->items()->updateOrCreate(
-                    ['urutan' => 1],
-                    ['gambar_id' => (int) $imageId, 'tag' => 'EKSPEDISI IJEN']
-                );
-            }
-        } elseif ($field === 'tentang_galeri_img_2' && $imageId) {
-            $galeri = SectGaleriAbout::first();
-            if ($galeri) {
-                $galeri->items()->updateOrCreate(
-                    ['urutan' => 2],
-                    ['gambar_id' => (int) $imageId, 'tag' => 'MOMEN SAVANA']
-                );
+                $urutan = (int) $m[1];
+                $tagDefault = "GALERI $urutan";
+                if ($urutan == 1) $tagDefault = "EKSPEDISI IJEN";
+                if ($urutan == 2) $tagDefault = "MOMEN SAVANA";
+                
+                $item = $galeri->items()->where('urutan', $urutan)->first();
+                if ($item) {
+                    $item->update(['gambar_id' => (int) $imageId]);
+                } else {
+                    $galeri->items()->create([
+                        'urutan' => $urutan,
+                        'gambar_id' => (int) $imageId,
+                        'tag' => $tagDefault
+                    ]);
+                }
             }
         } elseif (preg_match('/^tentang_nilai_item_(\d+)_judul$/', $field, $m)) {
             $nilai = SectNilai::first();
@@ -337,6 +345,11 @@ class PengaturanController extends Controller
                 $this->syncAboutSection($field, $image->id, $image->id);
             } elseif ($tipe === 'beranda') {
                 $this->syncHomeSection($field, $image->id);
+            } elseif ($tipe === 'galeri' && preg_match('/^galeri_img_(\d+)$/', $field, $m)) {
+                $galeri = \App\Models\Galeri::find((int) $m[1]);
+                if ($galeri) {
+                    $galeri->update(['image_id' => $image->id]);
+                }
             }
         }
 

@@ -13,13 +13,13 @@
             <i class="bi bi-shield-check text-sm md:text-xl"></i>
         </div>
         <div class="truncate">
-            <h2 class="font-extrabold text-[11px] md:text-base leading-tight truncate">{{ $data->judul ?? 'Kebijakan Privasi' }}</h2>
-            <p data-edit="subtitle" data-edit-type="text" data-edit-tipe="privasi" class="text-[9px] md:text-[11px] text-slate-400 font-bold uppercase tracking-wider truncate">{{ $data->subtitle ?? 'PT. Jadi Berangkat' }}</p>
+            <h2 class="font-extrabold text-[11px] md:text-base leading-tight truncate">{!! $data->judul ?? 'Kebijakan Privasi' !!}</h2>
+            <p data-edit="subtitle" data-edit-type="text" data-edit-tipe="privasi" class="text-[9px] md:text-[11px] text-slate-400 font-bold uppercase tracking-wider truncate">{!! $data->subtitle ?? 'PT. Jadi Berangkat' !!}</p>
         </div>
     </div>
     <div class="text-right shrink-0">
         <p class="text-[8px] md:text-[10px] text-slate-400 font-bold uppercase tracking-widest">Terakhir diperbarui</p>
-        <p data-edit="tanggal" data-edit-type="text" data-edit-tipe="privasi" class="text-[10px] md:text-xs font-extrabold text-holiday-light">{{ $data->tanggal ?? '30 Juni 2026' }}</p>
+        <p data-edit="tanggal" data-edit-type="text" data-edit-tipe="privasi" class="text-[10px] md:text-xs font-extrabold text-holiday-light">{!! $data->tanggal ?? '30 Juni 2026' !!}</p>
     </div>
 </div>
 
@@ -32,18 +32,17 @@
     @endauth
     <div class="max-w-4xl mx-auto space-y-6 flex flex-col items-center">
         <span data-edit="badge" data-edit-type="text" data-edit-tipe="privasi" class="inline-flex items-center gap-1.5 border border-holiday text-holiday-light px-3.5 py-1.5 rounded-full text-xs font-black tracking-wider uppercase bg-holiday/10">
-            <i class="bi bi-file-earmark-lock-fill"></i> {{ $data->badge ?? 'Dokumen Resmi & Legal' }}
+            <i class="bi bi-file-earmark-lock-fill"></i> {!! $data->badge ?? 'Dokumen Resmi & Legal' !!}
         </span>
-        <h1 data-edit="judul" data-edit-type="text" data-edit-tipe="privasi" class="text-3xl md:text-5xl font-black tracking-tight leading-tight max-w-3xl">
-            {{ $data->judul ?? 'Kebijakan Privasi & Penggunaan Situs Web' }}
+        <h1 data-edit="judul" data-edit-type="text" data-edit-tipe="privasi" class="text-3xl md:text-5xl font-black tracking-tight leading-tight max-w-3xl">{!! $data->judul ?? 'Kebijakan Privasi & Penggunaan Situs Web' !!}
         </h1>
         <div data-edit="konten" data-edit-type="html" data-edit-tipe="privasi" class="text-slate-300 text-sm md:text-base max-w-2xl font-medium leading-relaxed">
             {!! $data->konten ?? 'Dokumen ini mengatur hak, kewajiban, dan perlindungan data Pengguna dalam menggunakan layanan digital PT. Jadi Berangkat.' !!}
         </div>
         <div class="flex flex-wrap items-center justify-center gap-6 pt-4 text-xs font-bold text-slate-400">
             <span data-edit="pasal_label" data-edit-type="text" data-edit-tipe="privasi" class="flex items-center gap-2"><i class="bi bi-file-earmark-text text-holiday-light text-base"></i> {{ count($sections) }} Pasal</span>
-            <span data-edit="hukum_label" data-edit-type="text" data-edit-tipe="privasi" class="flex items-center gap-2"><i class="bi bi-bank text-holiday-light text-base"></i> {{ $data->hukum_label ?? 'Hukum Indonesia' }}</span>
-            <span data-edit="pdp_label" data-edit-type="text" data-edit-tipe="privasi" class="flex items-center gap-2"><i class="bi bi-shield-check text-holiday-light text-base"></i> {{ $data->pdp_label ?? 'UU PDP 2022' }}</span>
+            <span data-edit="hukum_label" data-edit-type="text" data-edit-tipe="privasi" class="flex items-center gap-2"><i class="bi bi-bank text-holiday-light text-base"></i> {!! $data->hukum_label ?? 'Hukum Indonesia' !!}</span>
+            <span data-edit="pdp_label" data-edit-type="text" data-edit-tipe="privasi" class="flex items-center gap-2"><i class="bi bi-shield-check text-holiday-light text-base"></i> {!! $data->pdp_label ?? 'UU PDP 2022' !!}</span>
         </div>
     </div>
 </div>

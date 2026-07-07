@@ -74,16 +74,16 @@
         </a>
     </div>
     @endauth
-    <img src="{{ asset($artikel->gambar) }}" alt="{{ $artikel->judul }}">
+    <img src="{{ ($artikel->image ? $artikel->image->url : '') }}" alt="{!! $artikel->judul !!}">
     <div class="overlay"></div>
     <div class="hero-bottom max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <a href="{{ route('artikel.index') }}" class="back-btn mb-4"><i class="bi bi-arrow-left"></i> Semua Artikel</a>
         @if($artikel->kategori)
         <span class="inline-block px-3 py-1 text-xs font-bold uppercase bg-[#2f6f42] rounded-full mb-3">{{ $artikel->kategori }}</span>
         @endif
-        <h1 data-edit="judul" data-edit-type="text" data-edit-route="{{ route('admin.artikel.edit', $artikel->id) }}">{{ $artikel->judul }}</h1>
+        <h1 data-edit="judul" data-edit-type="text" data-edit-route="{{ route('admin.artikel.edit', $artikel->id) }}">{!! $artikel->judul !!}</h1>
         <div class="meta-row">
-            @if($artikel->penulis)<span data-edit="penulis" data-edit-type="text" data-edit-route="{{ route('admin.artikel.edit', $artikel->id) }}"><i class="bi bi-person"></i> {{ $artikel->penulis }}</span>@endif
+            @if($artikel->penulis)<span data-edit="penulis" data-edit-type="text" data-edit-route="{{ route('admin.artikel.edit', $artikel->id) }}"><i class="bi bi-person"></i> {!! $artikel->penulis !!}</span>@endif
             @if($artikel->durasi_baca)<span><i class="bi bi-clock"></i> {{ $artikel->durasi_baca }} Min Read</span>@endif
             @if($artikel->tanggal_terbit)<span><i class="bi bi-calendar"></i> {{ $artikel->tanggal_terbit->format('d M Y') }}</span>@endif
         </div>
@@ -96,7 +96,7 @@
         <span class="sep">›</span>
         <a href="{{ route('artikel.index') }}">Artikel</a>
         <span class="sep">›</span>
-        <span>{{ $artikel->judul }}</span>
+        <span>{!! $artikel->judul !!}</span>
     </nav>
 </div>
 
@@ -130,12 +130,12 @@
         <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5">
             @foreach($lainnya as $item)
             <a href="{{ route('artikel.show', $item->slug) }}" class="related-card">
-                <img src="{{ asset($item->gambar) }}" alt="{{ $item->judul }}" loading="lazy">
+                <img src="{{ ($item->image ? $item->image->url : '') }}" alt="{!! $item->judul !!}" loading="lazy">
                 <div class="card-body">
                     @if($item->kategori)
                     <span class="inline-block px-2 py-0.5 text-[10px] font-bold uppercase bg-[#2f6f42]/10 text-[#2f6f42] rounded-full mb-2">{{ $item->kategori }}</span>
                     @endif
-                    <h4>{{ $item->judul }}</h4>
+                    <h4>{!! $item->judul !!}</h4>
                     <div class="flex items-center gap-3 text-xs text-gray-400 mt-2">
                         @if($item->durasi_baca)<span><i class="bi bi-clock"></i> {{ $item->durasi_baca }} Min Read</span>@endif
                         @if($item->tanggal_terbit)<span><i class="bi bi-calendar"></i> {{ $item->tanggal_terbit->format('d M Y') }}</span>@endif

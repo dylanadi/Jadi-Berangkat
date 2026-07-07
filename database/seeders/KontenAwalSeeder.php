@@ -143,6 +143,18 @@ class KontenAwalSeeder extends Seeder
         ];
 
         foreach ($destinasi as $data) {
+            $imageName = $data['gambar'] ?? null;
+            unset($data['gambar']);
+            
+            if ($imageName) {
+                $path = \Illuminate\Support\Str::startsWith($imageName, 'img/') ? $imageName : 'img/' . $imageName;
+                $image = \App\Models\Image::firstOrCreate(
+                    ['name' => $imageName],
+                    ['path' => $path, 'disk' => 'public']
+                );
+                $data['image_id'] = $image->id;
+            }
+            
             Destinasi::create($data);
         }
         $this->command->info('Destinasi: ' . count($destinasi) . ' data created.');

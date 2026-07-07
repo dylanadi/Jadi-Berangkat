@@ -24,14 +24,12 @@ class GaleriController extends Controller
         $validated = $request->validate([
             'kategori' => 'required|string',
             'judul' => 'required|string|max:255',
-            'gambar' => 'required|image|mimes:jpeg,png,jpg|max:2048',
+            'image_id' => 'required|exists:images,id',
             'deskripsi' => 'nullable|string',
             'slug' => 'nullable|string|max:255',
         ]);
 
-        if ($request->hasFile('gambar')) {
-            $validated['gambar'] = $request->file('gambar')->store('galeri', 'public');
-        }
+
 
         Galeri::create($validated);
         return redirect()->route('admin.galeri.index')->with('success', 'Galeri berhasil ditambahkan');
@@ -47,14 +45,12 @@ class GaleriController extends Controller
         $validated = $request->validate([
             'kategori' => 'required|string',
             'judul' => 'required|string|max:255',
-            'gambar' => 'nullable|image|mimes:jpeg,png,jpg|max:2048',
+            'image_id' => 'nullable|exists:images,id',
             'deskripsi' => 'nullable|string',
             'slug' => 'nullable|string|max:255',
         ]);
 
-        if ($request->hasFile('gambar')) {
-            $validated['gambar'] = $request->file('gambar')->store('galeri', 'public');
-        }
+
 
         $galeri->update($validated);
         return redirect()->route('admin.galeri.index')->with('success', 'Galeri berhasil diupdate');

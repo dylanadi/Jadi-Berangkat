@@ -11,9 +11,14 @@ class Ulasan extends Model
 
     protected $table = 'ulasan';
 
-    protected $fillable = ['bintang', 'pesan', 'gambar_profile', 'nama_user', 'kategori', 'ditampilkan'];
+    protected $fillable = ['bintang', 'pesan', 'image_id', 'nama_user', 'kategori', 'ditampilkan'];
 
     protected $casts = [
         'ditampilkan' => 'boolean',
     ];
+
+    public function image()
+    {
+        return $this->belongsTo(Image::class, 'image_id');
+    }
 }

@@ -240,7 +240,7 @@
                 <img src="{{ $item->image ? $item->image->url : asset('img/placeholder.png') }}" loading="lazy" class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105" alt="{{ $item->nama }}">
                 <div class="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent opacity-90 group-hover:opacity-100 transition-opacity duration-300"></div>
                 <div class="absolute bottom-0 left-0 right-0 p-4">
-                    <h4 class="text-white font-extrabold text-lg leading-tight mb-1">{{ $item->nama }}</h4>
+                    <h4 class="text-white font-extrabold text-lg leading-tight mb-1">{!! $item->nama !!}</h4>
                     <p class="text-gray-300 text-sm inline-block max-w-full truncate">{{ Str::limit($item->lokasi, 25) }}</p>
                 </div>
             </a>

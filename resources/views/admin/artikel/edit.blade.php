@@ -12,7 +12,7 @@
     </div>
 
     <div class="bg-white rounded-lg shadow p-6 max-w-4xl">
-        <form action="{{ route('admin.artikel.update', $artikel->id) }}" method="POST" enctype="multipart/form-data" class="space-y-4">
+        <form action="{{ route('admin.artikel.update', $artikel->id) }}" method="POST" class="space-y-4">
             @csrf
             @method('PUT')
 
@@ -36,13 +36,22 @@
 
             <div>
                 <label class="block text-sm font-medium text-gray-700 mb-1">Gambar</label>
-                @if($artikel->gambar)
-                <div class="mb-2">
-                    <img src="{{ asset('storage/' . $artikel->gambar) }}" class="h-32 w-32 object-cover rounded-lg">
+                
+                                <input type="hidden" name="image_id" id="image_id_input" value="{{ old('image_id', isset($artikel->image_id) ? $artikel->image_id : '') }}">
+                
+                <div class="flex items-center gap-4">
+                    <div id="image_preview_container" class="w-24 h-24 rounded-lg overflow-hidden border border-gray-300 bg-gray-100 flex items-center justify-center">
+                        <i class="bi bi-image text-gray-400 text-2xl {{ isset($artikel->image_id) && $artikel->image_id ? 'hidden' : '' }}" id="image_placeholder_icon"></i>
+                        <img id="image_preview_img" class="w-full h-full object-cover {{ isset($artikel->image_id) && $artikel->image_id ? '' : 'hidden' }}" src="{{ isset($artikel->image_id) && $artikel->image_id ? $artikel->image->url : '' }}">
+                    </div>
+                    <div>
+                        <button type="button" onclick="openImagePicker(handleImageSelect)" class="px-4 py-2 bg-holiday text-white rounded-lg text-sm font-semibold hover:bg-holiday-dark transition shadow-sm">
+                            <i class="bi bi-image mr-1"></i> Pilih Gambar
+                        </button>
+                        <p class="text-xs text-gray-500 mt-2 max-w-sm">Pilih gambar dari galeri atau upload baru melalui popup.</p>
+                    </div>
                 </div>
-                @endif
-                <input type="file" name="gambar" class="w-full border border-gray-300 rounded-lg px-3 py-2 focus:ring-admin-500 focus:border-holiday @error('gambar') border-red-500 @enderror">
-                @error('gambar') <p class="text-red-500 text-xs mt-1">{{ $message }}</p> @enderror
+                @error('image_id') <p class="text-red-500 text-xs mt-1">{{ $message }}</p> @enderror
             </div>
 
             <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
@@ -83,4 +92,20 @@
         </form>
     </div>
 </div>
+@include('admin.components.image-picker')
+
+@push('scripts')
+<script>
+    function handleImageSelect(image) {
+        document.getElementById('image_id_input').value = image.id;
+        
+        const previewImg = document.getElementById('image_preview_img');
+        const icon = document.getElementById('image_placeholder_icon');
+        
+        previewImg.src = image.url;
+        previewImg.classList.remove('hidden');
+        icon.classList.add('hidden');
+    }
+</script>
+@endpush
 @endsection

@@ -129,12 +129,12 @@
 
             <div id="galeriContainer" class="masonry">
                 @foreach($galeri as $item)
-                <div class="galeri-item relative" data-kategori="{{ $item->kategori }}" onclick="openLightbox('{{ asset($item->gambar) }}', '{{ $item->judul }}')">
+                <div class="galeri-item relative" data-kategori="{{ $item->kategori }}" onclick="openLightbox('{{ ($item->image ? $item->image->url : '') }}', '{{ $item->judul }}')">
                     @if($item->kategori)
                     <span class="kategori-badge">{{ $item->kategori }}</span>
                     @endif
-                    <img src="{{ asset($item->gambar) }}" alt="{{ $item->judul }}" loading="lazy" data-src="{{ asset($item->gambar) }}">
-                    <div class="overlay"><span>{{ $item->judul }}</span></div>
+                    <img src="{{ ($item->image ? $item->image->url : '') }}" alt="{{ $item->judul }}" loading="lazy" data-src="{{ ($item->image ? $item->image->url : '') }}" data-image-edit data-edit-field="galeri_img_{{ $item->id }}" data-edit-tipe="galeri">
+                    <div class="overlay"><span>{!! $item->judul !!}</span></div>
                     @auth
                     <div class="absolute top-2 right-2 flex gap-1.5 z-20">
                         <a href="{{ route('admin.galeri.edit', $item->id) }}" class="text-xs bg-yellow-100 text-yellow-700 rounded-full px-2.5 py-1 font-bold hover:bg-yellow-200 transition shadow-sm">

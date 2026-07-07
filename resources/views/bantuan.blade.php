@@ -18,8 +18,7 @@
         <div class="inline-flex items-center gap-2 bg-emerald-500/20 text-emerald-300 text-[11px] font-bold uppercase tracking-widest px-3 py-1 rounded-md mb-4">
             <i class="bi bi-question-circle-fill text-xs"></i>Pusat Bantuan
         </div>
-        <h1 data-edit="judul" data-edit-type="text" data-edit-tipe="bantuan" class="text-3xl md:text-5xl font-black text-white tracking-tight leading-none mb-4">
-            {{ $halaman->judul ?? 'Ada yang bisa kami bantu?' }}
+        <h1 data-edit="judul" data-edit-type="text" data-edit-tipe="bantuan" class="text-3xl md:text-5xl font-black text-white tracking-tight leading-none mb-4">{!! $halaman->judul ?? 'Ada yang bisa kami bantu?' !!}
         </h1>
         <div class="text-emerald-100/70 text-sm md:text-base max-w-2xl mx-auto font-medium relative group">
 @auth

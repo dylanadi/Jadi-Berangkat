@@ -66,11 +66,11 @@
         </a>
     </div>
     @endauth
-    <img src="{{ asset($destinasi->gambar) }}" alt="{{ $destinasi->nama }}">
+    <img src="{{ ($destinasi->image ? $destinasi->image->url : '') }}" alt="{{ $destinasi->nama }}">
     <div class="overlay"></div>
     <div class="hero-bottom max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <a href="{{ route('destinasi.index') }}" class="back-btn mb-4"><i class="bi bi-arrow-left"></i> Kembali</a>
-        <h1 data-edit="nama" data-edit-type="text" data-edit-route="{{ route('admin.destinasi.edit', $destinasi->id) }}">{{ $destinasi->nama }}</h1>
+        <h1 data-edit="nama" data-edit-type="text" data-edit-route="{{ route('admin.destinasi.edit', $destinasi->id) }}">{!! $destinasi->nama !!}</h1>
         <div class="meta-row">
             @if($destinasi->lokasi)<span data-edit="lokasi" data-edit-type="text" data-edit-route="{{ route('admin.destinasi.edit', $destinasi->id) }}"><i class="bi bi-geo-alt"></i> {{ $destinasi->lokasi }}</span>@endif
             @if($destinasi->kategori)<span><i class="bi bi-tag"></i> {{ $destinasi->kategori }}</span>@endif
@@ -87,7 +87,7 @@
         <span class="sep">›</span>
         <a href="{{ route('destinasi.index') }}">Destinasi</a>
         <span class="sep">›</span>
-        <span>{{ $destinasi->nama }}</span>
+        <span>{!! $destinasi->nama !!}</span>
     </nav>
 </div>
 
@@ -190,7 +190,7 @@
         <div>
             <div class="rincian-sidebar">
                 <h3 class="text-lg font-bold text-[#1a1a2e] mb-1">Rincian Booking</h3>
-                <p class="text-sm text-gray-400 mb-4">{{ $destinasi->nama }}</p>
+                <p class="text-sm text-gray-400 mb-4">{!! $destinasi->nama !!}</p>
 
                 <div class="price-main">Rp {{ number_format($destinasi->harga, 0, ',', '.') }} <small>/orang</small></div>
 
@@ -228,9 +228,9 @@
         <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5">
             @foreach($lainnya as $item)
             <a href="{{ route('destinasi.show', $item->slug) }}" class="lainnya-card">
-                <img src="{{ asset($item->gambar) }}" alt="{{ $item->nama }}" loading="lazy">
+                <img src="{{ ($item->image ? $item->image->url : '') }}" alt="{{ $item->nama }}" loading="lazy">
                 <div class="card-body">
-                    <h4>{{ $item->nama }}</h4>
+                    <h4>{!! $item->nama !!}</h4>
                     <p class="text-xs text-gray-400 flex items-center gap-1 mt-1"><i class="bi bi-geo-alt"></i> {{ $item->lokasi }}</p>
                     <div class="price mt-2">Rp {{ number_format($item->harga, 0, ',', '.') }}</div>
                 </div>

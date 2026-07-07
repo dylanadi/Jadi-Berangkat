@@ -12,11 +12,16 @@ class Artikel extends Model
     protected $table = 'artikel';
 
     protected $fillable = [
-        'judul', 'slug', 'konten', 'gambar', 'kategori',
+        'judul', 'slug', 'konten', 'image_id', 'kategori',
         'penulis', 'durasi_baca', 'status', 'tanggal_terbit'
     ];
 
     protected $casts = [
         'tanggal_terbit' => 'date',
     ];
+
+    public function image()
+    {
+        return $this->belongsTo(Image::class, 'image_id');
+    }
 }

@@ -89,7 +89,7 @@
                 <i class="bi bi-eye-fill absolute -right-4 -bottom-6 text-7xl text-slate-900/5"></i>
                 <div class="relative z-10 space-y-4">
                     <div class="text-slate-800 text-xl"><i class="bi bi-eye-fill"></i></div>
-                    <h3 data-edit="tentang_visi_label" data-edit-type="text" data-edit-tipe="tentang" class="text-sm font-bold uppercase tracking-wider text-slate-900">{{ $data->tentang_visi_label ?? 'Visi' }}</h3>
+                    <h3 data-edit="tentang_visi_label" data-edit-type="text" data-edit-tipe="tentang" class="text-sm font-bold uppercase tracking-wider text-slate-900">{!! $data->tentang_visi_label ?? 'Visi' !!}</h3>
                     <p data-edit="tentang_visi_text" data-edit-type="text" data-edit-tipe="tentang" class="text-slate-600 text-xs md:text-sm leading-relaxed font-medium">{!! $data->tentang_visi_text ?? '' !!}</p>
                 </div>
             </div>
@@ -98,7 +98,7 @@
                 <i class="bi bi-layers-half absolute -right-4 -top-6 text-7xl text-slate-900/5"></i>
                 <div class="relative z-10 space-y-4">
                     <div class="text-slate-800 text-xl"><i class="bi bi-layers-half"></i></div>
-                    <h3 data-edit="tentang_misi_label" data-edit-type="text" data-edit-tipe="tentang" class="text-sm font-bold uppercase tracking-wider text-slate-900">{{ $data->tentang_misi_label ?? 'Misi' }}</h3>
+                    <h3 data-edit="tentang_misi_label" data-edit-type="text" data-edit-tipe="tentang" class="text-sm font-bold uppercase tracking-wider text-slate-900">{!! $data->tentang_misi_label ?? 'Misi' !!}</h3>
                     <ul class="space-y-3 text-slate-600 text-xs md:text-sm font-medium">
                         <li class="flex gap-3"><span class="text-emerald-500 font-bold">01.</span><span data-edit="tentang_misi_item_1" data-edit-type="text" data-edit-tipe="tentang">{!! $data->tentang_misi_item_1 ?? '' !!}</span></li>
                         <li class="flex gap-3"><span class="text-emerald-500 font-bold">02.</span><span data-edit="tentang_misi_item_2" data-edit-type="text" data-edit-tipe="tentang">{!! $data->tentang_misi_item_2 ?? '' !!}</span></li>
@@ -199,6 +199,9 @@
                 switch($gi->urutan) {
                     case 1: $editField = 'tentang_galeri_img_1'; break;
                     case 2: $editField = 'tentang_galeri_img_2'; break;
+                    case 3: $editField = 'tentang_galeri_img_3'; break;
+                    case 4: $editField = 'tentang_galeri_img_4'; break;
+                    case 5: $editField = 'tentang_galeri_img_5'; break;
                     default: $editField = ''; break;
                 }
             @endphp
@@ -206,7 +209,7 @@
             @if($isVideo)
                 <div class="{{ $colSpan }} relative rounded-xl overflow-hidden aspect-[4/3] bg-slate-950 shadow-sm flex items-center justify-center group">
                     @if($imgUrl)
-                        <img src="{{ $imgUrl }}" class="absolute inset-0 w-full h-full object-cover opacity-70 group-hover:scale-105 transition duration-500" alt="{{ $tag }}">
+                        <img src="{{ $imgUrl }}" @if($editField) data-image-edit data-edit-field="{{ $editField }}" data-edit-tipe="tentang" @endif class="absolute inset-0 w-full h-full object-cover opacity-70 group-hover:scale-105 transition duration-500" alt="{{ $tag }}">
                     @endif
                     <span class="absolute top-3 right-3 bg-red-600 text-white text-[8px] font-bold px-1.5 py-0.5 rounded">VIDEO</span>
                     @if($videoUrl)
@@ -222,9 +225,7 @@
             @else
                 <div class="{{ $colSpan }} relative rounded-xl overflow-hidden {{ $heightClass }} shadow-sm @if($gi->urutan == 4) bg-gradient-to-br from-slate-100 to-slate-200/60 p-6 flex flex-col justify-end @else group @endif">
                     @if($editField)
-                        <img src="{{ $imgUrl }}" data-image-edit data-edit-field="{{ $editField }}" data-edit-tipe="tentang" class="w-full h-full object-cover @if($gi->urutan != 4) group-hover:scale-105 transition duration-500 @endif" alt="{{ $tag }}">
-                    @elseif($gi->urutan == 4 && $imgUrl)
-                        <img src="{{ $imgUrl }}" class="absolute inset-0 w-full h-full object-cover opacity-20 filter grayscale" alt="{{ $tag }}">
+                        <img src="{{ $imgUrl }}" data-image-edit data-edit-field="{{ $editField }}" data-edit-tipe="tentang" class="absolute inset-0 w-full h-full object-cover @if($gi->urutan == 4) opacity-20 filter grayscale @else @if($gi->urutan != 4) group-hover:scale-105 transition duration-500 @endif @endif" alt="{{ $tag }}">
                     @elseif($imgUrl)
                         <img src="{{ $imgUrl }}" class="w-full h-full object-cover" alt="{{ $tag }}">
                     @endif
