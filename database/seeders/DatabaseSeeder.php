@@ -21,7 +21,7 @@ class DatabaseSeeder extends Seeder
         $this->call([
             PengaturanSeeder::class,
             HalamanStatisSeeder::class,
-            SectionDataSeeder::class,   // harus sebelum KontenAwal agar images terisi dulu
+            ImageSeeder::class,       // harus sebelum KontenAwalSeeder
             KontenAwalSeeder::class,
         ]);
     }
