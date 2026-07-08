@@ -118,7 +118,7 @@ class SectionDataSeeder extends Seeder
         $data = json_decode($page->konten, true) ?: [];
 
         $heroImgId = null;
-        $img = Image::where('path', 'img/pantaipelengkung.png')->first();
+        $img = Image::where('path', 'img/pantaipelengkung.webp')->first();
         if ($img) $heroImgId = $img->id;
 
         SectAboutHero::firstOrCreate(['id' => 1], [
@@ -138,8 +138,8 @@ class SectionDataSeeder extends Seeder
             'caption' => $data['tentang_caption'] ?? 'Jelajahi Keindahan Alami Bersama Driver Profesional',
         ]);
 
-        $kisahImg1 = Image::where('path', 'img/unsplash_M8drGBgFNZE.png')->first();
-        $kisahImg2 = Image::where('path', 'img/unsplash_Souw06F1irM.png')->first();
+        $kisahImg1 = Image::where('path', 'img/unsplash_M8drGBgFNZE.webp')->first();
+        $kisahImg2 = Image::where('path', 'img/unsplash_Souw06F1irM.webp')->first();
 
         SectKisah::firstOrCreate(['id' => 1], [
             'badge' => $data['tentang_kisah_badge'] ?? 'Kisah Kami',
@@ -200,8 +200,8 @@ class SectionDataSeeder extends Seeder
         $galeriSection = SectGaleriAbout::first();
         if ($galeriSection && GaleriItemAbout::where('sect_galeri_about_id', $galeriSection->id)->count() === 0) {
             $galeriImages = [
-                ['path' => 'img/laut.png', 'tag' => 'EKSPEDISI IJEN'],
-                ['path' => 'img/bluefire (1).png', 'tag' => 'MOMEN SAVANA'],
+                ['path' => 'img/laut.webp', 'tag' => 'EKSPEDISI IJEN'],
+                ['path' => 'img/bluefire (1).webp', 'tag' => 'MOMEN SAVANA'],
             ];
             foreach ($galeriImages as $i => $gi) {
                 $imgRecord = Image::where('path', $gi['path'])->first();

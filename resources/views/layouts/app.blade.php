@@ -10,7 +10,7 @@
     @if(!empty($seoData['favicon']))
     <link rel="icon" type="image/png" href="{{ asset('storage/' . $seoData['favicon']) }}">
     @else
-    <link rel="icon" type="image/png" href="{{ asset('img/logo-icon.png') }}">
+    <link rel="icon" type="image/png" href="{{ asset('img/logo-icon.webp') }}">
     @endif
     <meta property="og:title" content="{{ $seoData['meta_title'] ?? 'Jadi Berangkat' }}">
     <meta property="og:description" content="{{ $seoData['meta_description'] ?? 'Jelajahi Banyuwangi dengan Jeep 4x4.' }}">
@@ -135,7 +135,7 @@
                 <div class="hidden flex-col gap-2 p-3 pt-0 border-t !border-black/5 mt-2">
                     <a href="{{ url('/destinasi') }}" class="flex items-center gap-3 p-3 rounded-xl !bg-white shadow-sm border !border-black/5 hover:!border-holiday transition">
                         <div class="w-12 h-12 rounded-lg overflow-hidden shrink-0 border !border-black/5">
-                            <img src="{{ asset('img/bluefire (1).png') }}" alt="Destinasi" class="w-full h-full object-cover">
+                            <img src="{{ asset('img/bluefire (1).webp') }}" alt="Destinasi" class="w-full h-full object-cover">
                         </div>
                         <div>
                             <span class="block !text-ink text-sm font-extrabold">Destinasi</span>
@@ -198,7 +198,7 @@
                             <div class="col-span-3 flex flex-col gap-3">
                                 <a href="{{ url('/destinasi') }}" class="group/dest flex-1 flex items-center p-3 rounded-2xl !bg-base border !border-black/5 hover:!bg-white hover:shadow-md hover:shadow-black/5 transition-all duration-300 gap-4">
                                     <div class="w-20 h-20 rounded-xl overflow-hidden shrink-0 shadow-sm border !border-black/5">
-                                        <img src="{{ asset('img/bluefire (1).png') }}" alt="Destinasi" class="w-full h-full object-cover group-hover/dest:scale-110 transition duration-700">
+                                        <img src="{{ asset('img/bluefire (1).webp') }}" alt="Destinasi" class="w-full h-full object-cover group-hover/dest:scale-110 transition duration-700">
                                     </div>
                                     <div class="flex-1 pr-1">
                                         <span class="block font-extrabold !text-ink text-[15px] mb-0.5">Destinasi</span>
@@ -216,7 +216,7 @@
                                 </a>
                             </div>
                             <a href="{{ url('/galeri') }}" class="col-span-2 group/gal relative rounded-2xl overflow-hidden flex flex-col p-4 h-full shadow-sm border !border-black/5">
-                                <img src="{{ asset('img/djawatan.jpg') }}" alt="Galeri" class="absolute inset-0 w-full h-full object-cover group-hover/gal:scale-110 transition duration-700">
+                                <img src="{{ asset('img/djawatan.webp') }}" alt="Galeri" class="absolute inset-0 w-full h-full object-cover group-hover/gal:scale-110 transition duration-700">
                                 <div class="absolute inset-0 bg-gradient-to-t from-black/80 via-black/30 to-black/10"></div>
                                 <div class="relative z-10 flex flex-col h-full justify-between">
                                     <div class="w-8 h-8 rounded-full !bg-white/20 backdrop-blur-md flex items-center justify-center !text-white border !border-white/30 self-start group-hover/gal:bg-holiday group-hover/gal:border-holiday group-hover/gal:scale-110 transition duration-300">

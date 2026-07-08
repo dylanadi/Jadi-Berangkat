@@ -6,7 +6,7 @@
 <style>
     .hero-galeri {
         position: relative; height: 40vh; min-height: 300px;
-        background: url('{{ asset('img/hero-galeri.jpg') }}') center/cover no-repeat;
+        background: url('{{ asset('img/hero-galeri.webp') }}') center/cover no-repeat;
         display: flex; align-items: center; justify-content: center;
     }
     .hero-galeri::before {

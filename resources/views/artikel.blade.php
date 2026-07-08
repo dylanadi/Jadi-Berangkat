@@ -88,7 +88,7 @@
         <!-- Slide 1: Pantai Boom Banyuwangi -->
         <div class="hero-slide absolute inset-0 w-full h-full opacity-100 transition-opacity duration-1000 ease-in-out">
             <div class="absolute inset-0 bg-gradient-to-t from-black/90 via-slate-950/50 to-slate-900/20 z-10"></div>
-            <img src="{{ asset('img/pantaiboom.png') }}" class="w-full h-full object-cover" alt="Sunrise Pantai Boom Banyuwangi">
+            <img src="{{ asset('img/pantaiboom.webp') }}" class="w-full h-full object-cover" alt="Sunrise Pantai Boom Banyuwangi">
             <div class="absolute inset-0 z-20 flex flex-col justify-end pb-24 px-6 md:px-9 max-w-[1440px] mx-auto w-full">
                 <span class="text-yellow-300 font-bold tracking-wider uppercase mb-2 flex items-center gap-2 drop-shadow-lg">
                     <i class="bi bi-sun-fill"></i> Sunrise of Java
@@ -105,7 +105,7 @@
         <!-- Slide 2: Kawah Ijen Banyuwangi -->
         <div class="hero-slide absolute inset-0 w-full h-full opacity-0 transition-opacity duration-1000 ease-in-out pointer-events-none">
             <div class="absolute inset-0 bg-gradient-to-t from-black/90 via-slate-950/50 to-slate-900/20 z-10"></div>
-            <img src="{{ asset('img/bluefire (1).png') }}" class="w-full h-full object-cover" alt="Kawah Ijen Banyuwangi">
+            <img src="{{ asset('img/bluefire (1).webp') }}" class="w-full h-full object-cover" alt="Kawah Ijen Banyuwangi">
             <div class="absolute inset-0 z-20 flex flex-col justify-end pb-24 px-6 md:px-9 max-w-[1440px] mx-auto w-full">
                 <span class="text-cyan-300 font-bold tracking-wider uppercase mb-2 flex items-center gap-2 drop-shadow-lg">
                     <i class="bi bi-fire"></i> Fenomena Api Biru Langka
@@ -221,7 +221,7 @@
                 @php $featured = $artikel->first(); @endphp
                 <article class="lg:col-span-2 relative bg-slate-900 rounded-[2rem] overflow-hidden h-[400px] md:h-[520px] group shadow-sm hover:shadow-xl transition-all duration-500 flex items-end cursor-pointer" onclick="window.location.href='{{ route('artikel.show', $featured->slug) }}'" data-cats="{{ strtolower($featured->kategori) }}" data-date="{{ $featured->tanggal_terbit ? $featured->tanggal_terbit->format('Y-m-d') : '' }}" data-article="{{ $featured->slug }}">
                     <div class="absolute inset-0 bg-gradient-to-t from-slate-950 via-slate-900/40 to-transparent z-10"></div>
-                    <img src="{{ $featured->image ? $featured->image->url : asset('img/bluefire (1).png') }}" class="absolute inset-0 w-full h-full object-cover object-center group-hover:scale-105 transition-transform duration-700" alt="{{ $featured->judul }}">
+                    <img src="{{ $featured->image ? $featured->image->url : asset('img/bluefire (1).webp') }}" class="absolute inset-0 w-full h-full object-cover object-center group-hover:scale-105 transition-transform duration-700" alt="{{ $featured->judul }}">
                     
                     <div class="relative z-20 p-6 md:p-10 w-full pointer-events-none">
                         <div class="flex items-center gap-2 mb-4 pointer-events-auto">
@@ -246,7 +246,7 @@
                     @foreach($artikel->skip(1)->take(2) as $item)
                     <article class="relative bg-slate-900 rounded-[2rem] overflow-hidden flex-1 group shadow-sm hover:shadow-xl transition-all duration-500 flex items-end cursor-pointer min-h-[200px]" onclick="window.location.href='{{ route('artikel.show', $item->slug) }}'" data-cats="{{ strtolower($item->kategori) }}" data-date="{{ $item->tanggal_terbit ? $item->tanggal_terbit->format('Y-m-d') : '' }}" data-article="{{ $item->slug }}">
                         <div class="absolute inset-0 bg-gradient-to-t from-slate-950/90 via-slate-900/50 to-transparent z-10"></div>
-                        <img src="{{ $item->image ? $item->image->url : asset('img/bluefire (1).png') }}" class="absolute inset-0 w-full h-full object-cover object-center group-hover:scale-105 transition-transform duration-700" alt="{{ $item->judul }}">
+                        <img src="{{ $item->image ? $item->image->url : asset('img/bluefire (1).webp') }}" class="absolute inset-0 w-full h-full object-cover object-center group-hover:scale-105 transition-transform duration-700" alt="{{ $item->judul }}">
                         
                         <div class="relative z-20 p-6 md:p-8 w-full pointer-events-none">
                             <div class="flex items-center gap-2 mb-3 pointer-events-auto">
@@ -278,7 +278,7 @@
                     @foreach($otherArticles as $item)
                     <article class="news-card bg-white rounded-[1.5rem] overflow-hidden shadow-sm border border-slate-100 flex flex-col justify-between group cursor-pointer hover:-translate-y-1 hover:shadow-md transition-all duration-300" onclick="window.location.href='{{ route('artikel.show', $item->slug) }}'" data-cats="{{ strtolower($item->kategori) }}" data-date="{{ $item->tanggal_terbit ? $item->tanggal_terbit->format('Y-m-d') : '' }}" data-article="{{ $item->slug }}">
                         <div class="relative h-52 overflow-hidden shrink-0">
-                            <img src="{{ $item->image ? $item->image->url : asset('img/bluefire (1).png') }}" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700" alt="{{ $item->judul }}">
+                            <img src="{{ $item->image ? $item->image->url : asset('img/bluefire (1).webp') }}" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700" alt="{{ $item->judul }}">
                             <span class="absolute top-4 left-4 bg-white/95 backdrop-blur-sm text-holiday-700 text-[10px] font-black uppercase tracking-wider px-3 py-1 rounded-md shadow-sm">{{ strtoupper($item->kategori ?? 'TIPS') }}</span>
                         </div>
                         <div class="p-6 flex-1 flex flex-col justify-between pointer-events-none">

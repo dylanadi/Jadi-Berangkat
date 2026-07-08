@@ -78,7 +78,7 @@
     @if(isset($slider_destinasi) && $slider_destinasi->count() > 0)
         @foreach($slider_destinasi as $index => $slide)
         <div class="hero-slide absolute inset-0 w-full h-full transition-opacity duration-1000 ease-in-out {{ $index === 0 ? 'opacity-100 z-10' : 'opacity-0 z-0 pointer-events-none' }}" data-slide="{{ $index }}">
-            <img src="{{ $slide->image ? $slide->image->url : asset('img/placeholder.png') }}" alt="{{ $slide->nama }}" class="absolute inset-0 w-full h-full object-cover object-center transform transition-transform duration-[8000ms] ease-out {{ $index === 0 ? 'scale-105' : 'scale-100' }}">
+            <img src="{{ $slide->image ? $slide->image->url : asset('img/placeholder.webp') }}" alt="{{ $slide->nama }}" class="absolute inset-0 w-full h-full object-cover object-center transform transition-transform duration-[8000ms] ease-out {{ $index === 0 ? 'scale-105' : 'scale-100' }}">
             <div class="absolute inset-0 bg-gradient-to-t from-ink via-ink/60 to-black/30"></div>
             <div class="absolute inset-0 flex flex-col justify-center items-center text-center px-6 mt-16">
                 <div class="slide-content transform transition-all duration-1000 ease-out {{ $index === 0 ? 'translate-y-0 opacity-100' : 'translate-y-8 opacity-0' }} max-w-4xl">
@@ -113,7 +113,7 @@
         </button>
     @else
         <!-- Fallback static hero -->
-        <img src="{{ asset('img/bluefire (1).png') }}" class="absolute inset-0 w-full h-full object-cover object-center">
+        <img src="{{ asset('img/bluefire (1).webp') }}" class="absolute inset-0 w-full h-full object-cover object-center">
         <div class="absolute inset-0 bg-gradient-to-t from-ink via-ink/40 to-black/30"></div>
         <div class="absolute inset-0 flex flex-col justify-center items-center text-center px-6 mt-16">
             <h1 class="text-5xl md:text-7xl font-extrabold text-white drop-shadow-2xl">Destinasi Pilihan</h1>
@@ -130,7 +130,7 @@
             <!-- Kiri: 1 Card -->
             @if($featured_destinasi->count() > 0)
             <a href="{{ route('destinasi.show', $featured_destinasi[0]->slug) }}" class="group relative min-h-[400px] lg:min-h-[520px] overflow-hidden rounded-[1.75rem] bg-ink text-white shadow-md hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-2">
-                <img src="{{ $featured_destinasi[0]->image ? $featured_destinasi[0]->image->url : asset('img/placeholder.png') }}" alt="{{ $featured_destinasi[0]->nama }}" class="absolute inset-0 h-full w-full object-cover transition-transform duration-700 group-hover:scale-105">
+                <img src="{{ $featured_destinasi[0]->image ? $featured_destinasi[0]->image->url : asset('img/placeholder.webp') }}" alt="{{ $featured_destinasi[0]->nama }}" class="absolute inset-0 h-full w-full object-cover transition-transform duration-700 group-hover:scale-105">
                 <div class="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent"></div>
                 <div class="absolute left-6 right-6 top-6 flex items-center justify-between">
                     <span class="rounded-full bg-white/16 px-4 py-2 text-xs font-extrabold uppercase tracking-[0.16em] backdrop-blur-md">Rekomendasi</span>
@@ -145,7 +145,7 @@
             <div class="grid gap-5 lg:gap-6 grid-rows-2">
                 @if($featured_destinasi->count() > 1)
                 <a href="{{ route('destinasi.show', $featured_destinasi[1]->slug) }}" class="group relative min-h-[200px] lg:min-h-[250px] overflow-hidden rounded-[1.5rem] bg-ink text-white shadow-md hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-1">
-                    <img src="{{ $featured_destinasi[1]->image ? $featured_destinasi[1]->image->url : asset('img/placeholder.png') }}" alt="{{ $featured_destinasi[1]->nama }}" class="absolute inset-0 h-full w-full object-cover transition-transform duration-700 group-hover:scale-105">
+                    <img src="{{ $featured_destinasi[1]->image ? $featured_destinasi[1]->image->url : asset('img/placeholder.webp') }}" alt="{{ $featured_destinasi[1]->nama }}" class="absolute inset-0 h-full w-full object-cover transition-transform duration-700 group-hover:scale-105">
                     <div class="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent"></div>
                     <div class="absolute bottom-0 left-0 right-0 p-6 z-10">
                         <h3 class="text-2xl font-extrabold">{{ $featured_destinasi[1]->nama }}</h3>
@@ -154,7 +154,7 @@
                 @endif
                 @if($featured_destinasi->count() > 2)
                 <a href="{{ route('destinasi.show', $featured_destinasi[2]->slug) }}" class="group relative min-h-[200px] lg:min-h-[250px] overflow-hidden rounded-[1.5rem] bg-ink text-white shadow-md hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-1">
-                    <img src="{{ $featured_destinasi[2]->image ? $featured_destinasi[2]->image->url : asset('img/placeholder.png') }}" alt="{{ $featured_destinasi[2]->nama }}" class="absolute inset-0 h-full w-full object-cover transition-transform duration-700 group-hover:scale-105">
+                    <img src="{{ $featured_destinasi[2]->image ? $featured_destinasi[2]->image->url : asset('img/placeholder.webp') }}" alt="{{ $featured_destinasi[2]->nama }}" class="absolute inset-0 h-full w-full object-cover transition-transform duration-700 group-hover:scale-105">
                     <div class="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent"></div>
                     <div class="absolute bottom-0 left-0 right-0 p-6 z-10">
                         <h3 class="text-2xl font-extrabold">{{ $featured_destinasi[2]->nama }}</h3>
@@ -237,7 +237,7 @@
         @endphp
         <div class="dest-card-container break-inside-avoid relative mb-4" data-kategori="{{ strtolower($item->kategori) }}" data-nama="{{ strtolower($item->nama) }}">
             <a href="{{ route('destinasi.show', $item->slug) }}" class="block relative group overflow-hidden rounded-2xl shadow-sm hover:shadow-xl transition-all duration-300 hover:-translate-y-1 bg-gray-200 {{ $h }}">
-                <img src="{{ $item->image ? $item->image->url : asset('img/placeholder.png') }}" loading="lazy" class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105" alt="{{ $item->nama }}">
+                <img src="{{ $item->image ? $item->image->url : asset('img/placeholder.webp') }}" loading="lazy" class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105" alt="{{ $item->nama }}">
                 <div class="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent opacity-90 group-hover:opacity-100 transition-opacity duration-300"></div>
                 <div class="absolute bottom-0 left-0 right-0 p-4">
                     <h4 class="text-white font-extrabold text-lg leading-tight mb-1">{!! $item->nama !!}</h4>
