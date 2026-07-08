@@ -44,7 +44,7 @@
     </div>
     @endauth
     <div class="absolute inset-0 bg-gradient-to-t from-slate-950/90 via-slate-950/50 to-transparent z-10"></div>
-    <img id="article-image" src="{{ $artikel->image_url ?? ($artikel->image ? $artikel->image->url : '') }}" class="w-full h-full object-cover" alt="{{ $artikel->judul }}">
+    <img id="article-image" src="{{ $artikel->image ? $artikel->image->url : asset('img/bluefire (1).png') }}" class="w-full h-full object-cover" alt="{{ $artikel->judul }}">
     <div class="absolute inset-0 z-20 flex flex-col justify-end pb-16 md:pb-24 px-6 md:px-16 max-w-5xl mx-auto w-full">
         @if($artikel->kategori)
         <span id="article-badge" class="inline-block w-fit bg-holiday-500 text-white text-[10px] font-black uppercase tracking-wider px-3 py-1.5 rounded-md mb-4">{{ strtoupper($artikel->kategori) }}</span>
@@ -90,7 +90,7 @@
             @foreach($lainnya as $item)
             <a href="{{ route('artikel.show', $item->slug) }}" class="bg-white rounded-2xl overflow-hidden shadow-sm border border-slate-100 flex flex-col group hover:shadow-md transition-all duration-300">
                 <div class="relative h-48 overflow-hidden">
-                    <img src="{{ ($item->image ? $item->image->url : '') }}" alt="{!! $item->judul !!}" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700" loading="lazy">
+                    <img src="{{ $item->image ? $item->image->url : asset('img/bluefire (1).png') }}" alt="{!! $item->judul !!}" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700" loading="lazy">
                     @if($item->kategori)
                     <span class="absolute bottom-3 left-3 bg-slate-950/80 text-white text-[10px] font-black uppercase px-2 py-1 rounded-md">{{ $item->kategori }}</span>
                     @endif

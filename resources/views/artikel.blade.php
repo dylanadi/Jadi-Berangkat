@@ -211,111 +211,99 @@
 
         <div id="filtered-layout" class="hidden flex-col gap-8"></div>
 
-        <div id="default-layout" class="{{ $artikel->count() > 0 ? 'space-y-8' : 'hidden' }}">
-            <!-- 1 CARD BESAR UTAMA -->
+        <div id="default-layout" class="{{ $artikel->count() > 0 ? 'space-y-12' : 'hidden' }}">
+            
+            <!-- TOP GRID: 1 BESAR KIRI, 2 KANAN ATAS BAWAH -->
             @if($artikel->count() > 0)
-            @php $featured = $artikel->first(); @endphp
-            <article class="news-card relative bg-slate-900 rounded-3xl overflow-hidden h-[480px] md:h-[520px] group shadow-sm hover:shadow-xl transition-all duration-500 flex items-end cursor-pointer" onclick="window.location.href='{{ route('artikel.show', $featured->slug) }}'" data-cats="{{ strtolower($featured->kategori) }}" data-date="{{ $featured->tanggal_terbit ? $featured->tanggal_terbit->format('Y-m-d') : '' }}" data-article="{{ $featured->slug }}">
-                <div class="absolute inset-0 bg-gradient-to-t from-slate-950 via-slate-900/40 to-transparent z-10"></div>
-                <img src="{{ $featured->image_url }}" class="absolute inset-0 w-full h-full object-cover object-center group-hover:scale-105 transition-transform duration-700" alt="{{ $featured->judul }}">
+            <div class="grid grid-cols-1 lg:grid-cols-3 gap-4 md:gap-6">
                 
-                <div class="relative z-20 p-8 md:p-10 w-full pointer-events-none">
-                    <div class="flex items-center gap-2 mb-4 pointer-events-auto">
-                        <span class="bg-holiday-500 text-white text-[10px] font-black uppercase tracking-wider px-2.5 py-1 rounded-md">{{ strtoupper($featured->kategori ?? 'DESTINASI') }}</span>
-                    </div>
-                    <h3 class="text-2xl md:text-3xl font-extrabold text-white mb-3 leading-tight pointer-events-auto">
-                        {{ $featured->judul }}
-                    </h3>
-                    <p class="text-slate-300 text-sm max-w-3xl mb-5 line-clamp-3 pointer-events-auto">
-                        {{ Str::limit(strip_tags($featured->konten), 250) }}
-                    </p>
-                    <div class="flex items-center justify-between pt-4 border-t border-white/10 text-xs text-slate-300 pointer-events-auto">
-                        <span><i class="bi bi-calendar3 text-holiday-400 mr-1"></i> {{ $featured->tanggal_terbit ? $featured->tanggal_terbit->format('d F Y') : '-' }}</span>
-                        <a href="{{ route('artikel.show', $featured->slug) }}" class="text-holiday-400 font-bold flex items-center gap-1 hover:text-white transition-colors">Baca Artikel <i class="bi bi-arrow-right"></i></a>
-                    </div>
-                </div>
-            </article>
-            @endif
-
-            <!-- 2 CARD TENGAH -->
-            @if($artikel->count() > 1)
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-8" id="middle-cards">
-                @foreach($artikel->skip(1)->take(2) as $item)
-                <article class="news-card bg-white rounded-3xl overflow-hidden shadow-sm border border-slate-100 flex flex-col justify-between group cursor-pointer" onclick="window.location.href='{{ route('artikel.show', $item->slug) }}'" data-cats="{{ strtolower($item->kategori) }}" data-date="{{ $item->tanggal_terbit ? $item->tanggal_terbit->format('Y-m-d') : '' }}" data-article="{{ $item->slug }}">
-                    <div class="relative h-56 overflow-hidden">
-                        <img src="{{ $item->image_url }}" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700" alt="{{ $item->judul }}">
-                        <span class="absolute bottom-4 left-4 bg-slate-950/80 backdrop-blur-sm text-white text-[10px] font-black uppercase tracking-wider px-2.5 py-1 rounded-md">{{ strtoupper($item->kategori ?? 'WISATA') }}</span>
-                    </div>
-                    <div class="p-6 md:p-8 flex-1 flex flex-col justify-between pointer-events-none">
-                        <div class="pointer-events-auto">
-                            <h4 class="text-xl font-bold text-slate-900 mb-3 group-hover:text-holiday-600 transition-colors">{{ $item->judul }}</h4>
-                            <p class="text-slate-500 text-sm line-clamp-2 mb-4">{{ Str::limit(strip_tags($item->konten), 120) }}</p>
+                <!-- Kiri Besar -->
+                @php $featured = $artikel->first(); @endphp
+                <article class="lg:col-span-2 relative bg-slate-900 rounded-[2rem] overflow-hidden h-[400px] md:h-[520px] group shadow-sm hover:shadow-xl transition-all duration-500 flex items-end cursor-pointer" onclick="window.location.href='{{ route('artikel.show', $featured->slug) }}'" data-cats="{{ strtolower($featured->kategori) }}" data-date="{{ $featured->tanggal_terbit ? $featured->tanggal_terbit->format('Y-m-d') : '' }}" data-article="{{ $featured->slug }}">
+                    <div class="absolute inset-0 bg-gradient-to-t from-slate-950 via-slate-900/40 to-transparent z-10"></div>
+                    <img src="{{ $featured->image ? $featured->image->url : asset('img/bluefire (1).png') }}" class="absolute inset-0 w-full h-full object-cover object-center group-hover:scale-105 transition-transform duration-700" alt="{{ $featured->judul }}">
+                    
+                    <div class="relative z-20 p-6 md:p-10 w-full pointer-events-none">
+                        <div class="flex items-center gap-2 mb-4 pointer-events-auto">
+                            <span class="bg-holiday-500 text-white text-[10px] font-black uppercase tracking-wider px-3 py-1 rounded-md shadow-sm">{{ strtoupper($featured->kategori ?? 'DESTINASI') }}</span>
                         </div>
-                        <div class="pt-4 border-t border-slate-100 text-xs text-slate-400 flex items-center justify-between pointer-events-auto">
-                            <span><i class="bi bi-geo-alt-fill text-holiday-500 mr-1"></i> {{ $item->lokasi ?? 'Banyuwangi' }}</span>
-                            <a href="{{ route('artikel.show', $item->slug) }}" class="text-holiday-600 font-bold hover:underline">Selengkapnya <i class="bi bi-chevron-right"></i></a>
+                        <h3 class="text-2xl md:text-3xl lg:text-4xl font-extrabold text-white mb-3 leading-tight pointer-events-auto drop-shadow-md">
+                            {{ $featured->judul }}
+                        </h3>
+                        <p class="text-slate-200 text-sm md:text-base max-w-2xl mb-6 line-clamp-2 pointer-events-auto drop-shadow">
+                            {{ Str::limit(strip_tags($featured->konten), 200) }}
+                        </p>
+                        <div class="flex items-center gap-5 pt-5 border-t border-white/20 text-xs md:text-sm text-white/80 pointer-events-auto font-medium">
+                            <span class="flex items-center gap-2"><i class="bi bi-calendar3 text-holiday-400"></i> {{ $featured->tanggal_terbit ? $featured->tanggal_terbit->format('d F Y') : '-' }}</span>
+                            @if($featured->penulis)<span class="flex items-center gap-2"><i class="bi bi-person text-holiday-400"></i> {{ $featured->penulis }}</span>@endif
                         </div>
                     </div>
                 </article>
-                @endforeach
-            </div>
-            @endif
 
-            @if($artikel->count() > 3)
-            <div class="pt-10 pb-3 flex items-center gap-2.5">
-                <span class="w-1.5 h-6 bg-holiday-600 rounded-full"></span>
-            </div>
-
-            @php $featuredMid = $artikel->skip(3)->first(); @endphp
-            <div id="featured-article" class="bg-white dark:bg-gray-800 rounded-[2rem] border border-gray-100 dark:border-gray-700 shadow-[0_8px_30px_rgb(0,0,0,0.02)] overflow-hidden mb-8 news-card cursor-pointer" onclick="window.location.href='{{ route('artikel.show', $featuredMid->slug) }}'" data-cats="{{ strtolower($featuredMid->kategori) }}" data-date="{{ $featuredMid->tanggal_terbit ? $featuredMid->tanggal_terbit->format('Y-m-d') : '' }}" data-article="{{ $featuredMid->slug }}">
-                <div class="grid grid-cols-1 md:grid-cols-2">
-                    <div class="h-64 md:h-auto">
-                        <img src="{{ $featuredMid->image_url }}" class="w-full h-full object-cover" alt="{{ $featuredMid->judul }}">
-                    </div>
-                    <div class="p-8 flex flex-col justify-center pointer-events-none">
-                        <div class="pointer-events-auto flex flex-col items-start">
-                            <span class="text-[10px] font-bold text-holiday uppercase tracking-widest mb-3">{{ strtoupper($featuredMid->kategori ?? 'Tips & Trik') }}</span>
-                            <h2 class="text-2xl md:text-3xl font-extrabold text-ink dark:text-white mb-4">{{ $featuredMid->judul }}</h2>
-                            <p class="text-gray-600 dark:text-gray-300 text-sm leading-relaxed mb-6">
-                                {{ Str::limit(strip_tags($featuredMid->konten), 200) }}
-                            </p>
-                            <a href="{{ route('artikel.show', $featuredMid->slug) }}" class="inline-flex items-center gap-2 bg-holiday text-white px-6 py-3 rounded-full font-bold hover:bg-holiday-dark transition shadow-lg shadow-holiday-glow w-max">
-                                Baca Artikel <i class="bi bi-arrow-right"></i>
-                            </a>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            @endif
-
-            @if($artikel->count() > 4)
-            <h3 class="text-lg font-extrabold text-slate-900 tracking-tight uppercase mt-8">Artikel Lainnya</h3>
-            
-            <!-- COMPACT HORIZONTAL CARD GRID -->
-            <div class="grid grid-cols-1 md:grid-cols-3 gap-6" id="compact-cards">
-                @php $otherArticles = $artikel->skip(4); @endphp
-                @foreach($otherArticles as $item)
-                <article class="news-card bg-white rounded-3xl overflow-hidden shadow-sm border border-slate-100 flex flex-col justify-between group cursor-pointer" onclick="window.location.href='{{ route('artikel.show', $item->slug) }}'" data-cats="{{ strtolower($item->kategori) }}" data-date="{{ $item->tanggal_terbit ? $item->tanggal_terbit->format('Y-m-d') : '' }}" data-article="{{ $item->slug }}">
-                    <div class="relative h-48 overflow-hidden shrink-0">
-                        <img src="{{ $item->image_url }}" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700" alt="{{ $item->judul }}">
-                        <span class="absolute bottom-3 left-3 bg-slate-950/80 backdrop-blur-sm text-white text-[10px] font-black uppercase tracking-wider px-2.5 py-1 rounded-md">{{ strtoupper($item->kategori ?? 'TIPS') }}</span>
-                    </div>
-                    <div class="p-5 flex-1 flex flex-col justify-between pointer-events-none">
-                        <div class="pointer-events-auto">
-                            <h4 class="font-extrabold text-slate-900 text-base md:text-lg leading-snug group-hover:text-holiday-600 transition-colors line-clamp-2 mb-2">
+                <!-- Kanan Atas Bawah -->
+                @if($artikel->count() > 1)
+                <div class="flex flex-col gap-4 md:gap-6 h-full">
+                    @foreach($artikel->skip(1)->take(2) as $item)
+                    <article class="relative bg-slate-900 rounded-[2rem] overflow-hidden flex-1 group shadow-sm hover:shadow-xl transition-all duration-500 flex items-end cursor-pointer min-h-[200px]" onclick="window.location.href='{{ route('artikel.show', $item->slug) }}'" data-cats="{{ strtolower($item->kategori) }}" data-date="{{ $item->tanggal_terbit ? $item->tanggal_terbit->format('Y-m-d') : '' }}" data-article="{{ $item->slug }}">
+                        <div class="absolute inset-0 bg-gradient-to-t from-slate-950/90 via-slate-900/50 to-transparent z-10"></div>
+                        <img src="{{ $item->image ? $item->image->url : asset('img/bluefire (1).png') }}" class="absolute inset-0 w-full h-full object-cover object-center group-hover:scale-105 transition-transform duration-700" alt="{{ $item->judul }}">
+                        
+                        <div class="relative z-20 p-6 md:p-8 w-full pointer-events-none">
+                            <div class="flex items-center gap-2 mb-3 pointer-events-auto">
+                                <span class="bg-holiday-500 text-white text-[9px] font-black uppercase tracking-wider px-2.5 py-1 rounded-md shadow-sm">{{ strtoupper($item->kategori ?? 'WISATA') }}</span>
+                            </div>
+                            <h4 class="text-lg md:text-xl font-bold text-white mb-2 leading-snug pointer-events-auto drop-shadow-md line-clamp-2">
                                 {{ $item->judul }}
                             </h4>
-                            <p class="text-sm text-slate-500 line-clamp-2 mb-4">
-                                {{ Str::limit(strip_tags($item->konten), 120) }}
-                            </p>
+                            <div class="flex items-center gap-3 text-xs text-white/70 pointer-events-auto font-medium mt-3">
+                                <span class="flex items-center gap-1.5"><i class="bi bi-calendar3"></i> {{ $item->tanggal_terbit ? $item->tanggal_terbit->format('d M Y') : '-' }}</span>
+                            </div>
                         </div>
-                        <div class="pt-4 border-t border-slate-100 text-xs text-slate-400 flex items-center justify-between pointer-events-auto">
-                            <span><i class="bi bi-calendar3 text-holiday-500 mr-1"></i> {{ $item->tanggal_terbit ? $item->tanggal_terbit->format('d M Y') : '-' }}</span>
-                            <a href="{{ route('artikel.show', $item->slug) }}" class="text-holiday-600 font-bold hover:underline">Baca <i class="bi bi-chevron-right"></i></a>
+                    </article>
+                    @endforeach
+                </div>
+                @endif
+            </div>
+            @endif
+
+            <!-- BAWAH: CONTAINER LEBIH KECIL (Standar Blog) -->
+            @if($artikel->count() > 3)
+            <div class="max-w-5xl mx-auto pt-10 border-t border-slate-100 mt-12">
+                <div class="flex items-center justify-between mb-8">
+                    <h3 class="text-2xl font-extrabold text-slate-900 tracking-tight">Berita & Cerita Lainnya</h3>
+                </div>
+                
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6" id="compact-cards">
+                    @php $otherArticles = $artikel->skip(3); @endphp
+                    @foreach($otherArticles as $item)
+                    <article class="news-card bg-white rounded-[1.5rem] overflow-hidden shadow-sm border border-slate-100 flex flex-col justify-between group cursor-pointer hover:-translate-y-1 hover:shadow-md transition-all duration-300" onclick="window.location.href='{{ route('artikel.show', $item->slug) }}'" data-cats="{{ strtolower($item->kategori) }}" data-date="{{ $item->tanggal_terbit ? $item->tanggal_terbit->format('Y-m-d') : '' }}" data-article="{{ $item->slug }}">
+                        <div class="relative h-52 overflow-hidden shrink-0">
+                            <img src="{{ $item->image ? $item->image->url : asset('img/bluefire (1).png') }}" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700" alt="{{ $item->judul }}">
+                            <span class="absolute top-4 left-4 bg-white/95 backdrop-blur-sm text-holiday-700 text-[10px] font-black uppercase tracking-wider px-3 py-1 rounded-md shadow-sm">{{ strtoupper($item->kategori ?? 'TIPS') }}</span>
                         </div>
-                    </div>
-                </article>
-                @endforeach
+                        <div class="p-6 flex-1 flex flex-col justify-between pointer-events-none">
+                            <div class="pointer-events-auto">
+                                <h4 class="font-extrabold text-slate-900 text-lg leading-snug group-hover:text-holiday-600 transition-colors line-clamp-2 mb-3">
+                                    {{ $item->judul }}
+                                </h4>
+                                <p class="text-sm text-slate-500 line-clamp-3 mb-4 leading-relaxed">
+                                    {{ Str::limit(strip_tags($item->konten), 120) }}
+                                </p>
+                            </div>
+                            <div class="pt-4 border-t border-slate-100 text-xs text-slate-400 flex items-center justify-between pointer-events-auto font-medium">
+                                <span class="flex items-center gap-1.5"><i class="bi bi-calendar3 text-holiday-400"></i> {{ $item->tanggal_terbit ? $item->tanggal_terbit->format('d M Y') : '-' }}</span>
+                                <span class="text-holiday-600 font-bold hover:underline flex items-center gap-1">Baca <i class="bi bi-arrow-right"></i></span>
+                            </div>
+                        </div>
+                    </article>
+                    @endforeach
+                </div>
+                
+                @if(method_exists($artikel, 'links') && $artikel->hasPages())
+                <div class="mt-14 mb-6 flex justify-center">
+                    {{ $artikel->links('pagination::tailwind') }}
+                </div>
+                @endif
             </div>
             @endif
         </div>

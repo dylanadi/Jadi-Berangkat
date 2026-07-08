@@ -62,7 +62,7 @@
             </div>
             <nav class="space-y-1" id="toc-nav">
                 @foreach($sections as $index => $section)
-                <a href="#pasal-{{ $index + 1 }}" class="toc-link block px-4 py-2.5 rounded-xl text-sm font-semibold transition-all text-slate-600 hover:bg-slate-50 hover:text-slate-900">{{ $index + 1 }}. {{ $section['judul'] }}</a>
+                <a href="#pasal-{{ $index + 1 }}" class="toc-link block px-4 py-2.5 rounded-xl text-sm font-semibold transition-all text-slate-600 hover:bg-slate-50 hover:text-slate-900">{{ $index + 1 }}. {{ strip_tags($section['judul']) }}</a>
                 @endforeach
             </nav>
         </aside>
@@ -71,8 +71,9 @@
         <div id="sections-container" class="lg:col-span-8 bg-white p-8 md:p-10 rounded-3xl border border-slate-200/60 shadow-sm space-y-12">
             @foreach($sections as $index => $section)
             <section id="pasal-{{ $index + 1 }}" data-section-index="{{ $index }}" class="scroll-mt-28">
-                <h2 data-edit="sections[{{ $index }}].judul" data-edit-type="text" data-edit-tipe="privasi" class="text-xl font-bold text-slate-900 mb-4 flex items-center gap-2">
-                    <span class="w-1.5 h-6 bg-holiday rounded-full"></span> <span class="section-num">{{ $index + 1 }}.</span> {{ $section['judul'] }}
+                <h2 class="text-xl font-bold text-slate-900 mb-4 flex items-center gap-2">
+                    <span class="w-1.5 h-6 bg-holiday rounded-full"></span> <span class="section-num">{{ $index + 1 }}.</span> 
+                    <span data-edit="sections[{{ $index }}].judul" data-edit-type="text" data-edit-tipe="privasi" class="flex-1">{{ strip_tags($section['judul']) }}</span>
                 </h2>
                 <div data-edit="sections[{{ $index }}].konten" data-edit-type="html" data-edit-tipe="privasi" class="text-slate-600 text-sm leading-relaxed">
                     {!! $section['konten'] !!}
