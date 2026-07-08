@@ -41,21 +41,7 @@
 
             <div>
                 <label class="block text-sm font-medium text-gray-700 mb-1">Gambar</label>
-                                <input type="hidden" name="image_id" id="image_id_input" value="{{ old('image_id', isset($galeri->image_id) ? $galeri->image_id : '') }}">
-                
-                <div class="flex items-center gap-4">
-                    <div id="image_preview_container" class="w-24 h-24 rounded-lg overflow-hidden border border-gray-300 bg-gray-100 flex items-center justify-center">
-                        <i class="bi bi-image text-gray-400 text-2xl {{ isset($galeri->image_id) && $galeri->image_id ? 'hidden' : '' }}" id="image_placeholder_icon"></i>
-                        <img id="image_preview_img" class="w-full h-full object-cover {{ isset($galeri->image_id) && $galeri->image_id ? '' : 'hidden' }}" src="{{ isset($galeri->image_id) && $galeri->image_id ? $galeri->image->url : '' }}">
-                    </div>
-                    <div>
-                        <button type="button" onclick="openImagePicker(handleImageSelect)" class="px-4 py-2 bg-holiday text-white rounded-lg text-sm font-semibold hover:bg-holiday-dark transition shadow-sm">
-                            <i class="bi bi-image mr-1"></i> Pilih Gambar
-                        </button>
-                        <p class="text-xs text-gray-500 mt-2 max-w-sm">Pilih gambar dari galeri atau upload baru melalui popup.</p>
-                    </div>
-                </div>
-                @error('image_id') <p class="text-red-500 text-xs mt-1">{{ $message }}</p> @enderror
+                                <x-image-input name="image_id" :value="old('image_id', isset($galeri->image_id) ? $galeri->image_id : '')" />
             </div>
 
             <div>
@@ -71,20 +57,5 @@
         </form>
     </div>
 </div>
-@include('admin.components.image-picker')
 
-@push('scripts')
-<script>
-    function handleImageSelect(image) {
-        document.getElementById('image_id_input').value = image.id;
-        
-        const previewImg = document.getElementById('image_preview_img');
-        const icon = document.getElementById('image_placeholder_icon');
-        
-        previewImg.src = image.url;
-        previewImg.classList.remove('hidden');
-        icon.classList.add('hidden');
-    }
-</script>
-@endpush
 @endsection
