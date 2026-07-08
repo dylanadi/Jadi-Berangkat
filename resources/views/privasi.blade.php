@@ -72,8 +72,13 @@
         <div id="sections-container" class="lg:col-span-8 bg-white p-8 md:p-10 rounded-3xl border border-slate-200/60 shadow-sm space-y-12">
             @foreach($sections as $index => $section)
             <section id="pasal-{{ $index + 1 }}" data-section-index="{{ $index }}" class="scroll-mt-28">
-                <h2 data-edit="sections[{{ $index }}].judul" data-edit-type="text" data-edit-tipe="privasi" class="text-xl font-bold text-slate-900 mb-4 flex items-center gap-2">
-                    <span class="w-1.5 h-6 bg-holiday rounded-full"></span> <span class="section-num">{{ $index + 1 }}.</span> {{ $section['judul'] }}
+                <h2 class="text-xl font-bold text-slate-900 mb-4 flex items-center gap-2 relative group w-full">
+                    <span class="w-1.5 h-6 bg-holiday rounded-full"></span> <span class="section-num">{{ $index + 1 }}.</span> <span class="flex-1" data-edit="sections[{{ $index }}].judul" data-edit-type="text" data-edit-tipe="privasi">{{ $section['judul'] }}</span>
+                    @auth
+                    <button onclick="removeSection(this)" class="edit-mode-only text-xs font-bold text-red-500 hover:text-red-700 bg-red-50 hover:bg-red-100 px-3 py-1.5 rounded-lg transition-all absolute right-0" title="Hapus Pasal ini">
+                        <i class="bi bi-trash"></i> Hapus
+                    </button>
+                    @endauth
                 </h2>
                 <div data-edit="sections[{{ $index }}].konten" data-edit-type="html" data-edit-tipe="privasi" class="text-slate-600 text-sm leading-relaxed">
                     {!! $section['konten'] !!}
@@ -82,8 +87,8 @@
             @endforeach
 
             @auth
-            <div class="text-center pt-4" id="add-section-btn-wrap">
-                <button onclick="addSection('privasi')" class="inline-flex items-center gap-2 text-sm bg-[#2f6f42] text-white rounded-xl px-5 py-3 font-bold hover:bg-[#255a35] transition shadow-lg">
+            <div class="edit-mode-only text-center pt-4 w-full" id="add-section-btn-wrap">
+                <button onclick="addSection('privasi')" class="mx-auto inline-flex items-center gap-2 text-sm bg-[#2f6f42] text-white rounded-xl px-5 py-3 font-bold hover:bg-[#255a35] transition shadow-lg">
                     <i class="bi bi-plus-lg"></i> Tambah Pasal
                 </button>
             </div>

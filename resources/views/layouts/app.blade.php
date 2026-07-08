@@ -113,6 +113,17 @@
         .img-edit-overlay button:hover { background:#17442a; }
     </style>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/tinymce/6.8.3/tinymce.min.js" referrerpolicy="origin"></script>
+    <style>
+        .edit-mode-only { display: none !important; }
+        body.is-editing .edit-mode-only { display: inline-flex !important; }
+        /* Hide Google Translate UI */
+        .VIpgJd-ZVi9od-ORHb-OEVmcd { display: none !important; }
+        .goog-te-banner-frame { display: none !important; }
+        body { top: 0 !important; }
+        .goog-tooltip { display: none !important; }
+        .goog-tooltip:hover { display: none !important; }
+        .goog-text-highlight { background-color: transparent !important; border: none !important; box-shadow: none !important; }
+    </style>
 </head>
 <body class="text-gray-800 overflow-x-hidden antialiased min-h-screen flex flex-col">
 
@@ -425,6 +436,7 @@ document.getElementById('adminToolbar').style.display = 'block';
 function toggleEditMode() {
   editMode = !editMode;
   document.getElementById('editModeLabel').textContent = editMode ? 'Selesai Edit' : 'Mode Edit';
+  document.body.classList.toggle('is-editing', editMode);
 
   if (editMode) {
     document.querySelectorAll('[data-edit]').forEach(el => makeEditable(el));
@@ -725,7 +737,7 @@ document.addEventListener('keydown', function(e) {
     var newId = 'section-' + Date.now();
     var html = '<section id="' + newId + '" class="scroll-mt-28 border-2 border-dashed border-holiday/40 rounded-2xl p-6 relative group/section" data-section-index="' + index + '">';
     html += '<div class="flex items-center justify-between gap-2 mb-3">';
-    html += '<h2 contenteditable="true" data-edit="sections[' + index + '].judul" data-edit-type="text" data-edit-tipe="' + tipe + '" class="text-xl font-bold text-slate-900 flex items-center gap-2 flex-1" style="outline:none;"><span class="w-1.5 h-6 bg-holiday rounded-full"></span> <span class="section-num">' + (index + 1) + '.</span> Pasal Baru</h2>';
+    html += '<h2 class="text-xl font-bold text-slate-900 flex items-center gap-2 flex-1 relative group w-full" style="outline:none;"><span class="w-1.5 h-6 bg-holiday rounded-full"></span> <span class="section-num">' + (index + 1) + '.</span> <span class="flex-1" contenteditable="true" data-edit="sections[' + index + '].judul" data-edit-type="text" data-edit-tipe="' + tipe + '">Pasal Baru</span></h2>';
     html += '<button onclick="removeSection(this)" class="text-red-500 hover:text-red-700 bg-red-50 hover:bg-red-100 rounded-lg px-2 py-1 text-xs font-bold transition"><i class="bi bi-trash"></i></button>';
     html += '</div>';
     html += '<div contenteditable="true" data-edit="sections[' + index + '].konten" data-edit-type="html" data-edit-tipe="' + tipe + '" class="text-slate-600 text-sm leading-relaxed">';
@@ -788,6 +800,54 @@ document.addEventListener('keydown', function(e) {
 })();
 </script>
 @endauth
+
+<div id="google_translate_element" style="display: none;"></div>
+<script type="text/javascript">
+function googleTranslateElementInit() {
+  new google.translate.TranslateElement({pageLanguage: 'id', includedLanguages: 'en,id', autoDisplay: false}, 'google_translate_element');
+}
+</script>
+<script type="text/javascript" src="//translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"></script>
+
+<script>
+function switchLanguage(lang) {
+    if (lang === 'id') {
+        document.cookie = "googtrans=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
+        document.cookie = "googtrans=; expires=Thu, 01 Jan 1970 00:00:00 UTC; domain=" + window.location.hostname + "; path=/;";
+        document.cookie = "googtrans=; expires=Thu, 01 Jan 1970 00:00:00 UTC; domain=." + window.location.hostname + "; path=/;";
+    } else {
+        document.cookie = "googtrans=/id/en; path=/";
+        document.cookie = "googtrans=/id/en; domain=" + window.location.hostname + "; path=/";
+        document.cookie = "googtrans=/id/en; domain=." + window.location.hostname + "; path=/";
+    }
+    localStorage.setItem('preferred_language', lang);
+    window.location.reload();
+}
+
+document.addEventListener('DOMContentLoaded', function() {
+    var lang = localStorage.getItem('preferred_language') || 'id';
+    var match = document.cookie.match(new RegExp('(^| )googtrans=([^;]+)'));
+    if (match) {
+        if (match[2] === '/id/en') lang = 'en';
+        else lang = 'id';
+    }
+    updateLangUI(lang);
+});
+
+function updateLangUI(lang) {
+    if (lang === 'en') {
+        document.querySelectorAll('.lang-selector-en').forEach(el => el.classList.add('ring-2', 'ring-holiday'));
+        document.querySelectorAll('.lang-selector-id').forEach(el => el.classList.remove('ring-2', 'ring-holiday'));
+        document.querySelectorAll('.lang-selector-en-mob').forEach(el => { el.classList.add('!bg-base'); el.classList.remove('!bg-transparent'); });
+        document.querySelectorAll('.lang-selector-id-mob').forEach(el => { el.classList.remove('!bg-base'); el.classList.add('!bg-transparent'); });
+    } else {
+        document.querySelectorAll('.lang-selector-id').forEach(el => el.classList.add('ring-2', 'ring-holiday'));
+        document.querySelectorAll('.lang-selector-en').forEach(el => el.classList.remove('ring-2', 'ring-holiday'));
+        document.querySelectorAll('.lang-selector-id-mob').forEach(el => { el.classList.add('!bg-base'); el.classList.remove('!bg-transparent'); });
+        document.querySelectorAll('.lang-selector-en-mob').forEach(el => { el.classList.remove('!bg-base'); el.classList.add('!bg-transparent'); });
+    }
+}
+</script>
 
 </body>
 </html>
