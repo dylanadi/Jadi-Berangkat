@@ -51,15 +51,19 @@ $articles = [
         'tanggal_terbit' => '2026-07-01'
     ],
     [
-        'judul' => 'Surga Surfing Dunia di Pantai Plengkung (G-Land)',
-        'slug' => 'pantai-plengkung-g-land',
-        'konten' => '<p>Pantai Plengkung atau yang lebih dikenal oleh peselancar internasional sebagai G-Land, adalah pantai di selatan Banyuwangi yang terkenal dengan gulungan ombak raksasanya.</p>
-<h2>Ombak Kiri Terbaik</h2>
-<p>G-Land dinobatkan sebagai salah satu spot surfing dengan ombak kiri (left-hander) terbaik di dunia, setara dengan Hawaii. Ombak di sini bisa mencapai ketinggian 4-6 meter dengan formasi tabung (barrel) yang panjang, menjadikannya tantangan pamungkas bagi para peselancar profesional.</p>
-<h2>Taman Nasional Alas Purwo</h2>
-<p>Yang membuat G-Land unik adalah lokasinya yang berada tepat di tepi hutan perawan Taman Nasional Alas Purwo. Tidak ada resor mewah yang merusak pemandangan, hanya kamp-kamp selancar yang menyatu dengan rimbunnya hutan, tempat di mana monyet dan babi hutan sering melintas.</p>',
-        'gambar' => 'pantaipelengkung.png',
-        'kategori' => 'Destinasi',
+        'judul' => 'Cara Mendaki Kawah Ijen Malam Hari',
+        'slug' => 'cara-mendaki-kawah-ijen-malam-hari',
+        'konten' => '<p>Mendaki Kawah Ijen di malam hari adalah pengalaman yang tak terlupakan. Disini kita kupas tuntas persiapan, rute, dan tips agar perjalanmu aman dan nyenyak menyaksikan fenomena blue fire yang sangat langka.</p>
+<h2>1. Waktu Terbaik untuk Mendaki</h2>
+<p>Waktu pendakian ideal dimulai pukul 01:00 hingga 02:00 dini hari dari Paltuding. Tujuannya adalah mencapai area kawah sebelum jam 04:00 agar blue fire masih terlihat jelas di kegelapan sebelum matahari terbit. Hindari mendaki saat musim hujan karena jalur akan sangat licin.</p>
+<h2>2. Persiapan Fisik dan Mental</h2>
+<p>Jalur pendakian Ijen cukup menanjak dengan kemiringan ekstrem, terutama di 2 kilometer pertama yang dipenuhi tanjakan pasir dan kerikil. Pastikan kondisi fisik Anda prima, lakukan pemanasan sebelum mendaki, dan bawa air minum yang cukup. Jika kelelahan, Anda bisa menyewa jasa "troli manusia" yang ditawarkan oleh penambang lokal.</p>
+<h2>3. Peralatan Wajib</h2>
+<p>Senter kepala (headlamp), masker gas (untuk menahan asap belerang beracun yang tebal), jaket tebal karena suhu bisa mencapai 5-10 derajat celcius, sarung tangan, dan sepatu gunung dengan grip yang baik adalah perlengkapan wajib jika Anda ingin menyaksikan Blue Fire dengan aman. Jangan lupa juga membawa kamera dengan pengaturan low-light yang baik.</p>
+<h2>4. Menggunakan Jasa Pemandu Lokal</h2>
+<p>Walaupun jalurnya cukup jelas, menggunakan jasa guide sangat disarankan untuk keamanan, terutama saat turun ke area kawah yang berbatu curam dan dipenuhi gas belerang. Guide juga tahu kapan arah angin berbahaya sehingga Anda bisa menghindar tepat waktu.</p>',
+        'gambar' => 'bluefire (1).png',
+        'kategori' => 'Tips',
         'penulis' => 'Tim Jadi Berangkat',
         'durasi_baca' => 6,
         'status' => 'terbit',

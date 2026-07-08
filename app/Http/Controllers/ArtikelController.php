@@ -9,7 +9,7 @@ class ArtikelController extends Controller
 {
     public function index()
     {
-        $artikel = Artikel::where('status', 'terbit')->with('image')->latest()->paginate(9);
+        $artikel = Artikel::where('status', 'terbit')->with('image')->latest()->paginate(12);
         $mediaSosial = MediaSosial::where('aktif', true)->get();
         return view('artikel', compact('artikel', 'mediaSosial'));
     }

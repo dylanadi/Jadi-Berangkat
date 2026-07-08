@@ -4,6 +4,9 @@
 
 @push('styles')
 <style>
+    .text-slate-900 { color: #0f172a !important; }
+    .text-slate-600 { color: #475569 !important; }
+
     body { font-family: 'Plus Jakarta Sans', sans-serif; background-color: #f8fafc; color: #1e293b; }
     
     @keyframes marquee {
@@ -170,10 +173,10 @@
                 <div class="w-full sm:w-auto overflow-x-auto no-scrollbar">
                     <div class="flex items-center gap-2 min-w-max" id="filter-buttons">
                         <button class="filter-btn px-5 py-2.5 rounded-2xl bg-[#0f172a] text-white font-bold text-sm shadow-md transition" data-filter="all">Semua Berita</button>
-                        <button class="filter-btn px-5 py-2.5 rounded-2xl bg-white text-[#475569] border border-slate-200 hover:border-holiday-500 hover:text-holiday-600 font-bold text-sm transition shadow-sm" data-filter="destinasi">Destinasi</button>
-                        <button class="filter-btn px-5 py-2.5 rounded-2xl bg-white text-[#475569] border border-slate-200 hover:border-holiday-500 hover:text-holiday-600 font-bold text-sm transition shadow-sm" data-filter="tips">Tips</button>
-                        <button class="filter-btn px-5 py-2.5 rounded-2xl bg-white text-[#475569] border border-slate-200 hover:border-holiday-500 hover:text-holiday-600 font-bold text-sm transition shadow-sm" data-filter="kuliner">Kuliner</button>
-                        <button class="filter-btn px-5 py-2.5 rounded-2xl bg-white text-[#475569] border border-slate-200 hover:border-holiday-500 hover:text-holiday-600 font-bold text-sm transition shadow-sm" data-filter="event">Event</button>
+                        <button class="filter-btn px-5 py-2.5 rounded-2xl bg-white text-slate-600 border border-slate-200 hover:border-holiday-500 hover:text-holiday-600 font-bold text-sm transition shadow-sm" data-filter="destinasi">Destinasi</button>
+                        <button class="filter-btn px-5 py-2.5 rounded-2xl bg-white text-slate-600 border border-slate-200 hover:border-holiday-500 hover:text-holiday-600 font-bold text-sm transition shadow-sm" data-filter="tips">Tips</button>
+                        <button class="filter-btn px-5 py-2.5 rounded-2xl bg-white text-slate-600 border border-slate-200 hover:border-holiday-500 hover:text-holiday-600 font-bold text-sm transition shadow-sm" data-filter="kuliner">Kuliner</button>
+                        <button class="filter-btn px-5 py-2.5 rounded-2xl bg-white text-slate-600 border border-slate-200 hover:border-holiday-500 hover:text-holiday-600 font-bold text-sm transition shadow-sm" data-filter="event">Event</button>
                     </div>
                 </div>
             </div>
@@ -202,12 +205,15 @@
             <div class="w-16 h-16 rounded-full bg-holiday-50 flex items-center justify-center mb-4">
                 <i class="bi bi-journal-x text-3xl text-holiday-500"></i>
             </div>
-            <h3 class="text-lg font-extrabold text-[#0f172a] mb-2">Artikel Belum Tersedia</h3>
+            <h3 class="text-lg font-extrabold text-slate-900 mb-2">Artikel Belum Tersedia</h3>
             <p class="text-sm text-slate-500 max-w-sm">Kami sedang menyiapkan artikel menarik untuk kategori ini. Nantikan update selanjutnya, ya!</p>
         </div>
 
-        <!-- 1 CARD BESAR UTAMA -->
-        @if($artikel->count() > 0)
+        <div id="filtered-layout" class="hidden flex-col gap-8"></div>
+
+        <div id="default-layout" class="space-y-8">
+            <!-- 1 CARD BESAR UTAMA -->
+            @if($artikel->count() > 0)
         @php $featured = $artikel->first(); @endphp
         <article class="news-card relative bg-slate-900 rounded-3xl overflow-hidden h-[480px] md:h-[520px] group shadow-sm hover:shadow-xl transition-all duration-500 flex items-end" data-cats="{{ strtolower($featured->kategori) }}" data-date="{{ $featured->tanggal_terbit ? $featured->tanggal_terbit->format('Y-m-d') : '' }}" data-article="{{ $featured->slug }}">
             <div class="absolute inset-0 bg-gradient-to-t from-slate-950 via-slate-900/40 to-transparent z-10"></div>
@@ -292,19 +298,19 @@
                         </div>
                     </div>
                 </article>
-                <article class="news-card bg-white rounded-3xl overflow-hidden shadow-sm border border-slate-100 flex flex-col justify-between group" data-cats="destinasi" data-date="2025-08-20" data-article="">
+                <article class="news-card bg-white rounded-3xl overflow-hidden shadow-sm border border-slate-100 flex flex-col justify-between group" data-cats="tips" data-date="2025-08-20" data-article="">
                     <div class="relative h-56 overflow-hidden">
-                        <img src="{{ asset('img/pantaipelengkung.png') }}" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700" alt="Pantai Plengkung" onerror="this.src='https://images.unsplash.com/photo-1506744038136-46273834b3fb?q=80&w=400'">
-                        <span class="absolute bottom-4 left-4 bg-slate-950/80 backdrop-blur-sm text-white text-[10px] font-black uppercase tracking-wider px-2.5 py-1 rounded-md">DESTINASI</span>
+                        <img src="{{ asset('img/unsplash_M8drGBgFNZE.png') }}" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700" alt="Kawah Ijen" onerror="this.src='{{ asset('img/bluefire (1).png') }}'">
+                        <span class="absolute bottom-4 left-4 bg-slate-950/80 backdrop-blur-sm text-white text-[10px] font-black uppercase tracking-wider px-2.5 py-1 rounded-md">TIPS</span>
                     </div>
                     <div class="p-6 md:p-8 flex-1 flex flex-col justify-between">
                         <div>
-                            <h4 class="text-xl font-bold text-slate-900 mb-3 group-hover:text-holiday-600 transition-colors">Pantai Plengkung : Surga Surfing di Ujung Jawa</h4>
-                            <p class="text-slate-500 text-sm line-clamp-2 mb-4">G-Land adalah salah satu spot surfing terbaik di dunia dengan ombak mencapai 6 meter. Terletak di jantung Taman Nasional Alas Purwo Banyuwangi, bagaimana cara mengunjunginya?.</p>
+                            <h4 class="text-xl font-bold text-slate-900 mb-3 group-hover:text-holiday-600 transition-colors">Panduan Lengkap Mendaki Kawah Ijen di Malam Hari</h4>
+                            <p class="text-slate-500 text-sm line-clamp-2 mb-4">Mendaki Kawah Ijen di malam hari adalah pengalaman yang tak terlupakan. Disini kita kupas tuntas persiapan, rute, dan tips agar perjalanmu aman dan nyenyak menyaksikan blue fire.</p>
                         </div>
                         <div class="pt-4 border-t border-slate-100 text-xs text-slate-400 flex items-center justify-between">
-                            <span><i class="bi bi-geo-alt-fill text-holiday-500 mr-1"></i> Rute Selatan</span>
-                            <a href="{{ route('artikel.index') }}" class="text-holiday-600 font-bold">Detail Rute <i class="bi bi-chevron-right"></i></a>
+                            <span><i class="bi bi-geo-alt-fill text-holiday-500 mr-1"></i> Kawah Ijen</span>
+                            <a href="{{ route('artikel.index') }}" class="text-holiday-600 font-bold">Selengkapnya <i class="bi bi-chevron-right"></i></a>
                         </div>
                     </div>
                 </article>
@@ -355,12 +361,12 @@
             </div>
         @endif
 
-        <h3 class="text-lg font-extrabold text-[#0f172a] tracking-tight uppercase">Artikel Lainnya</h3>
+        <h3 class="text-lg font-extrabold text-slate-900 tracking-tight uppercase">Artikel Lainnya</h3>
         
         <!-- COMPACT HORIZONTAL CARD GRID -->
         <div class="grid grid-cols-1 md:grid-cols-3 gap-6" id="compact-cards">
             
-            @php $otherArticles = $artikel->skip(3); @endphp
+            @php $otherArticles = $artikel->skip(4); @endphp
             @forelse($otherArticles as $item)
             <!-- Card DB -->
             <article class="news-card bg-white rounded-3xl overflow-hidden shadow-sm border border-slate-100 flex flex-col justify-between group cursor-pointer" onclick="window.location.href='{{ route('artikel.show', $item->slug) }}'" data-cats="{{ strtolower($item->kategori) }}" data-date="{{ $item->tanggal_terbit ? $item->tanggal_terbit->format('Y-m-d') : '' }}" data-article="{{ $item->slug }}">
@@ -370,7 +376,7 @@
                 </div>
                 <div class="p-5 flex-1 flex flex-col justify-between">
                     <div>
-                        <h4 class="font-extrabold text-[#0f172a] text-base md:text-lg leading-snug group-hover:text-holiday-600 transition-colors line-clamp-2 mb-2">
+                        <h4 class="font-extrabold text-slate-900 text-base md:text-lg leading-snug group-hover:text-holiday-600 transition-colors line-clamp-2 mb-2">
                             {{ $item->judul }}
                         </h4>
                         <p class="text-sm text-slate-500 line-clamp-2 mb-4">
@@ -392,7 +398,7 @@
                 <div class="flex flex-col justify-between py-1 h-24 md:h-28 flex-1">
                     <div>
                         <span class="inline-block bg-[#e2f7ea] text-holiday-700 text-[10px] font-black px-2 py-0.5 rounded uppercase tracking-wider mb-1.5">TIPS</span>
-                        <h4 class="font-extrabold text-[#0f172a] text-sm md:text-[14px] leading-snug group-hover:text-holiday-600 transition-colors line-clamp-2">
+                        <h4 class="font-extrabold text-slate-900 text-sm md:text-[14px] leading-snug group-hover:text-holiday-600 transition-colors line-clamp-2">
                             Panduan Sewa Jeep Banyuwangi: Tips Memilih, Harga, dan Apa yang Harus...
                         </h4>
                     </div>
@@ -410,7 +416,7 @@
                 <div class="flex flex-col justify-between py-1 h-24 md:h-28 flex-1">
                     <div>
                         <span class="inline-block bg-[#e2f7ea] text-holiday-700 text-[10px] font-black px-2 py-0.5 rounded uppercase tracking-wider mb-1.5">DESTINASI</span>
-                        <h4 class="font-extrabold text-[#0f172a] text-sm md:text-[14px] leading-snug group-hover:text-holiday-600 transition-colors line-clamp-2">
+                        <h4 class="font-extrabold text-slate-900 text-sm md:text-[14px] leading-snug group-hover:text-holiday-600 transition-colors line-clamp-2">
                             Taman Nasional Baluran: Safari "Afrika"-nya Indonesia di Banyuwangi
                         </h4>
                     </div>
@@ -428,7 +434,7 @@
                 <div class="flex flex-col justify-between py-1 h-24 md:h-28 flex-1">
                     <div>
                         <span class="inline-block bg-[#e2f7ea] text-holiday-700 text-[10px] font-black px-2 py-0.5 rounded uppercase tracking-wider mb-1.5">EVENT</span>
-                        <h4 class="font-extrabold text-[#0f172a] text-sm md:text-[14px] leading-snug group-hover:text-holiday-600 transition-colors line-clamp-2">
+                        <h4 class="font-extrabold text-slate-900 text-sm md:text-[14px] leading-snug group-hover:text-holiday-600 transition-colors line-clamp-2">
                             Festival Banyuwangi 2025–2026: Jadwal Lengkap & Cara Hadir
                         </h4>
                     </div>
@@ -446,7 +452,7 @@
                 <div class="flex flex-col justify-between py-1 h-24 md:h-28 flex-1">
                     <div>
                         <span class="inline-block bg-[#e2f7ea] text-holiday-700 text-[10px] font-black px-2 py-0.5 rounded uppercase tracking-wider mb-1.5">DESTINASI</span>
-                        <h4 class="font-extrabold text-[#0f172a] text-sm md:text-[14px] leading-snug group-hover:text-holiday-600 transition-colors line-clamp-2">
+                        <h4 class="font-extrabold text-slate-900 text-sm md:text-[14px] leading-snug group-hover:text-holiday-600 transition-colors line-clamp-2">
                             Kawah Ijen Blue Fire: Panduan Lengkap Trekking 2025
                         </h4>
                     </div>
@@ -459,6 +465,8 @@
             @endforelse
 
         </div>
+        </div>
+        <div id="filtered-layout" class="hidden flex flex-col gap-8"></div>
 
     </div>
 </section>
@@ -539,11 +547,14 @@
         const query = searchInput.value.toLowerCase().trim();
         const dateVal = dateFilter.value;
 
-        const container = document.getElementById('article-grid-container');
+        const defaultLayout = document.getElementById('default-layout');
+        const filteredLayout = document.getElementById('filtered-layout');
+        const emptyState = document.getElementById('empty-state');
+
         const oneMonthAgo = new Date();
         oneMonthAgo.setMonth(oneMonthAgo.getMonth() - 1);
 
-        let visible = Array.from(newsCards).filter(card => {
+        let visibleCards = Array.from(newsCards).filter(card => {
             const cats = (card.dataset.cats || '').split(',').map(c => c.trim());
             const matchesCat = activeCat === 'all' || cats.some(c => c.includes(activeCat));
             const matchesSearch = !query || card.textContent.toLowerCase().includes(query);
@@ -558,117 +569,96 @@
 
         // Sort by date
         if (dateVal === 'baru' || dateVal === '1bulan') {
-            visible.sort((a, b) => (b.dataset.date || '').localeCompare(a.dataset.date || ''));
+            visibleCards.sort((a, b) => (b.dataset.date || '').localeCompare(a.dataset.date || ''));
         } else if (dateVal === 'lampau') {
-            visible.sort((a, b) => (a.dataset.date || '').localeCompare(b.dataset.date || ''));
+            visibleCards.sort((a, b) => (a.dataset.date || '').localeCompare(b.dataset.date || ''));
         }
 
-        // Remove old dynamic layout
-        const oldLayout = document.getElementById('filtered-layout');
-        if (oldLayout) oldLayout.remove();
+        const isDefault = activeCat === 'all' && query === '' && dateVal === 'baru';
 
-        if (activeCat === 'all') {
-            // ====== SEMUA BERITA: Original Layout ======
-            newsCards.forEach(card => { card.style.display = ''; });
-            visible.forEach((card, i) => {
-                card.style.animation = 'fadeIn 0.3s ease-out';
-                card.style.animationDelay = (i * 0.05) + 's';
-                if (card.parentElement.classList.contains('grid')) {
-                    card.style.order = i;
-                }
-            });
-            const emptyState = document.getElementById('empty-state');
-            if (emptyState) {
-                if (visible.length === 0) {
+        if (isDefault) {
+            defaultLayout.style.display = 'block';
+            filteredLayout.style.display = 'none';
+            if (emptyState) emptyState.classList.add('hidden');
+            if (emptyState) emptyState.classList.remove('flex');
+            
+            // Restore visibility of original cards just in case
+            newsCards.forEach(c => { c.style.display = ''; });
+        } else {
+            defaultLayout.style.display = 'none';
+            filteredLayout.style.display = 'flex';
+            filteredLayout.innerHTML = '';
+
+            if (visibleCards.length === 0) {
+                if (emptyState) {
                     emptyState.classList.remove('hidden');
                     emptyState.classList.add('flex');
-                } else {
+                }
+            } else {
+                if (emptyState) {
                     emptyState.classList.add('hidden');
                     emptyState.classList.remove('flex');
                 }
-            }
-        } else {
-            // ====== FILTERED (Destinasi/Tips/Kuliner/Event) ======
-            const featuredCard = document.querySelector('.news-card[data-featured="true"]');
-            const heading = Array.from(container.querySelectorAll('h3')).find(h => h.textContent.trim() === 'Artikel Lainnya');
 
-            // Hide all original sections
-            document.querySelectorAll('#middle-cards, #featured-article, #compact-cards').forEach(el => {
-                if (el) el.style.display = 'none';
-            });
-            newsCards.forEach(card => { card.style.display = 'none'; });
+                // Render First Card as Big
+                const firstData = extractCardData(visibleCards[0]);
+                const bigCardHTML = `
+                    <article class="news-card relative bg-slate-900 rounded-3xl overflow-hidden h-[480px] md:h-[520px] group shadow-sm hover:shadow-xl transition-all duration-500 flex items-end cursor-pointer" onclick="window.location.href='${firstData.slug ? '{{ url("artikel") }}/' + firstData.slug : '#"'}">
+                        <div class="absolute inset-0 bg-gradient-to-t from-slate-950 via-slate-900/40 to-transparent z-10"></div>
+                        <img src="${firstData.imgSrc}" class="absolute inset-0 w-full h-full object-cover object-center group-hover:scale-105 transition-transform duration-700" alt="${firstData.title}">
+                        
+                        <div class="relative z-20 p-8 md:p-10 w-full">
+                            <div class="flex items-center gap-2 mb-4">
+                                <span class="bg-holiday-500 text-white text-[10px] font-black uppercase tracking-wider px-2.5 py-1 rounded-md">${firstData.kategori}</span>
+                            </div>
+                            <h3 class="text-2xl md:text-3xl font-extrabold text-white mb-3 leading-tight">${firstData.title}</h3>
+                            <p class="text-slate-300 text-sm max-w-3xl mb-5 line-clamp-3">${firstData.excerpt}</p>
+                            <div class="flex items-center justify-between pt-4 border-t border-white/10 text-xs text-slate-300">
+                                <span><i class="bi bi-calendar3 text-holiday-400 mr-1"></i> ${formatDateLabel(firstData.date)}</span>
+                                <span class="text-holiday-400 font-bold flex items-center gap-1">Baca Artikel <i class="bi bi-arrow-right"></i></span>
+                            </div>
+                        </div>
+                    </article>
+                `;
+                filteredLayout.innerHTML += bigCardHTML;
 
-            const emptyState = document.getElementById('empty-state');
-            if (visible.length === 0) {
-                if (emptyState) { emptyState.classList.remove('hidden'); emptyState.classList.add('flex'); }
-                if (heading) heading.style.display = 'none';
-                return;
-            }
-            if (emptyState) emptyState.classList.add('hidden');
-            if (heading) heading.style.display = '';
-
-            const layout = document.createElement('div');
-            layout.id = 'filtered-layout';
-
-            const baseUrl = '{{ url('artikel') }}';
-            const heroData = extractCardData(visible[0]);
-            const slug = visible[0].dataset.article || '';
-
-            // --- Hero card: clone featured template ---
-            let heroEl;
-            if (featuredCard) {
-                heroEl = featuredCard.cloneNode(true);
-                heroEl.style.display = '';
-                heroEl.removeAttribute('data-featured');
-                const img = heroEl.querySelector('img');
-                if (img) {
-                    img.src = heroData.imgSrc;
-                    img.alt = heroData.title;
-                    img.onerror = null;
+                // Render remaining as Small
+                if (visibleCards.length > 1) {
+                    let smallCardsHTML = '<div class="grid grid-cols-1 md:grid-cols-3 gap-6">';
+                    for (let i = 1; i < visibleCards.length; i++) {
+                        const data = extractCardData(visibleCards[i]);
+                        smallCardsHTML += `
+                            <article class="news-card bg-white rounded-3xl overflow-hidden shadow-sm border border-slate-100 flex flex-col justify-between group cursor-pointer" onclick="window.location.href='${data.slug ? '{{ url("artikel") }}/' + data.slug : '#"'}">
+                                <div class="relative h-48 overflow-hidden shrink-0">
+                                    <img src="${data.imgSrc}" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700" alt="${data.title}">
+                                    <span class="absolute bottom-3 left-3 bg-slate-950/80 backdrop-blur-sm text-white text-[10px] font-black uppercase tracking-wider px-2.5 py-1 rounded-md">${data.kategori}</span>
+                                </div>
+                                <div class="p-5 flex-1 flex flex-col justify-between">
+                                    <div>
+                                        <h4 class="font-extrabold text-slate-900 text-base md:text-lg leading-snug group-hover:text-holiday-600 transition-colors line-clamp-2 mb-2">${data.title}</h4>
+                                        <p class="text-sm text-slate-500 line-clamp-2 mb-4">${data.excerpt}</p>
+                                    </div>
+                                    <div class="pt-4 border-t border-slate-100 text-xs text-slate-400 flex items-center justify-between">
+                                        <span><i class="bi bi-calendar3 text-holiday-500 mr-1"></i> ${formatDateLabel(data.date)}</span>
+                                        <span class="text-holiday-600 font-bold hover:underline">Baca <i class="bi bi-chevron-right"></i></span>
+                                    </div>
+                                </div>
+                            </article>
+                        `;
+                    }
+                    smallCardsHTML += '</div>';
+                    filteredLayout.innerHTML += smallCardsHTML;
                 }
-                const badge = heroEl.querySelector('[class*="bg-holiday"]');
-                if (badge) badge.textContent = heroData.kategori;
-                const title = heroEl.querySelector('h3');
-                if (title) title.textContent = heroData.title;
-                const excerpt = heroEl.querySelector('p');
-                if (excerpt) excerpt.textContent = heroData.excerpt;
-                heroEl.removeAttribute('onclick');
-                heroEl.onclick = function() { window.location.href = baseUrl + '/' + slug; };
-                const link = heroEl.querySelector('a');
-                if (link) link.href = baseUrl + '/' + slug;
-                const icon = heroEl.querySelector('.bi-calendar3');
-                if (icon && icon.parentElement) {
-                    const d = heroData.date ? new Date(heroData.date).toLocaleDateString('id-ID', { day: 'numeric', month: 'long', year: 'numeric' }) : '-';
-                    icon.parentElement.innerHTML = '<i class="bi bi-calendar3 text-holiday-400 mr-1"></i> ' + d;
-                }
-            }
-            if (heroEl) layout.appendChild(heroEl);
-
-            // --- Compact cards: clone originals ---
-            if (visible.length > 1) {
-                const grid = document.createElement('div');
-                grid.className = 'grid grid-cols-1 md:grid-cols-3 gap-6 mt-8';
-                visible.slice(1).forEach((card, i) => {
-                    const clone = card.cloneNode(true);
-                    clone.style.display = '';
-                    clone.style.animation = 'fadeIn 0.3s ease-out';
-                    clone.style.animationDelay = (i * 0.05) + 's';
-                    clone.removeAttribute('onclick');
-                    clone.onclick = function() {
-                        const s = this.dataset.article;
-                        if (s) window.location.href = baseUrl + '/' + s;
-                    };
-                    grid.appendChild(clone);
-                });
-                layout.appendChild(grid);
-            }
-
-            if (heading) {
-                container.insertBefore(layout, heading);
-            } else {
-                container.appendChild(layout);
             }
         }
+    }
+
+    function formatDateLabel(dateString) {
+        if (!dateString) return '-';
+        const d = new Date(dateString);
+        if (isNaN(d.getTime())) return dateString;
+        const months = ['Jan','Feb','Mar','Apr','Mei','Jun','Jul','Agu','Sep','Okt','Nov','Des'];
+        return d.getDate() + ' ' + months[d.getMonth()] + ' ' + d.getFullYear();
     }
 
     // Search input listener
@@ -683,9 +673,9 @@
 
             filterButtons.forEach(b => {
                 b.classList.remove('bg-[#0f172a]', 'text-white');
-                b.classList.add('bg-white', 'text-[#475569]', 'border', 'border-slate-200');
+                b.classList.add('bg-white', 'text-slate-600', 'border', 'border-slate-200');
             });
-            btn.classList.remove('bg-white', 'text-[#475569]', 'border', 'border-slate-200');
+            btn.classList.remove('bg-white', 'text-slate-600', 'border', 'border-slate-200');
             btn.classList.add('bg-[#0f172a]', 'text-white');
 
             applyFilters();
