@@ -245,7 +245,11 @@
                         selectOverlay.onclick = function(e) {
                             e.stopPropagation();
                             if (onSelectCallback) {
-                                onSelectCallback(item);
+                                onSelectCallback({
+                                    id: item.image_id,
+                                    url: item.url,
+                                    path: item.path
+                                });
                             }
                             closeModal();
                         };

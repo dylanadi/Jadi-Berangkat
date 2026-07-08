@@ -360,7 +360,7 @@ class PengaturanController extends Controller
     {
         $images = [];
 
-        $dbImages = Image::all(['id', 'path', 'name']);
+        $dbImages = \App\Models\Image::all(['id', 'path', 'name', 'disk']);
         $seen = [];
         foreach ($dbImages as $img) {
             $url = $img->url;
@@ -378,28 +378,19 @@ class PengaturanController extends Controller
         foreach ($storageFiles as $file) {
             if (!in_array(strtolower(pathinfo($file, PATHINFO_EXTENSION)), ['jpg', 'jpeg', 'png', 'webp', 'gif'])) continue;
             if (isset($seen[$file])) continue;
+            
+            $img = \App\Models\Image::firstOrCreate(
+                ['path' => $file],
+                ['name' => basename($file), 'disk' => 'public']
+            );
+
             $images[] = [
-                'image_id' => null,
-                'url' => asset('storage/' . $file),
+                'image_id' => $img->id,
+                'url' => $img->url,
                 'path' => $file,
                 'name' => basename($file),
             ];
             $seen[$file] = true;
-        }
-
-        $publicImgPath = public_path('img');
-        if (is_dir($publicImgPath)) {
-            foreach (scandir($publicImgPath) as $file) {
-                if (!in_array(strtolower(pathinfo($file, PATHINFO_EXTENSION)), ['jpg', 'jpeg', 'png', 'webp', 'gif'])) continue;
-                $key = 'img/' . $file;
-                if (isset($seen[$key])) continue;
-                $images[] = [
-                    'image_id' => null,
-                    'url' => asset('img/' . $file),
-                    'path' => 'img/' . $file,
-                    'name' => $file,
-                ];
-            }
         }
 
         return response()->json(['images' => $images]);
