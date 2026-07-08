@@ -58,6 +58,10 @@
         html, body { font-family: 'Plus Jakarta Sans', sans-serif; background-color: #f4f0e7; color: #151813; }
         .no-scrollbar::-webkit-scrollbar { display: none; }
         .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+        [x-cloak] { display: none !important; }
+        .holiday-gradient { background: linear-gradient(135deg, var(--holiday-dark) 0%, var(--holiday) 100%); }
+        /* Hide add section button unless in edit mode */
+        body:not(.edit-mode-active) #add-section-btn-wrap { display: none !important; }
         .card-gradient { background: linear-gradient(to top, rgba(7,13,9,0.96) 0%, rgba(7,13,9,0.34) 58%, transparent 100%); }
         .hero-gradient { background: linear-gradient(90deg, rgba(10,16,11,0.82) 0%, rgba(10,16,11,0.56) 42%, rgba(10,16,11,0.14) 100%), linear-gradient(to bottom, rgba(0,0,0,0.18) 0%, rgba(0,0,0,0.02) 48%, rgba(0,0,0,0.58) 100%); }
         .section-shell { max-width: 1280px; margin-inline: auto; padding-inline: 1.5rem; }
@@ -863,7 +867,38 @@ document.addEventListener('keydown', function(e) {
     html += '<p>Ketik konten pasal di sini...</p>';
     html += '</div>';
     html += '</section>';
-    container.insertAdjacentHTML('beforeend', html);
+    
+    var btnWrap = document.getElementById('add-section-btn-wrap');
+    if (btnWrap) {
+        btnWrap.insertAdjacentHTML('beforebegin', html);
+    } else {
+        container.insertAdjacentHTML('beforeend', html);
+    }
+
+    if (editMode && typeof tinymce !== 'undefined') {
+        var newHtmlEl = document.querySelector('#' + newId + ' [data-edit-type="html"]');
+        if (newHtmlEl) {
+            newHtmlEl.id = 'html-editor-' + Math.random().toString(36).slice(2, 9);
+            tinymce.init({
+                target: newHtmlEl,
+                menubar: false,
+                plugins: 'link lists',
+                toolbar: 'bold italic underline | bullist numlist | link | removeformat',
+                branding: false,
+                promotion: false,
+                height: 300,
+                setup: function(editor) {
+                    editor.on('init', function() {
+                        newHtmlEl.dataset.originalValue = editor.getContent().trim();
+                    });
+                }
+            });
+        }
+        var newTextEl = document.querySelector('#' + newId + ' [data-edit-type="text"]');
+        if (newTextEl) {
+            newTextEl.classList.add('ring-2', 'ring-[#2f6f42]', 'ring-offset-2', 'rounded', 'px-1');
+        }
+    }
     // Add TOC link
     var tocNav = document.getElementById('toc-nav');
     if (tocNav) {
