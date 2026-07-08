@@ -212,110 +212,117 @@
         <div id="filtered-layout" class="hidden flex-col gap-8"></div>
 
         <div id="default-layout" class="space-y-8">
-            <!-- 1 CARD BESAR UTAMA -->
-            @if($artikel->count() > 0)
-        @php $featured = $artikel->first(); @endphp
-        <article class="news-card relative bg-slate-900 rounded-3xl overflow-hidden h-[480px] md:h-[520px] group shadow-sm hover:shadow-xl transition-all duration-500 flex items-end" data-cats="{{ strtolower($featured->kategori) }}" data-date="{{ $featured->tanggal_terbit ? $featured->tanggal_terbit->format('Y-m-d') : '' }}" data-article="{{ $featured->slug }}">
-            <div class="absolute inset-0 bg-gradient-to-t from-slate-950 via-slate-900/40 to-transparent z-10"></div>
-            <img src="{{ $featured->image_url }}" class="absolute inset-0 w-full h-full object-cover object-center group-hover:scale-105 transition-transform duration-700" alt="{{ $featured->judul }}">
-            
-            <div class="relative z-20 p-8 md:p-10 w-full">
-                <div class="flex items-center gap-2 mb-4">
-                    <span class="bg-holiday-500 text-white text-[10px] font-black uppercase tracking-wider px-2.5 py-1 rounded-md">{{ strtoupper($featured->kategori ?? 'DESTINASI') }}</span>
+            <!-- TOP 3 CARDS LAYOUT -->
+            <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+                <!-- 1 CARD BESAR UTAMA (KIRI) -->
+                @if($artikel->count() > 0)
+                @php $featured = $artikel->first(); @endphp
+                <div class="lg:col-span-2 lg:h-[500px]">
+                    <article class="news-card relative bg-slate-900 rounded-[2rem] overflow-hidden h-[400px] lg:h-full group shadow-sm hover:shadow-xl transition-all duration-500 flex items-end cursor-pointer" onclick="window.location.href='{{ route('artikel.show', $featured->slug) }}'" data-cats="{{ strtolower($featured->kategori) }}" data-date="{{ $featured->tanggal_terbit ? $featured->tanggal_terbit->format('Y-m-d') : '' }}" data-article="{{ $featured->slug }}">
+                        <div class="absolute inset-0 bg-gradient-to-t from-slate-950 via-slate-900/40 to-transparent z-10"></div>
+                        <img src="{{ $featured->image_url }}" class="absolute inset-0 w-full h-full object-cover object-center group-hover:scale-105 transition-transform duration-700" alt="{{ $featured->judul }}">
+                        
+                        <div class="relative z-20 p-8 w-full">
+                            <div class="flex items-center gap-2 mb-3">
+                                <span class="bg-holiday-500 text-white text-[10px] font-black uppercase tracking-wider px-2.5 py-1 rounded-md">{{ strtoupper($featured->kategori ?? 'DESTINASI') }}</span>
+                            </div>
+                            <h3 class="text-3xl md:text-4xl font-extrabold text-white mb-3 leading-tight">
+                                {{ $featured->judul }}
+                            </h3>
+                            <p class="text-slate-300 text-sm max-w-2xl mb-5 line-clamp-2">
+                                {{ Str::limit(strip_tags($featured->konten), 180) }}
+                            </p>
+                            <div class="flex items-center gap-4 text-xs text-slate-300 font-medium">
+                                <span class="flex items-center gap-1.5"><i class="bi bi-calendar3 text-holiday-400"></i> {{ $featured->tanggal_terbit ? $featured->tanggal_terbit->format('d F Y') : '-' }}</span>
+                                <span class="flex items-center gap-1.5"><i class="bi bi-person text-holiday-400"></i> {{ $featured->user->name ?? 'Admin' }}</span>
+                            </div>
+                        </div>
+                    </article>
                 </div>
-                <h3 class="text-2xl md:text-3xl font-extrabold text-white mb-3 leading-tight">
-                    {{ $featured->judul }}
-                </h3>
-                <p class="text-slate-300 text-sm max-w-3xl mb-5 line-clamp-3">
-                    {{ Str::limit(strip_tags($featured->konten), 250) }}
-                </p>
-                <div class="flex items-center justify-between pt-4 border-t border-white/10 text-xs text-slate-300">
-                    <span><i class="bi bi-calendar3 text-holiday-400 mr-1"></i> {{ $featured->tanggal_terbit ? $featured->tanggal_terbit->format('d F Y') : '-' }}</span>
-                    <a href="{{ route('artikel.show', $featured->slug) }}" class="text-holiday-400 font-bold flex items-center gap-1">Baca Artikel <i class="bi bi-arrow-right"></i></a>
+                @else
+                <!-- Fallback Besar -->
+                <div class="lg:col-span-2 lg:h-[500px]">
+                    <article class="news-card relative bg-slate-900 rounded-[2rem] overflow-hidden h-[400px] lg:h-full group shadow-sm hover:shadow-xl transition-all duration-500 flex items-end" data-cats="destinasi" data-date="2025-09-25" data-article="">
+                        <div class="absolute inset-0 bg-gradient-to-t from-slate-950 via-slate-900/40 to-transparent z-10"></div>
+                        <img src="{{ asset('img/Pantaisukamade.png') }}" class="absolute inset-0 w-full h-full object-cover object-center group-hover:scale-105 transition-transform duration-700" alt="Sukamade Ekowisata" onerror="this.src='{{ asset('img/bluefire (1).png') }}'">
+                        
+                        <div class="relative z-20 p-8 w-full">
+                            <div class="flex items-center gap-2 mb-3">
+                                <span class="bg-holiday-500 text-white text-[10px] font-black uppercase tracking-wider px-2.5 py-1 rounded-md">DESTINASI</span>
+                            </div>
+                            <h3 class="text-3xl md:text-4xl font-extrabold text-white mb-3 leading-tight">
+                                Sukamade: Ekowisata Penyu Paling Mengesankan di Indonesia
+                            </h3>
+                            <p class="text-slate-300 text-sm max-w-2xl mb-5 line-clamp-2">
+                                Pantai Sukamade di TN Meru Betiri adalah tempat pendaratan penyu laut paling penting di Pulau Jawa. Pelajari cara mengunjunginya dan ikut serta dalam konservasi tukik yang luar biasa.
+                            </p>
+                            <div class="flex items-center gap-4 text-xs text-slate-300 font-medium">
+                                <span class="flex items-center gap-1.5"><i class="bi bi-calendar3 text-holiday-400"></i> 25 September 2025</span>
+                                <span class="flex items-center gap-1.5"><i class="bi bi-person text-holiday-400"></i> Admin</span>
+                            </div>
+                        </div>
+                    </article>
+                </div>
+                @endif
+        
+                <!-- 2 CARD KECIL (KANAN) -->
+                <div class="flex flex-col gap-6 lg:h-[500px]">
+                    @if($artikel->count() > 1)
+                        @foreach($artikel->skip(1)->take(2) as $item)
+                        <article class="news-card relative bg-slate-900 rounded-[2rem] overflow-hidden h-[240px] lg:h-[238px] group shadow-sm hover:shadow-xl transition-all duration-500 flex items-end cursor-pointer" onclick="window.location.href='{{ route('artikel.show', $item->slug) }}'" data-cats="{{ strtolower($item->kategori) }}" data-date="{{ $item->tanggal_terbit ? $item->tanggal_terbit->format('Y-m-d') : '' }}" data-article="{{ $item->slug }}">
+                            <div class="absolute inset-0 bg-gradient-to-t from-slate-950 via-slate-900/40 to-transparent z-10"></div>
+                            <img src="{{ $item->image_url }}" class="absolute inset-0 w-full h-full object-cover object-center group-hover:scale-105 transition-transform duration-700" alt="{{ $item->judul }}">
+                            
+                            <div class="relative z-20 p-6 w-full">
+                                <div class="flex items-center gap-2 mb-2">
+                                    <span class="bg-holiday-500 text-white text-[10px] font-black uppercase tracking-wider px-2.5 py-1 rounded-md">{{ strtoupper($item->kategori ?? 'WISATA') }}</span>
+                                </div>
+                                <h4 class="text-xl font-extrabold text-white mb-3 leading-tight line-clamp-2">
+                                    {{ $item->judul }}
+                                </h4>
+                                <div class="flex items-center text-xs text-slate-300 font-medium">
+                                    <span class="flex items-center gap-1.5"><i class="bi bi-calendar3 text-holiday-400"></i> {{ $item->tanggal_terbit ? $item->tanggal_terbit->format('d M Y') : '-' }}</span>
+                                </div>
+                            </div>
+                        </article>
+                        @endforeach
+                    @else
+                        <!-- Fallback 2 Card Kanan -->
+                        <article class="news-card relative bg-slate-900 rounded-[2rem] overflow-hidden h-[240px] lg:h-[238px] group shadow-sm hover:shadow-xl transition-all duration-500 flex items-end cursor-pointer" onclick="window.location.href='{{ route('artikel.index') }}'" data-cats="kuliner" data-date="2025-09-10" data-article="">
+                            <div class="absolute inset-0 bg-gradient-to-t from-slate-950 via-slate-900/40 to-transparent z-10"></div>
+                            <img src="{{ asset('img/rujaksoto.png') }}" class="absolute inset-0 w-full h-full object-cover object-center group-hover:scale-105 transition-transform duration-700" alt="Kuliner" onerror="this.src='https://images.unsplash.com/photo-1544620347-c4fd4a3d5957?q=80&w=400'">
+                            
+                            <div class="relative z-20 p-6 w-full">
+                                <div class="flex items-center gap-2 mb-2">
+                                    <span class="bg-holiday-500 text-white text-[10px] font-black uppercase tracking-wider px-2.5 py-1 rounded-md">KULINER</span>
+                                </div>
+                                <h4 class="text-xl font-extrabold text-white mb-3 leading-tight line-clamp-2">
+                                    Sajian Kuliner Khas Banyuwangi Jawa Timur
+                                </h4>
+                                <div class="flex items-center text-xs text-slate-300 font-medium">
+                                    <span class="flex items-center gap-1.5"><i class="bi bi-calendar3 text-holiday-400"></i> 10 September 2025</span>
+                                </div>
+                            </div>
+                        </article>
+                        <article class="news-card relative bg-slate-900 rounded-[2rem] overflow-hidden h-[240px] lg:h-[238px] group shadow-sm hover:shadow-xl transition-all duration-500 flex items-end cursor-pointer" onclick="window.location.href='{{ route('artikel.index') }}'" data-cats="tips" data-date="2025-08-20" data-article="">
+                            <div class="absolute inset-0 bg-gradient-to-t from-slate-950 via-slate-900/40 to-transparent z-10"></div>
+                            <img src="{{ asset('img/unsplash_M8drGBgFNZE.png') }}" class="absolute inset-0 w-full h-full object-cover object-center group-hover:scale-105 transition-transform duration-700" alt="Kawah Ijen" onerror="this.src='{{ asset('img/bluefire (1).png') }}'">
+                            
+                            <div class="relative z-20 p-6 w-full">
+                                <div class="flex items-center gap-2 mb-2">
+                                    <span class="bg-holiday-500 text-white text-[10px] font-black uppercase tracking-wider px-2.5 py-1 rounded-md">TIPS</span>
+                                </div>
+                                <h4 class="text-xl font-extrabold text-white mb-3 leading-tight line-clamp-2">
+                                    Panduan Lengkap Mendaki Kawah Ijen di Malam Hari
+                                </h4>
+                                <div class="flex items-center text-xs text-slate-300 font-medium">
+                                    <span class="flex items-center gap-1.5"><i class="bi bi-calendar3 text-holiday-400"></i> 20 Agustus 2025</span>
+                                </div>
+                            </div>
+                        </article>
+                    @endif
                 </div>
             </div>
-        </article>
-        @else
-        <!-- Fallback Besar -->
-        <article class="news-card relative bg-slate-900 rounded-3xl overflow-hidden h-[480px] md:h-[520px] group shadow-sm hover:shadow-xl transition-all duration-500 flex items-end" data-cats="destinasi" data-date="2025-09-25" data-article="">
-            <div class="absolute inset-0 bg-gradient-to-t from-slate-950 via-slate-900/40 to-transparent z-10"></div>
-            <img src="{{ asset('img/Pantaisukamade.png') }}" class="absolute inset-0 w-full h-full object-cover object-center group-hover:scale-105 transition-transform duration-700" alt="Sukamade Ekowisata" onerror="this.src='{{ asset('img/bluefire (1).png') }}'">
-            
-            <div class="relative z-20 p-8 md:p-10 w-full">
-                <div class="flex items-center gap-2 mb-4">
-                    <span class="bg-holiday-500 text-white text-[10px] font-black uppercase tracking-wider px-2.5 py-1 rounded-md">DESTINASI</span>
-                </div>
-                <h3 class="text-2xl md:text-3xl font-extrabold text-white mb-3 leading-tight">
-                    Sukamade: Ekowisata Penyu Paling Mengesankan di Indonesia
-                </h3>
-                <p class="text-slate-300 text-sm max-w-3xl mb-5 line-clamp-2">
-                    Pantai Sukamade di TN Meru Betiri adalah tempat pendaratan penyu laut paling penting di Pulau Jawa. Pelajari cara mengunjunginya dan ikut serta dalam konservasi tukik yang luar biasa.
-                </p>
-                <div class="flex items-center justify-between pt-4 border-t border-white/10 text-xs text-slate-300">
-                    <span><i class="bi bi-calendar3 text-holiday-400 mr-1"></i> 25 September 2025</span>
-                    <a href="{{ route('artikel.index') }}" class="text-holiday-400 font-bold flex items-center gap-1">Baca Artikel <i class="bi bi-arrow-right"></i></a>
-                </div>
-            </div>
-        </article>
-        @endif
-
-        <!-- 2 CARD TENGAH -->
-        <div class="grid grid-cols-1 md:grid-cols-2 gap-8" id="middle-cards">
-            @if($artikel->count() > 1)
-                @foreach($artikel->skip(1)->take(2) as $item)
-                <article class="news-card bg-white rounded-3xl overflow-hidden shadow-sm border border-slate-100 flex flex-col justify-between group" data-cats="{{ strtolower($item->kategori) }}" data-date="{{ $item->tanggal_terbit ? $item->tanggal_terbit->format('Y-m-d') : '' }}" data-article="{{ $item->slug }}">
-                    <div class="relative h-56 overflow-hidden">
-                        <img src="{{ $item->image_url }}" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700" alt="{{ $item->judul }}">
-                        <span class="absolute bottom-4 left-4 bg-slate-950/80 backdrop-blur-sm text-white text-[10px] font-black uppercase tracking-wider px-2.5 py-1 rounded-md">{{ strtoupper($item->kategori ?? 'WISATA') }}</span>
-                    </div>
-                    <div class="p-6 md:p-8 flex-1 flex flex-col justify-between">
-                        <div>
-                            <h4 class="text-xl font-bold text-slate-900 mb-3 group-hover:text-holiday-600 transition-colors">{{ $item->judul }}</h4>
-                            <p class="text-slate-500 text-sm line-clamp-2 mb-4">{{ Str::limit(strip_tags($item->konten), 120) }}</p>
-                        </div>
-                        <div class="pt-4 border-t border-slate-100 text-xs text-slate-400 flex items-center justify-between">
-                            <span><i class="bi bi-geo-alt-fill text-holiday-500 mr-1"></i> {{ $item->lokasi ?? 'Banyuwangi' }}</span>
-                            <a href="{{ route('artikel.show', $item->slug) }}" class="text-holiday-600 font-bold">Selengkapnya <i class="bi bi-chevron-right"></i></a>
-                        </div>
-                    </div>
-                </article>
-                @endforeach
-            @else
-                <!-- Fallback 2 Card Tengah -->
-                <article class="news-card bg-white rounded-3xl overflow-hidden shadow-sm border border-slate-100 flex flex-col justify-between group" data-cats="destinasi,kuliner" data-date="2025-09-10" data-article="">
-                    <div class="relative h-56 overflow-hidden">
-                        <img src="{{ asset('img/rujaksoto.png') }}" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700" alt="Kuliner" onerror="this.src='https://images.unsplash.com/photo-1544620347-c4fd4a3d5957?q=80&w=400'">
-                        <span class="absolute bottom-4 left-4 bg-slate-950/80 backdrop-blur-sm text-white text-[10px] font-black uppercase tracking-wider px-2.5 py-1 rounded-md">KULINER</span>
-                    </div>
-                    <div class="p-6 md:p-8 flex-1 flex flex-col justify-between">
-                        <div>
-                            <h4 class="text-xl font-bold text-slate-900 mb-3 group-hover:text-holiday-600 transition-colors">Sajian Kuliner Khas Banyuwangi Jawa Timur</h4>
-                            <p class="text-slate-500 text-sm line-clamp-2 mb-4">Nikmati Rujak Soto Perpaduan unik antara rujak cingur/sayur yang disiram dengan kuah soto daging sapi yang gurih dan hangat.</p>
-                        </div>
-                        <div class="pt-4 border-t border-slate-100 text-xs text-slate-400 flex items-center justify-between">
-                            <span><i class="bi bi-geo-alt-fill text-holiday-500 mr-1"></i> Resto Tosari</span>
-                            <a href="{{ route('artikel.index') }}" class="text-holiday-600 font-bold">Lihat Menu <i class="bi bi-chevron-right"></i></a>
-                        </div>
-                    </div>
-                </article>
-                <article class="news-card bg-white rounded-3xl overflow-hidden shadow-sm border border-slate-100 flex flex-col justify-between group" data-cats="tips" data-date="2025-08-20" data-article="">
-                    <div class="relative h-56 overflow-hidden">
-                        <img src="{{ asset('img/unsplash_M8drGBgFNZE.png') }}" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700" alt="Kawah Ijen" onerror="this.src='{{ asset('img/bluefire (1).png') }}'">
-                        <span class="absolute bottom-4 left-4 bg-slate-950/80 backdrop-blur-sm text-white text-[10px] font-black uppercase tracking-wider px-2.5 py-1 rounded-md">TIPS</span>
-                    </div>
-                    <div class="p-6 md:p-8 flex-1 flex flex-col justify-between">
-                        <div>
-                            <h4 class="text-xl font-bold text-slate-900 mb-3 group-hover:text-holiday-600 transition-colors">Panduan Lengkap Mendaki Kawah Ijen di Malam Hari</h4>
-                            <p class="text-slate-500 text-sm line-clamp-2 mb-4">Mendaki Kawah Ijen di malam hari adalah pengalaman yang tak terlupakan. Disini kita kupas tuntas persiapan, rute, dan tips agar perjalanmu aman dan nyenyak menyaksikan blue fire.</p>
-                        </div>
-                        <div class="pt-4 border-t border-slate-100 text-xs text-slate-400 flex items-center justify-between">
-                            <span><i class="bi bi-geo-alt-fill text-holiday-500 mr-1"></i> Kawah Ijen</span>
-                            <a href="{{ route('artikel.index') }}" class="text-holiday-600 font-bold">Selengkapnya <i class="bi bi-chevron-right"></i></a>
-                        </div>
-                    </div>
-                </article>
-            @endif
-        </div>
 
         <div class="pt-10 pb-3 flex items-center gap-2.5">
             <span class="w-1.5 h-6 bg-holiday-600 rounded-full"></span>
@@ -602,8 +609,8 @@
 
                 // Render First Card as Big
                 const firstData = extractCardData(visibleCards[0]);
-                const bigCardHTML = `
-                    <article class="news-card relative bg-slate-900 rounded-3xl overflow-hidden h-[480px] md:h-[520px] group shadow-sm hover:shadow-xl transition-all duration-500 flex items-end cursor-pointer" onclick="window.location.href='${firstData.slug ? '{{ url("artikel") }}/' + firstData.slug : '#"'}">
+                let newLayoutHTML = `
+                    <article class="news-card relative bg-slate-900 rounded-[2rem] overflow-hidden h-[480px] md:h-[520px] group shadow-sm hover:shadow-xl transition-all duration-500 flex items-end cursor-pointer" onclick="window.location.href='${firstData.slug ? '{{ url("artikel") }}/' + firstData.slug : '#'}'">
                         <div class="absolute inset-0 bg-gradient-to-t from-slate-950 via-slate-900/40 to-transparent z-10"></div>
                         <img src="${firstData.imgSrc}" class="absolute inset-0 w-full h-full object-cover object-center group-hover:scale-105 transition-transform duration-700" alt="${firstData.title}">
                         
@@ -611,7 +618,7 @@
                             <div class="flex items-center gap-2 mb-4">
                                 <span class="bg-holiday-500 text-white text-[10px] font-black uppercase tracking-wider px-2.5 py-1 rounded-md">${firstData.kategori}</span>
                             </div>
-                            <h3 class="text-2xl md:text-3xl font-extrabold text-white mb-3 leading-tight">${firstData.title}</h3>
+                            <h3 class="text-3xl md:text-4xl font-extrabold text-white mb-3 leading-tight">${firstData.title}</h3>
                             <p class="text-slate-300 text-sm max-w-3xl mb-5 line-clamp-3">${firstData.excerpt}</p>
                             <div class="flex items-center justify-between pt-4 border-t border-white/10 text-xs text-slate-300">
                                 <span><i class="bi bi-calendar3 text-holiday-400 mr-1"></i> ${formatDateLabel(firstData.date)}</span>
@@ -620,15 +627,14 @@
                         </div>
                     </article>
                 `;
-                filteredLayout.innerHTML += bigCardHTML;
 
-                // Render remaining as Small
+                // Render remaining as Small in a grid below
                 if (visibleCards.length > 1) {
-                    let smallCardsHTML = '<div class="grid grid-cols-1 md:grid-cols-3 gap-6">';
+                    newLayoutHTML += '<div class="grid grid-cols-1 md:grid-cols-3 gap-6 mt-8">';
                     for (let i = 1; i < visibleCards.length; i++) {
                         const data = extractCardData(visibleCards[i]);
-                        smallCardsHTML += `
-                            <article class="news-card bg-white rounded-3xl overflow-hidden shadow-sm border border-slate-100 flex flex-col justify-between group cursor-pointer" onclick="window.location.href='${data.slug ? '{{ url("artikel") }}/' + data.slug : '#"'}">
+                        newLayoutHTML += `
+                            <article class="news-card bg-white rounded-3xl overflow-hidden shadow-sm border border-slate-100 flex flex-col justify-between group cursor-pointer" onclick="window.location.href='${data.slug ? '{{ url("artikel") }}/' + data.slug : '#'}'">
                                 <div class="relative h-48 overflow-hidden shrink-0">
                                     <img src="${data.imgSrc}" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700" alt="${data.title}">
                                     <span class="absolute bottom-3 left-3 bg-slate-950/80 backdrop-blur-sm text-white text-[10px] font-black uppercase tracking-wider px-2.5 py-1 rounded-md">${data.kategori}</span>
@@ -643,12 +649,12 @@
                                         <span class="text-holiday-600 font-bold hover:underline">Baca <i class="bi bi-chevron-right"></i></span>
                                     </div>
                                 </div>
-                            </article>
-                        `;
+                            </article>`;
                     }
-                    smallCardsHTML += '</div>';
-                    filteredLayout.innerHTML += smallCardsHTML;
+                    newLayoutHTML += '</div>';
                 }
+                
+                filteredLayout.innerHTML = newLayoutHTML;
             }
         }
     }
