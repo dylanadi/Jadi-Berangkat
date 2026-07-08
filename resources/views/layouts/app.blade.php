@@ -863,7 +863,7 @@ document.addEventListener('keydown', function(e) {
     html += '<h2 class="text-xl font-bold text-slate-900 flex items-center gap-2"><span class="w-1.5 h-6 bg-holiday rounded-full"></span> <span class="section-num">' + (index + 1) + '.</span> <span contenteditable="true" data-edit="sections[' + index + '].judul" data-edit-type="text" data-edit-tipe="' + tipe + '" style="outline:none;" class="flex-1">Pasal Baru</span></h2>';
     html += '<button onclick="removeSection(this)" class="text-red-500 hover:text-red-700 bg-red-50 hover:bg-red-100 rounded-lg px-2 py-1 text-xs font-bold transition"><i class="bi bi-trash"></i></button>';
     html += '</div>';
-    html += '<div contenteditable="true" data-edit="sections[' + index + '].konten" data-edit-type="html" data-edit-tipe="' + tipe + '" class="text-slate-600 text-sm leading-relaxed">';
+    html += '<div contenteditable="true" data-edit="sections[' + index + '].konten" data-edit-type="html" data-edit-tipe="' + tipe + '" class="text-slate-600 text-sm leading-relaxed formatted-content">';
     html += '<p>Ketik konten pasal di sini...</p>';
     html += '</div>';
     html += '</section>';

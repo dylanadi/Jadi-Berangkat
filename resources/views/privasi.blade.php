@@ -2,6 +2,16 @@
 
 @section('title', ($data->judul ?? 'Kebijakan Privasi') . ' - PT Jadi Berangkat')
 
+@push('styles')
+<style>
+    .formatted-content ul { list-style-type: disc; padding-left: 1.5rem; margin-top: 0.5rem; margin-bottom: 0.5rem; }
+    .formatted-content ol { list-style-type: decimal; padding-left: 1.5rem; margin-top: 0.5rem; margin-bottom: 0.5rem; }
+    .formatted-content li { margin-bottom: 0.25rem; }
+    .formatted-content p { margin-bottom: 0.5rem; }
+    .formatted-content a { color: #2f6f42; text-decoration: underline; }
+</style>
+@endpush
+
 @section('content')
 {{-- Sub-Header Bar --}}
 <div class="bg-slate-900 border-b border-slate-800 py-3 px-4 md:px-12 flex items-center justify-between text-white gap-2">
@@ -36,7 +46,7 @@
         </span>
         <h1 data-edit="judul" data-edit-type="text" data-edit-tipe="privasi" class="text-3xl md:text-5xl font-black tracking-tight leading-tight max-w-3xl">{!! $data->judul ?? 'Kebijakan Privasi & Penggunaan Situs Web' !!}
         </h1>
-        <div data-edit="konten" data-edit-type="html" data-edit-tipe="privasi" class="text-slate-300 text-sm md:text-base max-w-2xl font-medium leading-relaxed">
+        <div data-edit="konten" data-edit-type="html" data-edit-tipe="privasi" class="text-slate-300 text-sm md:text-base max-w-2xl font-medium leading-relaxed formatted-content">
             {!! $data->konten ?? 'Dokumen ini mengatur hak, kewajiban, dan perlindungan data Pengguna dalam menggunakan layanan digital PT. Jadi Berangkat.' !!}
         </div>
         <div class="flex flex-wrap items-center justify-center gap-6 pt-4 text-xs font-bold text-slate-400">
@@ -75,7 +85,7 @@
                     <span class="w-1.5 h-6 bg-holiday rounded-full"></span> <span class="section-num">{{ $index + 1 }}.</span> 
                     <span data-edit="sections[{{ $index }}].judul" data-edit-type="text" data-edit-tipe="privasi" class="flex-1">{{ strip_tags($section['judul']) }}</span>
                 </h2>
-                <div data-edit="sections[{{ $index }}].konten" data-edit-type="html" data-edit-tipe="privasi" class="text-slate-600 text-sm leading-relaxed">
+                <div data-edit="sections[{{ $index }}].konten" data-edit-type="html" data-edit-tipe="privasi" class="text-slate-600 text-sm leading-relaxed formatted-content">
                     {!! $section['konten'] !!}
                 </div>
             </section>

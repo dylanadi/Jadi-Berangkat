@@ -32,156 +32,33 @@
 {{-- FAQ Section --}}
 <section class="py-20">
     <div class="max-w-3xl mx-auto px-6">
-        {{-- Pemesanan & Pembayaran --}}
+        {{-- Daftar Bantuan --}}
         <div class="mb-12">
             <div class="flex items-center gap-3 mb-6">
                 <div class="w-10 h-10 bg-emerald-50 rounded-xl flex items-center justify-center text-emerald-600 text-lg">
-                    <i class="bi bi-calendar-check"></i>
+                    <i class="bi bi-question-circle"></i>
                 </div>
-                <h2 data-edit="bantuan_pemesanan_judul" data-edit-route="{{ route('admin.inline.update') }}" class="text-xl font-extrabold text-slate-900">Pemesanan & Pembayaran</h2>
+                <h2 class="text-xl font-extrabold text-slate-900">Pertanyaan Umum</h2>
             </div>
+            
             <div class="space-y-3">
+                @forelse($faqs as $faq)
                 <div class="faq-item bg-white rounded-xl border border-slate-200 overflow-hidden">
                     <button class="faq-question w-full flex items-center justify-between p-5 text-left font-bold text-sm text-slate-800 hover:bg-slate-50 transition-colors">
-                        <span>Bagaimana cara memesan paket trip?</span>
+                        <span>{{ $faq->judul }}</span>
                         <i class="bi bi-chevron-down text-emerald-600 text-base transition-transform duration-300"></i>
                     </button>
                     <div class="faq-answer">
-                        <div class="px-5 pb-5 text-sm text-slate-600 leading-relaxed">
-                            Kamu bisa langsung klik tombol "Pesan Sekarang" di halaman destinasi atau paket trip yang kamu minati. Ikuti langkah-langkah pemesanan, pilih tanggal, isi data diri, dan lakukan pembayaran. Konfirmasi akan dikirim via WhatsApp dalam 1x24 jam.
+                        <div class="px-5 pb-5 text-sm text-slate-600 leading-relaxed formatted-content">
+                            {!! $faq->deskripsi !!}
                         </div>
                     </div>
                 </div>
-
-                <div class="faq-item bg-white rounded-xl border border-slate-200 overflow-hidden">
-                    <button class="faq-question w-full flex items-center justify-between p-5 text-left font-bold text-sm text-slate-800 hover:bg-slate-50 transition-colors">
-                        <span>Metode pembayaran apa saja yang tersedia?</span>
-                        <i class="bi bi-chevron-down text-emerald-600 text-base transition-transform duration-300"></i>
-                    </button>
-                    <div class="faq-answer">
-                        <div class="px-5 pb-5 text-sm text-slate-600 leading-relaxed">
-                            Saat ini kami menerima pembayaran melalui transfer bank (BCA, Mandiri, BRI), dan dompet digital (GoPay, OVO, Dana). Pembayaran penuh atau DP 50% bisa kamu pilih sesuai kenyamanan.
-                        </div>
-                    </div>
+                @empty
+                <div class="text-center py-8 text-slate-500 text-sm">
+                    Belum ada pertanyaan umum (FAQ).
                 </div>
-
-                <div class="faq-item bg-white rounded-xl border border-slate-200 overflow-hidden">
-                    <button class="faq-question w-full flex items-center justify-between p-5 text-left font-bold text-sm text-slate-800 hover:bg-slate-50 transition-colors">
-                        <span>Apakah bisa booking secara mendadak (H-1)?</span>
-                        <i class="bi bi-chevron-down text-emerald-600 text-base transition-transform duration-300"></i>
-                    </button>
-                    <div class="faq-answer">
-                        <div class="px-5 pb-5 text-sm text-slate-600 leading-relaxed">
-                            Bisa! Selama armada masih tersedia, kamu bisa booking H-1. Kami sarankan hubungi langsung via WhatsApp untuk reservasi mendadak agar lebih cepat diproses.
-                        </div>
-                    </div>
-                </div>
-
-                <div class="faq-item bg-white rounded-xl border border-slate-200 overflow-hidden">
-                    <button class="faq-question w-full flex items-center justify-between p-5 text-left font-bold text-sm text-slate-800 hover:bg-slate-50 transition-colors">
-                        <span>Apakah uang muka (DP) bisa dikembalikan?</span>
-                        <i class="bi bi-chevron-down text-emerald-600 text-base transition-transform duration-300"></i>
-                    </button>
-                    <div class="faq-answer">
-                        <div class="px-5 pb-5 text-sm text-slate-600 leading-relaxed">
-                            DP bersifat non-refundable jika pembatalan dilakukan kurang dari 3 hari sebelum keberangkatan. Namun untuk situasi darurat (bencana alam, sakit), kami bisa mendiskusikan solusi terbaik. Hubungi tim CS kami ya.
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        {{-- Trip & Armada --}}
-        <div class="mb-12">
-            <div class="flex items-center gap-3 mb-6">
-                <div class="w-10 h-10 bg-emerald-50 rounded-xl flex items-center justify-center text-emerald-600 text-lg">
-                    <i class="bi bi-truck"></i>
-                </div>
-                <h2 data-edit="bantuan_trip_judul" data-edit-route="{{ route('admin.inline.update') }}" class="text-xl font-extrabold text-slate-900">Trip & Armada</h2>
-            </div>
-            <div class="space-y-3">
-                <div class="faq-item bg-white rounded-xl border border-slate-200 overflow-hidden">
-                    <button class="faq-question w-full flex items-center justify-between p-5 text-left font-bold text-sm text-slate-800 hover:bg-slate-50 transition-colors">
-                        <span>Destinasi apa saja yang bisa dikunjungi?</span>
-                        <i class="bi bi-chevron-down text-emerald-600 text-base transition-transform duration-300"></i>
-                    </button>
-                    <div class="faq-answer">
-                        <div class="px-5 pb-5 text-sm text-slate-600 leading-relaxed">
-                            Kami melayani trip ke berbagai destinasi di Banyuwangi dan sekitarnya: Kawah Ijen, Baluran Savannah, Pulau Merah, Teluk Hijau, Pantai Pelengkung, dan masih banyak lagi. Cek halaman <a href="{{ url('/destinasi') }}" class="text-emerald-600 font-bold hover:underline">Destinasi Populer</a> untuk daftar lengkapnya.
-                        </div>
-                    </div>
-                </div>
-
-                <div class="faq-item bg-white rounded-xl border border-slate-200 overflow-hidden">
-                    <button class="faq-question w-full flex items-center justify-between p-5 text-left font-bold text-sm text-slate-800 hover:bg-slate-50 transition-colors">
-                        <span>Apakah Jeep yang digunakan nyaman dan aman?</span>
-                        <i class="bi bi-chevron-down text-emerald-600 text-base transition-transform duration-300"></i>
-                    </button>
-                    <div class="faq-answer">
-                        <div class="px-5 pb-5 text-sm text-slate-600 leading-relaxed">
-                            Tentu! Armada Jeep 4x4 kami terawat, dibersihkan setiap hari, dan diperiksa rutin. Setiap Jeep dilengkapi seat belt, canvas atap terbuka untuk spot foto, dan sopir berpengalaman yang hafal medan.
-                        </div>
-                    </div>
-                </div>
-
-                <div class="faq-item bg-white rounded-xl border border-slate-200 overflow-hidden">
-                    <button class="faq-question w-full flex items-center justify-between p-5 text-left font-bold text-sm text-slate-800 hover:bg-slate-50 transition-colors">
-                        <span>Apakah ada paket trip khusus rombongan?</span>
-                        <i class="bi bi-chevron-down text-emerald-600 text-base transition-transform duration-300"></i>
-                    </button>
-                    <div class="faq-answer">
-                        <div class="px-5 pb-5 text-sm text-slate-600 leading-relaxed">
-                            Ada! Kami menyediakan paket grup untuk 4-20 orang dengan harga spesial. Cocok untuk gathering, family trip, atau study tour. Kamu bisa hubungi kami langsung untuk request custom itinerary.
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        {{-- Lainnya --}}
-        <div class="mb-12">
-            <div class="flex items-center gap-3 mb-6">
-                <div class="w-10 h-10 bg-emerald-50 rounded-xl flex items-center justify-center text-emerald-600 text-lg">
-                    <i class="bi bi-info-circle"></i>
-                </div>
-                <h2 class="text-xl font-extrabold text-slate-900">Lainnya</h2>
-            </div>
-            <div class="space-y-3">
-                <div class="faq-item bg-white rounded-xl border border-slate-200 overflow-hidden">
-                    <button class="faq-question w-full flex items-center justify-between p-5 text-left font-bold text-sm text-slate-800 hover:bg-slate-50 transition-colors">
-                        <span>Bagaimana cara menghubungi customer service?</span>
-                        <i class="bi bi-chevron-down text-emerald-600 text-base transition-transform duration-300"></i>
-                    </button>
-                    <div class="faq-answer">
-                        <div class="px-5 pb-5 text-sm text-slate-600 leading-relaxed">
-                            Kamu bisa hubungi kami via WhatsApp di <a href="https://wa.me/6285196161351" class="text-emerald-600 font-bold hover:underline">+62 851-9616-1351</a>, email ke halo@jadiberangkat.com, atau DM Instagram <a href="https://www.instagram.com/jadiberangkat/" class="text-emerald-600 font-bold hover:underline">@jadiberangkat</a>. Kami siap bantu Senin-Minggu, jam 07.00-21.00 WIB.
-                        </div>
-                    </div>
-                </div>
-
-                <div class="faq-item bg-white rounded-xl border border-slate-200 overflow-hidden">
-                    <button class="faq-question w-full flex items-center justify-between p-5 text-left font-bold text-sm text-slate-800 hover:bg-slate-50 transition-colors">
-                        <span>Apakah ada jemput dari hotel/stasiun?</span>
-                        <i class="bi bi-chevron-down text-emerald-600 text-base transition-transform duration-300"></i>
-                    </button>
-                    <div class="faq-answer">
-                        <div class="px-5 pb-5 text-sm text-slate-600 leading-relaxed">
-                            Ya, kami menyediakan layanan jemput dari hotel, villa, stasiun kereta, atau bandara di area Banyuwangi. Pastikan kamu cantumkan lokasi jemput saat booking.
-                        </div>
-                    </div>
-                </div>
-
-                <div class="faq-item bg-white rounded-xl border border-slate-200 overflow-hidden">
-                    <button class="faq-question w-full flex items-center justify-between p-5 text-left font-bold text-sm text-slate-800 hover:bg-slate-50 transition-colors">
-                        <span>Bagaimana jika cuaca buruk saat trip?</span>
-                        <i class="bi bi-chevron-down text-emerald-600 text-base transition-transform duration-300"></i>
-                    </button>
-                    <div class="faq-answer">
-                        <div class="px-5 pb-5 text-sm text-slate-600 leading-relaxed">
-                            Keselamatan adalah prioritas utama. Jika cuaca buruk, kami akan menunda atau mengalihkan rute ke destinasi alternatif. Kamu bisa reschedule tanpa biaya tambahan atau refund penuh sesuai kebijakan.
-                        </div>
-                    </div>
-                </div>
+                @endforelse
             </div>
         </div>
 

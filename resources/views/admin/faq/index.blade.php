@@ -21,7 +21,6 @@
                             <th class="px-4 py-3 font-medium text-gray-600">No</th>
                             <th class="px-4 py-3 font-medium text-gray-600">Judul</th>
                             <th class="px-4 py-3 font-medium text-gray-600">Deskripsi</th>
-                            <th class="px-4 py-3 font-medium text-gray-600">Urutan</th>
                             <th class="px-4 py-3 font-medium text-gray-600 w-32">Aksi</th>
                         </tr>
                     </thead>
@@ -31,7 +30,6 @@
                             <td class="px-4 py-3">{{ $loop->iteration }}</td>
                             <td class="px-4 py-3">{{ Str::limit($item->judul, 40) }}</td>
                             <td class="px-4 py-3 max-w-xs truncate">{{ Str::limit($item->deskripsi, 60) }}</td>
-                            <td class="px-4 py-3">{{ $item->urutan ?? '-' }}</td>
                             <td class="px-4 py-3">
                                 <div class="flex items-center gap-2">
                                     <a href="{{ route('admin.faq.edit', $item->id) }}" class="inline-flex items-center px-3 py-1.5 bg-yellow-100 text-yellow-700 rounded hover:bg-yellow-200 transition text-xs">
@@ -48,7 +46,7 @@
                             </td>
                         </tr>
                         @empty
-                        <tr><td colspan="5" class="px-4 py-8 text-center text-gray-500">Belum ada FAQ</td></tr>
+                        <tr><td colspan="4" class="px-4 py-8 text-center text-gray-500">Belum ada FAQ</td></tr>
                         @endforelse
                     </tbody>
                 </table>
@@ -68,11 +66,6 @@
                     <label class="block text-sm font-medium text-gray-700 mb-1">Deskripsi</label>
                     <textarea name="deskripsi" rows="4" class="w-full border border-gray-300 rounded-lg px-3 py-2 focus:ring-admin-500 focus:border-holiday @error('deskripsi') border-red-500 @enderror">{{ old('deskripsi') }}</textarea>
                     @error('deskripsi') <p class="text-red-500 text-xs mt-1">{{ $message }}</p> @enderror
-                </div>
-                <div>
-                    <label class="block text-sm font-medium text-gray-700 mb-1">Urutan</label>
-                    <input type="number" name="urutan" value="{{ old('urutan') }}" class="w-full border border-gray-300 rounded-lg px-3 py-2 focus:ring-admin-500 focus:border-holiday @error('urutan') border-red-500 @enderror">
-                    @error('urutan') <p class="text-red-500 text-xs mt-1">{{ $message }}</p> @enderror
                 </div>
                 <button type="submit" class="w-full px-4 py-2 bg-holiday text-white rounded-lg hover:bg-holiday-dark transition">Simpan</button>
             </form>

@@ -26,8 +26,8 @@ class HomeController extends Controller
 {
     public function index()
     {
-        $destinasi = Destinasi::where('status', 'aktif')->take(6)->get();
-        $paket = $destinasi;
+        $destinasi = Destinasi::where('status', 'aktif')->inRandomOrder()->take(5)->get();
+        $paket = Destinasi::where('status', 'aktif')->latest()->take(6)->get();
         $armada = Destinasi::where('status', 'aktif')->take(4)->get();
         $ulasan = Ulasan::where('ditampilkan', true)->get();
         $galeri = Galeri::take(8)->get();
@@ -167,12 +167,13 @@ class HomeController extends Controller
     public function bantuan()
     {
         $halaman = HalamanStatis::where('tipe', 'bantuan')->first();
+        $faqs = \App\Models\Faq::orderBy('id')->get();
         $footerModel = SectHomeFooter::first();
         $footerData = $footerModel ? [
             'footer_judul' => $footerModel->judul,
             'footer_tentang' => $footerModel->tentang,
             'footer_copyright' => $footerModel->copyright,
         ] : [];
-        return view('bantuan', compact('halaman', 'footerData'));
+        return view('bantuan', compact('halaman', 'footerData', 'faqs'));
     }
 }
