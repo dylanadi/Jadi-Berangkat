@@ -74,7 +74,7 @@
 
 @section('content')
 <!-- HERO SECTION SLIDER -->
-<section class="relative h-[65vh] w-full mt-0 overflow-hidden bg-ink" id="hero-slider">
+<section class="relative h-[65vh] w-full overflow-hidden bg-ink" id="hero-slider">
     @if(isset($slider_destinasi) && $slider_destinasi->count() > 0)
         @foreach($slider_destinasi as $index => $slide)
         <div class="hero-slide absolute inset-0 w-full h-full transition-opacity duration-1000 ease-in-out {{ $index === 0 ? 'opacity-100 z-10' : 'opacity-0 z-0 pointer-events-none' }}" data-slide="{{ $index }}">
@@ -82,7 +82,7 @@
             <div class="absolute inset-0 bg-gradient-to-t from-ink via-ink/60 to-black/30"></div>
             <div class="absolute inset-0 flex flex-col justify-center items-center text-center px-6 mt-16">
                 <div class="slide-content transform transition-all duration-1000 ease-out {{ $index === 0 ? 'translate-y-0 opacity-100' : 'translate-y-8 opacity-0' }} max-w-4xl">
-                    <span class="inline-block text-holiday-light font-bold text-sm tracking-widest uppercase mb-4 drop-shadow-md bg-black/20 px-4 py-1.5 rounded-full backdrop-blur-sm">{{ $slide->kategori }}</span>
+                    <!-- <span class="inline-block text-holiday-light font-bold text-sm tracking-widest uppercase mb-4 drop-shadow-md bg-black/20 px-4 py-1.5 rounded-full backdrop-blur-sm">{{ $slide->kategori }}</span> -->
                     <h1 class="text-4xl md:text-6xl lg:text-7xl font-extrabold text-white drop-shadow-2xl mb-4 leading-tight">{{ $slide->nama }}</h1>
                     <p class="text-white/90 text-base md:text-lg lg:text-xl font-medium max-w-2xl mx-auto drop-shadow-md line-clamp-2">
                         {{ $slide->deskripsi_singkat ?? Str::limit(strip_tags($slide->deskripsi), 120) }}

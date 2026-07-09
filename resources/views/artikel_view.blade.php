@@ -35,7 +35,7 @@
 @section('content')
 
 {{-- Article Hero Section --}}
-<div id="article-hero" class="relative w-full h-[70vh] md:h-[80vh] overflow-hidden bg-slate-900 -mt-24">
+<div id="article-hero" class="relative w-full h-[70vh] md:h-[80vh] overflow-hidden bg-slate-900">
     @auth
     <div class="absolute top-6 right-6 z-30">
         <a href="{{ route('admin.artikel.edit', $artikel->id) }}" class="inline-flex items-center gap-1.5 px-4 py-2 bg-holiday-600 text-white text-xs font-bold rounded-full hover:bg-holiday-700 transition shadow-md">

@@ -128,7 +128,7 @@
     </nav>
 </div>
 
-<section class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pb-16">
+<section class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-32 pb-16">
     <!-- Floating Category Menu -->
     <div id="floatingCategoryWrapper" class="floating-category-wrapper">
         <i class="bi bi-funnel-fill mobile-filter-icon lg:hidden"></i>

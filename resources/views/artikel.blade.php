@@ -82,7 +82,7 @@
 @section('content')
 
 <!-- HERO SECTION SLIDER -->
-<section class="relative h-[85vh] w-full overflow-hidden bg-slate-900 -mt-24">
+<section class="relative h-[85vh] w-full overflow-hidden bg-slate-900">
     <div id="hero-slider" class="relative h-full w-full">
         
         <!-- Slide 1: Pantai Boom Banyuwangi -->

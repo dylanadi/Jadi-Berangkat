@@ -113,6 +113,14 @@
         .edit-mode-active .icon-edit-overlay { opacity:1; pointer-events:auto; }
         .icon-edit-overlay button { background:#2f6f42;color:#fff;border:none;border-radius:50%;width:24px;height:24px;font-size:12px;cursor:pointer;display:flex;align-items:center;justify-content:center;box-shadow:0 2px 5px rgba(0,0,0,0.2); }
         .icon-edit-overlay button:hover { background:#17442a; }
+        .lang-btn { opacity: 0.7; border: 2px solid transparent !important; transition: all 0.3s ease; cursor: pointer; filter: grayscale(50%); }
+        .lang-btn.active { opacity: 1; border-color: #2e7d32 !important; filter: grayscale(0%); }
+        .lang-btn-mob { opacity: 0.7; border: 1px solid transparent !important; transition: all 0.3s ease; background: transparent; filter: grayscale(50%); }
+        .lang-btn-mob.active { opacity: 1; border-color: #2e7d32 !important; background: #F6F5ED; filter: grayscale(0%); }
+        
+        /* Hide Google Translate UI */
+        .skiptranslate, #google_translate_element { display: none !important; }
+        body { top: 0px !important; }
     </style>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/tinymce/6.8.3/tinymce.min.js" referrerpolicy="origin"></script>
     <style>
@@ -134,6 +142,23 @@
     </style>
 </head>
 <body class="text-gray-800 overflow-x-hidden antialiased min-h-screen flex flex-col" @auth style="color: {{ Auth::user()->text_color ?? '#151813' }} !important;" @endauth>
+    <div id="google_translate_element"></div>
+    <script type="text/javascript">
+        function googleTranslateElementInit() {
+            new google.translate.TranslateElement({pageLanguage: 'id', includedLanguages: 'id,en', autoDisplay: false}, 'google_translate_element');
+        }
+        function switchLanguage(lang) {
+            const selectField = document.querySelector(".goog-te-combo");
+            if (selectField) {
+                selectField.value = lang;
+                selectField.dispatchEvent(new Event('change'));
+                localStorage.setItem('preferred_lang', lang);
+                document.querySelectorAll('.lang-btn, .lang-btn-mob').forEach(b => b.classList.remove('active'));
+                document.querySelectorAll('.lang-' + lang).forEach(b => b.classList.add('active'));
+            }
+        }
+    </script>
+    <script type="text/javascript" src="//translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"></script>
 
     {{-- Navbar & Sidebar --}}
     <div id="menu-overlay" class="fixed inset-0 !bg-black/60 z-[60] hidden opacity-0 backdrop-blur-sm"></div>
@@ -194,11 +219,11 @@
             <div class="flex items-center justify-between p-4 rounded-2xl !bg-white border !border-black/5 shadow-sm">
                 <span class="text-sm font-bold !text-gray-700">Bahasa</span>
                 <div class="flex items-center gap-2">
-                    <button onclick="switchLanguage('id')" class="lang-selector-id-mob flex items-center gap-2 !bg-base px-3 py-2 rounded-xl border !border-black/5 hover:!border-holiday transition">
+                    <button onclick="switchLanguage('id')" class="lang-btn-mob lang-id px-3 py-2 rounded-xl hover:!border-holiday flex items-center gap-2 active">
                         <img src="https://flagcdn.com/id.svg" class="w-5 h-auto rounded-sm shadow-sm" alt="ID">
                         <span class="font-bold text-sm">ID</span>
                     </button>
-                    <button onclick="switchLanguage('en')" class="lang-selector-en-mob flex items-center gap-2 !bg-transparent px-3 py-2 rounded-xl border !border-transparent hover:!bg-base hover:!border-black/5 transition">
+                    <button onclick="switchLanguage('en')" class="lang-btn-mob lang-en px-3 py-2 rounded-xl hover:!border-holiday flex items-center gap-2">
                         <img src="https://flagcdn.com/gb.svg" class="w-5 h-auto rounded-sm shadow-sm" alt="EN">
                         <span class="font-bold text-sm !text-gray-400 hover:!text-ink">EN</span>
                     </button>
@@ -271,8 +296,8 @@
             <div class="flex items-center gap-4">
                 <a href="{{ url('/privasi') }}" class="hidden md:flex items-center justify-center w-11 h-11 rounded-full border !border-black/10 !text-ink hover:!text-holiday hover:!border-holiday transition !bg-white/50 backdrop-blur-md" title="Kebijakan Privasi"><i class="bi bi-shield-check text-xl"></i></a>
                 <div class="hidden md:flex items-center gap-3 border-l !border-black/10 pl-4" aria-label="Pilihan bahasa">
-                    <button onclick="switchLanguage('id')" class="lang-selector-id w-7 h-7 rounded-full overflow-hidden border !border-black/10 hover:opacity-80 transition" aria-label="Bahasa Indonesia"><img src="https://flagcdn.com/id.svg" alt="ID" class="w-full h-full object-cover"></button>
-                    <button onclick="switchLanguage('en')" class="lang-selector-en w-7 h-7 rounded-full overflow-hidden border !border-black/10 hover:opacity-80 transition" aria-label="English"><img src="https://flagcdn.com/gb.svg" alt="EN" class="w-full h-full object-cover"></button>
+                    <button onclick="switchLanguage('id')" class="lang-btn lang-id w-7 h-7 rounded-full overflow-hidden hover:opacity-100 transition active" aria-label="Bahasa Indonesia"><img src="https://flagcdn.com/id.svg" alt="ID" class="w-full h-full object-cover"></button>
+                    <button onclick="switchLanguage('en')" class="lang-btn lang-en w-7 h-7 rounded-full overflow-hidden hover:opacity-100 transition" aria-label="English"><img src="https://flagcdn.com/gb.svg" alt="EN" class="w-full h-full object-cover"></button>
                 </div>
                 <button id="open-menu-btn" class="md:hidden w-11 h-11 flex items-center justify-center rounded-full !bg-ink !text-white border !border-black/10 hover:!bg-holiday transition">
                     <i class="bi bi-list text-2xl"></i>
@@ -284,7 +309,7 @@
     @php
         $isHeroPage = request()->is('/') || request()->is('tentang') || request()->is('destinasi');
     @endphp
-    <main class="flex-1 {{ $isHeroPage ? '' : 'pt-24' }}">
+    <main class="flex-grow {{ $isHeroPage ? '' : 'pt-24' }}">
         @yield('content')
     </main>
 
@@ -405,6 +430,46 @@
             });
         }
     </script>
+    
+    {{-- Google Translate Integration --}}
+    <div id="google_translate_element"></div>
+    <script type="text/javascript">
+        function googleTranslateElementInit() {
+            new google.translate.TranslateElement({pageLanguage: 'id', autoDisplay: false}, 'google_translate_element');
+        }
+        
+        function switchLanguage(lang) {
+            var domain = window.location.hostname;
+            // Update cookie
+            if (lang === 'en') {
+                document.cookie = "googtrans=/id/en; path=/";
+                document.cookie = "googtrans=/id/en; path=/; domain=" + domain;
+            } else {
+                // Clear cookie for original language (ID)
+                document.cookie = "googtrans=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
+                document.cookie = "googtrans=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/; domain=" + domain;
+                document.cookie = "googtrans=/id/id; path=/";
+                document.cookie = "googtrans=/id/id; path=/; domain=" + domain;
+            }
+            window.location.reload();
+        }
+
+        // Set active class based on cookie
+        document.addEventListener('DOMContentLoaded', function() {
+            var isEnglish = document.cookie.indexOf('googtrans=/id/en') !== -1;
+            var btnsId = document.querySelectorAll('.lang-id');
+            var btnsEn = document.querySelectorAll('.lang-en');
+            
+            if (isEnglish) {
+                btnsId.forEach(b => b.classList.remove('active'));
+                btnsEn.forEach(b => b.classList.add('active'));
+            } else {
+                btnsId.forEach(b => b.classList.add('active'));
+                btnsEn.forEach(b => b.classList.remove('active'));
+            }
+        });
+    </script>
+    <script type="text/javascript" src="//translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"></script>
 
     @stack('scripts')
 
