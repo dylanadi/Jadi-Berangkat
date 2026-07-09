@@ -103,6 +103,7 @@ class HomeController extends Controller
         $visimisi = SectVisimisi::with('misiItems')->first();
         $nilai = SectNilai::with('cardNilai')->first();
         $galeriAbout = SectGaleriAbout::with('items.gambar')->first();
+        $galeriDatabase = \App\Models\Galeri::with('image')->latest()->take(5)->get();
 
         $dataArr = (array) $data;
         if ($aboutHero) {
@@ -145,7 +146,7 @@ class HomeController extends Controller
 
         return view('tentang', compact(
             'data', 'halaman', 'mediaSosial', 'footerData',
-            'aboutHero', 'kisah', 'visimisi', 'nilai', 'galeriAbout'
+            'aboutHero', 'kisah', 'visimisi', 'nilai', 'galeriAbout', 'galeriDatabase'
         ));
     }
 

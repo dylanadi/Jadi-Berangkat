@@ -648,205 +648,9 @@ document.addEventListener('keydown', function(e) {
   var currentImg = null;
   var currentField = null;
 
-  function createImagePickerModal() {
-    var modal = document.createElement('div');
-    modal.id = 'image-picker-modal';
-    modal.style.cssText = 'position:fixed;inset:0;z-index:99999;background:rgba(0,0,0,0.6);display:none;align-items:center;justify-content:center;backdrop-filter:blur(4px);';
-    modal.innerHTML = '<div style="background:#fff;border-radius:16px;padding:24px;max-width:720px;width:95%;max-height:90vh;overflow-y:auto;box-shadow:0 24px 48px rgba(0,0,0,0.3);">' +
-      '<div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:16px;">' +
-        '<h3 style="font-size:18px;font-weight:800;color:#151813;">Pilih Gambar</h3>' +
-        '<button id="picker-close-btn" style="width:32px;height:32px;border:none;background:#f3f4f6;border-radius:8px;cursor:pointer;font-size:18px;display:flex;align-items:center;justify-content:center;color:#6b7280;"><i class="bi bi-x"></i></button>' +
-      '</div>' +
-      '<div style="display:flex;gap:8px;margin-bottom:16px;flex-wrap:wrap;">' +
-        '<button id="picker-tab-gallery" style="padding:8px 16px;border:none;border-radius:8px;font-size:13px;font-weight:700;cursor:pointer;background:#2f6f42;color:#fff;">Galeri</button>' +
-        '<button id="picker-tab-upload" style="padding:8px 16px;border:1px solid #d1d5db;border-radius:8px;font-size:13px;font-weight:600;cursor:pointer;background:#fff;color:#374151;">Upload Baru</button>' +
-      '</div>' +
-      '<div id="picker-gallery-view">' +
-        '<div id="picker-gallery-grid" style="display:grid;grid-template-columns:repeat(auto-fill,minmax(120px,1fr));gap:10px;max-height:400px;overflow-y:auto;padding:4px;">' +
-          '<div style="grid-column:1/-1;text-align:center;padding:40px 0;color:#9ca3af;font-size:14px;"><i class="bi bi-arrow-clockwise" style="display:block;font-size:24px;margin-bottom:8px;"></i>Memuat gambar...</div>' +
-        '</div>' +
-      '</div>' +
-      '<div id="picker-upload-view" style="display:none;">' +
-        '<div style="border:2px dashed #d1d5db;border-radius:12px;padding:32px 20px;cursor:pointer;transition:all 0.2s;background:#f9fafb;text-align:center;" id="picker-dropzone">' +
-          '<i class="bi bi-cloud-upload" style="font-size:36px;color:#2f6f42;display:block;margin-bottom:8px;"></i>' +
-          '<p style="font-size:13px;color:#6b7280;font-weight:500;">Tarik file ke sini atau klik untuk memilih</p>' +
-          '<p style="font-size:11px;color:#9ca3af;margin-top:4px;">PNG, JPG, WebP — Maks 5MB</p>' +
-          '<input type="file" id="picker-file-input" accept="image/*" style="display:none;">' +
-        '</div>' +
-        '<div id="picker-upload-preview" style="display:none;margin-top:12px;text-align:center;">' +
-          '<img id="picker-preview-img" style="max-height:180px;border-radius:8px;margin:0 auto;display:block;max-width:100%;">' +
-          '<div id="picker-upload-progress" style="display:none;margin-top:10px;height:4px;background:#e5e7eb;border-radius:4px;overflow:hidden;"><div style="height:100%;width:0%;background:#2f6f42;transition:width 0.3s;"></div></div>' +
-          '<button id="picker-upload-btn" style="margin-top:12px;padding:10px 24px;border:none;border-radius:10px;font-size:13px;font-weight:700;cursor:pointer;background:#2f6f42;color:#fff;display:none;">Upload & Pilih</button>' +
-        '</div>' +
-      '</div>' +
-    '</div>';
-    document.body.appendChild(modal);
-
-    var closeBtn = modal.querySelector('#picker-close-btn');
-    var tabGallery = modal.querySelector('#picker-tab-gallery');
-    var tabUpload = modal.querySelector('#picker-tab-upload');
-    var galleryView = modal.querySelector('#picker-gallery-view');
-    var uploadView = modal.querySelector('#picker-upload-view');
-    var galleryGrid = modal.querySelector('#picker-gallery-grid');
-    var dropzone = modal.querySelector('#picker-dropzone');
-    var fileInput = modal.querySelector('#picker-file-input');
-    var uploadPreview = modal.querySelector('#picker-upload-preview');
-    var previewImg = modal.querySelector('#picker-preview-img');
-    var uploadProgress = modal.querySelector('#picker-upload-progress');
-    var progressBar = uploadProgress.querySelector('div');
-    var uploadBtn = modal.querySelector('#picker-upload-btn');
-
-    closeBtn.addEventListener('click', closeModal);
-    modal.addEventListener('click', function(e) { if (e.target === modal) closeModal(); });
-
-    tabGallery.addEventListener('click', function() {
-      tabGallery.style.background = '#2f6f42'; tabGallery.style.color = '#fff';
-      tabUpload.style.background = '#fff'; tabUpload.style.color = '#374151'; tabUpload.style.borderColor = '#d1d5db';
-      galleryView.style.display = 'block';
-      uploadView.style.display = 'none';
-    });
-
-    tabUpload.addEventListener('click', function() {
-      tabUpload.style.background = '#2f6f42'; tabUpload.style.color = '#fff';
-      tabGallery.style.background = '#fff'; tabGallery.style.color = '#374151'; tabGallery.style.borderColor = '#d1d5db';
-      galleryView.style.display = 'none';
-      uploadView.style.display = 'block';
-    });
-
-    dropzone.addEventListener('click', function() { fileInput.click(); });
-    dropzone.addEventListener('dragover', function(e) { e.preventDefault(); dropzone.style.borderColor = '#2f6f42'; dropzone.style.background = '#f0fdf4'; });
-    dropzone.addEventListener('dragleave', function() { dropzone.style.borderColor = '#d1d5db'; dropzone.style.background = '#f9fafb'; });
-    dropzone.addEventListener('drop', function(e) { e.preventDefault(); dropzone.style.borderColor = '#d1d5db'; dropzone.style.background = '#f9fafb'; if (e.dataTransfer.files.length) handlePickerFile(e.dataTransfer.files[0]); });
-    fileInput.addEventListener('change', function() { if (this.files.length) handlePickerFile(this.files[0]); });
-
-    function handlePickerFile(file) {
-      if (!file.type.startsWith('image/')) { showToast('Hanya file gambar yang diizinkan', 'error'); return; }
-      if (file.size > 5 * 1024 * 1024) { showToast('Maksimal 5MB', 'error'); return; }
-      var reader = new FileReader();
-      reader.onload = function(e) {
-        previewImg.src = e.target.result;
-        uploadPreview.style.display = 'block';
-        uploadBtn.style.display = 'inline-block';
-        uploadBtn._file = file;
-      };
-      reader.readAsDataURL(file);
-    }
-
-    uploadBtn.addEventListener('click', function() {
-      var file = uploadBtn._file;
-      if (!file) return;
-      var fd = new FormData();
-      fd.append('image', file);
-      fd.append('field', currentField || '');
-      fd.append('tipe', currentImg && currentImg.dataset.editTipe || '');
-      fd.append('_token', document.querySelector('meta[name="csrf-token"]').content);
-      uploadProgress.style.display = 'block';
-      uploadBtn.disabled = true;
-      uploadBtn.textContent = 'Mengupload...';
-      var xhr = new XMLHttpRequest();
-      xhr.open('POST', '/admin/upload-image');
-      xhr.upload.onprogress = function(e) {
-        if (e.lengthComputable) progressBar.style.width = (e.loaded / e.total * 100) + '%';
-      };
-      xhr.onload = function() {
-        uploadBtn.disabled = false;
-        uploadBtn.textContent = 'Upload & Pilih';
-        uploadProgress.style.display = 'none';
-        progressBar.style.width = '0%';
-        if (xhr.status === 200) {
-          var res = JSON.parse(xhr.responseText);
-          if (res.url && currentImg) {
-            currentImg.src = res.url;
-            showToast('Gambar berhasil diganti', 'success');
-            closeModal();
-          } else {
-            showToast(res.error || 'Gagal upload', 'error');
-          }
-        } else {
-          showToast('Gagal upload gambar', 'error');
-        }
-      };
-      xhr.onerror = function() { showToast('Gagal upload gambar', 'error'); uploadBtn.disabled = false; uploadBtn.textContent = 'Upload & Pilih'; };
-      xhr.send(fd);
-    });
-
-    function loadGallery() {
-      galleryGrid.innerHTML = '<div style="grid-column:1/-1;text-align:center;padding:40px 0;color:#9ca3af;font-size:14px;"><i class="bi bi-arrow-clockwise" style="display:block;font-size:24px;margin-bottom:8px;"></i>Memuat gambar...</div>';
-      fetch('/admin/images', {
-        headers: { 'Accept': 'application/json', 'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').content }
-      })
-      .then(function(r) { return r.json(); })
-      .then(function(data) {
-        if (!data.images || !data.images.length) {
-          galleryGrid.innerHTML = '<div style="grid-column:1/-1;text-align:center;padding:40px 0;color:#9ca3af;font-size:14px;"><i class="bi bi-image" style="display:block;font-size:24px;margin-bottom:8px;"></i>Belum ada gambar</div>';
-          return;
-        }
-        galleryGrid.innerHTML = '';
-          data.images.forEach(function(img) {
-            var item = document.createElement('div');
-            item.style.cssText = 'border:2px solid #e5e7eb;border-radius:10px;overflow:hidden;cursor:pointer;position:relative;aspect-ratio:1;background:#f9fafb;transition:border-color 0.2s;';
-            item.innerHTML = '<img src="' + img.url + '" style="width:100%;height:100%;object-fit:cover;" loading="lazy" onerror="this.style.display=\'none\'">';
-            item.addEventListener('click', function() {
-              if (currentImg) {
-                currentImg.src = img.url;
-                if (currentImg.dataset.editField) {
-                  var imgField = currentImg.dataset.editField;
-                  currentImg.dataset.editValue = img.path;
-                  var saveData = { field: imgField, value: String(img.image_id || img.path), tipe: currentImg.dataset.editTipe || 'tentang' };
-                  if (img.image_id) saveData.image_id = img.image_id;
-                  fetch('/admin/inline-update', {
-                    method: 'POST',
-                    headers: {
-                      'Content-Type': 'application/json',
-                      'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').content,
-                      'Accept': 'application/json'
-                    },
-                    body: JSON.stringify(saveData)
-                  })
-                  .then(function(r) { return r.json(); })
-                  .then(function(res) {
-                    if (res.success) showToast('Gambar berhasil dipilih', 'success');
-                    else showToast('Gagal menyimpan', 'error');
-                  })
-                  .catch(function() { showToast('Gagal menyimpan gambar', 'error'); });
-                }
-                closeModal();
-              }
-            });
-            galleryGrid.appendChild(item);
-          });
-      })
-      .catch(function() {
-        galleryGrid.innerHTML = '<div style="grid-column:1/-1;text-align:center;padding:40px 0;color:#ef4444;font-size:14px;"><i class="bi bi-exclamation-triangle" style="display:block;font-size:24px;margin-bottom:8px;"></i>Gagal memuat gambar</div>';
-      });
-    }
-
-    function closeModal() {
-      modal.style.display = 'none';
-      currentImg = null;
-      currentField = null;
-      uploadPreview.style.display = 'none';
-      uploadBtn.style.display = 'none';
-      uploadBtn._file = null;
-      uploadProgress.style.display = 'none';
-      progressBar.style.width = '0%';
-      dropzone.style.borderColor = '#d1d5db';
-      dropzone.style.background = '#f9fafb';
-    }
-
-    modal._open = function(img, field) {
-      currentImg = img;
-      currentField = field || '';
-      modal.style.display = 'flex';
-      tabGallery.click();
-      loadGallery();
-    };
-
-    return modal;
-  }
-
+  
   document.addEventListener('DOMContentLoaded', function() {
-    imagePickerModal = createImagePickerModal();
+    
     document.querySelectorAll('[data-image-edit]').forEach(function(img) {
       if (img.parentElement.classList.contains('img-wrapper')) return;
       var wrapper = document.createElement('div');
@@ -867,7 +671,39 @@ document.addEventListener('keydown', function(e) {
         if (url) {
           window.open(url, '_blank');
         } else {
-          imagePickerModal._open(img, img.dataset.editField || '');
+          if (typeof window.openImagePicker === 'function') {
+            window.openImagePicker(function(selectedImg) {
+              if (img) {
+                img.src = selectedImg.url;
+                if (img.dataset.editField) {
+                  var imgField = img.dataset.editField;
+                  var saveData = { 
+                      field: imgField, 
+                      value: String(selectedImg.id || selectedImg.path), 
+                      tipe: img.dataset.editTipe || 'tentang',
+                      image_id: selectedImg.id
+                  };
+                  fetch('/admin/inline-update', {
+                    method: 'POST',
+                    headers: {
+                      'Content-Type': 'application/json',
+                      'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').content,
+                      'Accept': 'application/json'
+                    },
+                    body: JSON.stringify(saveData)
+                  })
+                  .then(function(r) { return r.json(); })
+                  .then(function(res) {
+                    if (res.success) showToast('Gambar berhasil diganti', 'success');
+                    else showToast('Gagal menyimpan', 'error');
+                  })
+                  .catch(function() { showToast('Gagal menyimpan gambar', 'error'); });
+                }
+              }
+            });
+          } else {
+             alert('Image picker not loaded!');
+          }
         }
       });
       overlay.appendChild(btn);
@@ -1016,5 +852,8 @@ function googleTranslateElementInit() {
 </script>
 <script type="text/javascript" src="//translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"></script>
 
+  @auth
+    @include('admin.components.image-picker')
+  @endauth
 </body>
 </html>

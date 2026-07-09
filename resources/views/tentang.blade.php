@@ -175,19 +175,18 @@
     </div>
 
     @php
-        $galeriItems = $galeriAbout?->items?->sortBy('urutan') ?? collect();
+        $galeriItems = $galeriDatabase ?? collect();
     @endphp
 
     <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-12 gap-5">
-        @foreach($galeriItems as $gi)
+        @foreach($galeriItems as $index => $gi)
             @php
-                $imgUrl = $gi->gambar?->url ?? '';
-                $videoUrl = $gi->video_url ?? '';
-                $tag = $gi->tag ?? '';
+                $urutan = $index + 1;
+                $imgUrl = $gi->image?->url ?? asset('img/placeholder.png');
+                $tag = $gi->kategori ?? '';
                 $colSpan = '';
                 $heightClass = '';
-                $isVideo = $gi->is_video;
-                switch($gi->urutan) {
+                switch($urutan) {
                     case 1: $colSpan = 'md:col-span-4'; $heightClass = 'min-h-[320px]'; break;
                     case 2: $colSpan = 'md:col-span-5'; $heightClass = ''; break;
                     case 3: $colSpan = 'md:col-span-3'; $heightClass = ''; break;
@@ -195,49 +194,18 @@
                     case 5: $colSpan = 'md:col-span-3'; $heightClass = ''; break;
                     default: $colSpan = 'md:col-span-4'; $heightClass = ''; break;
                 }
-                $editField = '';
-                switch($gi->urutan) {
-                    case 1: $editField = 'tentang_galeri_img_1'; break;
-                    case 2: $editField = 'tentang_galeri_img_2'; break;
-                    case 3: $editField = 'tentang_galeri_img_3'; break;
-                    case 4: $editField = 'tentang_galeri_img_4'; break;
-                    case 5: $editField = 'tentang_galeri_img_5'; break;
-                    default: $editField = ''; break;
-                }
             @endphp
 
-            @if($isVideo)
-                <div class="{{ $colSpan }} relative rounded-xl overflow-hidden aspect-[4/3] bg-slate-950 shadow-sm flex items-center justify-center group">
-                    @if($imgUrl)
-                        <img src="{{ $imgUrl }}" @if($editField) data-image-edit data-edit-field="{{ $editField }}" data-edit-tipe="tentang" @endif class="absolute inset-0 w-full h-full object-cover opacity-70 group-hover:scale-105 transition duration-500" alt="{{ $tag }}">
-                    @endif
-                    <span class="absolute top-3 right-3 bg-red-600 text-white text-[8px] font-bold px-1.5 py-0.5 rounded">VIDEO</span>
-                    @if($videoUrl)
-                        <a href="{{ $videoUrl }}" target="_blank" class="relative z-10 w-11 h-11 bg-white/90 backdrop-blur-sm rounded-full text-slate-900 flex items-center justify-center text-base shadow-md hover:scale-110 transition">
-                            <i class="bi bi-play-fill ml-0.5"></i>
-                        </a>
-                    @else
-                        <button class="relative z-10 w-11 h-11 bg-white/90 backdrop-blur-sm rounded-full text-slate-900 flex items-center justify-center text-base shadow-md hover:scale-110 transition">
-                            <i class="bi bi-play-fill ml-0.5"></i>
-                        </button>
-                    @endif
-                </div>
-            @else
-                <div class="{{ $colSpan }} relative rounded-xl overflow-hidden {{ $heightClass }} shadow-sm @if($gi->urutan == 4) bg-gradient-to-br from-slate-100 to-slate-200/60 p-6 flex flex-col justify-end @else group @endif">
-                    @if($editField)
-                        <img src="{{ $imgUrl }}" data-image-edit data-edit-field="{{ $editField }}" data-edit-tipe="tentang" class="absolute inset-0 w-full h-full object-cover @if($gi->urutan == 4) opacity-20 filter grayscale @else @if($gi->urutan != 4) group-hover:scale-105 transition duration-500 @endif @endif" alt="{{ $tag }}">
-                    @elseif($imgUrl)
-                        <img src="{{ $imgUrl }}" class="w-full h-full object-cover" alt="{{ $tag }}">
-                    @endif
-                    @if($tag && $gi->urutan == 1)
-                        <div class="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent"></div>
-                        <span class="absolute bottom-4 left-4 bg-emerald-600 text-white text-[9px] font-extrabold uppercase px-2 py-0.5 rounded">{{ $tag }}</span>
-                    @endif
-                    @if($gi->urutan == 4)
-                        <p class="font-extrabold text-slate-800 text-xs tracking-wider uppercase relative z-10"><i class="bi bi-people-fill text-emerald-600 mr-1.5"></i>{{ $tag }}</p>
-                    @endif
-                </div>
-            @endif
+            <div class="{{ $colSpan }} relative rounded-xl overflow-hidden {{ $heightClass }} shadow-sm @if($urutan == 4) bg-gradient-to-br from-slate-100 to-slate-200/60 p-6 flex flex-col justify-end @else group @endif">
+                <img src="{{ $imgUrl }}" class="absolute inset-0 w-full h-full object-cover @if($urutan == 4) opacity-20 filter grayscale @else @if($urutan != 4) group-hover:scale-105 transition duration-500 @endif @endif" alt="{{ $tag }}">
+                @if($tag && $urutan == 1)
+                    <div class="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent"></div>
+                    <span class="absolute bottom-4 left-4 bg-emerald-600 text-white text-[9px] font-extrabold uppercase px-2 py-0.5 rounded">{{ $tag }}</span>
+                @endif
+                @if($urutan == 4)
+                    <p class="font-extrabold text-slate-800 text-xs tracking-wider uppercase relative z-10"><i class="bi bi-people-fill text-emerald-600 mr-1.5"></i>{{ $tag }}</p>
+                @endif
+            </div>
         @endforeach
     </div>
 </section>
