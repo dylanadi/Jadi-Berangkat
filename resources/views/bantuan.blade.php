@@ -5,11 +5,7 @@
 @section('content')
 {{-- Hero FAQ --}}
 <section class="relative pt-32 pb-20 bg-gradient-to-br from-emerald-900 via-slate-900 to-slate-950 overflow-hidden">
-    @auth
-    <a href="{{ route('admin.halaman.index') }}" target="_blank" class="absolute top-4 right-4 text-sm bg-[#2f6f42] text-white rounded-full p-2 shadow-lg hover:bg-[#255a35] transition z-50" title="Edit halaman ini">
-        <i class="bi bi-pencil-square"></i>
-    </a>
-    @endauth
+
     <div class="absolute inset-0 opacity-10">
         <div class="absolute top-10 left-10 w-72 h-72 bg-emerald-400 rounded-full blur-3xl"></div>
         <div class="absolute bottom-10 right-10 w-96 h-96 bg-emerald-300 rounded-full blur-3xl"></div>
@@ -21,9 +17,7 @@
         <h1 data-edit="judul" data-edit-type="text" data-edit-tipe="bantuan" class="text-3xl md:text-5xl font-black text-white tracking-tight leading-none mb-4">{!! $halaman->judul ?? 'Ada yang bisa kami bantu?' !!}
         </h1>
         <div class="text-emerald-100/70 text-sm md:text-base max-w-2xl mx-auto font-medium relative group">
-@auth
-<a href="{{ $halaman ? route('admin.halaman.edit', $halaman->id) : '#' }}" class="opacity-0 group-hover:opacity-100 absolute -top-2 -right-2 text-xs bg-[#2f6f42] text-white rounded-full p-1.5 shadow-lg hover:bg-[#255a35] transition-all z-50" title="Edit konten"><i class="bi bi-pencil-square"></i></a>
-@endauth
+
             {!! $halaman->konten ?? 'Temukan jawaban untuk pertanyaan yang paling sering diajukan. Jika masih bingung, jangan ragu hubungi kami langsung.' !!}
         </div>
     </div>
@@ -67,7 +61,7 @@
             <i class="bi bi-chat-dots text-4xl text-emerald-600 mb-3 block"></i>
             <h3 class="text-lg font-extrabold text-slate-900 mb-2">Masih punya pertanyaan?</h3>
             <p class="text-sm text-slate-600 mb-5 font-medium">Tim kami siap membantu kamu dengan senang hati.</p>
-            <a href="https://wa.me/6285196161351" target="_blank" class="inline-flex items-center gap-2 bg-emerald-600 hover:bg-emerald-700 text-white font-bold text-sm px-6 py-3 rounded-xl transition-colors shadow-md">
+            <a href="{{ $waLink }}" target="_blank" class="inline-flex items-center gap-2 bg-emerald-600 hover:bg-emerald-700 text-white font-bold text-sm px-6 py-3 rounded-xl transition-colors shadow-md">
                 <i class="bi bi-whatsapp"></i>Hubungi Kami
             </a>
         </div>

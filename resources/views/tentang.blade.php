@@ -13,7 +13,7 @@
                 <span class="w-1.5 h-1.5 bg-emerald-500 rounded-full animate-ping"></span><span data-edit="tentang_badge" data-edit-type="text" data-edit-tipe="tentang">{!! $data->tentang_badge ?? '' !!}</span>
             </div>
             <h1 class="text-3xl md:text-5xl font-black text-slate-900 tracking-tight leading-none">
-                <span data-edit="judul" data-edit-type="text" data-edit-tipe="tentang">{!! $data->judul ?? '' !!}</span> <br><span class="text-transparent bg-clip-text bg-gradient-to-r from-emerald-600 to-emerald-500">Dimulai dari Sini</span>
+                <span data-edit="judul" data-edit-type="text" data-edit-tipe="tentang">{!! $data->judul ?? '' !!}</span>
             </h1>
             <div data-edit="konten" data-edit-type="html" data-edit-tipe="tentang" class="text-sm md:text-base leading-relaxed max-w-2xl font-medium relative group" style="color: #000 !important">
                 {!! $data->konten ?? '' !!}
@@ -183,7 +183,7 @@
             @php
                 $urutan = $index + 1;
                 $imgUrl = $gi->image?->url ?? asset('img/placeholder.png');
-                $tag = $gi->kategori ?? '';
+                $tag = $gi->kategori?->nama_kategori ?? '';
                 $colSpan = '';
                 $heightClass = '';
                 switch($urutan) {

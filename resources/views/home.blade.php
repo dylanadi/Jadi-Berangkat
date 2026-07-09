@@ -169,7 +169,7 @@
                             <p class="text-xl font-extrabold text-holiday-dark">Rp {{ number_format($item->harga ?? 1250000, 0, ',', '.') }}</p>
                         </div>
                         <div class="flex gap-3">
-                            <a href="{{ url('/detail/' . ($item->slug ?? '#')) }}" class="flex-1 py-3 rounded-xl border border-gray-200 text-gray-700 font-extrabold hover:bg-gray-50 transition text-center">Detail</a>
+                            <a href="{{ url('/destinasi/' . ($item->slug ?? '#')) }}" class="flex-1 py-3 rounded-xl border border-gray-200 text-gray-700 font-extrabold hover:bg-gray-50 transition text-center">Detail</a>
                             <a href="{{ url('/booking/' . ($item->slug ?? '#')) }}" class="flex-1 py-3 rounded-xl bg-holiday text-white font-extrabold hover:bg-holiday-dark transition shadow-md shadow-holiday-glow text-center">Pesan</a>
                         </div>
                     </div>
@@ -242,7 +242,7 @@
                         <h3 class="text-2xl font-extrabold text-gray-900 mb-2">{!! $item->nama !!}</h3>
                         <p class="text-sm text-gray-500 mb-6 font-medium">{!! $item->deskripsi ?? '' !!}</p>
                     </div>
-                    <a href="{{ url('/detail/' . ($item->slug ?? '#')) }}" class="w-full py-3.5 rounded-xl bg-gray-50 border border-gray-200 text-gray-900 font-bold hover:bg-holiday hover:text-white transition-all mt-auto text-center">Lihat Detail</a>
+                    <a href="{{ url('/destinasi/' . ($item->slug ?? '#')) }}" class="w-full py-3.5 rounded-xl bg-gray-50 border border-gray-200 text-gray-900 font-bold hover:bg-holiday hover:text-white transition-all mt-auto text-center">Lihat Detail</a>
                 </div>
             </div>
             @empty

@@ -47,11 +47,11 @@
     <img id="article-image" src="{{ $artikel->image ? $artikel->image->url : asset('img/bluefire (1).webp') }}" class="w-full h-full object-cover" alt="{{ $artikel->judul }}">
     <div class="absolute inset-0 z-20 flex flex-col justify-end pb-16 md:pb-24 px-6 md:px-16 max-w-5xl mx-auto w-full">
         @if($artikel->kategori)
-        <span id="article-badge" class="inline-block w-fit bg-holiday-500 text-white text-[10px] font-black uppercase tracking-wider px-3 py-1.5 rounded-md mb-4">{{ strtoupper($artikel->kategori) }}</span>
+        <span id="article-badge" class="inline-block w-fit bg-holiday-500 text-white text-[10px] font-black uppercase tracking-wider px-3 py-1.5 rounded-md mb-4">{{ strtoupper($artikel->kategori->nama_kategori) }}</span>
         @endif
-        <h1 id="article-title" class="text-3xl md:text-5xl font-extrabold text-white leading-tight mb-4" data-edit="judul" data-edit-type="text" data-edit-route="{{ route('admin.artikel.edit', $artikel->id) }}">{{ $artikel->judul }}</h1>
+        <h1 id="article-title" class="text-3xl md:text-5xl font-extrabold text-white leading-tight mb-4">{{ $artikel->judul }}</h1>
         <div class="flex items-center gap-4 text-sm text-slate-300">
-            @if($artikel->penulis)<span class="flex items-center gap-1" data-edit="penulis" data-edit-type="text" data-edit-route="{{ route('admin.artikel.edit', $artikel->id) }}"><i class="bi bi-person"></i> {{ $artikel->penulis }}</span>@endif
+            @if($artikel->penulis)<span class="flex items-center gap-1"><i class="bi bi-person"></i> {{ $artikel->penulis }}</span>@endif
             @if($artikel->tanggal_terbit)
             <span id="article-date" class="flex items-center gap-1"><i class="bi bi-calendar3 text-holiday-400"></i> {{ $artikel->tanggal_terbit->format('d F Y') }}</span>
             @endif
@@ -75,8 +75,8 @@
         </div>
     </div>
     
-    <div id="article-content" class="article-content" data-edit="konten" data-edit-type="html" data-edit-route="{{ route('admin.artikel.edit', $artikel->id) }}">
-        {!! nl2br(e($artikel->konten)) !!}
+    <div id="article-content" class="article-content">
+        {!! $artikel->konten !!}
     </div>
 </section>
 

@@ -11,7 +11,7 @@ class MediaSosial extends Model
 
     protected $table = 'media_sosial';
 
-    protected $fillable = ['platform', 'link', 'ikon', 'aktif'];
+    protected $fillable = ['platform', 'link', 'nomor', 'ikon', 'aktif'];
 
     protected $casts = [
         'aktif' => 'boolean',

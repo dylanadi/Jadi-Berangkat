@@ -28,18 +28,26 @@ class PengaturanController extends Controller
     public function update(Request $request)
     {
         $keys = [
-            'hero_label', 'hero_judul', 'hero_deskripsi', 'hero_btn',
-            'statistik_1', 'statistik_1_label', 'statistik_2', 'statistik_2_label',
-            'statistik_3', 'statistik_3_label',
-            'cta_judul', 'cta_deskripsi', 'copyright',
+            'logo_full', 'logo_utama', 'logo_alt', 'timezone'
         ];
 
         foreach ($keys as $key) {
             if ($request->has($key)) {
-                PengaturanHalamanDepan::updateOrCreate(
-                    ['key' => $key],
-                    ['value' => $request->$key, 'tipe' => 'text']
-                );
+                $val = $request->$key;
+                
+                // If it's an image ID from the picker, resolve the path
+                if (in_array($key, ['logo_full', 'logo_utama']) && is_numeric($val)) {
+                    $val = \App\Models\Image::resolvePath($val);
+                }
+
+                if ($val !== null && $val !== '') {
+                    PengaturanHalamanDepan::updateOrCreate(
+                        ['key' => $key],
+                        ['value' => $val, 'tipe' => in_array($key, ['logo_full', 'logo_utama']) ? 'file' : 'text']
+                    );
+                } elseif (in_array($key, ['logo_full', 'logo_utama']) && $val === '') {
+                    PengaturanHalamanDepan::where('key', $key)->delete();
+                }
             }
         }
 
@@ -444,13 +452,19 @@ class PengaturanController extends Controller
     public function deleteImage(\App\Models\Image $image)
     {
         try {
-            if (\Illuminate\Support\Str::startsWith($image->path, 'storage/')) {
-                $path = str_replace('storage/', '', $image->path);
-                \Illuminate\Support\Facades\Storage::disk('public')->delete($path);
-                // Try deleting webp counterpart
+            $path = $image->path;
+            if (\Illuminate\Support\Str::startsWith($path, 'storage/')) {
+                $path = str_replace('storage/', '', $path);
+            }
+            
+            \Illuminate\Support\Facades\Storage::disk('public')->delete($path);
+            
+            // Try deleting webp counterpart
+            if (pathinfo($path, PATHINFO_EXTENSION) !== 'webp') {
                 $webpPath = pathinfo($path, PATHINFO_DIRNAME) . '/' . pathinfo($path, PATHINFO_FILENAME) . '.webp';
                 \Illuminate\Support\Facades\Storage::disk('public')->delete($webpPath);
             }
+            
             $image->delete();
             return response()->json(['success' => true, 'message' => 'Gambar berhasil dihapus']);
         } catch (\Exception $e) {

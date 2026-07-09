@@ -10,7 +10,6 @@ use App\Http\Controllers\Admin\DestinasiController as AdminDestinasiController;
 use App\Http\Controllers\Admin\UlasanController as AdminUlasanController;
 use App\Http\Controllers\Admin\GaleriController as AdminGaleriController;
 use App\Http\Controllers\Admin\ArtikelController as AdminArtikelController;
-use App\Http\Controllers\Admin\HalamanStatisController;
 use App\Http\Controllers\Admin\MediaSosialController;
 use App\Http\Controllers\Admin\PengaturanController;
 use App\Http\Controllers\Admin\SeoSettingsController;
@@ -44,9 +43,6 @@ Route::middleware(['auth'])->prefix('admin')->name('admin.')->group(function () 
     Route::resource('faq', FaqController::class)->except(['create', 'show']);
     Route::resource('kategori', KategoriController::class)->except(['create', 'show']);
 
-    Route::get('halaman', [HalamanStatisController::class, 'index'])->name('halaman.index');
-    Route::get('halaman/{halamanStatis}/edit', [HalamanStatisController::class, 'edit'])->name('halaman.edit');
-    Route::match(['put', 'post'], 'halaman/{halamanStatis}', [HalamanStatisController::class, 'update'])->name('halaman.update');
 
     Route::get('pengaturan', [PengaturanController::class, 'index'])->name('pengaturan.index');
     Route::post('pengaturan', [PengaturanController::class, 'update'])->name('pengaturan.update');

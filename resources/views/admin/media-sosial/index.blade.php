@@ -11,6 +11,11 @@
         <i class="bi bi-check-circle"></i> {{ session('success') }}
     </div>
     @endif
+    @if(session('error'))
+    <div class="flex items-center gap-2 p-4 bg-red-100 text-red-700 rounded-lg">
+        <i class="bi bi-x-circle"></i> {{ session('error') }}
+    </div>
+    @endif
 
     <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
         <div class="lg:col-span-2 bg-white rounded-lg shadow overflow-hidden">
@@ -34,7 +39,7 @@
                             <td class="px-4 py-3 max-w-xs truncate">
                                 <a href="{{ $item->link }}" target="_blank" class="text-blue-600 hover:underline">{{ $item->link }}</a>
                             </td>
-                            <td class="px-4 py-3 text-lg">{{ $item->ikon ? '<i class="bi bi-' . $item->ikon . '"></i>' : '-' }}</td>
+                            <td class="px-4 py-3 text-lg">{!! $item->ikon ? '<i class="' . (str_starts_with($item->ikon, 'bi ') ? $item->ikon : (str_starts_with($item->ikon, 'bi-') ? 'bi ' . $item->ikon : 'bi bi-' . $item->ikon)) . '"></i>' : '-' !!}</td>
                             <td class="px-4 py-3">
                                 @if($item->aktif)
                                 <span class="px-2 py-1 rounded text-xs bg-green-100 text-green-700">Ya</span>
@@ -47,6 +52,7 @@
                                     <a href="{{ route('admin.media-sosial.edit', $item->id) }}" class="inline-flex items-center px-3 py-1.5 bg-yellow-100 text-yellow-700 rounded hover:bg-yellow-200 transition text-xs">
                                         <i class="bi bi-pencil"></i>
                                     </a>
+                                    @if(strtolower($item->platform) !== 'whatsapp')
                                     <form action="{{ route('admin.media-sosial.destroy', $item->id) }}" method="POST" onsubmit="return confirm('Yakin ingin menghapus?')">
                                         @csrf
                                         @method('DELETE')
@@ -54,6 +60,7 @@
                                             <i class="bi bi-trash"></i>
                                         </button>
                                     </form>
+                                    @endif
                                 </div>
                             </td>
                         </tr>
@@ -65,8 +72,13 @@
             </div>
         </div>
 
-        <div class="bg-white rounded-lg shadow p-6">
+        <div class="bg-white rounded-lg shadow p-6 h-fit">
             <h2 class="text-lg font-semibold text-gray-800 mb-4">Tambah Media Sosial</h2>
+            @if($mediaSosial->count() >= 6)
+                <div class="p-4 bg-yellow-50 text-yellow-800 rounded-lg text-sm border border-yellow-200">
+                    <i class="bi bi-info-circle mr-2"></i>Maksimal 6 media sosial sudah tercapai. Hapus salah satu untuk menambahkan yang baru.
+                </div>
+            @else
             <form action="{{ route('admin.media-sosial.store') }}" method="POST" class="space-y-4">
                 @csrf
                 <div>
@@ -80,8 +92,21 @@
                     @error('link') <p class="text-red-500 text-xs mt-1">{{ $message }}</p> @enderror
                 </div>
                 <div>
-                    <label class="block text-sm font-medium text-gray-700 mb-1">Ikon (Bootstrap Icons class)</label>
-                    <input type="text" name="ikon" value="{{ old('ikon') }}" placeholder="e.g. instagram, facebook" class="w-full border border-gray-300 rounded-lg px-3 py-2 focus:ring-admin-500 focus:border-holiday @error('ikon') border-red-500 @enderror">
+                    <label class="block text-sm font-medium text-gray-700 mb-1">Nomor (Opsional, khusus WhatsApp)</label>
+                    <input type="text" name="nomor" value="{{ old('nomor') }}" placeholder="e.g. 628123456789" class="w-full border border-gray-300 rounded-lg px-3 py-2 focus:ring-admin-500 focus:border-holiday @error('nomor') border-red-500 @enderror">
+                    @error('nomor') <p class="text-red-500 text-xs mt-1">{{ $message }}</p> @enderror
+                </div>
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-1">Ikon</label>
+                    <div class="flex gap-2 items-center">
+                        <div id="previewIconMedia" class="w-12 h-12 rounded-xl bg-gray-50 border border-gray-200 flex items-center justify-center text-2xl text-holiday shrink-0">
+                            <i class="{{ old('ikon', 'bi bi-link-45deg') }}"></i>
+                        </div>
+                        <input type="hidden" name="ikon" id="inputIconMedia" value="{{ old('ikon', 'bi bi-link-45deg') }}">
+                        <button type="button" onclick="pilihIcon('Media')" class="flex-1 border border-gray-200 text-gray-600 px-4 py-2.5 rounded-xl hover:bg-gray-50 transition text-sm font-medium">
+                            Pilih Icon
+                        </button>
+                    </div>
                     @error('ikon') <p class="text-red-500 text-xs mt-1">{{ $message }}</p> @enderror
                 </div>
                 <div class="flex items-center gap-2">
@@ -90,7 +115,23 @@
                 </div>
                 <button type="submit" class="w-full px-4 py-2 bg-holiday text-white rounded-lg hover:bg-holiday-dark transition">Simpan</button>
             </form>
+            @endif
         </div>
     </div>
 </div>
+
+@include('admin.components.icon-picker')
+
+@push('scripts')
+<script>
+    function pilihIcon(target) {
+        if (typeof openIconPicker === 'function') {
+            openIconPicker(function(icon) {
+                document.getElementById('inputIconMedia').value = icon.class_name;
+                document.getElementById('previewIconMedia').innerHTML = `<i class="${icon.class_name}"></i>`;
+            });
+        }
+    }
+</script>
+@endpush
 @endsection

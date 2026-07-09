@@ -103,12 +103,13 @@
         }
         #navbar { transition: all 0.5s ease; }
         html { scroll-padding-top: 100px; }
-        .img-edit-overlay { position:absolute;top:0;right:0;z-index:999;opacity:0;transition:opacity 0.2s; }
-        .img-wrapper:hover .img-edit-overlay { opacity:1; }
-        .edit-mode-active .img-edit-overlay { opacity:1; }
+        .img-edit-overlay { position:absolute;top:0;right:0;z-index:999;opacity:0;transition:opacity 0.2s; pointer-events:none; }
+        .edit-mode-active .img-wrapper:hover .img-edit-overlay { opacity:1; pointer-events:auto; }
+        .edit-mode-active .img-edit-overlay { opacity:1; pointer-events:auto; }
         .img-edit-overlay button { width:36px;height:36px;background:#2f6f42;color:#fff;border:none;border-radius:0 0 0 8px;cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:16px;box-shadow:0 2px 8px rgba(0,0,0,0.3); }
         .img-edit-overlay button:hover { background:#17442a; }
-        .icon-edit-overlay { position:absolute;top:-10px;right:-10px;z-index:20;opacity:0;transition:opacity 0.2s; pointer-events:none; }
+        .icon-edit-overlay { position:absolute;top:-10px;right:-10px;z-index:20;opacity:0;transition:opacity 0.2s; pointer-events:none; display:block !important; }
+        .edit-mode-active .icon-wrapper:hover .icon-edit-overlay { opacity:1; pointer-events:auto; }
         .edit-mode-active .icon-edit-overlay { opacity:1; pointer-events:auto; }
         .icon-edit-overlay button { background:#2f6f42;color:#fff;border:none;border-radius:50%;width:24px;height:24px;font-size:12px;cursor:pointer;display:flex;align-items:center;justify-content:center;box-shadow:0 2px 5px rgba(0,0,0,0.2); }
         .icon-edit-overlay button:hover { background:#17442a; }
@@ -139,7 +140,11 @@
     <aside id="mobile-sidebar" class="fixed top-0 left-0 h-full w-[85%] max-w-sm !bg-base shadow-2xl z-[70] p-6 flex flex-col transform -translate-x-full border-r !border-black/5 overflow-y-auto">
         <div class="flex justify-between items-center mb-8">
             <a href="{{ url('/') }}" class="text-2xl font-extrabold flex items-center gap-2">
-                <i class="bi bi-jeep !text-holiday"></i> JB.
+                @if(!empty($globalPengaturan['logo_utama']))
+                    <img src="{{ asset('storage/' . $globalPengaturan['logo_utama']) }}" alt="{{ $globalPengaturan['logo_alt'] ?? 'Logo Jadi Berangkat' }}" class="h-8 w-auto">
+                @else
+                    <i class="bi bi-jeep !text-holiday"></i> JB.
+                @endif
             </a>
             <button id="close-menu-btn" class="w-10 h-10 rounded-full !bg-white flex items-center justify-center !text-gray-800 hover:!bg-holiday hover:!text-white transition shadow-sm border !border-black/5">
                 <i class="bi bi-x-lg"></i>
@@ -205,7 +210,17 @@
     <header id="header-wrapper" class="fixed w-full top-0 z-50 transition-all duration-700 ease-in-out py-3 flex justify-center px-4 md:px-6">
         <div id="nav-container" class="w-full max-w-[1440px] flex justify-between items-center px-6 md:px-9 py-3.5 transition-all duration-500 !text-ink !bg-white/90 backdrop-blur-xl rounded-[1.65rem] border !border-white/70 shadow-[0_18px_55px_rgba(0,0,0,0.16)]">
             <a href="{{ url('/') }}" class="text-2xl font-extrabold tracking-wide flex items-center gap-2">
-                <i class="bi bi-jeep !text-holiday"></i> <span class="hidden sm:block">Jadi Berangkat</span><span class="sm:hidden">JB.</span>
+                @if(!empty($globalPengaturan['logo_full']))
+                    <img src="{{ asset('storage/' . $globalPengaturan['logo_full']) }}" alt="{{ $globalPengaturan['logo_alt'] ?? 'Logo Jadi Berangkat' }}" class="hidden sm:block h-10 w-auto">
+                @else
+                    <i class="bi bi-jeep !text-holiday hidden sm:block"></i> <span class="hidden sm:block">Jadi Berangkat</span>
+                @endif
+                
+                @if(!empty($globalPengaturan['logo_utama']))
+                    <img src="{{ asset('storage/' . $globalPengaturan['logo_utama']) }}" alt="{{ $globalPengaturan['logo_alt'] ?? 'Logo Jadi Berangkat' }}" class="sm:hidden h-8 w-auto">
+                @else
+                    <i class="bi bi-jeep !text-holiday sm:hidden"></i> <span class="sm:hidden">JB.</span>
+                @endif
             </a>
             <nav class="hidden md:flex gap-8 font-semibold items-center !text-gray-700">
                 <a href="{{ url('/') }}" class="hover:!text-holiday transition">Beranda</a>
@@ -279,17 +294,21 @@
             <div class="grid grid-cols-1 md:grid-cols-12 gap-10 md:gap-8 mb-16">
                 <div class="md:col-span-5 pr-0 md:pr-10">
                     <a href="{{ url('/') }}" class="text-3xl font-extrabold tracking-wide flex items-center gap-2 mb-6 text-white">
-                        <div class="w-10 h-10 bg-holiday rounded-xl flex items-center justify-center shadow-lg">
-                            <i class="bi bi-jeep text-white text-xl"></i>
-                        </div>
-                        <span data-edit="footer_judul" data-edit-type="text" data-edit-tipe="beranda">{!! $footerData['footer_judul'] ?? 'Jadi Berangkat' !!}</span>
+                        @if(!empty($globalPengaturan['logo_full']))
+                            <img src="{{ asset('storage/' . $globalPengaturan['logo_full']) }}" alt="{{ $globalPengaturan['logo_alt'] ?? 'Logo Jadi Berangkat' }}" class="h-12 w-auto">
+                        @else
+                            <div class="w-10 h-10 bg-holiday rounded-xl flex items-center justify-center shadow-lg">
+                                <i class="bi bi-jeep text-white text-xl"></i>
+                            </div>
+                            <span data-edit="footer_judul" data-edit-type="text" data-edit-tipe="beranda">{!! $footerData['footer_judul'] ?? 'Jadi Berangkat' !!}</span>
+                        @endif
                     </a>
                     <p data-edit="footer_tentang" data-edit-type="text" data-edit-tipe="beranda" class="text-gray-400 text-sm leading-relaxed mb-8 font-medium">{!! $footerData['footer_tentang'] ?? 'Platform penyedia layanan penyewaan Jeep wisata premium.' !!}
                     </p>
                     <div class="flex gap-4">
-                        <a href="https://www.instagram.com/jadiberangkat/" target="_blank" rel="noopener noreferrer" aria-label="Instagram Jadi Berangkat" class="w-10 h-10 rounded-full bg-white/10 flex items-center justify-center text-white hover:bg-holiday hover:scale-110 transition-all"><i class="bi bi-instagram"></i></a>
-                        <a href="https://www.facebook.com/jadiberangkat/" target="_blank" rel="noopener noreferrer" aria-label="Facebook Jadi Berangkat" class="w-10 h-10 rounded-full bg-white/10 flex items-center justify-center text-white hover:bg-holiday hover:scale-110 transition-all"><i class="bi bi-facebook"></i></a>
-                        <a href="https://wa.me/6285196161351" target="_blank" rel="noopener noreferrer" aria-label="WhatsApp Jadi Berangkat" class="w-10 h-10 rounded-full bg-white/10 flex items-center justify-center text-white hover:bg-holiday hover:scale-110 transition-all"><i class="bi bi-whatsapp"></i></a>
+                        @foreach($globalMediaSosial as $medsos)
+                        <a href="{{ $medsos->link }}" target="_blank" rel="noopener noreferrer" aria-label="{{ $medsos->platform }} Jadi Berangkat" class="w-10 h-10 rounded-full bg-white/10 flex items-center justify-center text-white hover:bg-holiday hover:scale-110 transition-all"><i class="{{ $medsos->ikon }}"></i></a>
+                        @endforeach
                     </div>
                 </div>
                 <div class="md:col-span-3 md:col-start-7">
@@ -305,7 +324,7 @@
                     <ul class="space-y-4 text-sm text-gray-400 font-bold">
                         <li><a href="{{ url('/bantuan') }}" class="hover:text-holiday transition-colors">Bantuan</a></li>
                         <li><a href="{{ url('/privasi') }}" class="hover:text-holiday transition-colors">Syarat Ketentuan</a></li>
-                        <li><a href="https://wa.me/6285196161351" target="_blank" rel="noopener noreferrer" class="hover:text-holiday transition-colors">Kontak</a></li>
+                        <li><a href="{{ $waLink }}" target="_blank" rel="noopener noreferrer" class="hover:text-holiday transition-colors">Kontak</a></li>
                     </ul>
                 </div>
             </div>
@@ -322,7 +341,7 @@
     </button>
 
     {{-- WhatsApp Button --}}
-    <a href="https://wa.me/6285196161351" target="_blank" class="fixed bottom-6 right-6 md:bottom-10 md:right-10 w-12 h-12 md:w-14 md:h-14 bg-green-500 text-white rounded-full flex items-center justify-center shadow-xl shadow-green-500/30 z-[90] hover:bg-green-600 transition-colors" aria-label="WhatsApp">
+    <a href="{{ $waLink }}" target="_blank" class="fixed bottom-6 right-6 md:bottom-10 md:right-10 w-12 h-12 md:w-14 md:h-14 bg-green-500 text-white rounded-full flex items-center justify-center shadow-xl shadow-green-500/30 z-[90] hover:bg-green-600 transition-colors" aria-label="WhatsApp">
         <i class="bi bi-whatsapp text-xl md:text-2xl font-bold"></i>
     </a>
 
@@ -888,14 +907,10 @@ document.addEventListener('keydown', function(e) {
 
       var overlay = document.createElement('div');
       overlay.className = 'icon-edit-overlay';
-      overlay.style.cssText = 'position:absolute;top:-10px;right:-10px;z-index:20;display:none;';
       var btn = document.createElement('button');
       btn.innerHTML = '<i class="bi bi-pencil-square"></i>';
       btn.style.cssText = 'background:#2f6f42;color:#fff;border:none;border-radius:50%;width:24px;height:24px;font-size:12px;cursor:pointer;display:flex;align-items:center;justify-content:center;box-shadow:0 2px 5px rgba(0,0,0,0.2);';
       btn.title = 'Ganti Ikon';
-      
-      wrapper.addEventListener('mouseenter', () => overlay.style.display = 'block');
-      wrapper.addEventListener('mouseleave', () => overlay.style.display = 'none');
 
       btn.addEventListener('click', function(e) {
         e.preventDefault();

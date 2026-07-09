@@ -92,17 +92,7 @@
                     </div>
                 </div>
             </a>
-            <a href="{{ route('admin.halaman.index') }}" class="block bg-white rounded-lg shadow p-4 hover:shadow-md transition-shadow group">
-                <div class="flex flex-col items-center text-center gap-2">
-                    <div class="w-12 h-12 rounded-full flex items-center justify-center" style="background-color: #14b8a6;">
-                        <i class="bi bi-file-text text-white text-xl"></i>
-                    </div>
-                    <div>
-                        <p class="font-semibold text-gray-800 group-hover:text-[#14b8a6] transition-colors">Halaman Statis</p>
-                        <p class="text-xs text-gray-500">Kelola Halaman</p>
-                    </div>
-                </div>
-            </a>
+
             <a href="{{ route('admin.media-sosial.index') }}" class="block bg-white rounded-lg shadow p-4 hover:shadow-md transition-shadow group">
                 <div class="flex flex-col items-center text-center gap-2">
                     <div class="w-12 h-12 rounded-full flex items-center justify-center" style="background-color: #ec4899;">

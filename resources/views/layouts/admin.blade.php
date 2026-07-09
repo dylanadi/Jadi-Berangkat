@@ -48,10 +48,14 @@
     <aside class="fixed left-0 top-0 h-full w-64 bg-gray-900 text-white z-40 flex flex-col shadow-xl">
         <div class="p-5 border-b border-gray-800">
             <a href="{{ url('/admin') }}" class="text-xl font-extrabold flex items-center gap-2">
-                <div class="w-8 h-8 bg-holiday rounded-lg flex items-center justify-center">
-                    <i class="bi bi-jeep text-white text-sm"></i>
-                </div>
-                <span>Jadi Berangkat</span>
+                @if(!empty($globalPengaturan['logo_full']))
+                    <img src="{{ asset('storage/' . $globalPengaturan['logo_full']) }}" alt="{{ $globalPengaturan['logo_alt'] ?? 'Logo Admin' }}" class="h-8 w-auto">
+                @else
+                    <div class="w-8 h-8 bg-holiday rounded-lg flex items-center justify-center">
+                        <i class="bi bi-jeep text-white text-sm"></i>
+                    </div>
+                    <span>Jadi Berangkat</span>
+                @endif
             </a>
             <p class="text-[10px] text-gray-500 font-bold uppercase tracking-widest mt-1">Panel Admin</p>
         </div>
@@ -73,9 +77,6 @@
             </a>
             <a href="{{ url('/admin/ulasan') }}" class="sidebar-link flex items-center gap-3 px-4 py-2.5 rounded-xl text-sm font-semibold text-gray-300">
                 <i class="bi bi-star text-lg"></i> Ulasan
-            </a>
-            <a href="{{ url('/admin/halaman') }}" class="sidebar-link flex items-center gap-3 px-4 py-2.5 rounded-xl text-sm font-semibold text-gray-300">
-                <i class="bi bi-file-text text-lg"></i> Halaman Statis
             </a>
             <a href="{{ url('/admin/media-sosial') }}" class="sidebar-link flex items-center gap-3 px-4 py-2.5 rounded-xl text-sm font-semibold text-gray-300">
                 <i class="bi bi-share text-lg"></i> Media Sosial

@@ -73,7 +73,7 @@
         <h1 data-edit="nama" data-edit-type="text" data-edit-route="{{ route('admin.destinasi.edit', $destinasi->id) }}">{!! $destinasi->nama !!}</h1>
         <div class="meta-row">
             @if($destinasi->lokasi)<span data-edit="lokasi" data-edit-type="text" data-edit-route="{{ route('admin.destinasi.edit', $destinasi->id) }}"><i class="bi bi-geo-alt"></i> {{ $destinasi->lokasi }}</span>@endif
-            @if($destinasi->kategori)<span><i class="bi bi-tag"></i> {{ $destinasi->kategori }}</span>@endif
+            @if($destinasi->kategori)<span><i class="bi bi-tag"></i> {{ $destinasi->kategori->nama_kategori }}</span>@endif
             @if($destinasi->durasi)<span><i class="bi bi-clock"></i> {{ $destinasi->durasi }}</span>@endif
             @if($destinasi->mood)<span><i class="bi bi-emoji-smile"></i> {{ $destinasi->mood }}</span>@endif
             @if($destinasi->rating)<span><i class="bi bi-star-fill text-yellow-400"></i> {{ number_format($destinasi->rating, 1) }}</span>@endif
@@ -291,7 +291,7 @@
         if (addons.length) msg += `Tambahan: ${addons.join(', ')}\n`;
         msg += `\nMohon info lebih lanjut. Terima kasih!`;
 
-        const url = `https://wa.me/6281234567890?text=${encodeURIComponent(msg)}`;
+        const url = `https://wa.me/{{ $waNumber }}?text=${encodeURIComponent(msg)}`;
         window.open(url, '_blank');
     }
 </script>

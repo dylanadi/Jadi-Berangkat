@@ -219,13 +219,13 @@
                 
                 <!-- Kiri Besar -->
                 @php $featured = $artikel->first(); @endphp
-                <article class="lg:col-span-2 relative bg-slate-900 rounded-[2rem] overflow-hidden h-[400px] md:h-[520px] group shadow-sm hover:shadow-xl transition-all duration-500 flex items-end cursor-pointer" onclick="window.location.href='{{ route('artikel.show', $featured->slug) }}'" data-cats="{{ strtolower($featured->kategori) }}" data-date="{{ $featured->tanggal_terbit ? $featured->tanggal_terbit->format('Y-m-d') : '' }}" data-article="{{ $featured->slug }}">
+                <article class="lg:col-span-2 relative bg-slate-900 rounded-[2rem] overflow-hidden h-[400px] md:h-[520px] group shadow-sm hover:shadow-xl transition-all duration-500 flex items-end cursor-pointer" onclick="window.location.href='{{ route('artikel.show', $featured->slug) }}'" data-cats="{{ strtolower($featured->kategori->nama_kategori ?? '') }}" data-date="{{ $featured->tanggal_terbit ? $featured->tanggal_terbit->format('Y-m-d') : '' }}" data-article="{{ $featured->slug }}">
                     <div class="absolute inset-0 bg-gradient-to-t from-slate-950 via-slate-900/40 to-transparent z-10"></div>
                     <img src="{{ $featured->image ? $featured->image->url : asset('img/bluefire (1).webp') }}" class="absolute inset-0 w-full h-full object-cover object-center group-hover:scale-105 transition-transform duration-700" alt="{{ $featured->judul }}">
                     
                     <div class="relative z-20 p-6 md:p-10 w-full pointer-events-none">
                         <div class="flex items-center gap-2 mb-4 pointer-events-auto">
-                            <span class="bg-holiday-500 text-white text-[10px] font-black uppercase tracking-wider px-3 py-1 rounded-md shadow-sm">{{ strtoupper($featured->kategori ?? 'DESTINASI') }}</span>
+                            <span class="bg-holiday-500 text-white text-[10px] font-black uppercase tracking-wider px-3 py-1 rounded-md shadow-sm">{{ strtoupper($featured->kategori->nama_kategori ?? 'DESTINASI') }}</span>
                         </div>
                         <h3 class="text-2xl md:text-3xl lg:text-4xl font-extrabold text-white mb-3 leading-tight pointer-events-auto drop-shadow-md">
                             {{ $featured->judul }}

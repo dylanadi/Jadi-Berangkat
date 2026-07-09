@@ -36,11 +36,7 @@
 
 {{-- Hero Banner --}}
 <div class="bg-gradient-to-b from-slate-950 to-slate-900 text-white py-16 px-6 md:px-12 text-center border-b border-slate-800 relative">
-    @auth
-    <a href="{{ route('admin.halaman.index') }}" target="_blank" class="absolute top-4 right-4 text-sm bg-[#2f6f42] text-white rounded-full p-2 shadow-lg hover:bg-[#255a35] transition z-50" title="Edit halaman ini">
-        <i class="bi bi-pencil-square"></i>
-    </a>
-    @endauth
+
     <div class="max-w-4xl mx-auto space-y-6 flex flex-col items-center">
         <span data-edit="badge" data-edit-type="text" data-edit-tipe="privasi" class="inline-flex items-center gap-1.5 border border-holiday text-holiday-light px-3.5 py-1.5 rounded-full text-xs font-black tracking-wider uppercase bg-holiday/10">
             <i class="bi bi-file-earmark-lock-fill"></i> {!! $data->badge ?? 'Dokumen Resmi & Legal' !!}

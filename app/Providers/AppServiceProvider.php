@@ -16,7 +16,18 @@ class AppServiceProvider extends ServiceProvider
 
     public function boot(): void
     {
-        View::composer('*', function ($view) {
+        try {
+            $globalPengaturan = \App\Models\PengaturanHalamanDepan::pluck('value', 'key')->toArray();
+            if (isset($globalPengaturan['timezone']) && $globalPengaturan['timezone']) {
+                date_default_timezone_set($globalPengaturan['timezone']);
+                \Illuminate\Support\Facades\Config::set('app.timezone', $globalPengaturan['timezone']);
+            }
+        } catch (\Exception $e) {
+            $globalPengaturan = [];
+        }
+
+        View::composer('*', function ($view) use ($globalPengaturan) {
+            $view->with('globalPengaturan', $globalPengaturan);
             $berandaPage = HalamanStatis::where('tipe', 'beranda')->first();
             $footerData = $berandaPage ? json_decode($berandaPage->konten, true) : [];
             $view->with('footerData', $footerData);
@@ -24,6 +35,15 @@ class AppServiceProvider extends ServiceProvider
 
             $seoData = SeoSettings::pluck('value', 'key')->toArray();
             $view->with('seoData', $seoData);
+
+            $globalMediaSosial = \App\Models\MediaSosial::where('aktif', true)->get();
+            $view->with('globalMediaSosial', $globalMediaSosial);
+
+            $waData = $globalMediaSosial->filter(function($item) { return strtolower($item->platform) == 'whatsapp'; })->first();
+            $waNumber = $waData && $waData->nomor ? preg_replace('/[^0-9]/', '', $waData->nomor) : '6285196161351';
+            $waLink = $waData ? ($waData->nomor ? 'https://wa.me/' . $waNumber : $waData->link) : 'https://wa.me/6285196161351';
+            $view->with('waNumber', $waNumber);
+            $view->with('waLink', $waLink);
         });
     }
 }
