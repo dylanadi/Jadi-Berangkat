@@ -86,18 +86,18 @@
 
         <div class="grid grid-cols-1 md:grid-cols-12 gap-8 items-stretch">
             <div class="md:col-span-6 bg-white p-6 rounded-xl border border-slate-100 shadow-sm border-l-4 border-l-slate-800 relative overflow-hidden">
-                <i class="bi bi-eye-fill absolute -right-4 -bottom-6 text-7xl text-slate-900/5"></i>
+                <i class="{!! $data->tentang_hero_icon_1 ?? 'bi bi-eye-fill' !!} absolute -right-4 -bottom-6 text-7xl text-slate-900/5" data-icon-edit data-edit-field="tentang_hero_icon_1" data-edit-tipe="tentang"></i>
                 <div class="relative z-10 space-y-4">
-                    <div class="text-slate-800 text-xl"><i class="bi bi-eye-fill"></i></div>
+                    <div class="text-slate-800 text-xl"><i class="{!! $data->tentang_hero_icon_1 ?? 'bi bi-eye-fill' !!}" data-edit-field="tentang_hero_icon_1"></i></div>
                     <h3 data-edit="tentang_visi_label" data-edit-type="text" data-edit-tipe="tentang" class="text-sm font-bold uppercase tracking-wider text-slate-900">{!! $data->tentang_visi_label ?? 'Visi' !!}</h3>
                     <p data-edit="tentang_visi_text" data-edit-type="text" data-edit-tipe="tentang" class="text-slate-600 text-xs md:text-sm leading-relaxed font-medium">{!! $data->tentang_visi_text ?? '' !!}</p>
                 </div>
             </div>
 
             <div class="md:col-span-6 bg-white p-6 rounded-xl border border-slate-100 shadow-sm border-l-4 border-l-slate-800 relative overflow-hidden">
-                <i class="bi bi-layers-half absolute -right-4 -top-6 text-7xl text-slate-900/5"></i>
+                <i class="{!! $data->tentang_hero_icon_2 ?? 'bi bi-layers-half' !!} absolute -right-4 -top-6 text-7xl text-slate-900/5" data-icon-edit data-edit-field="tentang_hero_icon_2" data-edit-tipe="tentang"></i>
                 <div class="relative z-10 space-y-4">
-                    <div class="text-slate-800 text-xl"><i class="bi bi-layers-half"></i></div>
+                    <div class="text-slate-800 text-xl"><i class="{!! $data->tentang_hero_icon_2 ?? 'bi bi-layers-half' !!}" data-edit-field="tentang_hero_icon_2"></i></div>
                     <h3 data-edit="tentang_misi_label" data-edit-type="text" data-edit-tipe="tentang" class="text-sm font-bold uppercase tracking-wider text-slate-900">{!! $data->tentang_misi_label ?? 'Misi' !!}</h3>
                     <ul class="space-y-3 text-slate-600 text-xs md:text-sm font-medium">
                         <li class="flex gap-3"><span class="text-emerald-500 font-bold">01.</span><span data-edit="tentang_misi_item_1" data-edit-type="text" data-edit-tipe="tentang">{!! $data->tentang_misi_item_1 ?? '' !!}</span></li>
@@ -119,42 +119,42 @@
 
     <div class="grid grid-cols-1 md:grid-cols-3 gap-10">
         <div class="flex gap-4 items-start">
-            <div class="w-10 h-10 shrink-0 bg-emerald-50 rounded-xl flex items-center justify-center text-emerald-600 text-lg"><i class="bi bi-shield-check"></i></div>
+            <div class="w-10 h-10 shrink-0 bg-emerald-50 rounded-xl flex items-center justify-center text-emerald-600 text-lg"><i class="{!! $data->tentang_nilai_item_1_icon ?? 'bi bi-shield-check' !!}" data-icon-edit data-edit-field="tentang_nilai_item_1_icon" data-edit-tipe="tentang"></i></div>
             <div class="space-y-1">
                 <h3 data-edit="tentang_nilai_item_1_judul" data-edit-type="text" data-edit-tipe="tentang" class="text-sm md:text-base font-bold" style="color: #000 !important">{!! $data->tentang_nilai_item_1_judul ?? '' !!}</h3>
                 <p data-edit="tentang_nilai_item_1_desc" data-edit-type="text" data-edit-tipe="tentang" class="text-xs leading-relaxed" style="color: #000 !important">{!! $data->tentang_nilai_item_1_desc ?? '' !!}</p>
             </div>
         </div>
         <div class="flex gap-4 items-start">
-            <div class="w-10 h-10 shrink-0 bg-emerald-50 rounded-xl flex items-center justify-center text-emerald-600 text-lg"><i class="bi bi-tree"></i></div>
+            <div class="w-10 h-10 shrink-0 bg-emerald-50 rounded-xl flex items-center justify-center text-emerald-600 text-lg"><i class="{!! $data->tentang_nilai_item_2_icon ?? 'bi bi-tree' !!}" data-icon-edit data-edit-field="tentang_nilai_item_2_icon" data-edit-tipe="tentang"></i></div>
             <div class="space-y-1">
                 <h3 data-edit="tentang_nilai_item_2_judul" data-edit-type="text" data-edit-tipe="tentang" class="text-sm md:text-base font-bold" style="color: #000 !important">{!! $data->tentang_nilai_item_2_judul ?? '' !!}</h3>
                 <p data-edit="tentang_nilai_item_2_desc" data-edit-type="text" data-edit-tipe="tentang" class="text-xs leading-relaxed" style="color: #000 !important">{!! $data->tentang_nilai_item_2_desc ?? '' !!}</p>
             </div>
         </div>
         <div class="flex gap-4 items-start">
-            <div class="w-10 h-10 shrink-0 bg-emerald-50 rounded-xl flex items-center justify-center text-emerald-600 text-lg"><i class="bi bi-person-badge"></i></div>
+            <div class="w-10 h-10 shrink-0 bg-emerald-50 rounded-xl flex items-center justify-center text-emerald-600 text-lg"><i class="{!! $data->tentang_nilai_item_3_icon ?? 'bi bi-person-badge' !!}" data-icon-edit data-edit-field="tentang_nilai_item_3_icon" data-edit-tipe="tentang"></i></div>
             <div class="space-y-1">
                 <h3 data-edit="tentang_nilai_item_3_judul" data-edit-type="text" data-edit-tipe="tentang" class="text-sm md:text-base font-bold" style="color: #000 !important">{!! $data->tentang_nilai_item_3_judul ?? '' !!}</h3>
                 <p data-edit="tentang_nilai_item_3_desc" data-edit-type="text" data-edit-tipe="tentang" class="text-xs leading-relaxed" style="color: #000 !important">{!! $data->tentang_nilai_item_3_desc ?? '' !!}</p>
             </div>
         </div>
         <div class="flex gap-4 items-start">
-            <div class="w-10 h-10 shrink-0 bg-emerald-50 rounded-xl flex items-center justify-center text-emerald-600 text-lg"><i class="bi bi-phone-vibrate"></i></div>
+            <div class="w-10 h-10 shrink-0 bg-emerald-50 rounded-xl flex items-center justify-center text-emerald-600 text-lg"><i class="{!! $data->tentang_nilai_item_4_icon ?? 'bi bi-phone-vibrate' !!}" data-icon-edit data-edit-field="tentang_nilai_item_4_icon" data-edit-tipe="tentang"></i></div>
             <div class="space-y-1">
                 <h3 data-edit="tentang_nilai_item_4_judul" data-edit-type="text" data-edit-tipe="tentang" class="text-sm md:text-base font-bold" style="color: #000 !important">{!! $data->tentang_nilai_item_4_judul ?? '' !!}</h3>
                 <p data-edit="tentang_nilai_item_4_desc" data-edit-type="text" data-edit-tipe="tentang" class="text-xs leading-relaxed" style="color: #000 !important">{!! $data->tentang_nilai_item_4_desc ?? '' !!}</p>
             </div>
         </div>
         <div class="flex gap-4 items-start">
-            <div class="w-10 h-10 shrink-0 bg-emerald-50 rounded-xl flex items-center justify-center text-emerald-600 text-lg"><i class="bi bi-gem"></i></div>
+            <div class="w-10 h-10 shrink-0 bg-emerald-50 rounded-xl flex items-center justify-center text-emerald-600 text-lg"><i class="{!! $data->tentang_nilai_item_5_icon ?? 'bi bi-gem' !!}" data-icon-edit data-edit-field="tentang_nilai_item_5_icon" data-edit-tipe="tentang"></i></div>
             <div class="space-y-1">
                 <h3 data-edit="tentang_nilai_item_5_judul" data-edit-type="text" data-edit-tipe="tentang" class="text-sm md:text-base font-bold" style="color: #000 !important">{!! $data->tentang_nilai_item_5_judul ?? '' !!}</h3>
                 <p data-edit="tentang_nilai_item_5_desc" data-edit-type="text" data-edit-tipe="tentang" class="text-xs leading-relaxed" style="color: #000 !important">{!! $data->tentang_nilai_item_5_desc ?? '' !!}</p>
             </div>
         </div>
         <div class="flex gap-4 items-start">
-            <div class="w-10 h-10 shrink-0 bg-emerald-50 rounded-xl flex items-center justify-center text-emerald-600 text-lg"><i class="bi bi-people"></i></div>
+            <div class="w-10 h-10 shrink-0 bg-emerald-50 rounded-xl flex items-center justify-center text-emerald-600 text-lg"><i class="{!! $data->tentang_nilai_item_6_icon ?? 'bi bi-people' !!}" data-icon-edit data-edit-field="tentang_nilai_item_6_icon" data-edit-tipe="tentang"></i></div>
             <div class="space-y-1">
                 <h3 data-edit="tentang_nilai_item_6_judul" data-edit-type="text" data-edit-tipe="tentang" class="text-sm md:text-base font-bold" style="color: #000 !important">{!! $data->tentang_nilai_item_6_judul ?? '' !!}</h3>
                 <p data-edit="tentang_nilai_item_6_desc" data-edit-type="text" data-edit-tipe="tentang" class="text-xs leading-relaxed" style="color: #000 !important">{!! $data->tentang_nilai_item_6_desc ?? '' !!}</p>

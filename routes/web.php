@@ -56,6 +56,7 @@ Route::middleware(['auth'])->prefix('admin')->name('admin.')->group(function () 
     Route::post('seo', [SeoSettingsController::class, 'update'])->name('seo.update');
 
     Route::post('upload-image', [PengaturanController::class, 'uploadImage'])->name('upload.image');
+    Route::post('save-icon', [PengaturanController::class, 'saveIcon'])->name('save.icon');
     Route::get('images', [PengaturanController::class, 'listImages'])->name('images.list');
     Route::delete('delete-image/{image}', [PengaturanController::class, 'deleteImage'])->name('delete.image');
     Route::post('convert-webp', [PengaturanController::class, 'convertToWebp'])->name('convert.webp');

@@ -108,6 +108,10 @@
         .edit-mode-active .img-edit-overlay { opacity:1; }
         .img-edit-overlay button { width:36px;height:36px;background:#2f6f42;color:#fff;border:none;border-radius:0 0 0 8px;cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:16px;box-shadow:0 2px 8px rgba(0,0,0,0.3); }
         .img-edit-overlay button:hover { background:#17442a; }
+        .icon-edit-overlay { position:absolute;top:-10px;right:-10px;z-index:20;opacity:0;transition:opacity 0.2s; pointer-events:none; }
+        .edit-mode-active .icon-edit-overlay { opacity:1; pointer-events:auto; }
+        .icon-edit-overlay button { background:#2f6f42;color:#fff;border:none;border-radius:50%;width:24px;height:24px;font-size:12px;cursor:pointer;display:flex;align-items:center;justify-content:center;box-shadow:0 2px 5px rgba(0,0,0,0.2); }
+        .icon-edit-overlay button:hover { background:#17442a; }
     </style>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/tinymce/6.8.3/tinymce.min.js" referrerpolicy="origin"></script>
     <style>
@@ -709,6 +713,79 @@ document.addEventListener('keydown', function(e) {
       overlay.appendChild(btn);
       wrapper.appendChild(overlay);
     });
+
+    document.querySelectorAll('[data-icon-edit]').forEach(function(icon) {
+      if (icon.parentElement.classList.contains('icon-wrapper')) return;
+      var wrapper = document.createElement('div');
+      wrapper.className = 'icon-wrapper';
+      wrapper.style.cssText = 'position:relative;display:inline-block;';
+      icon.parentNode.insertBefore(wrapper, icon);
+      wrapper.appendChild(icon);
+
+      var overlay = document.createElement('div');
+      overlay.className = 'icon-edit-overlay';
+      
+      var btn = document.createElement('button');
+      btn.innerHTML = '<i class="bi bi-pencil-square"></i>';
+      btn.title = 'Ganti Ikon';
+      
+      btn.addEventListener('click', function(e) {
+        e.preventDefault();
+        e.stopPropagation();
+        if (typeof editMode !== 'undefined' && !editMode) return;
+        
+        if (typeof window.openIconPicker === 'function') {
+            window.openIconPicker(function(selectedIcon) {
+                // Update all elements sharing the same edit field (e.g. inner text icons)
+                var field = icon.dataset.editField;
+                var targets = field ? document.querySelectorAll('i[data-edit-field="' + field + '"]') : [icon];
+                
+                targets.forEach(function(targetEl) {
+                    // Remove old bi classes safely
+                    Array.from(targetEl.classList).forEach(cls => {
+                        if (cls.startsWith('bi-') || cls === 'bi') {
+                            targetEl.classList.remove(cls);
+                        }
+                    });
+                    // Add new bi classes
+                    selectedIcon.class_name.split(' ').forEach(cls => {
+                        if (cls) targetEl.classList.add(cls);
+                    });
+                });
+                if (icon.dataset.editField) {
+                  var iconField = icon.dataset.editField;
+                  var saveData = { 
+                      field: iconField, 
+                      value: selectedIcon.class_name, 
+                      tipe: icon.dataset.editTipe || ''
+                  };
+                  fetch('/admin/inline-update', {
+                    method: 'POST',
+                    headers: {
+                      'Content-Type': 'application/json',
+                      'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').content,
+                      'Accept': 'application/json'
+                    },
+                    body: JSON.stringify(saveData)
+                  })
+                  .then(function(r) { return r.json(); })
+                  .then(function(res) {
+                    if (res.success) {
+                        if (typeof showToast === 'function') showToast('Ikon berhasil diganti', 'success');
+                    } else {
+                        if (typeof showToast === 'function') showToast('Gagal menyimpan ikon', 'error');
+                    }
+                  })
+                  .catch(function() { 
+                      if (typeof showToast === 'function') showToast('Gagal menyimpan ikon', 'error');
+                  });
+                }
+            });
+        }
+      });
+      overlay.appendChild(btn);
+      wrapper.appendChild(overlay);
+    });
   });
 
   // Section management (privasi / bantuan)
@@ -800,6 +877,64 @@ document.addEventListener('keydown', function(e) {
         el.dataset.originalValue = '';
       });
     });
+
+    document.querySelectorAll('[data-icon-edit]').forEach(function(icon) {
+      if (icon.parentElement.classList.contains('icon-wrapper')) return;
+      var wrapper = document.createElement('div');
+      wrapper.className = 'icon-wrapper';
+      wrapper.style.cssText = 'position:relative;display:inline-block;';
+      icon.parentNode.insertBefore(wrapper, icon);
+      wrapper.appendChild(icon);
+
+      var overlay = document.createElement('div');
+      overlay.className = 'icon-edit-overlay';
+      overlay.style.cssText = 'position:absolute;top:-10px;right:-10px;z-index:20;display:none;';
+      var btn = document.createElement('button');
+      btn.innerHTML = '<i class="bi bi-pencil-square"></i>';
+      btn.style.cssText = 'background:#2f6f42;color:#fff;border:none;border-radius:50%;width:24px;height:24px;font-size:12px;cursor:pointer;display:flex;align-items:center;justify-content:center;box-shadow:0 2px 5px rgba(0,0,0,0.2);';
+      btn.title = 'Ganti Ikon';
+      
+      wrapper.addEventListener('mouseenter', () => overlay.style.display = 'block');
+      wrapper.addEventListener('mouseleave', () => overlay.style.display = 'none');
+
+      btn.addEventListener('click', function(e) {
+        e.preventDefault();
+        e.stopPropagation();
+        if (typeof window.openIconPicker === 'function') {
+            window.openIconPicker(function(selectedIcon) {
+                // Update icon class on UI
+                icon.className = selectedIcon.class_name;
+                
+                // Save to server if edit field exists
+                if (icon.dataset.editField) {
+                  var iconField = icon.dataset.editField;
+                  var saveData = { 
+                      field: iconField, 
+                      value: selectedIcon.class_name, 
+                      tipe: icon.dataset.editTipe || ''
+                  };
+                  fetch('/admin/inline-update', {
+                    method: 'POST',
+                    headers: {
+                      'Content-Type': 'application/json',
+                      'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').content,
+                      'Accept': 'application/json'
+                    },
+                    body: JSON.stringify(saveData)
+                  })
+                  .then(function(r) { return r.json(); })
+                  .then(function(res) {
+                    if (res.success) showToast('Ikon berhasil diganti', 'success');
+                    else showToast('Gagal menyimpan ikon', 'error');
+                  })
+                  .catch(function() { showToast('Gagal menyimpan ikon', 'error'); });
+                }
+            });
+        }
+      });
+      overlay.appendChild(btn);
+      wrapper.appendChild(overlay);
+    });
     // Update TOC nav
     var tocNav = document.getElementById('toc-nav');
     if (tocNav) {
@@ -854,6 +989,7 @@ function googleTranslateElementInit() {
 
   @auth
     @include('admin.components.image-picker')
+    @include('admin.components.icon-picker')
   @endauth
 </body>
 </html>

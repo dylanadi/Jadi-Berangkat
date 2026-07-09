@@ -457,4 +457,25 @@ class PengaturanController extends Controller
             return response()->json(['success' => false, 'message' => $e->getMessage()], 500);
         }
     }
+
+    public function saveIcon(Request $request)
+    {
+        $request->validate([
+            'class_name' => 'required|string|max:255',
+        ]);
+
+        try {
+            $icon = \App\Models\Icon::firstOrCreate([
+                'class_name' => $request->input('class_name'),
+            ]);
+
+            return response()->json([
+                'success' => true,
+                'icon_id' => $icon->id,
+                'class_name' => $icon->class_name,
+            ]);
+        } catch (\Exception $e) {
+            return response()->json(['success' => false, 'message' => $e->getMessage()], 500);
+        }
+    }
 }

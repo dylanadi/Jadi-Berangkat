@@ -68,6 +68,10 @@
         color: #fff; font-size: 16px; text-align: center; max-width: 600px;
     }
 
+    .galeri-edit-btn { display: none; position: absolute; top: 10px; right: 10px; z-index: 30; background: #2f6f42; color: #fff; width: 32px; height: 32px; border-radius: 50%; align-items: center; justify-content: center; font-size: 16px; box-shadow: 0 2px 8px rgba(0,0,0,0.3); transition: background 0.2s; }
+    .galeri-edit-btn:hover { background: #17442a; }
+    .edit-mode-active .galeri-edit-btn { display: flex; }
+
     .galeri-item .kategori-badge {
         position: absolute; top: 12px; left: 12px; padding: 4px 12px;
         border-radius: 50px; font-size: 11px; font-weight: 700; text-transform: uppercase;
@@ -133,20 +137,12 @@
                     @if($item->kategori)
                     <span class="kategori-badge">{{ $item->kategori }}</span>
                     @endif
-                    <img src="{{ ($item->image ? $item->image->url : '') }}" alt="{{ $item->judul }}" loading="lazy" data-src="{{ ($item->image ? $item->image->url : '') }}" data-image-edit data-edit-field="galeri_img_{{ $item->id }}" data-edit-tipe="galeri">
+                    <img src="{{ ($item->image ? $item->image->url : '') }}" alt="{{ $item->judul }}" loading="lazy" data-src="{{ ($item->image ? $item->image->url : '') }}">
                     <div class="overlay"><span>{!! $item->judul !!}</span></div>
                     @auth
-                    <div class="absolute top-2 right-2 flex gap-1.5 z-20">
-                        <a href="{{ route('admin.galeri.edit', $item->id) }}" class="text-xs bg-yellow-100 text-yellow-700 rounded-full px-2.5 py-1 font-bold hover:bg-yellow-200 transition shadow-sm">
-                            <i class="bi bi-pencil"></i> Edit
-                        </a>
-                        <form action="{{ route('admin.galeri.destroy', $item->id) }}" method="POST" onsubmit="return confirm('Hapus galeri ini?')" class="inline">
-                            @csrf @method('DELETE')
-                            <button type="submit" class="text-xs bg-red-100 text-red-700 rounded-full px-2.5 py-1 font-bold hover:bg-red-200 transition shadow-sm">
-                                <i class="bi bi-trash"></i> Hapus
-                            </button>
-                        </form>
-                    </div>
+                    <a href="{{ url('/admin/galeri') }}" class="galeri-edit-btn" onclick="event.stopPropagation()">
+                        <i class="bi bi-three-dots-vertical"></i>
+                    </a>
                     @endauth
                 </div>
                 @endforeach
