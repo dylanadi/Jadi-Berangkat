@@ -9,6 +9,7 @@
     .formatted-content li { margin-bottom: 0.25rem; }
     .formatted-content p { margin-bottom: 0.5rem; }
     .formatted-content a { color: #2f6f42; text-decoration: underline; }
+    body:not(.edit-mode-active) .delete-section-btn { display: none !important; }
 </style>
 @endpush
 
@@ -80,11 +81,18 @@
         {{-- Konten Detail --}}
         <div id="sections-container" class="lg:col-span-8 bg-white p-8 md:p-10 rounded-3xl border border-slate-200/60 shadow-sm space-y-12">
             @foreach($sections as $index => $section)
-            <section id="pasal-{{ $index + 1 }}" data-section-index="{{ $index }}" class="scroll-mt-28">
-                <h2 class="text-xl font-bold text-slate-900 mb-4 flex items-center gap-2">
-                    <span class="w-1.5 h-6 bg-holiday rounded-full"></span> <span class="section-num">{{ $index + 1 }}.</span> 
-                    <span data-edit="sections[{{ $index }}].judul" data-edit-type="text" data-edit-tipe="privasi" class="flex-1">{{ strip_tags($section['judul']) }}</span>
-                </h2>
+            <section id="pasal-{{ $index + 1 }}" data-section-index="{{ $index }}" class="scroll-mt-28 relative group">
+                <div class="flex items-center justify-between mb-4 gap-4">
+                    <h2 class="text-xl font-bold text-slate-900 flex items-center gap-2 flex-1">
+                        <span class="w-1.5 h-6 bg-holiday rounded-full"></span> <span class="section-num">{{ $index + 1 }}.</span> 
+                        <span data-edit="sections[{{ $index }}].judul" data-edit-type="text" data-edit-tipe="privasi" class="flex-1">{{ strip_tags($section['judul']) }}</span>
+                    </h2>
+                    @auth
+                    <button onclick="removeSection(this)" class="delete-section-btn text-red-500 hover:text-red-700 bg-red-50 hover:bg-red-100 rounded-lg px-3 py-1.5 text-xs font-bold transition flex items-center gap-1.5 shrink-0" title="Hapus Pasal">
+                        <i class="bi bi-trash"></i> Hapus
+                    </button>
+                    @endauth
+                </div>
                 <div data-edit="sections[{{ $index }}].konten" data-edit-type="html" data-edit-tipe="privasi" class="text-slate-600 text-sm leading-relaxed formatted-content">
                     {!! $section['konten'] !!}
                 </div>
@@ -116,7 +124,7 @@
         </p>
         <div class="mt-8 pt-6 border-t border-slate-800/80 w-full">
             <p class="text-[10px] md:text-[11px] font-black uppercase tracking-[0.2em] text-holiday-light/80">
-                &copy; {{ date('Y') }} PT. JADI BERANGKAT. ALL RIGHTS RESERVED.
+                &copy; {{ date('Y') }} PT. JADI BERANGKAT. HAK CIPTA DILINDUNGI.
             </p>
         </div>
     </div>

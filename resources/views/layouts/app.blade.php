@@ -110,6 +110,23 @@
         .img-edit-overlay button:hover { background:#17442a; }
     </style>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/tinymce/6.8.3/tinymce.min.js" referrerpolicy="origin"></script>
+    <style>
+        /* Sembunyikan UI bawaan Google Translate secara total */
+        .goog-te-banner-frame.skiptranslate, 
+        .goog-te-gadget-icon, 
+        .goog-te-gadget-simple, 
+        .goog-te-gadget, 
+        #google_translate_element, 
+        #goog-gt-tt, 
+        .goog-te-balloon-frame,
+        .VIpgJd-ZVi9od-ORHb-OEVmcd,
+        .VIpgJd-ZVi9od-aZ2wEe-wOHMyf {
+            display: none !important;
+            visibility: hidden !important;
+        }
+        body, html { top: 0px !important; margin-top: 0px !important; }
+        .goog-text-highlight { background-color: transparent !important; border: none !important; box-shadow: none !important; }
+    </style>
 </head>
 <body class="text-gray-800 overflow-x-hidden antialiased min-h-screen flex flex-col" @auth style="color: {{ Auth::user()->text_color ?? '#151813' }} !important;" @endauth>
 
@@ -245,7 +262,10 @@
         </div>
     </header>
 
-    <main class="flex-1 pt-24">
+    @php
+        $isHeroPage = request()->is('/') || request()->is('tentang') || request()->is('destinasi');
+    @endphp
+    <main class="flex-1 {{ $isHeroPage ? '' : 'pt-24' }}">
         @yield('content')
     </main>
 
@@ -286,7 +306,7 @@
                 </div>
             </div>
             <div class="text-center md:text-left flex flex-col md:flex-row justify-between items-center text-sm text-gray-500 pt-8 border-t border-gray-800 font-medium">
-                <p data-edit="footer_copyright" data-edit-type="text" data-edit-tipe="beranda">{!! $footerData['footer_copyright'] ?? '&copy; ' . date('Y') . ' Jadi Berangkat. All rights reserved.' !!}</p>
+                <p data-edit="footer_copyright" data-edit-type="text" data-edit-tipe="beranda">{!! $footerData['footer_copyright'] ?? '&copy; ' . date('Y') . ' Jadi Berangkat. Hak Cipta Dilindungi.' !!}</p>
                 <p class="mt-2 md:mt-0">Jeep trip Banyuwangi, siap dipesan online.</p>
             </div>
         </div>
@@ -534,6 +554,12 @@ function finishEditMode() {
 }
 
 function saveAllDirty() {
+  // Cegah penyimpanan jika Google Translate sedang aktif untuk menghindari korupsi data (teks bahasa Inggris tersimpan)
+  if (document.documentElement.classList.contains('translated-ltr') || document.documentElement.classList.contains('translated-rtl') || document.querySelector('.goog-te-combo') && document.querySelector('.goog-te-combo').value !== '' && document.querySelector('.goog-te-combo').value !== 'id') {
+      showToast('Gagal menyimpan: Fitur terjemahan sedang aktif! Mohon kembalikan ke Bahasa Indonesia (Asli) sebelum mengedit/menyimpan.', 'error');
+      return;
+  }
+
   const changes = [];
   document.querySelectorAll('[data-edit]').forEach(el => {
     const newVal = getContent(el);
@@ -954,6 +980,41 @@ document.addEventListener('keydown', function(e) {
 })();
 </script>
 @endauth
+<div id="google_translate_element"></div>
+<script type="text/javascript">
+function switchLanguage(lang) {
+    if(lang === 'id') {
+        // Hapus cookie Google Translate secara agresif
+        document.cookie = "googtrans=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
+        document.cookie = "googtrans=; expires=Thu, 01 Jan 1970 00:00:00 UTC; domain=" + window.location.hostname + "; path=/;";
+        document.cookie = "googtrans=; expires=Thu, 01 Jan 1970 00:00:00 UTC; domain=." + window.location.hostname + "; path=/;";
+        
+        // Hapus localStorage barangkali tersimpan
+        localStorage.removeItem('googtrans');
+        sessionStorage.removeItem('googtrans');
+        
+        // Paksa reload tanpa cache
+        window.location.href = window.location.pathname + window.location.search;
+    } else {
+        var date = new Date();
+        date.setTime(date.getTime() + (365*24*60*60*1000));
+        var expires = "; expires=" + date.toUTCString();
+        document.cookie = "googtrans=/id/" + lang + expires + "; path=/";
+        document.cookie = "googtrans=/id/" + lang + expires + "; domain=" + window.location.hostname + "; path=/";
+        document.cookie = "googtrans=/id/" + lang + expires + "; domain=." + window.location.hostname + "; path=/";
+        window.location.reload();
+    }
+}
+
+function googleTranslateElementInit() {
+    new google.translate.TranslateElement({
+        pageLanguage: 'id', 
+        includedLanguages: 'en,id', 
+        autoDisplay: false
+    }, 'google_translate_element');
+}
+</script>
+<script type="text/javascript" src="//translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"></script>
 
 </body>
 </html>
