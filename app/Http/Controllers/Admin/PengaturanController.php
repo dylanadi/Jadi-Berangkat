@@ -322,13 +322,46 @@ class PengaturanController extends Controller
             'image' => 'required|image|mimes:jpeg,png,jpg,webp|max:5120',
         ]);
 
-        $path = $request->file('image')->store('uploads', 'public');
+        $file = $request->file('image');
+        $ext = strtolower($file->getClientOriginalExtension());
+        $filename = \Illuminate\Support\Str::random(40);
+        $path = '';
+
+        if (in_array($ext, ['jpg', 'jpeg', 'png'])) {
+            $fullPath = storage_path('app/public/uploads/' . $filename . '.webp');
+            $imageResource = null;
+            
+            if ($ext === 'png') {
+                $imageResource = @imagecreatefrompng($file->getRealPath());
+                if ($imageResource) {
+                    imagepalettetotruecolor($imageResource);
+                    imagealphablending($imageResource, false);
+                    imagesavealpha($imageResource, true);
+                }
+            } else {
+                $imageResource = @imagecreatefromjpeg($file->getRealPath());
+            }
+
+            if ($imageResource) {
+                if (!is_dir(storage_path('app/public/uploads'))) {
+                    mkdir(storage_path('app/public/uploads'), 0755, true);
+                }
+                imagewebp($imageResource, $fullPath, 80);
+                imagedestroy($imageResource);
+                $path = 'uploads/' . $filename . '.webp';
+            } else {
+                $path = $file->storeAs('uploads', $filename . '.' . $ext, 'public');
+            }
+        } else {
+            $path = $file->storeAs('uploads', $filename . '.' . $ext, 'public');
+        }
+
         $url = asset('storage/' . $path);
 
-        $image = Image::create([
-            'name' => pathinfo($request->file('image')->getClientOriginalName(), PATHINFO_FILENAME),
+        $image = \App\Models\Image::create([
+            'name' => pathinfo($file->getClientOriginalName(), PATHINFO_FILENAME),
             'path' => $path,
-            'alt' => pathinfo($request->file('image')->getClientOriginalName(), PATHINFO_FILENAME),
+            'alt' => pathinfo($file->getClientOriginalName(), PATHINFO_FILENAME),
             'disk' => 'public',
         ]);
 
