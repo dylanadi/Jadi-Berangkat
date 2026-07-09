@@ -35,7 +35,7 @@
                     <tr class="border-b hover:bg-gray-50">
                         <td class="px-4 py-3">{{ $loop->iteration }}</td>
                         <td class="px-4 py-3">{!! $item->judul !!}</td>
-                        <td class="px-4 py-3">{{ $item->kategori }}</td>
+                        <td class="px-4 py-3">{{ $item->kategori->nama_kategori ?? '' }}</td>
                         <td class="px-4 py-3">
                             @if($item->image_id)
                             <img src="{{ $item->image->url }}" class="h-12 w-16 object-cover rounded">

@@ -15,6 +15,7 @@ use App\Http\Controllers\Admin\MediaSosialController;
 use App\Http\Controllers\Admin\PengaturanController;
 use App\Http\Controllers\Admin\SeoSettingsController;
 use App\Http\Controllers\Admin\FaqController;
+use App\Http\Controllers\Admin\KategoriController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', [HomeController::class, 'index'])->name('home');
@@ -41,6 +42,7 @@ Route::middleware(['auth'])->prefix('admin')->name('admin.')->group(function () 
     Route::resource('artikel', AdminArtikelController::class);
     Route::resource('media-sosial', MediaSosialController::class)->except(['create', 'show']);
     Route::resource('faq', FaqController::class)->except(['create', 'show']);
+    Route::resource('kategori', KategoriController::class)->except(['create', 'show']);
 
     Route::get('halaman', [HalamanStatisController::class, 'index'])->name('halaman.index');
     Route::get('halaman/{halamanStatis}/edit', [HalamanStatisController::class, 'edit'])->name('halaman.edit');

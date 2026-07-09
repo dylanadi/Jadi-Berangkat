@@ -36,7 +36,7 @@
                     <tr class="border-b hover:bg-gray-50">
                         <td class="px-4 py-3">{{ $loop->iteration }}</td>
                         <td class="px-4 py-3">{{ Str::limit($item->judul, 40) }}</td>
-                        <td class="px-4 py-3">{{ $item->kategori ?? '-' }}</td>
+                        <td class="px-4 py-3">{{ $item->kategori->nama_kategori ?? '-' }}</td>
                         <td class="px-4 py-3">{{ $item->penulis ?? '-' }}</td>
                         <td class="px-4 py-3">
                             <span class="px-2 py-1 rounded text-xs {{ $item->status === 'terbit' ? 'bg-green-100 text-green-700' : 'bg-yellow-100 text-yellow-700' }}">

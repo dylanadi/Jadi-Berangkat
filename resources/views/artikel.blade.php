@@ -244,13 +244,13 @@
                 @if($artikel->count() > 1)
                 <div class="flex flex-col gap-4 md:gap-6 h-full">
                     @foreach($artikel->skip(1)->take(2) as $item)
-                    <article class="relative bg-slate-900 rounded-[2rem] overflow-hidden flex-1 group shadow-sm hover:shadow-xl transition-all duration-500 flex items-end cursor-pointer min-h-[200px]" onclick="window.location.href='{{ route('artikel.show', $item->slug) }}'" data-cats="{{ strtolower($item->kategori) }}" data-date="{{ $item->tanggal_terbit ? $item->tanggal_terbit->format('Y-m-d') : '' }}" data-article="{{ $item->slug }}">
+                    <article class="relative bg-slate-900 rounded-[2rem] overflow-hidden flex-1 group shadow-sm hover:shadow-xl transition-all duration-500 flex items-end cursor-pointer min-h-[200px]" onclick="window.location.href='{{ route('artikel.show', $item->slug) }}'" data-cats="{{ strtolower($item->kategori->nama_kategori ?? '') }}" data-date="{{ $item->tanggal_terbit ? $item->tanggal_terbit->format('Y-m-d') : '' }}" data-article="{{ $item->slug }}">
                         <div class="absolute inset-0 bg-gradient-to-t from-slate-950/90 via-slate-900/50 to-transparent z-10"></div>
                         <img src="{{ $item->image ? $item->image->url : asset('img/bluefire (1).webp') }}" class="absolute inset-0 w-full h-full object-cover object-center group-hover:scale-105 transition-transform duration-700" alt="{{ $item->judul }}">
                         
                         <div class="relative z-20 p-6 md:p-8 w-full pointer-events-none">
                             <div class="flex items-center gap-2 mb-3 pointer-events-auto">
-                                <span class="bg-holiday-500 text-white text-[9px] font-black uppercase tracking-wider px-2.5 py-1 rounded-md shadow-sm">{{ strtoupper($item->kategori ?? 'WISATA') }}</span>
+                                <span class="bg-holiday-500 text-white text-[9px] font-black uppercase tracking-wider px-2.5 py-1 rounded-md shadow-sm">{{ strtoupper($item->kategori->nama_kategori ?? 'WISATA') }}</span>
                             </div>
                             <h4 class="text-lg md:text-xl font-bold text-white mb-2 leading-snug pointer-events-auto drop-shadow-md line-clamp-2">
                                 {{ $item->judul }}
@@ -276,10 +276,10 @@
                 <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6" id="compact-cards">
                     @php $otherArticles = $artikel->skip(3); @endphp
                     @foreach($otherArticles as $item)
-                    <article class="news-card bg-white rounded-[1.5rem] overflow-hidden shadow-sm border border-slate-100 flex flex-col justify-between group cursor-pointer hover:-translate-y-1 hover:shadow-md transition-all duration-300" onclick="window.location.href='{{ route('artikel.show', $item->slug) }}'" data-cats="{{ strtolower($item->kategori) }}" data-date="{{ $item->tanggal_terbit ? $item->tanggal_terbit->format('Y-m-d') : '' }}" data-article="{{ $item->slug }}">
+                    <article class="news-card bg-white rounded-[1.5rem] overflow-hidden shadow-sm border border-slate-100 flex flex-col justify-between group cursor-pointer hover:-translate-y-1 hover:shadow-md transition-all duration-300" onclick="window.location.href='{{ route('artikel.show', $item->slug) }}'" data-cats="{{ strtolower($item->kategori->nama_kategori ?? '') }}" data-date="{{ $item->tanggal_terbit ? $item->tanggal_terbit->format('Y-m-d') : '' }}" data-article="{{ $item->slug }}">
                         <div class="relative h-52 overflow-hidden shrink-0">
                             <img src="{{ $item->image ? $item->image->url : asset('img/bluefire (1).webp') }}" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700" alt="{{ $item->judul }}">
-                            <span class="absolute top-4 left-4 bg-white/95 backdrop-blur-sm text-holiday-700 text-[10px] font-black uppercase tracking-wider px-3 py-1 rounded-md shadow-sm">{{ strtoupper($item->kategori ?? 'TIPS') }}</span>
+                            <span class="absolute top-4 left-4 bg-white/95 backdrop-blur-sm text-holiday-700 text-[10px] font-black uppercase tracking-wider px-3 py-1 rounded-md shadow-sm">{{ strtoupper($item->kategori->nama_kategori ?? 'TIPS') }}</span>
                         </div>
                         <div class="p-6 flex-1 flex flex-col justify-between pointer-events-none">
                             <div class="pointer-events-auto">

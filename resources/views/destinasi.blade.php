@@ -235,7 +235,7 @@
         @php
             $h = $heights[$index % count($heights)];
         @endphp
-        <div class="dest-card-container break-inside-avoid relative mb-4" data-kategori="{{ strtolower($item->kategori) }}" data-nama="{{ strtolower($item->nama) }}">
+        <div class="dest-card-container break-inside-avoid relative mb-4" data-kategori="{{ strtolower($item->kategori->nama_kategori ?? '') }}" data-nama="{{ strtolower($item->nama) }}">
             <a href="{{ route('destinasi.show', $item->slug) }}" class="block relative group overflow-hidden rounded-2xl shadow-sm hover:shadow-xl transition-all duration-300 hover:-translate-y-1 bg-gray-200 {{ $h }}">
                 <img src="{{ $item->image ? $item->image->url : asset('img/placeholder.webp') }}" loading="lazy" class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105" alt="{{ $item->nama }}">
                 <div class="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent opacity-90 group-hover:opacity-100 transition-opacity duration-300"></div>

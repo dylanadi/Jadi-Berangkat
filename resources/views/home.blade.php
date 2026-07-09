@@ -81,7 +81,7 @@
                             <span class="rounded-full bg-white text-holiday-dark px-4 py-2 text-sm font-extrabold">{{ $item->label ?? 'Mulai pagi' }}</span>
                         </div>
                         <div class="absolute bottom-0 left-0 right-0 p-6 md:p-8">
-                            <p class="mb-3 text-sm font-bold text-holiday-light">{{ $item->kategori ?? 'Destinasi' }}</p>
+                            <p class="mb-3 text-sm font-bold text-holiday-light">{{ $item->kategori->nama_kategori ?? 'Destinasi' }}</p>
                             <h3 class="max-w-xl text-4xl md:text-5xl font-extrabold leading-tight">{!! $item->nama !!}</h3>
                             <div class="mt-7 grid grid-cols-3 gap-3 border-t border-white/18 pt-5 text-sm">
                                 <div>
@@ -108,7 +108,7 @@
                             <img src="{{ ($item->image ? $item->image->url : '') ? ($item->image ? $item->image->url : '') : '' }}" alt="{{ $item->nama }}" data-image-edit data-edit-url="{{ route('admin.destinasi.edit', $item->id) }}" class="absolute inset-0 h-full w-full object-cover transition-transform duration-700 group-hover:scale-105">
                             <div class="absolute inset-0 bg-gradient-to-t from-black/95 via-black/70 to-black/30"></div>
                             <div class="absolute bottom-0 left-0 right-0 p-5">
-                                <p class="text-xs font-extrabold uppercase tracking-[0.14em] text-holiday-light">{{ $item->kategori ?? 'Wisata' }}</p>
+                                <p class="text-xs font-extrabold uppercase tracking-[0.14em] text-holiday-light">{{ $item->kategori->nama_kategori ?? 'Wisata' }}</p>
                                 <h3 class="mt-2 text-2xl font-extrabold">{!! $item->nama !!}</h3>
                                 <p class="mt-2 text-sm text-white/72">{!! $item->deskripsi_singkat ?? '' !!}</p>
                             </div>
@@ -281,7 +281,7 @@
                             <div class="w-12 h-12 rounded-full bg-holiday text-white flex items-center justify-center font-bold">{{ substr($item->nama_user ?? 'A', 0, 1) }}</div>
                             <div>
                                 <h4 class="font-extrabold text-sm text-gray-900">{!! $item->nama_user ?? '' !!}</h4>
-                                <p class="text-xs text-gray-500 font-medium">{{ $item->kategori ?? '' }}</p>
+                                <p class="text-xs text-gray-500 font-medium">{{ $item->kategori->nama_kategori ?? '' }}</p>
                             </div>
                         </div>
                     </div>

@@ -65,6 +65,9 @@
             <a href="{{ url('/admin/artikel') }}" class="sidebar-link flex items-center gap-3 px-4 py-2.5 rounded-xl text-sm font-semibold text-gray-300">
                 <i class="bi bi-newspaper text-lg"></i> Artikel
             </a>
+            <a href="{{ url('/admin/kategori') }}" class="sidebar-link flex items-center gap-3 px-4 py-2.5 rounded-xl text-sm font-semibold text-gray-300">
+                <i class="bi bi-tags text-lg"></i> Kategori
+            </a>
             <a href="{{ url('/admin/galeri') }}" class="sidebar-link flex items-center gap-3 px-4 py-2.5 rounded-xl text-sm font-semibold text-gray-300">
                 <i class="bi bi-images text-lg"></i> Galeri
             </a>

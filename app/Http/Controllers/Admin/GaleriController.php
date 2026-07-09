@@ -16,13 +16,14 @@ class GaleriController extends Controller
 
     public function create()
     {
-        return view('admin.galeri.create');
+        $kategoris = \App\Models\Kategori::all();
+        return view('admin.galeri.create', compact('kategoris'));
     }
 
     public function store(Request $request)
     {
         $validated = $request->validate([
-            'kategori' => 'required|string',
+            'kategori_id' => 'required|exists:kategoris,id',
             'judul' => 'required|string|max:255',
             'image_id' => 'required|exists:images,id',
             'deskripsi' => 'nullable|string',
@@ -37,13 +38,14 @@ class GaleriController extends Controller
 
     public function edit(Galeri $galeri)
     {
-        return view('admin.galeri.edit', compact('galeri'));
+        $kategoris = \App\Models\Kategori::all();
+        return view('admin.galeri.edit', compact('galeri', 'kategoris'));
     }
 
     public function update(Request $request, Galeri $galeri)
     {
         $validated = $request->validate([
-            'kategori' => 'required|string',
+            'kategori_id' => 'required|exists:kategoris,id',
             'judul' => 'required|string|max:255',
             'image_id' => 'nullable|exists:images,id',
             'deskripsi' => 'nullable|string',

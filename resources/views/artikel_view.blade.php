@@ -92,7 +92,7 @@
                 <div class="relative h-48 overflow-hidden">
                     <img src="{{ $item->image ? $item->image->url : asset('img/bluefire (1).webp') }}" alt="{!! $item->judul !!}" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700" loading="lazy">
                     @if($item->kategori)
-                    <span class="absolute bottom-3 left-3 bg-slate-950/80 text-white text-[10px] font-black uppercase px-2 py-1 rounded-md">{{ $item->kategori }}</span>
+                    <span class="absolute bottom-3 left-3 bg-slate-950/80 text-white text-[10px] font-black uppercase px-2 py-1 rounded-md">{{ $item->kategori->nama_kategori ?? '' }}</span>
                     @endif
                 </div>
                 <div class="p-4 flex flex-col flex-1">

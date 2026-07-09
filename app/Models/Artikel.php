@@ -12,7 +12,7 @@ class Artikel extends Model
     protected $table = 'artikel';
 
     protected $fillable = [
-        'judul', 'slug', 'konten', 'image_id', 'kategori',
+        'judul', 'slug', 'konten', 'image_id', 'kategori_id',
         'penulis', 'durasi_baca', 'status', 'tanggal_terbit'
     ];
 
@@ -24,4 +24,10 @@ class Artikel extends Model
     {
         return $this->belongsTo(Image::class, 'image_id');
     }
+
+    public function kategori()
+    {
+        return $this->belongsTo(Kategori::class);
+    }
 }
+

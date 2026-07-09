@@ -28,7 +28,7 @@ class DestinasiController extends Controller
     public function store(Request $request)
     {
         $validated = $request->validate([
-            'kategori' => 'required|string',
+            'kategori_id' => 'required|exists:kategoris,id',
             'nama' => 'required|string|max:255',
             'deskripsi' => 'nullable|string',
             'lokasi' => 'nullable|string|max:255',
@@ -60,13 +60,14 @@ class DestinasiController extends Controller
         $kategoriList = Destinasi::KATEGORI;
         $durasiList = Destinasi::DURASI;
         $moodList = Destinasi::MOOD;
-        return view('admin.destinasi.edit', compact('destinasi', 'images', 'kategoriList', 'durasiList', 'moodList'));
+        $kategoris = \App\Models\Kategori::all();
+        return view('admin.destinasi.edit', compact('destinasi', 'images', 'kategoriList', 'durasiList', 'moodList', 'kategoris'));
     }
 
     public function update(Request $request, Destinasi $destinasi)
     {
         $validated = $request->validate([
-            'kategori' => 'required|string',
+            'kategori_id' => 'required|exists:kategoris,id',
             'nama' => 'required|string|max:255',
             'deskripsi' => 'nullable|string',
             'lokasi' => 'nullable|string|max:255',

@@ -11,6 +11,7 @@ class GaleriController extends Controller
     {
         $galeri = Galeri::with('image')->latest()->get();
         $mediaSosial = MediaSosial::where('aktif', true)->get();
-        return view('galeri', compact('galeri', 'mediaSosial'));
+        $semuaKategori = \App\Models\Kategori::all();
+        return view('galeri', compact('galeri', 'mediaSosial', 'semuaKategori'));
     }
 }

@@ -41,7 +41,14 @@
             <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <div>
                     <label class="block text-sm font-medium text-gray-700 mb-1">Kategori</label>
-                    <input type="text" name="kategori" value="{{ old('kategori') }}" class="w-full border border-gray-300 rounded-lg px-3 py-2 focus:ring-admin-500 focus:border-holiday @error('kategori') border-red-500 @enderror">
+                    <select name="kategori_id" class="w-full border border-gray-300 rounded-lg px-3 py-2 focus:ring-admin-500 focus:border-holiday @error(" required>
+    <option value="">-- Pilih Kategori --</option>
+    @foreach($kategoris as $kat)
+        <option value="{{ $kat->id }}" {{ old('kategori_id') == $kat->id ? 'selected' : '' }}>
+            {{ $kat->nama_kategori }}
+        </option>
+    @endforeach
+</select>
                     @error('kategori') <p class="text-red-500 text-xs mt-1">{{ $message }}</p> @enderror
                 </div>
                 <div>

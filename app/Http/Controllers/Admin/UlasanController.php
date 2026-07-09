@@ -21,7 +21,8 @@ class UlasanController extends Controller
 
     public function edit(Ulasan $ulasan)
     {
-        return view('admin.ulasan.edit', compact('ulasan'));
+        $kategoris = \App\Models\Kategori::all();
+        return view('admin.ulasan.edit', compact('ulasan', 'kategoris'));
     }
 
     public function update(Request $request, Ulasan $ulasan)
@@ -30,7 +31,7 @@ class UlasanController extends Controller
             'nama_user' => 'required|string|max:50',
             'bintang' => 'required|integer|min:1|max:5',
             'pesan' => 'required|string',
-            'kategori' => 'nullable|string|max:20',
+            'kategori_id' => 'required|exists:kategoris,id',
             'image_id' => 'nullable|exists:images,id',
             'ditampilkan' => 'boolean',
         ]);

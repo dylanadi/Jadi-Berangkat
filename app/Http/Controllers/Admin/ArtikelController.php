@@ -16,7 +16,8 @@ class ArtikelController extends Controller
 
     public function create()
     {
-        return view('admin.artikel.create');
+        $kategoris = \App\Models\Kategori::all();
+        return view('admin.artikel.create', compact('kategoris'));
     }
 
     public function store(Request $request)
@@ -26,7 +27,7 @@ class ArtikelController extends Controller
             'slug' => 'required|string|max:255|unique:artikel',
             'konten' => 'required|string',
             'image_id' => 'nullable|exists:images,id',
-            'kategori' => 'nullable|string|max:50',
+            'kategori_id' => 'required|exists:kategoris,id',
             'penulis' => 'nullable|string|max:100',
             'durasi_baca' => 'nullable|integer',
             'status' => 'required|string|in:draft,terbit',
@@ -41,7 +42,8 @@ class ArtikelController extends Controller
 
     public function edit(Artikel $artikel)
     {
-        return view('admin.artikel.edit', compact('artikel'));
+        $kategoris = \App\Models\Kategori::all();
+        return view('admin.artikel.edit', compact('artikel', 'kategoris'));
     }
 
     public function update(Request $request, Artikel $artikel)
@@ -51,7 +53,7 @@ class ArtikelController extends Controller
             'slug' => 'required|string|max:255|unique:artikel,slug,' . $artikel->id,
             'konten' => 'required|string',
             'image_id' => 'nullable|exists:images,id',
-            'kategori' => 'nullable|string|max:50',
+            'kategori_id' => 'required|exists:kategoris,id',
             'penulis' => 'nullable|string|max:100',
             'durasi_baca' => 'nullable|integer',
             'status' => 'required|string|in:draft,terbit',
