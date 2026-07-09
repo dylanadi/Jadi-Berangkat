@@ -12,7 +12,7 @@
     </div>
 
     <div class="bg-white rounded-lg shadow p-6 max-w-2xl">
-        <form action="{{ route('admin.galeri.store') }}" method="POST" enctype="multipart/form-data" class="space-y-4">
+        <form action="{{ route('admin.galeri.store') }}" method="POST" class="space-y-4">
             @csrf
 
             <div>
@@ -41,8 +41,7 @@
 
             <div>
                 <label class="block text-sm font-medium text-gray-700 mb-1">Gambar</label>
-                <input type="file" name="gambar" class="w-full border border-gray-300 rounded-lg px-3 py-2 focus:ring-admin-500 focus:border-holiday @error('gambar') border-red-500 @enderror">
-                @error('gambar') <p class="text-red-500 text-xs mt-1">{{ $message }}</p> @enderror
+                                <x-image-input name="image_id" :value="old('image_id', isset($galeri->image_id) ? $galeri->image_id : '')" />
             </div>
 
             <div>
@@ -58,4 +57,5 @@
         </form>
     </div>
 </div>
+
 @endsection

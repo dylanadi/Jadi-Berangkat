@@ -23,26 +23,22 @@ class SeoSettingsController extends Controller
 
         foreach ($fields as $key) {
             if ($request->has($key)) {
-                SeoSettings::updateOrCreate(
-                    ['key' => $key],
-                    ['value' => $request->$key, 'tipe' => in_array($key, ['favicon', 'logo', 'og_image']) ? 'file' : 'text']
-                );
+                $val = $request->$key;
+                if (in_array($key, ['favicon', 'logo', 'og_image']) && is_numeric($val)) {
+                    $val = \App\Models\Image::resolvePath($val);
+                }
+                
+                if ($val !== null && $val !== '') {
+                    SeoSettings::updateOrCreate(
+                        ['key' => $key],
+                        ['value' => $val, 'tipe' => in_array($key, ['favicon', 'logo', 'og_image']) ? 'file' : 'text']
+                    );
+                } elseif (in_array($key, ['favicon', 'logo', 'og_image']) && $val === '') {
+                    // Jika dikosongkan (dihapus via component), kita bisa handle penghapusan atau biarkan.
+                    // Jika dihapus, hapus dari database.
+                    SeoSettings::where('key', $key)->delete();
+                }
             }
-        }
-
-        if ($request->hasFile('favicon')) {
-            $path = $request->file('favicon')->store('seo', 'public');
-            SeoSettings::updateOrCreate(['key' => 'favicon'], ['value' => $path, 'tipe' => 'file']);
-        }
-
-        if ($request->hasFile('logo')) {
-            $path = $request->file('logo')->store('seo', 'public');
-            SeoSettings::updateOrCreate(['key' => 'logo'], ['value' => $path, 'tipe' => 'file']);
-        }
-
-        if ($request->hasFile('og_image')) {
-            $path = $request->file('og_image')->store('seo', 'public');
-            SeoSettings::updateOrCreate(['key' => 'og_image'], ['value' => $path, 'tipe' => 'file']);
         }
 
         return redirect()->route('admin.seo.index')->with('success', 'SEO settings berhasil disimpan');

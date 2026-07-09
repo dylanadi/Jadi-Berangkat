@@ -28,12 +28,6 @@
                 @error('deskripsi') <p class="text-red-500 text-xs mt-1">{{ $message }}</p> @enderror
             </div>
 
-            <div>
-                <label class="block text-sm font-medium text-gray-700 mb-1">Urutan</label>
-                <input type="number" name="urutan" value="{{ old('urutan', $faq->urutan) }}" class="w-full border border-gray-300 rounded-lg px-3 py-2 focus:ring-admin-500 focus:border-holiday @error('urutan') border-red-500 @enderror">
-                @error('urutan') <p class="text-red-500 text-xs mt-1">{{ $message }}</p> @enderror
-            </div>
-
             <div class="flex items-center gap-3 pt-4">
                 <button type="submit" class="px-6 py-2 bg-holiday text-white rounded-lg hover:bg-holiday-dark transition">Update</button>
                 <a href="{{ route('admin.faq.index') }}" class="px-6 py-2 border border-gray-300 rounded-lg hover:bg-gray-50 transition">Batal</a>

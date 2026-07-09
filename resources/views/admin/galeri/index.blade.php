@@ -34,11 +34,11 @@
                     @forelse($galeri as $item)
                     <tr class="border-b hover:bg-gray-50">
                         <td class="px-4 py-3">{{ $loop->iteration }}</td>
-                        <td class="px-4 py-3">{{ $item->judul }}</td>
+                        <td class="px-4 py-3">{!! $item->judul !!}</td>
                         <td class="px-4 py-3">{{ $item->kategori }}</td>
                         <td class="px-4 py-3">
-                            @if($item->image)
-                            <img src="{{ $item->image_url }}" class="h-12 w-16 object-cover rounded" alt="{{ $item->judul }}">
+                            @if($item->image_id)
+                            <img src="{{ $item->image->url }}" class="h-12 w-16 object-cover rounded">
                             @else
                             <span class="text-gray-400">-</span>
                             @endif

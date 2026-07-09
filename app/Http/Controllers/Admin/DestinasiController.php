@@ -5,10 +5,8 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use App\Models\Destinasi;
 use App\Models\Image;
-use App\Models\JadwalPerjalanan;
-use App\Models\IncludeModel;
-use App\Models\UnInclude;
 use Illuminate\Http\Request;
+use Illuminate\Support\Str;
 
 class DestinasiController extends Controller
 {
@@ -20,37 +18,37 @@ class DestinasiController extends Controller
 
     public function create()
     {
-        return view('admin.destinasi.create');
+        $images = Image::latest()->get();
+        $kategoriList = Destinasi::KATEGORI;
+        $durasiList = Destinasi::DURASI;
+        $moodList = Destinasi::MOOD;
+        return view('admin.destinasi.create', compact('images', 'kategoriList', 'durasiList', 'moodList'));
     }
 
     public function store(Request $request)
     {
         $validated = $request->validate([
             'kategori' => 'required|string',
-            'nama'     => 'required|string|max:255',
-            'slug'     => 'required|string|max:255|unique:destinasi',
+            'nama' => 'required|string|max:255',
             'deskripsi' => 'nullable|string',
-            'lokasi'   => 'nullable|string|max:255',
-            'harga'    => 'nullable|numeric',
-            'gambar'   => 'nullable|image|mimes:jpeg,png,jpg,webp|max:4096',
-            'status'   => 'required|string|in:aktif,nonaktif',
-            'durasi'   => 'nullable|string|max:50',
-            'mood'     => 'nullable|string|max:50',
-            'rating'   => 'nullable|string|max:10',
+            'lokasi' => 'nullable|string|max:255',
+            'harga' => 'nullable|numeric',
+            'image_id' => 'nullable|exists:images,id',
+            'status' => 'required|string|in:aktif,nonaktif',
+            'durasi' => 'nullable|string|max:50',
+            'mood' => 'nullable|string|max:50',
+            'rating' => 'nullable|string|max:10',
         ]);
 
-        // Upload gambar dan simpan ke tabel images terpusat
-        if ($request->hasFile('gambar')) {
-            $path = $request->file('gambar')->store('destinasi', 'public');
-            $image = Image::create([
-                'name' => $validated['nama'],
-                'path' => $path,   // contoh: destinasi/abc123.jpg (ada subfolder → url() pakai storage/)
-                'alt'  => $validated['nama'],
-                'disk' => 'public',
-            ]);
-            $validated['image_id'] = $image->id;
+        $validated['slug'] = Str::slug($validated['nama']);
+        
+        // Ensure slug is unique
+        $originalSlug = $validated['slug'];
+        $counter = 1;
+        while (Destinasi::where('slug', $validated['slug'])->exists()) {
+            $validated['slug'] = $originalSlug . '-' . $counter;
+            $counter++;
         }
-        unset($validated['gambar']);
 
         Destinasi::create($validated);
         return redirect()->route('admin.destinasi.index')->with('success', 'Destinasi berhasil ditambahkan');
@@ -58,38 +56,37 @@ class DestinasiController extends Controller
 
     public function edit(Destinasi $destinasi)
     {
-        $destinasi->load('image');
-        return view('admin.destinasi.edit', compact('destinasi'));
+        $images = Image::latest()->get();
+        $kategoriList = Destinasi::KATEGORI;
+        $durasiList = Destinasi::DURASI;
+        $moodList = Destinasi::MOOD;
+        return view('admin.destinasi.edit', compact('destinasi', 'images', 'kategoriList', 'durasiList', 'moodList'));
     }
 
     public function update(Request $request, Destinasi $destinasi)
     {
         $validated = $request->validate([
             'kategori' => 'required|string',
-            'nama'     => 'required|string|max:255',
-            'slug'     => 'required|string|max:255|unique:destinasi,slug,' . $destinasi->id,
+            'nama' => 'required|string|max:255',
             'deskripsi' => 'nullable|string',
-            'lokasi'   => 'nullable|string|max:255',
-            'harga'    => 'nullable|numeric',
-            'gambar'   => 'nullable|image|mimes:jpeg,png,jpg,webp|max:4096',
-            'status'   => 'required|string|in:aktif,nonaktif',
-            'durasi'   => 'nullable|string|max:50',
-            'mood'     => 'nullable|string|max:50',
-            'rating'   => 'nullable|string|max:10',
+            'lokasi' => 'nullable|string|max:255',
+            'harga' => 'nullable|numeric',
+            'image_id' => 'nullable|exists:images,id',
+            'status' => 'required|string|in:aktif,nonaktif',
+            'durasi' => 'nullable|string|max:50',
+            'mood' => 'nullable|string|max:50',
+            'rating' => 'nullable|string|max:10',
         ]);
 
-        // Upload gambar baru dan simpan ke tabel images terpusat
-        if ($request->hasFile('gambar')) {
-            $path = $request->file('gambar')->store('destinasi', 'public');
-            $image = Image::create([
-                'name' => $validated['nama'],
-                'path' => $path,
-                'alt'  => $validated['nama'],
-                'disk' => 'public',
-            ]);
-            $validated['image_id'] = $image->id;
+        $validated['slug'] = Str::slug($validated['nama']);
+        
+        // Ensure slug is unique
+        $originalSlug = $validated['slug'];
+        $counter = 1;
+        while (Destinasi::where('slug', $validated['slug'])->where('id', '!=', $destinasi->id)->exists()) {
+            $validated['slug'] = $originalSlug . '-' . $counter;
+            $counter++;
         }
-        unset($validated['gambar']);
 
         $destinasi->update($validated);
         return redirect()->route('admin.destinasi.index')->with('success', 'Destinasi berhasil diupdate');

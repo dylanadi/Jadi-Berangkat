@@ -12,28 +12,18 @@ class Destinasi extends Model
     protected $table = 'destinasi';
 
     protected $fillable = [
-        'kategori', 'nama', 'slug', 'deskripsi', 'deskripsi_singkat', 'lokasi', 'harga',
-        'image_id', 'status', 'durasi', 'mood', 'rating', 'label', 'rute', 'jml_ulasan', 'tipe'
+        'kategori', 'nama', 'label', 'slug', 'deskripsi', 
+        'deskripsi_singkat', 'lokasi', 'rute', 'harga', 
+        'image_id', 'status', 'durasi', 'mood', 'rating', 'jml_ulasan', 'tipe'
     ];
 
-    /**
-     * Relasi ke tabel images terpusat.
-     */
+    public const KATEGORI = ['Alam', 'Budaya', 'Pantai', 'Kuliner', 'Petualangan', 'Keluarga'];
+    public const DURASI = ['1 Hari', '2 Hari 1 Malam', '3 Hari 2 Malam', 'Lebih dari 3 Hari'];
+    public const MOOD = ['Santai', 'Romantis', 'Eksplorasi', 'Adrenalin', 'Edukasi'];
+
     public function image()
     {
-        return $this->belongsTo(Image::class);
-    }
-
-    /**
-     * Ambil URL gambar dari tabel images terpusat.
-     * Fallback ke gambar default jika image_id belum diset.
-     */
-    public function getImageUrlAttribute(): string
-    {
-        if ($this->image) {
-            return $this->image->url();
-        }
-        return asset('img/unsplash_M8drGBgFNZE.png');
+        return $this->belongsTo(Image::class, 'image_id');
     }
 
     public function jadwalPerjalanan()

@@ -31,6 +31,7 @@ class UlasanController extends Controller
             'bintang' => 'required|integer|min:1|max:5',
             'pesan' => 'required|string',
             'kategori' => 'nullable|string|max:20',
+            'image_id' => 'nullable|exists:images,id',
             'ditampilkan' => 'boolean',
         ]);
 

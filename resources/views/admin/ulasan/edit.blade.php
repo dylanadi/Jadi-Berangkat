@@ -44,6 +44,11 @@
                 @error('kategori') <p class="text-red-500 text-xs mt-1">{{ $message }}</p> @enderror
             </div>
 
+            <div>
+                <label class="block text-sm font-medium text-gray-700 mb-1">Gambar Profil (Opsional)</label>
+                <x-image-input name="image_id" :value="old('image_id', $ulasan->image_id)" />
+            </div>
+
             <div class="flex items-center gap-2">
                 <input type="checkbox" name="ditampilkan" id="ditampilkan" value="1" {{ old('ditampilkan', $ulasan->ditampilkan) ? 'checked' : '' }} class="rounded border-gray-300 text-holiday focus:ring-admin-500">
                 <label for="ditampilkan" class="text-sm font-medium text-gray-700">Ditampilkan</label>
@@ -56,4 +61,5 @@
         </form>
     </div>
 </div>
+
 @endsection

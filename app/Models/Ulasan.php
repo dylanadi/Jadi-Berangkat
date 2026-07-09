@@ -11,31 +11,14 @@ class Ulasan extends Model
 
     protected $table = 'ulasan';
 
-    protected $fillable = ['bintang', 'pesan', 'gambar_profile', 'image_id', 'nama_user', 'kategori', 'ditampilkan'];
+    protected $fillable = ['bintang', 'pesan', 'image_id', 'nama_user', 'kategori', 'ditampilkan'];
 
     protected $casts = [
         'ditampilkan' => 'boolean',
     ];
 
-    /**
-     * Relasi ke tabel images terpusat (untuk foto profil reviewer).
-     */
     public function image()
     {
-        return $this->belongsTo(Image::class);
-    }
-
-    /**
-     * Ambil URL foto profil: utamakan dari tabel images, fallback ke kolom gambar_profile lama.
-     */
-    public function getImageUrlAttribute(): ?string
-    {
-        if ($this->image) {
-            return $this->image->url();
-        }
-        if ($this->gambar_profile) {
-            return asset('img/' . $this->gambar_profile);
-        }
-        return null;
+        return $this->belongsTo(Image::class, 'image_id');
     }
 }

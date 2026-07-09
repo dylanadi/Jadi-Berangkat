@@ -10,7 +10,7 @@ class FaqController extends Controller
 {
     public function index()
     {
-        $faq = Faq::orderBy('urutan')->get();
+        $faq = Faq::orderBy('id')->get();
         return view('admin.faq.index', compact('faq'));
     }
 
@@ -19,7 +19,6 @@ class FaqController extends Controller
         $validated = $request->validate([
             'judul' => 'required|string|max:255',
             'deskripsi' => 'required|string',
-            'urutan' => 'nullable|integer',
         ]);
 
         Faq::create($validated);
@@ -36,7 +35,6 @@ class FaqController extends Controller
         $validated = $request->validate([
             'judul' => 'required|string|max:255',
             'deskripsi' => 'required|string',
-            'urutan' => 'nullable|integer',
         ]);
 
         $faq->update($validated);

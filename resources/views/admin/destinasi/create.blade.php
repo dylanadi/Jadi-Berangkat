@@ -19,10 +19,9 @@
                 <label class="block text-sm font-medium text-gray-700 mb-1">Kategori</label>
                 <select name="kategori" class="w-full border border-gray-300 rounded-lg px-3 py-2 focus:ring-admin-500 focus:border-holiday @error('kategori') border-red-500 @enderror">
                     <option value="">Pilih Kategori</option>
-                    <option value="Wisata Alam" {{ old('kategori') == 'Wisata Alam' ? 'selected' : '' }}>Wisata Alam</option>
-                    <option value="Wisata Budaya" {{ old('kategori') == 'Wisata Budaya' ? 'selected' : '' }}>Wisata Budaya</option>
-                    <option value="Wisata Kuliner" {{ old('kategori') == 'Wisata Kuliner' ? 'selected' : '' }}>Wisata Kuliner</option>
-                    <option value="Wisata Religi" {{ old('kategori') == 'Wisata Religi' ? 'selected' : '' }}>Wisata Religi</option>
+                    @foreach($kategoriList as $kategori)
+                        <option value="{{ $kategori }}" {{ old('kategori') == $kategori ? 'selected' : '' }}>{{ $kategori }}</option>
+                    @endforeach
                 </select>
                 @error('kategori') <p class="text-red-500 text-xs mt-1">{{ $message }}</p> @enderror
             </div>
@@ -31,12 +30,6 @@
                 <label class="block text-sm font-medium text-gray-700 mb-1">Nama</label>
                 <input type="text" name="nama" value="{{ old('nama') }}" class="w-full border border-gray-300 rounded-lg px-3 py-2 focus:ring-admin-500 focus:border-holiday @error('nama') border-red-500 @enderror">
                 @error('nama') <p class="text-red-500 text-xs mt-1">{{ $message }}</p> @enderror
-            </div>
-
-            <div>
-                <label class="block text-sm font-medium text-gray-700 mb-1">Slug</label>
-                <input type="text" name="slug" value="{{ old('slug') }}" class="w-full border border-gray-300 rounded-lg px-3 py-2 focus:ring-admin-500 focus:border-holiday @error('slug') border-red-500 @enderror">
-                @error('slug') <p class="text-red-500 text-xs mt-1">{{ $message }}</p> @enderror
             </div>
 
             <div>
@@ -59,8 +52,7 @@
 
             <div>
                 <label class="block text-sm font-medium text-gray-700 mb-1">Gambar</label>
-                <input type="file" name="gambar" class="w-full border border-gray-300 rounded-lg px-3 py-2 focus:ring-admin-500 focus:border-holiday @error('gambar') border-red-500 @enderror">
-                @error('gambar') <p class="text-red-500 text-xs mt-1">{{ $message }}</p> @enderror
+                <x-image-input name="image_id" :value="old('image_id')" />
             </div>
 
             <div>
@@ -74,13 +66,23 @@
 
             <div>
                 <label class="block text-sm font-medium text-gray-700 mb-1">Durasi</label>
-                <input type="text" name="durasi" value="{{ old('durasi') }}" class="w-full border border-gray-300 rounded-lg px-3 py-2 focus:ring-admin-500 focus:border-holiday @error('durasi') border-red-500 @enderror">
+                <select name="durasi" class="w-full border border-gray-300 rounded-lg px-3 py-2 focus:ring-admin-500 focus:border-holiday @error('durasi') border-red-500 @enderror">
+                    <option value="">Pilih Durasi</option>
+                    @foreach($durasiList as $durasi)
+                        <option value="{{ $durasi }}" {{ old('durasi') == $durasi ? 'selected' : '' }}>{{ $durasi }}</option>
+                    @endforeach
+                </select>
                 @error('durasi') <p class="text-red-500 text-xs mt-1">{{ $message }}</p> @enderror
             </div>
 
             <div>
                 <label class="block text-sm font-medium text-gray-700 mb-1">Mood</label>
-                <input type="text" name="mood" value="{{ old('mood') }}" class="w-full border border-gray-300 rounded-lg px-3 py-2 focus:ring-admin-500 focus:border-holiday @error('mood') border-red-500 @enderror">
+                <select name="mood" class="w-full border border-gray-300 rounded-lg px-3 py-2 focus:ring-admin-500 focus:border-holiday @error('mood') border-red-500 @enderror">
+                    <option value="">Pilih Mood</option>
+                    @foreach($moodList as $mood)
+                        <option value="{{ $mood }}" {{ old('mood') == $mood ? 'selected' : '' }}>{{ $mood }}</option>
+                    @endforeach
+                </select>
                 @error('mood') <p class="text-red-500 text-xs mt-1">{{ $message }}</p> @enderror
             </div>
 
@@ -97,4 +99,5 @@
         </form>
     </div>
 </div>
+
 @endsection

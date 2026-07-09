@@ -40,7 +40,7 @@
                     @forelse($destinasi as $item)
                     <tr class="border-b hover:bg-gray-50">
                         <td class="px-4 py-3">{{ $loop->iteration }}</td>
-                        <td class="px-4 py-3">{{ $item->nama }}</td>
+                        <td class="px-4 py-3">{!! $item->nama !!}</td>
                         <td class="px-4 py-3">{{ $item->kategori }}</td>
                         <td class="px-4 py-3">
                             <span class="px-2 py-1 rounded text-xs {{ $item->status === 'aktif' ? 'bg-green-100 text-green-700' : 'bg-red-100 text-red-700' }}">

@@ -88,7 +88,7 @@
         <!-- Slide 1: Pantai Boom Banyuwangi -->
         <div class="hero-slide absolute inset-0 w-full h-full opacity-100 transition-opacity duration-1000 ease-in-out">
             <div class="absolute inset-0 bg-gradient-to-t from-black/90 via-slate-950/50 to-slate-900/20 z-10"></div>
-            <img src="{{ asset('img/pantaiboom.png') }}" class="w-full h-full object-cover" alt="Sunrise Pantai Boom Banyuwangi">
+            <img src="{{ asset('img/pantaiboom.webp') }}" class="w-full h-full object-cover" alt="Sunrise Pantai Boom Banyuwangi">
             <div class="absolute inset-0 z-20 flex flex-col justify-end pb-24 px-6 md:px-9 max-w-[1440px] mx-auto w-full">
                 <span class="text-yellow-300 font-bold tracking-wider uppercase mb-2 flex items-center gap-2 drop-shadow-lg">
                     <i class="bi bi-sun-fill"></i> Sunrise of Java
@@ -105,7 +105,7 @@
         <!-- Slide 2: Kawah Ijen Banyuwangi -->
         <div class="hero-slide absolute inset-0 w-full h-full opacity-0 transition-opacity duration-1000 ease-in-out pointer-events-none">
             <div class="absolute inset-0 bg-gradient-to-t from-black/90 via-slate-950/50 to-slate-900/20 z-10"></div>
-            <img src="{{ asset('img/bluefire (1).png') }}" class="w-full h-full object-cover" alt="Kawah Ijen Banyuwangi">
+            <img src="{{ asset('img/bluefire (1).webp') }}" class="w-full h-full object-cover" alt="Kawah Ijen Banyuwangi">
             <div class="absolute inset-0 z-20 flex flex-col justify-end pb-24 px-6 md:px-9 max-w-[1440px] mx-auto w-full">
                 <span class="text-cyan-300 font-bold tracking-wider uppercase mb-2 flex items-center gap-2 drop-shadow-lg">
                     <i class="bi bi-fire"></i> Fenomena Api Biru Langka
@@ -200,8 +200,8 @@
     <!-- GRID SYSTEM UTAMA -->
     <div class="space-y-8" id="article-grid-container">
 
-        <!-- EMPTY STATE: muncul kalau filter kategori/pencarian tidak ada hasilnya -->
-        <div id="empty-state" class="hidden flex-col items-center justify-center text-center py-20 px-6 bg-white rounded-3xl border border-dashed border-slate-200">
+        <!-- EMPTY STATE: muncul kalau filter kategori/pencarian tidak ada hasilnya atau database kosong -->
+        <div id="empty-state" class="{{ $artikel->count() == 0 ? 'flex' : 'hidden' }} flex-col items-center justify-center text-center py-20 px-6 bg-white rounded-3xl border border-dashed border-slate-200">
             <div class="w-16 h-16 rounded-full bg-holiday-50 flex items-center justify-center mb-4">
                 <i class="bi bi-journal-x text-3xl text-holiday-500"></i>
             </div>
@@ -211,269 +211,102 @@
 
         <div id="filtered-layout" class="hidden flex-col gap-8"></div>
 
-        <div id="default-layout" class="space-y-8">
-            <!-- TOP 3 CARDS LAYOUT -->
-            <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
-                <!-- 1 CARD BESAR UTAMA (KIRI) -->
-                @if($artikel->count() > 0)
+        <div id="default-layout" class="{{ $artikel->count() > 0 ? 'space-y-12' : 'hidden' }}">
+            
+            <!-- TOP GRID: 1 BESAR KIRI, 2 KANAN ATAS BAWAH -->
+            @if($artikel->count() > 0)
+            <div class="grid grid-cols-1 lg:grid-cols-3 gap-4 md:gap-6">
+                
+                <!-- Kiri Besar -->
                 @php $featured = $artikel->first(); @endphp
-                <div class="lg:col-span-2 lg:h-[500px]">
-                    <article class="news-card relative bg-slate-900 rounded-[2rem] overflow-hidden h-[400px] lg:h-full group shadow-sm hover:shadow-xl transition-all duration-500 flex items-end cursor-pointer" onclick="window.location.href='{{ route('artikel.show', $featured->slug) }}'" data-cats="{{ strtolower($featured->kategori) }}" data-date="{{ $featured->tanggal_terbit ? $featured->tanggal_terbit->format('Y-m-d') : '' }}" data-article="{{ $featured->slug }}">
-                        <div class="absolute inset-0 bg-gradient-to-t from-slate-950 via-slate-900/40 to-transparent z-10"></div>
-                        <img src="{{ $featured->image_url }}" class="absolute inset-0 w-full h-full object-cover object-center group-hover:scale-105 transition-transform duration-700" alt="{{ $featured->judul }}">
+                <article class="lg:col-span-2 relative bg-slate-900 rounded-[2rem] overflow-hidden h-[400px] md:h-[520px] group shadow-sm hover:shadow-xl transition-all duration-500 flex items-end cursor-pointer" onclick="window.location.href='{{ route('artikel.show', $featured->slug) }}'" data-cats="{{ strtolower($featured->kategori) }}" data-date="{{ $featured->tanggal_terbit ? $featured->tanggal_terbit->format('Y-m-d') : '' }}" data-article="{{ $featured->slug }}">
+                    <div class="absolute inset-0 bg-gradient-to-t from-slate-950 via-slate-900/40 to-transparent z-10"></div>
+                    <img src="{{ $featured->image ? $featured->image->url : asset('img/bluefire (1).webp') }}" class="absolute inset-0 w-full h-full object-cover object-center group-hover:scale-105 transition-transform duration-700" alt="{{ $featured->judul }}">
+                    
+                    <div class="relative z-20 p-6 md:p-10 w-full pointer-events-none">
+                        <div class="flex items-center gap-2 mb-4 pointer-events-auto">
+                            <span class="bg-holiday-500 text-white text-[10px] font-black uppercase tracking-wider px-3 py-1 rounded-md shadow-sm">{{ strtoupper($featured->kategori ?? 'DESTINASI') }}</span>
+                        </div>
+                        <h3 class="text-2xl md:text-3xl lg:text-4xl font-extrabold text-white mb-3 leading-tight pointer-events-auto drop-shadow-md">
+                            {{ $featured->judul }}
+                        </h3>
+                        <p class="text-slate-200 text-sm md:text-base max-w-2xl mb-6 line-clamp-2 pointer-events-auto drop-shadow">
+                            {{ Str::limit(strip_tags($featured->konten), 200) }}
+                        </p>
+                        <div class="flex items-center gap-5 pt-5 border-t border-white/20 text-xs md:text-sm text-white/80 pointer-events-auto font-medium">
+                            <span class="flex items-center gap-2"><i class="bi bi-calendar3 text-holiday-400"></i> {{ $featured->tanggal_terbit ? $featured->tanggal_terbit->format('d F Y') : '-' }}</span>
+                            @if($featured->penulis)<span class="flex items-center gap-2"><i class="bi bi-person text-holiday-400"></i> {{ $featured->penulis }}</span>@endif
+                        </div>
+                    </div>
+                </article>
+
+                <!-- Kanan Atas Bawah -->
+                @if($artikel->count() > 1)
+                <div class="flex flex-col gap-4 md:gap-6 h-full">
+                    @foreach($artikel->skip(1)->take(2) as $item)
+                    <article class="relative bg-slate-900 rounded-[2rem] overflow-hidden flex-1 group shadow-sm hover:shadow-xl transition-all duration-500 flex items-end cursor-pointer min-h-[200px]" onclick="window.location.href='{{ route('artikel.show', $item->slug) }}'" data-cats="{{ strtolower($item->kategori) }}" data-date="{{ $item->tanggal_terbit ? $item->tanggal_terbit->format('Y-m-d') : '' }}" data-article="{{ $item->slug }}">
+                        <div class="absolute inset-0 bg-gradient-to-t from-slate-950/90 via-slate-900/50 to-transparent z-10"></div>
+                        <img src="{{ $item->image ? $item->image->url : asset('img/bluefire (1).webp') }}" class="absolute inset-0 w-full h-full object-cover object-center group-hover:scale-105 transition-transform duration-700" alt="{{ $item->judul }}">
                         
-                        <div class="relative z-20 p-8 w-full">
-                            <div class="flex items-center gap-2 mb-3">
-                                <span class="bg-holiday-500 text-white text-[10px] font-black uppercase tracking-wider px-2.5 py-1 rounded-md">{{ strtoupper($featured->kategori ?? 'DESTINASI') }}</span>
+                        <div class="relative z-20 p-6 md:p-8 w-full pointer-events-none">
+                            <div class="flex items-center gap-2 mb-3 pointer-events-auto">
+                                <span class="bg-holiday-500 text-white text-[9px] font-black uppercase tracking-wider px-2.5 py-1 rounded-md shadow-sm">{{ strtoupper($item->kategori ?? 'WISATA') }}</span>
                             </div>
-                            <h3 class="text-3xl md:text-4xl font-extrabold text-white mb-3 leading-tight">
-                                {{ $featured->judul }}
-                            </h3>
-                            <p class="text-slate-300 text-sm max-w-2xl mb-5 line-clamp-2">
-                                {{ Str::limit(strip_tags($featured->konten), 180) }}
-                            </p>
-                            <div class="flex items-center gap-4 text-xs text-slate-300 font-medium">
-                                <span class="flex items-center gap-1.5"><i class="bi bi-calendar3 text-holiday-400"></i> {{ $featured->tanggal_terbit ? $featured->tanggal_terbit->format('d F Y') : '-' }}</span>
-                                <span class="flex items-center gap-1.5"><i class="bi bi-person text-holiday-400"></i> {{ $featured->user->name ?? 'Admin' }}</span>
+                            <h4 class="text-lg md:text-xl font-bold text-white mb-2 leading-snug pointer-events-auto drop-shadow-md line-clamp-2">
+                                {{ $item->judul }}
+                            </h4>
+                            <div class="flex items-center gap-3 text-xs text-white/70 pointer-events-auto font-medium mt-3">
+                                <span class="flex items-center gap-1.5"><i class="bi bi-calendar3"></i> {{ $item->tanggal_terbit ? $item->tanggal_terbit->format('d M Y') : '-' }}</span>
                             </div>
                         </div>
                     </article>
-                </div>
-                @else
-                <!-- Fallback Besar -->
-                <div class="lg:col-span-2 lg:h-[500px]">
-                    <article class="news-card relative bg-slate-900 rounded-[2rem] overflow-hidden h-[400px] lg:h-full group shadow-sm hover:shadow-xl transition-all duration-500 flex items-end" data-cats="destinasi" data-date="2025-09-25" data-article="">
-                        <div class="absolute inset-0 bg-gradient-to-t from-slate-950 via-slate-900/40 to-transparent z-10"></div>
-                        <img src="{{ asset('img/Pantaisukamade.png') }}" class="absolute inset-0 w-full h-full object-cover object-center group-hover:scale-105 transition-transform duration-700" alt="Sukamade Ekowisata" onerror="this.src='{{ asset('img/bluefire (1).png') }}'">
-                        
-                        <div class="relative z-20 p-8 w-full">
-                            <div class="flex items-center gap-2 mb-3">
-                                <span class="bg-holiday-500 text-white text-[10px] font-black uppercase tracking-wider px-2.5 py-1 rounded-md">DESTINASI</span>
-                            </div>
-                            <h3 class="text-3xl md:text-4xl font-extrabold text-white mb-3 leading-tight">
-                                Sukamade: Ekowisata Penyu Paling Mengesankan di Indonesia
-                            </h3>
-                            <p class="text-slate-300 text-sm max-w-2xl mb-5 line-clamp-2">
-                                Pantai Sukamade di TN Meru Betiri adalah tempat pendaratan penyu laut paling penting di Pulau Jawa. Pelajari cara mengunjunginya dan ikut serta dalam konservasi tukik yang luar biasa.
-                            </p>
-                            <div class="flex items-center gap-4 text-xs text-slate-300 font-medium">
-                                <span class="flex items-center gap-1.5"><i class="bi bi-calendar3 text-holiday-400"></i> 25 September 2025</span>
-                                <span class="flex items-center gap-1.5"><i class="bi bi-person text-holiday-400"></i> Admin</span>
-                            </div>
-                        </div>
-                    </article>
+                    @endforeach
                 </div>
                 @endif
-        
-                <!-- 2 CARD KECIL (KANAN) -->
-                <div class="flex flex-col gap-6 lg:h-[500px]">
-                    @if($artikel->count() > 1)
-                        @foreach($artikel->skip(1)->take(2) as $item)
-                        <article class="news-card relative bg-slate-900 rounded-[2rem] overflow-hidden h-[240px] lg:h-[238px] group shadow-sm hover:shadow-xl transition-all duration-500 flex items-end cursor-pointer" onclick="window.location.href='{{ route('artikel.show', $item->slug) }}'" data-cats="{{ strtolower($item->kategori) }}" data-date="{{ $item->tanggal_terbit ? $item->tanggal_terbit->format('Y-m-d') : '' }}" data-article="{{ $item->slug }}">
-                            <div class="absolute inset-0 bg-gradient-to-t from-slate-950 via-slate-900/40 to-transparent z-10"></div>
-                            <img src="{{ $item->image_url }}" class="absolute inset-0 w-full h-full object-cover object-center group-hover:scale-105 transition-transform duration-700" alt="{{ $item->judul }}">
-                            
-                            <div class="relative z-20 p-6 w-full">
-                                <div class="flex items-center gap-2 mb-2">
-                                    <span class="bg-holiday-500 text-white text-[10px] font-black uppercase tracking-wider px-2.5 py-1 rounded-md">{{ strtoupper($item->kategori ?? 'WISATA') }}</span>
-                                </div>
-                                <h4 class="text-xl font-extrabold text-white mb-3 leading-tight line-clamp-2">
+            </div>
+            @endif
+
+            <!-- BAWAH: CONTAINER LEBIH KECIL (Standar Blog) -->
+            @if($artikel->count() > 3)
+            <div class="max-w-5xl mx-auto pt-10 border-t border-slate-100 mt-12">
+                <div class="flex items-center justify-between mb-8">
+                    <h3 class="text-2xl font-extrabold text-slate-900 tracking-tight">Berita & Cerita Lainnya</h3>
+                </div>
+                
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6" id="compact-cards">
+                    @php $otherArticles = $artikel->skip(3); @endphp
+                    @foreach($otherArticles as $item)
+                    <article class="news-card bg-white rounded-[1.5rem] overflow-hidden shadow-sm border border-slate-100 flex flex-col justify-between group cursor-pointer hover:-translate-y-1 hover:shadow-md transition-all duration-300" onclick="window.location.href='{{ route('artikel.show', $item->slug) }}'" data-cats="{{ strtolower($item->kategori) }}" data-date="{{ $item->tanggal_terbit ? $item->tanggal_terbit->format('Y-m-d') : '' }}" data-article="{{ $item->slug }}">
+                        <div class="relative h-52 overflow-hidden shrink-0">
+                            <img src="{{ $item->image ? $item->image->url : asset('img/bluefire (1).webp') }}" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700" alt="{{ $item->judul }}">
+                            <span class="absolute top-4 left-4 bg-white/95 backdrop-blur-sm text-holiday-700 text-[10px] font-black uppercase tracking-wider px-3 py-1 rounded-md shadow-sm">{{ strtoupper($item->kategori ?? 'TIPS') }}</span>
+                        </div>
+                        <div class="p-6 flex-1 flex flex-col justify-between pointer-events-none">
+                            <div class="pointer-events-auto">
+                                <h4 class="font-extrabold text-slate-900 text-lg leading-snug group-hover:text-holiday-600 transition-colors line-clamp-2 mb-3">
                                     {{ $item->judul }}
                                 </h4>
-                                <div class="flex items-center text-xs text-slate-300 font-medium">
-                                    <span class="flex items-center gap-1.5"><i class="bi bi-calendar3 text-holiday-400"></i> {{ $item->tanggal_terbit ? $item->tanggal_terbit->format('d M Y') : '-' }}</span>
-                                </div>
+                                <p class="text-sm text-slate-500 line-clamp-3 mb-4 leading-relaxed">
+                                    {{ Str::limit(strip_tags($item->konten), 120) }}
+                                </p>
                             </div>
-                        </article>
-                        @endforeach
-                    @else
-                        <!-- Fallback 2 Card Kanan -->
-                        <article class="news-card relative bg-slate-900 rounded-[2rem] overflow-hidden h-[240px] lg:h-[238px] group shadow-sm hover:shadow-xl transition-all duration-500 flex items-end cursor-pointer" onclick="window.location.href='{{ route('artikel.index') }}'" data-cats="kuliner" data-date="2025-09-10" data-article="">
-                            <div class="absolute inset-0 bg-gradient-to-t from-slate-950 via-slate-900/40 to-transparent z-10"></div>
-                            <img src="{{ asset('img/rujaksoto.png') }}" class="absolute inset-0 w-full h-full object-cover object-center group-hover:scale-105 transition-transform duration-700" alt="Kuliner" onerror="this.src='https://images.unsplash.com/photo-1544620347-c4fd4a3d5957?q=80&w=400'">
-                            
-                            <div class="relative z-20 p-6 w-full">
-                                <div class="flex items-center gap-2 mb-2">
-                                    <span class="bg-holiday-500 text-white text-[10px] font-black uppercase tracking-wider px-2.5 py-1 rounded-md">KULINER</span>
-                                </div>
-                                <h4 class="text-xl font-extrabold text-white mb-3 leading-tight line-clamp-2">
-                                    Sajian Kuliner Khas Banyuwangi Jawa Timur
-                                </h4>
-                                <div class="flex items-center text-xs text-slate-300 font-medium">
-                                    <span class="flex items-center gap-1.5"><i class="bi bi-calendar3 text-holiday-400"></i> 10 September 2025</span>
-                                </div>
+                            <div class="pt-4 border-t border-slate-100 text-xs text-slate-400 flex items-center justify-between pointer-events-auto font-medium">
+                                <span class="flex items-center gap-1.5"><i class="bi bi-calendar3 text-holiday-400"></i> {{ $item->tanggal_terbit ? $item->tanggal_terbit->format('d M Y') : '-' }}</span>
+                                <span class="text-holiday-600 font-bold hover:underline flex items-center gap-1">Baca <i class="bi bi-arrow-right"></i></span>
                             </div>
-                        </article>
-                        <article class="news-card relative bg-slate-900 rounded-[2rem] overflow-hidden h-[240px] lg:h-[238px] group shadow-sm hover:shadow-xl transition-all duration-500 flex items-end cursor-pointer" onclick="window.location.href='{{ route('artikel.index') }}'" data-cats="tips" data-date="2025-08-20" data-article="">
-                            <div class="absolute inset-0 bg-gradient-to-t from-slate-950 via-slate-900/40 to-transparent z-10"></div>
-                            <img src="{{ asset('img/unsplash_M8drGBgFNZE.png') }}" class="absolute inset-0 w-full h-full object-cover object-center group-hover:scale-105 transition-transform duration-700" alt="Kawah Ijen" onerror="this.src='{{ asset('img/bluefire (1).png') }}'">
-                            
-                            <div class="relative z-20 p-6 w-full">
-                                <div class="flex items-center gap-2 mb-2">
-                                    <span class="bg-holiday-500 text-white text-[10px] font-black uppercase tracking-wider px-2.5 py-1 rounded-md">TIPS</span>
-                                </div>
-                                <h4 class="text-xl font-extrabold text-white mb-3 leading-tight line-clamp-2">
-                                    Panduan Lengkap Mendaki Kawah Ijen di Malam Hari
-                                </h4>
-                                <div class="flex items-center text-xs text-slate-300 font-medium">
-                                    <span class="flex items-center gap-1.5"><i class="bi bi-calendar3 text-holiday-400"></i> 20 Agustus 2025</span>
-                                </div>
-                            </div>
-                        </article>
-                    @endif
+                        </div>
+                    </article>
+                    @endforeach
                 </div>
+                
+                @if(method_exists($artikel, 'links') && $artikel->hasPages())
+                <div class="mt-14 mb-6 flex justify-center">
+                    {{ $artikel->links('pagination::tailwind') }}
+                </div>
+                @endif
             </div>
-
-        <div class="pt-10 pb-3 flex items-center gap-2.5">
-            <span class="w-1.5 h-6 bg-holiday-600 rounded-full"></span>
+            @endif
         </div>
-
-        @if($artikel->count() > 3)
-            @php $featuredMid = $artikel->skip(3)->first(); @endphp
-            <div id="featured-article" class="bg-white dark:bg-gray-800 rounded-[2rem] border border-gray-100 dark:border-gray-700 shadow-[0_8px_30px_rgb(0,0,0,0.02)] overflow-hidden mb-8 news-card" data-cats="{{ strtolower($featuredMid->kategori) }}" data-date="{{ $featuredMid->tanggal_terbit ? $featuredMid->tanggal_terbit->format('Y-m-d') : '' }}" data-article="{{ $featuredMid->slug }}">
-                <div class="grid grid-cols-1 md:grid-cols-2">
-                    <div class="h-64 md:h-auto">
-                        <img src="{{ $featuredMid->image_url }}" class="w-full h-full object-cover" alt="{{ $featuredMid->judul }}">
-                    </div>
-                    <div class="p-8 flex flex-col justify-center">
-                        <span class="text-[10px] font-bold text-holiday uppercase tracking-widest mb-3">{{ strtoupper($featuredMid->kategori ?? 'Tips & Trik') }}</span>
-                        <h2 class="text-2xl md:text-3xl font-extrabold text-ink dark:text-white mb-4">{{ $featuredMid->judul }}</h2>
-                        <p class="text-gray-600 dark:text-gray-300 text-sm leading-relaxed mb-6">
-                            {{ Str::limit(strip_tags($featuredMid->konten), 200) }}
-                        </p>
-                        <a href="{{ route('artikel.show', $featuredMid->slug) }}" class="inline-flex items-center gap-2 bg-holiday text-white px-6 py-3 rounded-full font-bold hover:bg-holiday-dark transition shadow-lg shadow-holiday-glow w-max">
-                            Baca Artikel <i class="bi bi-arrow-right"></i>
-                        </a>
-                    </div>
-                </div>
-            </div>
-        @else
-            <!-- Fallback Featured Article -->
-            <div id="featured-article" class="bg-white dark:bg-gray-800 rounded-[2rem] border border-gray-100 dark:border-gray-700 shadow-[0_8px_30px_rgb(0,0,0,0.02)] overflow-hidden mb-8 news-card" data-cats="tips" data-date="2025-09-05" data-article="">
-                <div class="grid grid-cols-1 md:grid-cols-2">
-                    <div class="h-64 md:h-auto">
-                        <img src="{{ asset('img/unsplash_M8drGBgFNZE.png') }}" class="w-full h-full object-cover" alt="Artikel Utama" onerror="this.src='{{ asset('img/bluefire (1).png') }}'">
-                    </div>
-                    <div class="p-8 flex flex-col justify-center">
-                        <span class="text-[10px] font-bold text-holiday uppercase tracking-widest mb-3">Tips & Trik</span>
-                        <h2 class="text-2xl md:text-3xl font-extrabold text-ink dark:text-white mb-4">Panduan Lengkap Mendaki Kawah Ijen Malam Hari</h2>
-                        <p class="text-gray-600 dark:text-gray-300 text-sm leading-relaxed mb-6">
-                            Mendaki Kawah Ijen di malam hari adalah pengalaman yang tak terlupakan. Disini kita kupas tuntas persiapan, rute, dan tips agar perjalanmu aman dan nyenyak menyaksikan blue fire.
-                        </p>
-                        <a href="{{ route('artikel.index') }}" class="inline-flex items-center gap-2 bg-holiday text-white px-6 py-3 rounded-full font-bold hover:bg-holiday-dark transition shadow-lg shadow-holiday-glow w-max">
-                            Baca Artikel <i class="bi bi-arrow-right"></i>
-                        </a>
-                    </div>
-                </div>
-            </div>
-        @endif
-
-        <h3 class="text-lg font-extrabold text-slate-900 tracking-tight uppercase">Artikel Lainnya</h3>
-        
-        <!-- COMPACT HORIZONTAL CARD GRID -->
-        <div class="grid grid-cols-1 md:grid-cols-3 gap-6" id="compact-cards">
-            
-            @php $otherArticles = $artikel->skip(4); @endphp
-            @forelse($otherArticles as $item)
-            <!-- Card DB -->
-            <article class="news-card bg-white rounded-3xl overflow-hidden shadow-sm border border-slate-100 flex flex-col justify-between group cursor-pointer" onclick="window.location.href='{{ route('artikel.show', $item->slug) }}'" data-cats="{{ strtolower($item->kategori) }}" data-date="{{ $item->tanggal_terbit ? $item->tanggal_terbit->format('Y-m-d') : '' }}" data-article="{{ $item->slug }}">
-                <div class="relative h-48 overflow-hidden shrink-0">
-                    <img src="{{ $item->image_url }}" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700" alt="{{ $item->judul }}">
-                    <span class="absolute bottom-3 left-3 bg-slate-950/80 backdrop-blur-sm text-white text-[10px] font-black uppercase tracking-wider px-2.5 py-1 rounded-md">{{ strtoupper($item->kategori ?? 'TIPS') }}</span>
-                </div>
-                <div class="p-5 flex-1 flex flex-col justify-between">
-                    <div>
-                        <h4 class="font-extrabold text-slate-900 text-base md:text-lg leading-snug group-hover:text-holiday-600 transition-colors line-clamp-2 mb-2">
-                            {{ $item->judul }}
-                        </h4>
-                        <p class="text-sm text-slate-500 line-clamp-2 mb-4">
-                            {{ Str::limit(strip_tags($item->konten), 120) }}
-                        </p>
-                    </div>
-                    <div class="pt-4 border-t border-slate-100 text-xs text-slate-400 flex items-center justify-between">
-                        <span><i class="bi bi-calendar3 text-holiday-500 mr-1"></i> {{ $item->tanggal_terbit ? $item->tanggal_terbit->format('d M Y') : '-' }}</span>
-                        <span class="text-holiday-600 font-bold hover:underline">Baca <i class="bi bi-chevron-right"></i></span>
-                    </div>
-                </div>
-            </article>
-            @empty
-            <!-- Fallback Static Cards -->
-            <article class="news-card bg-white p-4 rounded-3xl border border-slate-100 shadow-sm hover:shadow-md transition-all duration-300 flex gap-4 group items-center" data-cats="tips" data-date="2025-08-01" data-article="">
-                <div class="w-24 h-24 md:w-28 md:h-28 rounded-2xl overflow-hidden shrink-0">
-                    <img src="https://images.unsplash.com/photo-1544620347-c4fd4a3d5957?q=80&w=400" class="w-full h-full object-cover" alt="Tips">
-                </div>
-                <div class="flex flex-col justify-between py-1 h-24 md:h-28 flex-1">
-                    <div>
-                        <span class="inline-block bg-[#e2f7ea] text-holiday-700 text-[10px] font-black px-2 py-0.5 rounded uppercase tracking-wider mb-1.5">TIPS</span>
-                        <h4 class="font-extrabold text-slate-900 text-sm md:text-[14px] leading-snug group-hover:text-holiday-600 transition-colors line-clamp-2">
-                            Panduan Sewa Jeep Banyuwangi: Tips Memilih, Harga, dan Apa yang Harus...
-                        </h4>
-                    </div>
-                    <div class="flex items-center justify-between gap-2 text-xs text-slate-400 font-medium">
-                        <span><span>1 Agu</span> <span>•</span> <span>7 min</span></span>
-                        <a href="{{ route('artikel.index') }}" class="text-holiday-600 font-bold hover:underline">Baca</a>
-                    </div>
-                </div>
-            </article>
-
-            <article class="news-card bg-white p-4 rounded-3xl border border-slate-100 shadow-sm hover:shadow-md transition-all duration-300 flex gap-4 group items-center" data-cats="destinasi" data-date="2025-07-15" data-article="">
-                <div class="w-24 h-24 md:w-28 md:h-28 rounded-2xl overflow-hidden shrink-0">
-                    <img src="https://images.unsplash.com/photo-1506744038136-46273834b3fb?q=80&w=400" class="w-full h-full object-cover" alt="Destinasi">
-                </div>
-                <div class="flex flex-col justify-between py-1 h-24 md:h-28 flex-1">
-                    <div>
-                        <span class="inline-block bg-[#e2f7ea] text-holiday-700 text-[10px] font-black px-2 py-0.5 rounded uppercase tracking-wider mb-1.5">DESTINASI</span>
-                        <h4 class="font-extrabold text-slate-900 text-sm md:text-[14px] leading-snug group-hover:text-holiday-600 transition-colors line-clamp-2">
-                            Taman Nasional Baluran: Safari "Afrika"-nya Indonesia di Banyuwangi
-                        </h4>
-                    </div>
-                    <div class="flex items-center justify-between gap-2 text-xs text-slate-400 font-medium">
-                        <span><span>15 Jul</span> <span>•</span> <span>5 min</span></span>
-                        <a href="{{ route('artikel.index') }}" class="text-holiday-600 font-bold hover:underline">Baca</a>
-                    </div>
-                </div>
-            </article>
-
-            <article class="news-card bg-white p-4 rounded-3xl border border-slate-100 shadow-sm hover:shadow-md transition-all duration-300 flex gap-4 group items-center" data-cats="event" data-date="2025-07-01" data-article="">
-                <div class="w-24 h-24 md:w-28 md:h-28 rounded-2xl overflow-hidden shrink-0">
-                    <img src="https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?q=80&w=400" class="w-full h-full object-cover" alt="Event">
-                </div>
-                <div class="flex flex-col justify-between py-1 h-24 md:h-28 flex-1">
-                    <div>
-                        <span class="inline-block bg-[#e2f7ea] text-holiday-700 text-[10px] font-black px-2 py-0.5 rounded uppercase tracking-wider mb-1.5">EVENT</span>
-                        <h4 class="font-extrabold text-slate-900 text-sm md:text-[14px] leading-snug group-hover:text-holiday-600 transition-colors line-clamp-2">
-                            Festival Banyuwangi 2025–2026: Jadwal Lengkap & Cara Hadir
-                        </h4>
-                    </div>
-                    <div class="flex items-center justify-between gap-2 text-xs text-slate-400 font-medium">
-                        <span><span>1 Jul</span> <span>•</span> <span>5 min</span></span>
-                        <a href="{{ route('artikel.index') }}" class="text-holiday-600 font-bold hover:underline">Baca</a>
-                    </div>
-                </div>
-            </article>
-
-            <article class="news-card bg-white p-4 rounded-3xl border border-slate-100 shadow-sm hover:shadow-md transition-all duration-300 flex gap-4 group items-center" data-cats="destinasi" data-date="2025-06-10" data-article="">
-                <div class="w-24 h-24 md:w-28 md:h-28 rounded-2xl overflow-hidden shrink-0">
-                    <img src="{{ asset('img/bluefire (1).png') }}" class="w-full h-full object-cover" alt="Destinasi">
-                </div>
-                <div class="flex flex-col justify-between py-1 h-24 md:h-28 flex-1">
-                    <div>
-                        <span class="inline-block bg-[#e2f7ea] text-holiday-700 text-[10px] font-black px-2 py-0.5 rounded uppercase tracking-wider mb-1.5">DESTINASI</span>
-                        <h4 class="font-extrabold text-slate-900 text-sm md:text-[14px] leading-snug group-hover:text-holiday-600 transition-colors line-clamp-2">
-                            Kawah Ijen Blue Fire: Panduan Lengkap Trekking 2025
-                        </h4>
-                    </div>
-                    <div class="flex items-center justify-between gap-2 text-xs text-slate-400 font-medium">
-                        <span><span>10 Jun</span> <span>•</span> <span>6 min</span></span>
-                        <a href="{{ route('artikel.index') }}" class="text-holiday-600 font-bold hover:underline">Baca</a>
-                    </div>
-                </div>
-            </article>
-            @endforelse
-
-        </div>
-        </div>
-        <div id="filtered-layout" class="hidden flex flex-col gap-8"></div>
 
     </div>
 </section>
@@ -609,8 +442,8 @@
 
                 // Render First Card as Big
                 const firstData = extractCardData(visibleCards[0]);
-                let newLayoutHTML = `
-                    <article class="news-card relative bg-slate-900 rounded-[2rem] overflow-hidden h-[480px] md:h-[520px] group shadow-sm hover:shadow-xl transition-all duration-500 flex items-end cursor-pointer" onclick="window.location.href='${firstData.slug ? '{{ url("artikel") }}/' + firstData.slug : '#'}'">
+                const bigCardHTML = `
+                    <article class="news-card relative bg-slate-900 rounded-3xl overflow-hidden h-[480px] md:h-[520px] group shadow-sm hover:shadow-xl transition-all duration-500 flex items-end cursor-pointer" onclick="window.location.href='${firstData.slug ? '{{ url("artikel") }}/' + firstData.slug : '#"'}">
                         <div class="absolute inset-0 bg-gradient-to-t from-slate-950 via-slate-900/40 to-transparent z-10"></div>
                         <img src="${firstData.imgSrc}" class="absolute inset-0 w-full h-full object-cover object-center group-hover:scale-105 transition-transform duration-700" alt="${firstData.title}">
                         
@@ -618,7 +451,7 @@
                             <div class="flex items-center gap-2 mb-4">
                                 <span class="bg-holiday-500 text-white text-[10px] font-black uppercase tracking-wider px-2.5 py-1 rounded-md">${firstData.kategori}</span>
                             </div>
-                            <h3 class="text-3xl md:text-4xl font-extrabold text-white mb-3 leading-tight">${firstData.title}</h3>
+                            <h3 class="text-2xl md:text-3xl font-extrabold text-white mb-3 leading-tight">${firstData.title}</h3>
                             <p class="text-slate-300 text-sm max-w-3xl mb-5 line-clamp-3">${firstData.excerpt}</p>
                             <div class="flex items-center justify-between pt-4 border-t border-white/10 text-xs text-slate-300">
                                 <span><i class="bi bi-calendar3 text-holiday-400 mr-1"></i> ${formatDateLabel(firstData.date)}</span>
@@ -627,14 +460,15 @@
                         </div>
                     </article>
                 `;
+                filteredLayout.innerHTML += bigCardHTML;
 
-                // Render remaining as Small in a grid below
+                // Render remaining as Small
                 if (visibleCards.length > 1) {
-                    newLayoutHTML += '<div class="grid grid-cols-1 md:grid-cols-3 gap-6 mt-8">';
+                    let smallCardsHTML = '<div class="grid grid-cols-1 md:grid-cols-3 gap-6">';
                     for (let i = 1; i < visibleCards.length; i++) {
                         const data = extractCardData(visibleCards[i]);
-                        newLayoutHTML += `
-                            <article class="news-card bg-white rounded-3xl overflow-hidden shadow-sm border border-slate-100 flex flex-col justify-between group cursor-pointer" onclick="window.location.href='${data.slug ? '{{ url("artikel") }}/' + data.slug : '#'}'">
+                        smallCardsHTML += `
+                            <article class="news-card bg-white rounded-3xl overflow-hidden shadow-sm border border-slate-100 flex flex-col justify-between group cursor-pointer" onclick="window.location.href='${data.slug ? '{{ url("artikel") }}/' + data.slug : '#"'}">
                                 <div class="relative h-48 overflow-hidden shrink-0">
                                     <img src="${data.imgSrc}" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700" alt="${data.title}">
                                     <span class="absolute bottom-3 left-3 bg-slate-950/80 backdrop-blur-sm text-white text-[10px] font-black uppercase tracking-wider px-2.5 py-1 rounded-md">${data.kategori}</span>
@@ -649,12 +483,12 @@
                                         <span class="text-holiday-600 font-bold hover:underline">Baca <i class="bi bi-chevron-right"></i></span>
                                     </div>
                                 </div>
-                            </article>`;
+                            </article>
+                        `;
                     }
-                    newLayoutHTML += '</div>';
+                    smallCardsHTML += '</div>';
+                    filteredLayout.innerHTML += smallCardsHTML;
                 }
-                
-                filteredLayout.innerHTML = newLayoutHTML;
             }
         }
     }

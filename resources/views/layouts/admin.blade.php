@@ -122,6 +122,8 @@
         </main>
     </div>
 
+    @include('admin.components.image-picker')
+
     @stack('scripts')
 </body>
 </html>

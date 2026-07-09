@@ -2,6 +2,16 @@
 
 @section('title', ($data->judul ?? 'Kebijakan Privasi') . ' - PT Jadi Berangkat')
 
+@push('styles')
+<style>
+    .formatted-content ul { list-style-type: disc; padding-left: 1.5rem; margin-top: 0.5rem; margin-bottom: 0.5rem; }
+    .formatted-content ol { list-style-type: decimal; padding-left: 1.5rem; margin-top: 0.5rem; margin-bottom: 0.5rem; }
+    .formatted-content li { margin-bottom: 0.25rem; }
+    .formatted-content p { margin-bottom: 0.5rem; }
+    .formatted-content a { color: #2f6f42; text-decoration: underline; }
+</style>
+@endpush
+
 @section('content')
 {{-- Sub-Header Bar --}}
 <div class="bg-slate-900 border-b border-slate-800 py-3 px-4 md:px-12 flex items-center justify-between text-white gap-2">
@@ -13,13 +23,13 @@
             <i class="bi bi-shield-check text-sm md:text-xl"></i>
         </div>
         <div class="truncate">
-            <h2 class="font-extrabold text-[11px] md:text-base leading-tight truncate">{{ $data->judul ?? 'Kebijakan Privasi' }}</h2>
-            <p data-edit="subtitle" data-edit-type="text" data-edit-tipe="privasi" class="text-[9px] md:text-[11px] text-slate-400 font-bold uppercase tracking-wider truncate">{{ $data->subtitle ?? 'PT. Jadi Berangkat' }}</p>
+            <h2 class="font-extrabold text-[11px] md:text-base leading-tight truncate">{!! $data->judul ?? 'Kebijakan Privasi' !!}</h2>
+            <p data-edit="subtitle" data-edit-type="text" data-edit-tipe="privasi" class="text-[9px] md:text-[11px] text-slate-400 font-bold uppercase tracking-wider truncate">{!! $data->subtitle ?? 'PT. Jadi Berangkat' !!}</p>
         </div>
     </div>
     <div class="text-right shrink-0">
         <p class="text-[8px] md:text-[10px] text-slate-400 font-bold uppercase tracking-widest">Terakhir diperbarui</p>
-        <p data-edit="tanggal" data-edit-type="text" data-edit-tipe="privasi" class="text-[10px] md:text-xs font-extrabold text-holiday-light">{{ $data->tanggal ?? '30 Juni 2026' }}</p>
+        <p data-edit="tanggal" data-edit-type="text" data-edit-tipe="privasi" class="text-[10px] md:text-xs font-extrabold text-holiday-light">{!! $data->tanggal ?? '30 Juni 2026' !!}</p>
     </div>
 </div>
 
@@ -32,18 +42,17 @@
     @endauth
     <div class="max-w-4xl mx-auto space-y-6 flex flex-col items-center">
         <span data-edit="badge" data-edit-type="text" data-edit-tipe="privasi" class="inline-flex items-center gap-1.5 border border-holiday text-holiday-light px-3.5 py-1.5 rounded-full text-xs font-black tracking-wider uppercase bg-holiday/10">
-            <i class="bi bi-file-earmark-lock-fill"></i> {{ $data->badge ?? 'Dokumen Resmi & Legal' }}
+            <i class="bi bi-file-earmark-lock-fill"></i> {!! $data->badge ?? 'Dokumen Resmi & Legal' !!}
         </span>
-        <h1 data-edit="judul" data-edit-type="text" data-edit-tipe="privasi" class="text-3xl md:text-5xl font-black tracking-tight leading-tight max-w-3xl">
-            {{ $data->judul ?? 'Kebijakan Privasi & Penggunaan Situs Web' }}
+        <h1 data-edit="judul" data-edit-type="text" data-edit-tipe="privasi" class="text-3xl md:text-5xl font-black tracking-tight leading-tight max-w-3xl">{!! $data->judul ?? 'Kebijakan Privasi & Penggunaan Situs Web' !!}
         </h1>
-        <div data-edit="konten" data-edit-type="html" data-edit-tipe="privasi" class="text-slate-300 text-sm md:text-base max-w-2xl font-medium leading-relaxed">
+        <div data-edit="konten" data-edit-type="html" data-edit-tipe="privasi" class="text-slate-300 text-sm md:text-base max-w-2xl font-medium leading-relaxed formatted-content">
             {!! $data->konten ?? 'Dokumen ini mengatur hak, kewajiban, dan perlindungan data Pengguna dalam menggunakan layanan digital PT. Jadi Berangkat.' !!}
         </div>
         <div class="flex flex-wrap items-center justify-center gap-6 pt-4 text-xs font-bold text-slate-400">
             <span data-edit="pasal_label" data-edit-type="text" data-edit-tipe="privasi" class="flex items-center gap-2"><i class="bi bi-file-earmark-text text-holiday-light text-base"></i> {{ count($sections) }} Pasal</span>
-            <span data-edit="hukum_label" data-edit-type="text" data-edit-tipe="privasi" class="flex items-center gap-2"><i class="bi bi-bank text-holiday-light text-base"></i> {{ $data->hukum_label ?? 'Hukum Indonesia' }}</span>
-            <span data-edit="pdp_label" data-edit-type="text" data-edit-tipe="privasi" class="flex items-center gap-2"><i class="bi bi-shield-check text-holiday-light text-base"></i> {{ $data->pdp_label ?? 'UU PDP 2022' }}</span>
+            <span data-edit="hukum_label" data-edit-type="text" data-edit-tipe="privasi" class="flex items-center gap-2"><i class="bi bi-bank text-holiday-light text-base"></i> {!! $data->hukum_label ?? 'Hukum Indonesia' !!}</span>
+            <span data-edit="pdp_label" data-edit-type="text" data-edit-tipe="privasi" class="flex items-center gap-2"><i class="bi bi-shield-check text-holiday-light text-base"></i> {!! $data->pdp_label ?? 'UU PDP 2022' !!}</span>
         </div>
     </div>
 </div>
@@ -63,7 +72,7 @@
             </div>
             <nav class="space-y-1" id="toc-nav">
                 @foreach($sections as $index => $section)
-                <a href="#pasal-{{ $index + 1 }}" class="toc-link block px-4 py-2.5 rounded-xl text-sm font-semibold transition-all text-slate-600 hover:bg-slate-50 hover:text-slate-900">{{ $index + 1 }}. {{ $section['judul'] }}</a>
+                <a href="#pasal-{{ $index + 1 }}" class="toc-link block px-4 py-2.5 rounded-xl text-sm font-semibold transition-all text-slate-600 hover:bg-slate-50 hover:text-slate-900">{{ $index + 1 }}. {{ strip_tags($section['judul']) }}</a>
                 @endforeach
             </nav>
         </aside>
@@ -72,23 +81,19 @@
         <div id="sections-container" class="lg:col-span-8 bg-white p-8 md:p-10 rounded-3xl border border-slate-200/60 shadow-sm space-y-12">
             @foreach($sections as $index => $section)
             <section id="pasal-{{ $index + 1 }}" data-section-index="{{ $index }}" class="scroll-mt-28">
-                <h2 class="text-xl font-bold text-slate-900 mb-4 flex items-center gap-2 relative group w-full">
-                    <span class="w-1.5 h-6 bg-holiday rounded-full"></span> <span class="section-num">{{ $index + 1 }}.</span> <span class="flex-1" data-edit="sections[{{ $index }}].judul" data-edit-type="text" data-edit-tipe="privasi">{{ $section['judul'] }}</span>
-                    @auth
-                    <button onclick="removeSection(this)" class="edit-mode-only text-xs font-bold text-red-500 hover:text-red-700 bg-red-50 hover:bg-red-100 px-3 py-1.5 rounded-lg transition-all absolute right-0" title="Hapus Pasal ini">
-                        <i class="bi bi-trash"></i> Hapus
-                    </button>
-                    @endauth
+                <h2 class="text-xl font-bold text-slate-900 mb-4 flex items-center gap-2">
+                    <span class="w-1.5 h-6 bg-holiday rounded-full"></span> <span class="section-num">{{ $index + 1 }}.</span> 
+                    <span data-edit="sections[{{ $index }}].judul" data-edit-type="text" data-edit-tipe="privasi" class="flex-1">{{ strip_tags($section['judul']) }}</span>
                 </h2>
-                <div data-edit="sections[{{ $index }}].konten" data-edit-type="html" data-edit-tipe="privasi" class="text-slate-600 text-sm leading-relaxed">
+                <div data-edit="sections[{{ $index }}].konten" data-edit-type="html" data-edit-tipe="privasi" class="text-slate-600 text-sm leading-relaxed formatted-content">
                     {!! $section['konten'] !!}
                 </div>
             </section>
             @endforeach
 
             @auth
-            <div class="edit-mode-only text-center pt-4 w-full" id="add-section-btn-wrap">
-                <button onclick="addSection('privasi')" class="mx-auto inline-flex items-center gap-2 text-sm bg-[#2f6f42] text-white rounded-xl px-5 py-3 font-bold hover:bg-[#255a35] transition shadow-lg">
+            <div class="text-center pt-4" id="add-section-btn-wrap">
+                <button onclick="addSection('privasi')" class="inline-flex items-center gap-2 text-sm bg-[#2f6f42] text-white rounded-xl px-5 py-3 font-bold hover:bg-[#255a35] transition shadow-lg">
                     <i class="bi bi-plus-lg"></i> Tambah Pasal
                 </button>
             </div>

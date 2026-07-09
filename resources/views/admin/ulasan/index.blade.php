@@ -29,7 +29,7 @@
                     @forelse($ulasan as $item)
                     <tr class="border-b hover:bg-gray-50">
                         <td class="px-4 py-3">{{ $loop->iteration }}</td>
-                        <td class="px-4 py-3">{{ $item->nama_user }}</td>
+                        <td class="px-4 py-3">{!! $item->nama_user !!}</td>
                         <td class="px-4 py-3">
                             <span class="text-yellow-500">
                                 @for($i = 1; $i <= 5; $i++)

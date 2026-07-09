@@ -47,6 +47,15 @@
             @endif
         </div>
 
+        <div>
+            <x-input-label for="text_color" :value="__('Text Color')" />
+            <div class="flex items-center gap-3 mt-1">
+                <x-text-input id="text_color" name="text_color" type="color" class="block w-16 h-10 p-1" :value="old('text_color', $user->text_color ?? '#000000')" />
+                <span class="text-sm text-gray-500 font-medium">Pilih warna teks untuk tampilan</span>
+            </div>
+            <x-input-error class="mt-2" :messages="$errors->get('text_color')" />
+        </div>
+
         <div class="flex items-center gap-4">
             <x-primary-button>{{ __('Save') }}</x-primary-button>
 

@@ -23,6 +23,7 @@ class DatabaseSeeder extends Seeder
             HalamanStatisSeeder::class,
             ImageSeeder::class,       // harus sebelum KontenAwalSeeder
             KontenAwalSeeder::class,
+            SectionDataSeeder::class,
         ]);
     }
 }

@@ -33,32 +33,17 @@
 
         <div>
             <label class="block text-sm font-bold text-gray-700 mb-1">Favicon</label>
-            <input type="file" name="favicon" accept="image/x-icon,image/png" class="w-full text-sm">
-            @if(!empty($settings['favicon']))
-            <div class="mt-2">
-                <img src="{{ asset('storage/' . $settings['favicon']) }}" class="w-10 h-10 object-contain border rounded">
-            </div>
-            @endif
+            <x-image-input name="favicon" :value="isset($settings['favicon']) ? $settings['favicon'] : ''" />
         </div>
 
         <div>
             <label class="block text-sm font-bold text-gray-700 mb-1">Logo Website</label>
-            <input type="file" name="logo" accept="image/*" class="w-full text-sm">
-            @if(!empty($settings['logo']))
-            <div class="mt-2">
-                <img src="{{ asset('storage/' . $settings['logo']) }}" class="h-12 object-contain border rounded">
-            </div>
-            @endif
+            <x-image-input name="logo" :value="isset($settings['logo']) ? $settings['logo'] : ''" />
         </div>
 
         <div>
             <label class="block text-sm font-bold text-gray-700 mb-1">Open Graph Image (OG Image)</label>
-            <input type="file" name="og_image" accept="image/*" class="w-full text-sm">
-            @if(!empty($settings['og_image']))
-            <div class="mt-2">
-                <img src="{{ asset('storage/' . $settings['og_image']) }}" class="h-20 object-cover border rounded">
-            </div>
-            @endif
+            <x-image-input name="og_image" :value="isset($settings['og_image']) ? $settings['og_image'] : ''" />
         </div>
 
         <div class="flex gap-3 pt-4">
