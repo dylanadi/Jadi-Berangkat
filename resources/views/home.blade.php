@@ -19,16 +19,16 @@
         </iframe>
     </div>
     <div class="absolute inset-0 hero-gradient"></div>
-    <div class="relative z-10 text-white section-shell w-full pt-28 md:pt-28 pb-16 md:pb-20 gsap-section">
-        <div class="max-w-3xl">
+    <div class="relative z-10 text-white section-shell w-full pt-36 md:pt-44 pb-16 md:pb-20 flex flex-col items-center text-center gsap-section">
+        <div class="max-w-4xl flex flex-col items-center">
             <p class="gsap-item inline-flex items-center gap-2 rounded-full border border-white/20 bg-white/10 px-4 py-2 text-xs font-bold uppercase tracking-[0.18em] text-holiday-light backdrop-blur-md">
                 <span data-edit="hero_badge" data-edit-type="text" data-edit-tipe="beranda">{!! $pengaturan->hero_badge ?? '' !!}</span>
             </p>
-            <h1 data-edit="hero_judul" data-edit-type="text" data-edit-tipe="beranda" class="gsap-item mt-7 text-4xl sm:text-5xl md:text-7xl lg:text-8xl font-extrabold mb-6 drop-shadow-2xl leading-[0.98] md:leading-[0.95] text-white">{!! $pengaturan->hero_judul ?? '' !!}
+            <h1 data-edit="hero_judul" data-edit-type="text" data-edit-tipe="beranda" class="gsap-item mt-7 text-4xl sm:text-5xl md:text-6xl lg:text-6xl font-extrabold mb-6 drop-shadow-2xl leading-[1.1] md:leading-[1.1] text-white">{!! $pengaturan->hero_judul ?? '' !!}
             </h1>
-            <p data-edit="hero_deskripsi" data-edit-type="text" data-edit-tipe="beranda" class="gsap-item text-base md:text-xl max-w-xl drop-shadow-md text-white/88 mb-7 md:mb-9 font-medium leading-relaxed">{!! $pengaturan->hero_deskripsi ?? '' !!}
+            <p data-edit="hero_deskripsi" data-edit-type="text" data-edit-tipe="beranda" class="gsap-item text-base md:text-lg max-w-xl mx-auto drop-shadow-md text-white/90 mb-7 md:mb-10 font-medium leading-relaxed">{!! $pengaturan->hero_deskripsi ?? '' !!}
             </p>
-            <div class="gsap-item flex flex-col sm:flex-row gap-3">
+            <div class="gsap-item flex flex-col sm:flex-row gap-4 justify-center items-center w-full">
                 <a href="{{ url('/booking') }}" class="btn-primary px-7 py-4 rounded-full transition-all font-bold inline-flex items-center justify-center gap-2">
 <span data-edit="button_booking" data-edit-type="text" data-edit-tipe="beranda">{!! $pengaturan->button_booking ?? '' !!}</span> <i class="bi bi-arrow-right"></i>
                         </a>
@@ -37,16 +37,16 @@
                 </a>
             </div>
         </div>
-        <div class="gsap-item mt-10 md:mt-14 grid grid-cols-3 max-w-2xl divide-x divide-white/18 rounded-[1.5rem] border border-white/14 bg-black/24 p-4 text-white backdrop-blur-md">
-            <div class="px-3">
+        <div class="gsap-item mt-12 md:mt-16 grid grid-cols-3 max-w-2xl mx-auto divide-x divide-white/18 rounded-[1.5rem] border border-white/14 bg-black/24 p-4 text-white backdrop-blur-md">
+            <div class="px-4">
                 <p class="text-2xl md:text-3xl font-extrabold"><span data-edit="hero_jumlah_destinasi" data-edit-type="number" data-edit-tipe="beranda" class="hero-stat" data-target="{{ $pengaturan->hero_jumlah_destinasi ?? 0 }}" data-suffix="+">0</span></p>
 <p data-edit="stat_hero_destinasi_label" data-edit-type="text" data-edit-tipe="beranda" class="text-xs text-white/65 font-bold">{!! $pengaturan->stat_hero_destinasi_label ?? '' !!}</p>
             </div>
-            <div class="px-3">
+            <div class="px-4">
                 <p class="text-2xl md:text-3xl font-extrabold"><span data-edit="hero_jumlah_armada" data-edit-type="number" data-edit-tipe="beranda" class="hero-stat" data-target="{{ $pengaturan->hero_jumlah_armada ?? 0 }}" data-suffix="+">0</span></p>
                 <p data-edit="stat_armada_label" data-edit-type="text" data-edit-tipe="beranda" class="text-xs text-white/65 font-bold">{!! $pengaturan->stat_armada_label ?? '' !!}</p>
             </div>
-            <div class="px-3">
+            <div class="px-4">
                 <p class="text-2xl md:text-3xl font-extrabold"><span data-edit="hero_rating" data-edit-type="number" data-edit-tipe="beranda" class="hero-stat" data-target="{{ $pengaturan->hero_rating ?? 0 }}">0</span><i class="bi bi-star-fill text-amber-400"></i></p>
                 <p data-edit="stat_rating_label" data-edit-type="text" data-edit-tipe="beranda" class="text-xs text-white/65 font-bold">{!! $pengaturan->stat_rating_label ?? '' !!}</p>
             </div>

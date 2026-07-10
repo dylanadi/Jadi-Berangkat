@@ -216,22 +216,22 @@
         </div>
     </aside>
 
-    <header id="header-wrapper" class="fixed w-full top-0 z-50 transition-all duration-700 ease-in-out py-3 flex justify-center px-4 md:px-6">
-        <div id="nav-container" class="w-full max-w-[1440px] flex justify-between items-center px-6 md:px-9 py-3.5 transition-all duration-500 !text-ink !bg-white/90 backdrop-blur-xl rounded-[1.65rem] border !border-white/70 shadow-[0_18px_55px_rgba(0,0,0,0.16)]">
+    <header id="header-wrapper" class="fixed w-full top-0 z-50 transition-all duration-700 ease-in-out py-5 flex justify-center px-4 md:px-6">
+        <div id="nav-container" class="w-[96%] max-w-[1500px] flex justify-between items-center px-6 md:px-10 py-3 transition-all duration-500 !text-gray-800 !bg-[#F6F5ED] rounded-full shadow-[0_8px_30px_rgb(0,0,0,0.06)] border !border-white/50 backdrop-blur-md">
             <a href="{{ url('/') }}" class="text-2xl font-extrabold tracking-wide flex items-center gap-2">
                 @if(!empty($globalPengaturan['logo_full']))
-                    <img src="{{ asset('storage/' . $globalPengaturan['logo_full']) }}" alt="{{ $globalPengaturan['logo_alt'] ?? 'Logo Jadi Berangkat' }}" class="hidden sm:block h-10 w-auto">
+                    <img src="{{ asset('storage/' . $globalPengaturan['logo_full']) }}" alt="{{ $globalPengaturan['logo_alt'] ?? 'Logo Jadi Berangkat' }}" class="hidden sm:block h-9 w-auto">
                 @else
                     <i class="bi bi-jeep !text-holiday hidden sm:block"></i> <span class="hidden sm:block">Jadi Berangkat</span>
                 @endif
                 
                 @if(!empty($globalPengaturan['logo_utama']))
-                    <img src="{{ asset('storage/' . $globalPengaturan['logo_utama']) }}" alt="{{ $globalPengaturan['logo_alt'] ?? 'Logo Jadi Berangkat' }}" class="sm:hidden h-8 w-auto">
+                    <img src="{{ asset('storage/' . $globalPengaturan['logo_utama']) }}" alt="{{ $globalPengaturan['logo_alt'] ?? 'Logo Jadi Berangkat' }}" class="sm:hidden h-7 w-auto">
                 @else
                     <i class="bi bi-jeep !text-holiday sm:hidden"></i> <span class="sm:hidden">JB.</span>
                 @endif
             </a>
-            <nav class="hidden md:flex gap-8 font-semibold items-center !text-gray-700">
+            <nav class="hidden md:flex gap-8 font-medium text-[15px] items-center !text-gray-600">
                 <a href="{{ url('/') }}" class="hover:!text-holiday transition">Beranda</a>
                 <a href="{{ url('/tentang') }}" class="hover:!text-holiday transition">Tentang</a>
                 <div class="relative group">
