@@ -219,7 +219,7 @@
                 
                 <!-- Kiri Besar -->
                 @php $featured = $artikel->first(); @endphp
-                <article class="lg:col-span-2 relative bg-slate-900 rounded-[2rem] overflow-hidden h-[400px] md:h-[520px] group shadow-sm hover:shadow-xl transition-all duration-500 flex items-end cursor-pointer" onclick="window.location.href='{{ route('artikel.show', $featured->slug) }}'" data-cats="{{ strtolower($featured->kategori->nama_kategori ?? '') }}" data-date="{{ $featured->tanggal_terbit ? $featured->tanggal_terbit->format('Y-m-d') : '' }}" data-article="{{ $featured->slug }}">
+                <article class="news-card lg:col-span-2 relative bg-slate-900 rounded-[2rem] overflow-hidden h-[400px] md:h-[520px] group shadow-sm hover:shadow-xl transition-all duration-500 flex items-end cursor-pointer" onclick="window.location.href='{{ route('artikel.show', $featured->slug) }}'" data-cats="{{ strtolower($featured->kategori->nama_kategori ?? '') }}" data-date="{{ $featured->tanggal_terbit ? $featured->tanggal_terbit->format('Y-m-d') : '' }}" data-article="{{ $featured->slug }}">
                     <div class="absolute inset-0 bg-gradient-to-t from-slate-950 via-slate-900/40 to-transparent z-10"></div>
                     <img src="{{ $featured->image ? $featured->image->url : asset('img/bluefire (1).webp') }}" class="absolute inset-0 w-full h-full object-cover object-center group-hover:scale-105 transition-transform duration-700" alt="{{ $featured->judul }}">
                     
@@ -244,7 +244,7 @@
                 @if($artikel->count() > 1)
                 <div class="flex flex-col gap-4 md:gap-6 h-full">
                     @foreach($artikel->skip(1)->take(2) as $item)
-                    <article class="relative bg-slate-900 rounded-[2rem] overflow-hidden flex-1 group shadow-sm hover:shadow-xl transition-all duration-500 flex items-end cursor-pointer min-h-[200px]" onclick="window.location.href='{{ route('artikel.show', $item->slug) }}'" data-cats="{{ strtolower($item->kategori->nama_kategori ?? '') }}" data-date="{{ $item->tanggal_terbit ? $item->tanggal_terbit->format('Y-m-d') : '' }}" data-article="{{ $item->slug }}">
+                    <article class="news-card relative bg-slate-900 rounded-[2rem] overflow-hidden flex-1 group shadow-sm hover:shadow-xl transition-all duration-500 flex items-end cursor-pointer min-h-[200px]" onclick="window.location.href='{{ route('artikel.show', $item->slug) }}'" data-cats="{{ strtolower($item->kategori->nama_kategori ?? '') }}" data-date="{{ $item->tanggal_terbit ? $item->tanggal_terbit->format('Y-m-d') : '' }}" data-article="{{ $item->slug }}">
                         <div class="absolute inset-0 bg-gradient-to-t from-slate-950/90 via-slate-900/50 to-transparent z-10"></div>
                         <img src="{{ $item->image ? $item->image->url : asset('img/bluefire (1).webp') }}" class="absolute inset-0 w-full h-full object-cover object-center group-hover:scale-105 transition-transform duration-700" alt="{{ $item->judul }}">
                         
@@ -255,6 +255,7 @@
                             <h4 class="text-lg md:text-xl font-bold text-white mb-2 leading-snug pointer-events-auto drop-shadow-md line-clamp-2">
                                 {{ $item->judul }}
                             </h4>
+                            <p class="hidden">{{ Str::limit(strip_tags($item->konten), 120) }}</p>
                             <div class="flex items-center gap-3 text-xs text-white/70 pointer-events-auto font-medium mt-3">
                                 <span class="flex items-center gap-1.5"><i class="bi bi-calendar3"></i> {{ $item->tanggal_terbit ? $item->tanggal_terbit->format('d M Y') : '-' }}</span>
                             </div>
@@ -394,10 +395,30 @@
         const oneMonthAgo = new Date();
         oneMonthAgo.setMonth(oneMonthAgo.getMonth() - 1);
 
+        const categoryMap = {
+            'destinasi': ['destinasi', 'wisata', 'pantai', 'pegunungan', 'hutan', 'budaya', 'petualangan', 'armada', 'open trip', 'kawah ijen', 'trip hutan', 'budaya trip', 'ijen trip', 'sunrise tour', 'alam', 'gunung', 'sejarah'],
+            'event': ['event', 'lomba', 'festival', 'acara', 'pertunjukan', 'konser'],
+            'kuliner': ['kuliner', 'makanan', 'minuman', 'resto', 'kafe', 'oleh-oleh'],
+            'tips': ['tips', 'tips wisata', 'panduan', 'tutorial', 'info', 'persiapan']
+        };
+
         let visibleCards = Array.from(newsCards).filter(card => {
-            const cats = (card.dataset.cats || '').split(',').map(c => c.trim());
-            const matchesCat = activeCat === 'all' || cats.some(c => c.includes(activeCat));
-            const matchesSearch = !query || card.textContent.toLowerCase().includes(query);
+            const data = extractCardData(card);
+            const cats = (card.dataset.cats || '').split(',').map(c => c.trim().toLowerCase());
+            
+            let matchesCat = activeCat === 'all';
+            if (!matchesCat) {
+                const allowedKeywords = categoryMap[activeCat] || [activeCat];
+                matchesCat = cats.some(c => allowedKeywords.includes(c) || allowedKeywords.some(keyword => c === keyword || c.startsWith(keyword + ' ')));
+            }
+            
+            const searchText = (data.title + ' ' + data.excerpt).toLowerCase();
+            
+            // Mencari kecocokan dari awal huruf (prefix / word boundary)
+            const matchesSearch = !query || query.split(/\s+/).every(q => {
+                const escapedQ = q.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+                return new RegExp('\\b' + escapedQ, 'i').test(searchText);
+            });
             const cardDate = card.dataset.date || '';
             const d = new Date(cardDate);
             let matchesDate = true;
@@ -414,6 +435,22 @@
             visibleCards.sort((a, b) => (a.dataset.date || '').localeCompare(b.dataset.date || ''));
         }
 
+        // Prioritaskan hasil pencarian berdasarkan kecocokan di judul
+        if (query) {
+            visibleCards.sort((a, b) => {
+                const titleA = (a.querySelector('h2, h3, h4') || {}).textContent || '';
+                const titleB = (b.querySelector('h2, h3, h4') || {}).textContent || '';
+                
+                const qLower = query.toLowerCase();
+                const aStarts = titleA.toLowerCase().startsWith(qLower);
+                const bStarts = titleB.toLowerCase().startsWith(qLower);
+                
+                if (aStarts && !bStarts) return -1;
+                if (!aStarts && bStarts) return 1;
+                
+                return 0; // Kembalikan ke urutan tanggal jika sama
+            });
+        }
         const isDefault = activeCat === 'all' && query === '' && dateVal === 'baru';
 
         if (isDefault) {

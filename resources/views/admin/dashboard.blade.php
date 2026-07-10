@@ -145,7 +145,7 @@
                         @forelse($destinasiTerbaru as $d)
                         <tr class="border-b last:border-0">
                             <td class="py-2">{{ $d->nama }}</td>
-                            <td class="py-2">{{ $d->kategori }}</td>
+                            <td class="py-2">{{ $d->kategori->nama_kategori ?? '-' }}</td>
                             <td class="py-2">
                                 <span class="px-2 py-1 rounded text-xs {{ $d->status === 'aktif' ? 'bg-green-100 text-green-700' : 'bg-red-100 text-red-700' }}">
                                     {{ $d->status }}

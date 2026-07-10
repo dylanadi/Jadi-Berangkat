@@ -142,23 +142,7 @@
     </style>
 </head>
 <body class="text-gray-800 overflow-x-hidden antialiased min-h-screen flex flex-col" @auth style="color: {{ Auth::user()->text_color ?? '#151813' }} !important;" @endauth>
-    <div id="google_translate_element"></div>
-    <script type="text/javascript">
-        function googleTranslateElementInit() {
-            new google.translate.TranslateElement({pageLanguage: 'id', includedLanguages: 'id,en', autoDisplay: false}, 'google_translate_element');
-        }
-        function switchLanguage(lang) {
-            const selectField = document.querySelector(".goog-te-combo");
-            if (selectField) {
-                selectField.value = lang;
-                selectField.dispatchEvent(new Event('change'));
-                localStorage.setItem('preferred_lang', lang);
-                document.querySelectorAll('.lang-btn, .lang-btn-mob').forEach(b => b.classList.remove('active'));
-                document.querySelectorAll('.lang-' + lang).forEach(b => b.classList.add('active'));
-            }
-        }
-    </script>
-    <script type="text/javascript" src="//translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"></script>
+
 
     {{-- Navbar & Sidebar --}}
     <div id="menu-overlay" class="fixed inset-0 !bg-black/60 z-[60] hidden opacity-0 backdrop-blur-sm"></div>
@@ -435,28 +419,21 @@
     <div id="google_translate_element"></div>
     <script type="text/javascript">
         function googleTranslateElementInit() {
-            new google.translate.TranslateElement({pageLanguage: 'id', autoDisplay: false}, 'google_translate_element');
+            new google.translate.TranslateElement({pageLanguage: 'auto', autoDisplay: false}, 'google_translate_element');
         }
         
         function switchLanguage(lang) {
             var domain = window.location.hostname;
-            // Update cookie
-            if (lang === 'en') {
-                document.cookie = "googtrans=/id/en; path=/";
-                document.cookie = "googtrans=/id/en; path=/; domain=" + domain;
-            } else {
-                // Clear cookie for original language (ID)
-                document.cookie = "googtrans=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
-                document.cookie = "googtrans=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/; domain=" + domain;
-                document.cookie = "googtrans=/id/id; path=/";
-                document.cookie = "googtrans=/id/id; path=/; domain=" + domain;
-            }
+            // Update cookie with auto-detection for the source language
+            document.cookie = "googtrans=/auto/" + lang + "; path=/";
+            document.cookie = "googtrans=/auto/" + lang + "; path=/; domain=" + domain;
+            document.cookie = "googtrans=/auto/" + lang + "; path=/; domain=." + domain;
             window.location.reload();
         }
 
         // Set active class based on cookie
         document.addEventListener('DOMContentLoaded', function() {
-            var isEnglish = document.cookie.indexOf('googtrans=/id/en') !== -1;
+            var isEnglish = document.cookie.indexOf('googtrans=/auto/en') !== -1 || document.cookie.indexOf('googtrans=/id/en') !== -1;
             var btnsId = document.querySelectorAll('.lang-id');
             var btnsEn = document.querySelectorAll('.lang-en');
             
@@ -595,17 +572,21 @@ function initTinyMCE() {
 }
 
 function getContent(el) {
+  let val = '';
   if (el.dataset.editType === 'html') {
     if (typeof tinymce !== 'undefined') {
       const editor = tinymce.get(el.id);
-      if (editor) return editor.getContent().trim();
+      if (editor) val = editor.getContent().trim();
     }
-    return el.innerHTML.trim();
+    if (!val) val = el.innerHTML.trim();
+  } else {
+    val = el.innerHTML.trim();
+    if (el.dataset.editType === 'number') {
+      val = val.replace(/[^0-9]/g, '');
+    }
   }
-  var val = el.innerHTML.trim();
-  if (el.dataset.editType === 'number') {
-    val = val.replace(/[^0-9]/g, '');
-  }
+  // Strip Google Translate <font> tags to prevent "stuck in English" bug
+  val = val.replace(/<\/?font[^>]*>/gi, '');
   return val;
 }
 
