@@ -261,8 +261,12 @@
         let total = 0;
         document.querySelectorAll('#addonContainer input:checked').forEach(cb => {
             const label = cb.closest('.addon-card');
-            const priceText = label.querySelector('.ml-auto').textContent.replace(/[^0-9]/g, '');
-            total += parseInt(priceText) || 0;
+            const priceText = label.querySelector('.ml-auto').textContent;
+            let price = parseInt(priceText.replace(/[^0-9]/g, '')) || 0;
+            if (priceText.toUpperCase().includes('K')) {
+                price *= 1000;
+            }
+            total += price;
         });
         return total;
     }
