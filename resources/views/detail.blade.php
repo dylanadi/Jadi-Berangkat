@@ -68,7 +68,7 @@
     @endauth
     <img src="{{ ($destinasi->image ? $destinasi->image->url : '') }}" alt="{{ $destinasi->nama }}">
     <div class="overlay"></div>
-    <div class="hero-bottom max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <div class="hero-bottom w-[96%] max-w-[1500px] mx-auto px-6 md:px-10">
         <a href="{{ route('destinasi.index') }}" class="back-btn mb-4"><i class="bi bi-arrow-left"></i> Kembali</a>
         <h1 data-edit="nama" data-edit-type="text" data-edit-route="{{ route('admin.destinasi.edit', $destinasi->id) }}">{!! $destinasi->nama !!}</h1>
         <div class="meta-row">
@@ -81,7 +81,7 @@
     </div>
 </section>
 
-<div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
+<div class="w-[96%] max-w-[1500px] mx-auto px-6 md:px-10 py-4">
     <nav class="breadcrumb" aria-label="Breadcrumb">
         <a href="{{ route('home') }}">Beranda</a>
         <span class="sep">›</span>
@@ -91,7 +91,7 @@
     </nav>
 </div>
 
-<section class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pb-16">
+<section class="w-[96%] max-w-[1500px] mx-auto px-6 md:px-10 pb-16">
     <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
         <div class="lg:col-span-2 space-y-10">
             <div>
@@ -221,7 +221,7 @@
 
 @if(isset($lainnya) && $lainnya->count())
 <section class="bg-white py-16">
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <div class="w-[96%] max-w-[1500px] mx-auto px-6 md:px-10">
         <h2 class="text-2xl font-bold text-[#1a1a2e] mb-8 flex items-center gap-2">
             <i class="bi bi-compass text-[#2f6f42]"></i> Jelajahi Trip Lainnya
         </h2>

@@ -64,7 +64,8 @@
         body:not(.edit-mode-active) #add-section-btn-wrap { display: none !important; }
         .card-gradient { background: linear-gradient(to top, rgba(7,13,9,0.96) 0%, rgba(7,13,9,0.34) 58%, transparent 100%); }
         .hero-gradient { background: linear-gradient(90deg, rgba(10,16,11,0.82) 0%, rgba(10,16,11,0.56) 42%, rgba(10,16,11,0.14) 100%), linear-gradient(to bottom, rgba(0,0,0,0.18) 0%, rgba(0,0,0,0.02) 48%, rgba(0,0,0,0.58) 100%); }
-        .section-shell { max-width: 1280px; margin-inline: auto; padding-inline: 1.5rem; }
+        .section-shell { width: 96%; max-width: 1500px; margin-inline: auto; padding-inline: 1.5rem; }
+        @media (min-width: 768px) { .section-shell { padding-inline: 2.5rem; } }
         .btn-primary { background: #2f6f42; color: #fff; box-shadow: 0 16px 42px rgba(47, 111, 66, 0.26); }
         .btn-primary:hover { background: #17442a; transform: translateY(-1px); }
         .btn-secondary { border: 1px solid rgba(255,255,255,0.34); background: rgba(255,255,255,0.12); color: #fff; backdrop-filter: blur(14px); }
@@ -146,6 +147,7 @@
 
     {{-- Navbar & Sidebar --}}
     <div id="menu-overlay" class="fixed inset-0 !bg-black/60 z-[60] hidden opacity-0 backdrop-blur-sm"></div>
+    @if(!request()->routeIs('privasi') && !request()->routeIs('bantuan'))
     <aside id="mobile-sidebar" class="fixed top-0 left-0 h-full w-[85%] max-w-sm !bg-base shadow-2xl z-[70] p-6 flex flex-col transform -translate-x-full border-r !border-black/5 overflow-y-auto">
         <div class="flex justify-between items-center mb-8">
             <a href="{{ url('/') }}" class="text-2xl font-extrabold flex items-center gap-2">
@@ -289,15 +291,17 @@
             </div>
         </div>
     </header>
+    @endif
 
     @php
-        $isHeroPage = request()->is('/') || request()->is('tentang') || request()->is('destinasi');
+        $isHeroPage = request()->is('/') || request()->is('tentang') || request()->is('destinasi') || request()->routeIs('privasi') || request()->routeIs('bantuan');
     @endphp
     <main class="flex-grow {{ $isHeroPage ? '' : 'pt-24' }}">
         @yield('content')
     </main>
 
     {{-- Footer --}}
+    @if(!request()->routeIs('privasi') && !request()->routeIs('bantuan'))
     <footer class="bg-ink text-white pt-20 pb-8 border-t-[6px] border-holiday">
         <div class="section-shell">
             <div class="grid grid-cols-1 md:grid-cols-12 gap-10 md:gap-8 mb-16">
@@ -343,6 +347,7 @@
             </div>
         </div>
     </footer>
+    @endif
 
     {{-- Scroll To Top Button --}}
     <button id="scrollToTopBtn" class="fixed bottom-6 left-6 md:bottom-10 md:left-10 w-12 h-12 md:w-14 md:h-14 bg-holiday text-white rounded-full flex items-center justify-center shadow-xl shadow-holiday/30 z-[90] opacity-0 invisible translate-y-10 hover:bg-[#236026] transition-colors" aria-label="Scroll to top">

@@ -7,12 +7,12 @@
     <div class="absolute top-1/4 -right-20 w-96 h-96 bg-emerald-100/40 rounded-full blur-3xl -z-10"></div>
     <div class="absolute bottom-10 left-10 w-72 h-72 bg-amber-100/30 rounded-full blur-2xl -z-10"></div>
 
-    <div class="max-w-7xl mx-auto px-6 md:px-12 grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
+    <div class="w-[96%] max-w-[1500px] mx-auto px-6 md:px-10 grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
         <div class="lg:col-span-7 space-y-6 relative lg:-top-8">
             <div class="inline-flex items-center gap-2 bg-emerald-100 text-emerald-800 text-[11px] font-bold uppercase tracking-widest px-3 py-1 rounded-md">
                 <span class="w-1.5 h-1.5 bg-emerald-500 rounded-full animate-ping"></span><span data-edit="tentang_badge" data-edit-type="text" data-edit-tipe="tentang">{!! $data->tentang_badge ?? '' !!}</span>
             </div>
-            <h1 class="text-3xl md:text-5xl font-black text-slate-900 tracking-tight leading-none">
+            <h1 class="text-3xl md:text-4xl lg:text-5xl font-black text-slate-900 tracking-tight leading-tight">
                 <span data-edit="judul" data-edit-type="text" data-edit-tipe="tentang">{!! $data->judul ?? '' !!}</span>
             </h1>
             <div data-edit="konten" data-edit-type="html" data-edit-tipe="tentang" class="text-sm md:text-base leading-relaxed max-w-2xl font-medium relative group" style="color: #000 !important">
@@ -53,7 +53,7 @@
 </section>
 
 <section class="py-24 bg-slate-900 text-white relative overflow-hidden">
-    <div class="max-w-7xl mx-auto px-6 md:px-12 grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
+    <div class="w-[96%] max-w-[1500px] mx-auto px-6 md:px-10 grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
         <div class="lg:col-span-5 grid grid-cols-2 gap-4 relative">
             <div class="space-y-4">
                 <img src="{{ $kisah?->gambar1?->url ?? '' }}" data-image-edit data-edit-field="tentang_kisah_img_1" data-edit-tipe="tentang" class="w-full aspect-square object-cover rounded-xl shadow-md" alt="Nature Briefing">
@@ -111,7 +111,7 @@
     </div>
 </section>
 
-<section class="max-w-7xl mx-auto px-6 md:px-12 py-20 bg-white rounded-3xl shadow-sm border border-slate-100 my-10">
+<section class="w-[96%] max-w-[1500px] mx-auto px-6 md:px-10 py-20 bg-white rounded-3xl shadow-sm border border-slate-100 my-10">
     <div class="text-center mb-16 space-y-2">
         <span data-edit="tentang_nilai_badge" data-edit-type="text" data-edit-tipe="tentang" class="text-emerald-600 font-bold text-xs uppercase tracking-widest block">{!! $data->tentang_nilai_badge ?? '' !!}</span>
         <h2 data-edit="tentang_nilai_judul" data-edit-type="text" data-edit-tipe="tentang" class="text-2xl md:text-3xl font-black text-slate-900 tracking-tight">{!! $data->tentang_nilai_judul ?? '' !!}</h2>
@@ -163,7 +163,7 @@
     </div>
 </section>
 
-<section class="max-w-7xl mx-auto px-6 md:px-12 py-16">
+<section class="w-[96%] max-w-[1500px] mx-auto px-6 md:px-10 py-16">
     <div class="flex flex-col sm:flex-row sm:items-end justify-between mb-10 gap-4">
         <div>
             <span class="text-emerald-600 font-bold text-xs uppercase tracking-widest block mb-1">{{ $galeriAbout?->label ?? '' }}</span>

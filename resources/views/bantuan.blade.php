@@ -3,8 +3,28 @@
 @section('title', 'Bantuan - Jadi Berangkat')
 
 @section('content')
+{{-- Sub-Header Bar --}}
+<div class="bg-slate-900 border-b border-slate-800 py-3 px-4 md:px-12 flex items-center justify-between text-white gap-2 relative z-50">
+    <a href="{{ url('/') }}" class="flex items-center gap-1.5 text-xs md:text-sm font-bold text-slate-300 hover:text-white transition shrink-0">
+        <i class="bi bi-arrow-left text-base"></i> Kembali
+    </a>
+    <div class="flex items-center gap-2 md:gap-3 min-w-0">
+        <div class="w-7 h-7 md:w-10 md:h-10 rounded-full bg-emerald-500/20 flex items-center justify-center border border-emerald-500 text-emerald-300 shrink-0">
+            <i class="bi bi-question-circle-fill text-sm md:text-xl"></i>
+        </div>
+        <div class="truncate">
+            <h2 class="font-extrabold text-[11px] md:text-base leading-tight truncate">Pusat Bantuan</h2>
+            <p class="text-[9px] md:text-[11px] text-slate-400 font-bold uppercase tracking-wider truncate">PT. Jadi Berangkat</p>
+        </div>
+    </div>
+    <div class="text-right shrink-0 hidden sm:block">
+        <p class="text-[8px] md:text-[10px] text-slate-400 font-bold uppercase tracking-widest">Dukungan</p>
+        <p class="text-[10px] md:text-xs font-extrabold text-emerald-400">Siap Membantu</p>
+    </div>
+</div>
+
 {{-- Hero FAQ --}}
-<section class="relative pt-32 pb-20 bg-gradient-to-br from-emerald-900 via-slate-900 to-slate-950 overflow-hidden">
+<section class="relative pt-20 pb-20 bg-gradient-to-br from-emerald-900 via-slate-900 to-slate-950 overflow-hidden">
 
     <div class="absolute inset-0 opacity-10">
         <div class="absolute top-10 left-10 w-72 h-72 bg-emerald-400 rounded-full blur-3xl"></div>

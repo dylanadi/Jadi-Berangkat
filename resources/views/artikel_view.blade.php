@@ -63,7 +63,7 @@
 </div>
 
 {{-- Article Content --}}
-<section class="max-w-4xl mx-auto px-6 md:px-12 py-12 md:py-16">
+<section class="max-w-4xl mx-auto px-6 md:px-10 py-12 md:py-16">
     <div class="flex gap-4 mb-8">
         <a href="{{ route('artikel.index') }}" class="inline-flex items-center gap-2 text-sm font-bold text-holiday hover:text-holiday-dark transition">
             <i class="bi bi-arrow-left"></i> Kembali ke Artikel
@@ -82,7 +82,7 @@
 
 @if(isset($lainnya) && $lainnya->count())
 <section class="bg-slate-50 py-16 border-t border-slate-100">
-    <div class="max-w-7xl mx-auto px-6 md:px-12">
+    <div class="w-[96%] max-w-[1500px] mx-auto px-6 md:px-10">
         <h2 class="text-2xl font-bold text-slate-900 mb-8 flex items-center gap-2">
             <i class="bi bi-bookmark text-holiday-600"></i> Artikel Terkait
         </h2>

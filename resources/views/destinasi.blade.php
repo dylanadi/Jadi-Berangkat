@@ -121,7 +121,7 @@
     @endif
 </section>
 
-<main class="max-w-7xl mx-auto px-6 md:px-12 py-16">
+<main class="w-[96%] max-w-[1500px] mx-auto px-6 md:px-10 py-16">
     
     <!-- UNTUK ANDA -->
     <section class="mb-16">

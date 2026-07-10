@@ -15,7 +15,7 @@
 
 @section('content')
 {{-- Sub-Header Bar --}}
-<div class="pt-28 bg-slate-900 border-b border-slate-800 py-3 px-4 md:px-12 flex items-center justify-between text-white gap-2">
+<div class="bg-slate-900 border-b border-slate-800 py-3 px-4 md:px-12 flex items-center justify-between text-white gap-2">
     <a href="{{ url('/') }}" class="flex items-center gap-1.5 text-xs md:text-sm font-bold text-slate-300 hover:text-white transition shrink-0">
         <i class="bi bi-arrow-left text-base"></i> Kembali
     </a>

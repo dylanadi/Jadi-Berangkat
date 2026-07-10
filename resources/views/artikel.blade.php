@@ -129,7 +129,7 @@
 
 <!-- MAIN WISATA CONTENT SECTION -->
 <!-- Breadcrumb -->
-<div class="w-full max-w-7xl mx-auto px-6 md:px-12 pt-8">
+<div class="w-full w-[96%] max-w-[1500px] mx-auto px-6 md:px-10 pt-8">
     <nav class="flex text-sm font-medium text-gray-500">
         <ol class="inline-flex items-center gap-2">
             <li class="inline-flex items-center">
@@ -147,7 +147,7 @@
     </nav>
 </div>
 
-<section class="max-w-7xl mx-auto px-6 md:px-12 pb-16 pt-4">
+<section class="w-[96%] max-w-[1500px] mx-auto px-6 md:px-10 pb-16 pt-4">
     
     <!-- Judul Kategori Atas -->
     <div class="mb-6 text-center md:text-left">

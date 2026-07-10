@@ -19,17 +19,17 @@
         </iframe>
     </div>
     <div class="absolute inset-0 hero-gradient"></div>
-    <div class="relative z-10 text-white section-shell w-full pt-36 md:pt-44 pb-16 md:pb-20 flex flex-col items-center text-center gsap-section">
+    <div class="relative z-10 text-white section-shell pt-36 md:pt-44 pb-16 md:pb-20 flex flex-col items-center text-center gsap-section">
         <div class="max-w-4xl flex flex-col items-center">
             <p class="gsap-item inline-flex items-center gap-2 rounded-full border border-white/20 bg-white/10 px-4 py-2 text-xs font-bold uppercase tracking-[0.18em] text-holiday-light backdrop-blur-md">
                 <span data-edit="hero_badge" data-edit-type="text" data-edit-tipe="beranda">{!! $pengaturan->hero_badge ?? '' !!}</span>
             </p>
-            <h1 data-edit="hero_judul" data-edit-type="text" data-edit-tipe="beranda" class="gsap-item mt-7 text-4xl sm:text-5xl md:text-6xl lg:text-6xl font-extrabold mb-6 drop-shadow-2xl leading-[1.1] md:leading-[1.1] text-white">{!! $pengaturan->hero_judul ?? '' !!}
+            <h1 data-edit="hero_judul" data-edit-type="text" data-edit-tipe="beranda" class="gsap-item mt-7 text-3xl sm:text-4xl md:text-5xl lg:text-5xl font-extrabold mb-6 drop-shadow-2xl leading-[1.1] md:leading-[1.1] text-white">{!! $pengaturan->hero_judul ?? '' !!}
             </h1>
             <p data-edit="hero_deskripsi" data-edit-type="text" data-edit-tipe="beranda" class="gsap-item text-base md:text-lg max-w-xl mx-auto drop-shadow-md text-white/90 mb-7 md:mb-10 font-medium leading-relaxed">{!! $pengaturan->hero_deskripsi ?? '' !!}
             </p>
             <div class="gsap-item flex flex-col sm:flex-row gap-4 justify-center items-center w-full">
-                <a href="{{ url('/booking') }}" class="btn-primary px-7 py-4 rounded-full transition-all font-bold inline-flex items-center justify-center gap-2">
+                <a href="{{ url('/destinasi') }}" class="btn-primary px-7 py-4 rounded-full transition-all font-bold inline-flex items-center justify-center gap-2">
 <span data-edit="button_booking" data-edit-type="text" data-edit-tipe="beranda">{!! $pengaturan->button_booking ?? '' !!}</span> <i class="bi bi-arrow-right"></i>
                         </a>
                         <a href="{{ url('/destinasi') }}" class="px-8 py-4 rounded-xl bg-white/15 text-white font-extrabold text-sm hover:bg-white hover:text-holiday transition-all flex items-center gap-2">
@@ -63,7 +63,7 @@
         <div class="grid lg:grid-cols-[0.9fr_1.4fr] gap-10 lg:gap-14 items-end mb-12">
             <div class="max-w-5xl lg:col-span-2">
                 <span data-edit="eyebrow_destinasi" data-edit-type="text" data-edit-tipe="beranda" class="gsap-item eyebrow">{!! $pengaturan->eyebrow_destinasi ?? '' !!}</span>
-                <h2 data-edit="destinasi_judul" data-edit-type="text" data-edit-tipe="beranda" class="gsap-item text-4xl md:text-5xl xl:text-6xl font-extrabold text-ink mt-3 mb-5 leading-tight">{!! $pengaturan->destinasi_judul ?? '' !!}</h2>
+                <h2 data-edit="destinasi_judul" data-edit-type="text" data-edit-tipe="beranda" class="gsap-item text-3xl md:text-4xl xl:text-5xl font-extrabold text-ink mt-3 mb-5 leading-tight">{!! $pengaturan->destinasi_judul ?? '' !!}</h2>
             </div>
             <p data-edit="destinasi_deskripsi" data-edit-type="text" data-edit-tipe="beranda" class="gsap-item text-gray-600 max-w-2xl font-medium leading-relaxed lg:pb-3">{!! $pengaturan->destinasi_deskripsi ?? '' !!}
             </p>
@@ -82,7 +82,7 @@
                         </div>
                         <div class="absolute bottom-0 left-0 right-0 p-6 md:p-8">
                             <p class="mb-3 text-sm font-bold text-holiday-light">{{ $item->kategori->nama_kategori ?? 'Destinasi' }}</p>
-                            <h3 class="max-w-xl text-4xl md:text-5xl font-extrabold leading-tight">{!! $item->nama !!}</h3>
+                            <h3 class="max-w-xl text-3xl md:text-4xl font-extrabold leading-tight">{!! $item->nama !!}</h3>
                             <div class="mt-7 grid grid-cols-3 gap-3 border-t border-white/18 pt-5 text-sm">
                                 <div>
                                     <p class="text-white/55 font-bold">Durasi</p>
@@ -132,7 +132,7 @@
         <div class="flex justify-between items-end mb-10 gap-6">
             <div class="gsap-item text-left w-auto">
                 <span data-edit="eyebrow_paket" data-edit-type="text" data-edit-tipe="beranda" class="eyebrow">{!! $pengaturan->eyebrow_paket ?? '' !!}</span>
-                <h2 data-edit="paket_judul" data-edit-type="text" data-edit-tipe="beranda" class="text-4xl md:text-5xl font-extrabold text-ink mt-3 leading-tight">{!! $pengaturan->paket_judul ?? '' !!}</h2>
+                <h2 data-edit="paket_judul" data-edit-type="text" data-edit-tipe="beranda" class="text-3xl md:text-4xl font-extrabold text-ink mt-3 leading-tight">{!! $pengaturan->paket_judul ?? '' !!}</h2>
             </div>
             <div class="gsap-item flex gap-2">
                 <button id="btn-prev-paket" class="w-10 h-10 rounded-full bg-white shadow-md flex items-center justify-center text-gray-600 hover:text-white hover:bg-holiday transition cursor-pointer border border-black/10"><i class="bi bi-chevron-left"></i></button>
@@ -199,19 +199,19 @@
     <div class="section-shell relative z-10">
         <div class="grid grid-cols-2 md:grid-cols-4 gap-y-10 gap-x-6 text-left md:text-center divide-y-0 md:divide-x divide-white/12">
             <div class="px-4 gsap-item flex flex-col justify-center">
-                <h3 class="text-4xl md:text-5xl font-extrabold mb-2 tracking-tight"><span data-edit="stats_pengunjung" data-edit-type="number" data-edit-tipe="beranda" class="hero-stat" data-target="{{ $pengaturan->stats_pengunjung ?? 0 }}" data-suffix="K+">0</span></h3>
+                <h3 class="text-3xl md:text-4xl font-extrabold mb-2 tracking-tight"><span data-edit="stats_pengunjung" data-edit-type="number" data-edit-tipe="beranda" class="hero-stat" data-target="{{ $pengaturan->stats_pengunjung ?? 0 }}" data-suffix="K+">0</span></h3>
                 <p data-edit="stat_pengunjung_label" data-edit-type="text" data-edit-tipe="beranda" class="text-sm text-white/58 font-bold uppercase tracking-widest">{!! $pengaturan->stat_pengunjung_label ?? '' !!}</p>
             </div>
             <div class="px-4 gsap-item flex flex-col justify-center border-l border-white/20 md:border-l-0">
-                <h3 class="text-4xl md:text-5xl font-extrabold mb-2 tracking-tight"><span data-edit="stats_jumlah_destinasi" data-edit-type="number" data-edit-tipe="beranda" class="hero-stat" data-target="{{ $pengaturan->stats_jumlah_destinasi ?? 0 }}" data-suffix="+">0</span></h3>
+                <h3 class="text-3xl md:text-4xl font-extrabold mb-2 tracking-tight"><span data-edit="stats_jumlah_destinasi" data-edit-type="number" data-edit-tipe="beranda" class="hero-stat" data-target="{{ $pengaturan->stats_jumlah_destinasi ?? 0 }}" data-suffix="+">0</span></h3>
                 <p data-edit="stat_destinasi_label" data-edit-type="text" data-edit-tipe="beranda" class="text-sm text-white/58 font-bold uppercase tracking-widest">{!! $pengaturan->stat_destinasi_label ?? '' !!}</p>
             </div>
             <div class="px-4 gsap-item flex flex-col justify-center">
-                <h3 class="text-4xl md:text-5xl font-extrabold mb-2 tracking-tight"><span data-edit="stats_jumlah_rute" data-edit-type="number" data-edit-tipe="beranda" class="hero-stat" data-target="{{ $pengaturan->stats_jumlah_rute ?? 0 }}" data-suffix="+">0</span></h3>
+                <h3 class="text-3xl md:text-4xl font-extrabold mb-2 tracking-tight"><span data-edit="stats_jumlah_rute" data-edit-type="number" data-edit-tipe="beranda" class="hero-stat" data-target="{{ $pengaturan->stats_jumlah_rute ?? 0 }}" data-suffix="+">0</span></h3>
                 <p data-edit="stat_rute_label" data-edit-type="text" data-edit-tipe="beranda" class="text-sm text-white/58 font-bold uppercase tracking-widest">{!! $pengaturan->stat_rute_label ?? '' !!}</p>
             </div>
             <div class="px-4 gsap-item flex flex-col justify-center border-l border-white/20 md:border-l-0">
-                <h3 class="text-4xl md:text-5xl font-extrabold mb-2 tracking-tight"><span data-edit="stats_jumlah_armada" data-edit-type="number" data-edit-tipe="beranda" class="hero-stat" data-target="{{ $pengaturan->stats_jumlah_armada ?? 0 }}" data-suffix="+">0</span></h3>
+                <h3 class="text-3xl md:text-4xl font-extrabold mb-2 tracking-tight"><span data-edit="stats_jumlah_armada" data-edit-type="number" data-edit-tipe="beranda" class="hero-stat" data-target="{{ $pengaturan->stats_jumlah_armada ?? 0 }}" data-suffix="+">0</span></h3>
                 <p data-edit="stat_jeep_label" data-edit-type="text" data-edit-tipe="beranda" class="text-sm text-white/58 font-bold uppercase tracking-widest">{!! $pengaturan->stat_jeep_label ?? '' !!}</p>
             </div>
         </div>
@@ -224,7 +224,7 @@
         <div class="flex justify-between items-end mb-10 gap-6">
             <div class="gsap-item text-left w-auto">
                 <span data-edit="eyebrow_armada" data-edit-type="text" data-edit-tipe="beranda" class="eyebrow">{!! $pengaturan->eyebrow_armada ?? '' !!}</span>
-                <h2 data-edit="armada_judul" data-edit-type="text" data-edit-tipe="beranda" class="text-4xl md:text-5xl font-extrabold text-ink mt-3 mb-4 leading-tight">{!! $pengaturan->armada_judul ?? '' !!}</h2>
+                <h2 data-edit="armada_judul" data-edit-type="text" data-edit-tipe="beranda" class="text-3xl md:text-4xl font-extrabold text-ink mt-3 mb-4 leading-tight">{!! $pengaturan->armada_judul ?? '' !!}</h2>
                 <p data-edit="armada_deskripsi" data-edit-type="text" data-edit-tipe="beranda" class="text-gray-500 max-w-lg font-medium">{!! $pengaturan->armada_deskripsi ?? '' !!}</p>
             </div>
             <div class="gsap-item flex gap-2">
