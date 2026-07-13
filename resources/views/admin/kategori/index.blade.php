@@ -37,12 +37,18 @@
                         </div>
                     </td>
                     <td class="px-6 py-4 font-medium text-gray-900">{{ $k->nama_kategori }}</td>
-                    <td class="px-6 py-4 text-right space-x-2">
-                        <button onclick="editKategori({{ $k->id }}, '{{ $k->nama_kategori }}', '{{ $k->icon }}')" class="text-yellow-600 hover:bg-yellow-50 px-3 py-1.5 rounded-lg transition font-medium">Edit</button>
-                        <form action="{{ route('admin.kategori.destroy', $k->id) }}" method="POST" class="inline-block" onsubmit="return confirm('Hapus kategori ini?')">
-                            @csrf @method('DELETE')
-                            <button class="text-red-600 hover:bg-red-50 px-3 py-1.5 rounded-lg transition font-medium">Hapus</button>
-                        </form>
+                    <td class="px-4 py-3">
+                        <div class="flex items-center gap-2 justify-end">
+                            <button onclick="editKategori({{ $k->id }}, '{{ $k->nama_kategori }}', '{{ $k->icon }}')" class="inline-flex items-center px-3 py-1.5 bg-yellow-100 text-yellow-700 rounded hover:bg-yellow-200 transition text-xs" title="Edit">
+                                <i class="bi bi-pencil"></i>
+                            </button>
+                            <form action="{{ route('admin.kategori.destroy', $k->id) }}" method="POST" class="inline-block" onsubmit="return confirm('Hapus kategori ini?')">
+                                @csrf @method('DELETE')
+                                <button type="submit" class="inline-flex items-center px-3 py-1.5 bg-red-100 text-red-700 rounded hover:bg-red-200 transition text-xs" title="Hapus">
+                                    <i class="bi bi-trash"></i>
+                                </button>
+                            </form>
+                        </div>
                     </td>
                 </tr>
                 @empty

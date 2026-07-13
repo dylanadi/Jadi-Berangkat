@@ -22,7 +22,8 @@ class DestinasiController extends Controller
         $kategoriList = Destinasi::KATEGORI;
         $durasiList = Destinasi::DURASI;
         $moodList = Destinasi::MOOD;
-        return view('admin.destinasi.create', compact('images', 'kategoriList', 'durasiList', 'moodList'));
+        $kategoris = \App\Models\Kategori::all();
+        return view('admin.destinasi.create', compact('images', 'kategoriList', 'durasiList', 'moodList', 'kategoris'));
     }
 
     public function store(Request $request)

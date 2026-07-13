@@ -60,34 +60,34 @@
             <p class="text-[10px] text-gray-500 font-bold uppercase tracking-widest mt-1">Panel Admin</p>
         </div>
         <nav class="flex-1 overflow-y-auto no-scrollbar p-3 space-y-1">
-            <a href="{{ url('/admin') }}" class="sidebar-link flex items-center gap-3 px-4 py-2.5 rounded-xl text-sm font-semibold text-gray-300 @if(request()->routeIs('admin.dashboard')) active @endif">
+            <a href="{{ url('/admin') }}" class="sidebar-link flex items-center gap-3 px-4 py-2.5 rounded-xl text-sm font-semibold text-gray-300 @if(request()->is('admin')) active @endif">
                 <i class="bi bi-speedometer2 text-lg"></i> Dashboard
             </a>
-            <a href="{{ url('/admin/destinasi') }}" class="sidebar-link flex items-center gap-3 px-4 py-2.5 rounded-xl text-sm font-semibold text-gray-300">
+            <a href="{{ url('/admin/destinasi') }}" class="sidebar-link flex items-center gap-3 px-4 py-2.5 rounded-xl text-sm font-semibold text-gray-300 @if(request()->is('admin/destinasi*')) active @endif">
                 <i class="bi bi-geo-alt text-lg"></i> Destinasi
             </a>
-            <a href="{{ url('/admin/artikel') }}" class="sidebar-link flex items-center gap-3 px-4 py-2.5 rounded-xl text-sm font-semibold text-gray-300">
+            <a href="{{ url('/admin/artikel') }}" class="sidebar-link flex items-center gap-3 px-4 py-2.5 rounded-xl text-sm font-semibold text-gray-300 @if(request()->is('admin/artikel*')) active @endif">
                 <i class="bi bi-newspaper text-lg"></i> Artikel
             </a>
-            <a href="{{ url('/admin/kategori') }}" class="sidebar-link flex items-center gap-3 px-4 py-2.5 rounded-xl text-sm font-semibold text-gray-300">
+            <a href="{{ url('/admin/kategori') }}" class="sidebar-link flex items-center gap-3 px-4 py-2.5 rounded-xl text-sm font-semibold text-gray-300 @if(request()->is('admin/kategori*')) active @endif">
                 <i class="bi bi-tags text-lg"></i> Kategori
             </a>
-            <a href="{{ url('/admin/galeri') }}" class="sidebar-link flex items-center gap-3 px-4 py-2.5 rounded-xl text-sm font-semibold text-gray-300">
+            <a href="{{ url('/admin/galeri') }}" class="sidebar-link flex items-center gap-3 px-4 py-2.5 rounded-xl text-sm font-semibold text-gray-300 @if(request()->is('admin/galeri*')) active @endif">
                 <i class="bi bi-images text-lg"></i> Galeri
             </a>
-            <a href="{{ url('/admin/ulasan') }}" class="sidebar-link flex items-center gap-3 px-4 py-2.5 rounded-xl text-sm font-semibold text-gray-300">
+            <a href="{{ url('/admin/ulasan') }}" class="sidebar-link flex items-center gap-3 px-4 py-2.5 rounded-xl text-sm font-semibold text-gray-300 @if(request()->is('admin/ulasan*')) active @endif">
                 <i class="bi bi-star text-lg"></i> Ulasan
             </a>
-            <a href="{{ url('/admin/media-sosial') }}" class="sidebar-link flex items-center gap-3 px-4 py-2.5 rounded-xl text-sm font-semibold text-gray-300">
+            <a href="{{ url('/admin/media-sosial') }}" class="sidebar-link flex items-center gap-3 px-4 py-2.5 rounded-xl text-sm font-semibold text-gray-300 @if(request()->is('admin/media-sosial*')) active @endif">
                 <i class="bi bi-share text-lg"></i> Media Sosial
             </a>
-            <a href="{{ url('/admin/faq') }}" class="sidebar-link flex items-center gap-3 px-4 py-2.5 rounded-xl text-sm font-semibold text-gray-300">
+            <a href="{{ url('/admin/faq') }}" class="sidebar-link flex items-center gap-3 px-4 py-2.5 rounded-xl text-sm font-semibold text-gray-300 @if(request()->is('admin/faq*')) active @endif">
                 <i class="bi bi-question-circle text-lg"></i> FAQ
             </a>
-            <a href="{{ url('/admin/pengaturan') }}" class="sidebar-link flex items-center gap-3 px-4 py-2.5 rounded-xl text-sm font-semibold text-gray-300">
+            <a href="{{ url('/admin/pengaturan') }}" class="sidebar-link flex items-center gap-3 px-4 py-2.5 rounded-xl text-sm font-semibold text-gray-300 @if(request()->is('admin/pengaturan*')) active @endif">
                 <i class="bi bi-gear text-lg"></i> Pengaturan
             </a>
-            <a href="{{ url('/admin/seo') }}" class="sidebar-link flex items-center gap-3 px-4 py-2.5 rounded-xl text-sm font-semibold text-gray-300">
+            <a href="{{ url('/admin/seo') }}" class="sidebar-link flex items-center gap-3 px-4 py-2.5 rounded-xl text-sm font-semibold text-gray-300 @if(request()->is('admin/seo*')) active @endif">
                 <i class="bi bi-search-heart text-lg"></i> SEO
             </a>
         </nav>
