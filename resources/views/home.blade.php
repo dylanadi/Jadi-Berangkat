@@ -170,7 +170,7 @@
                         </div>
                         <div class="flex gap-3">
                             <a href="{{ url('/destinasi/' . ($item->slug ?? '#')) }}" class="flex-1 py-3 rounded-xl border border-gray-200 text-gray-700 font-extrabold hover:bg-gray-50 transition text-center">Detail</a>
-                            <a href="{{ url('/booking/' . ($item->slug ?? '#')) }}" class="flex-1 py-3 rounded-xl bg-holiday text-white font-extrabold hover:bg-holiday-dark transition shadow-md shadow-holiday-glow text-center">Pesan</a>
+                            <a href="{{ url('/destinasi/' . ($item->slug ?? '#')) }}" class="flex-1 py-3 rounded-xl bg-holiday text-white font-extrabold hover:bg-holiday-dark transition shadow-md shadow-holiday-glow text-center">Pesan</a>
                         </div>
                     </div>
                 </div>
