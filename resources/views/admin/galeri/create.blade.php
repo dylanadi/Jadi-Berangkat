@@ -1,0 +1,60 @@
+@extends('layouts.admin')
+
+@section('title', 'Tambah Galeri')
+
+@section('content')
+<div class="space-y-6">
+    <div class="flex items-center gap-4">
+        <a href="{{ route('admin.galeri.index') }}" class="text-gray-500 hover:text-gray-700">
+            <i class="bi bi-arrow-left text-xl"></i>
+        </a>
+        <h1 class="text-2xl font-semibold text-gray-800">Tambah Galeri</h1>
+    </div>
+
+    <div class="bg-white rounded-lg shadow p-6 w-full">
+        <form action="{{ route('admin.galeri.store') }}" method="POST" class="space-y-4">
+            @csrf
+
+            <div>
+                <label class="block text-sm font-medium text-gray-700 mb-1">Kategori</label>
+                <select name="kategori_id" class="w-full border border-gray-300 rounded-lg px-3 py-2 focus:ring-admin-500 focus:border-holiday @error('kategori_id') border-red-500 @enderror">
+                    <option value="">Pilih Kategori</option>
+                    @foreach($kategoris as $kat)
+                        <option value="{{ $kat->id }}" {{ old('kategori_id') == $kat->id ? 'selected' : '' }}>{{ $kat->nama_kategori }}</option>
+                    @endforeach
+                </select>
+                @error('kategori_id') <p class="text-red-500 text-xs mt-1">{{ $message }}</p> @enderror
+            </div>
+
+            <div>
+                <label class="block text-sm font-medium text-gray-700 mb-1">Judul</label>
+                <input type="text" name="judul" value="{{ old('judul') }}" class="w-full border border-gray-300 rounded-lg px-3 py-2 focus:ring-admin-500 focus:border-holiday @error('judul') border-red-500 @enderror">
+                @error('judul') <p class="text-red-500 text-xs mt-1">{{ $message }}</p> @enderror
+            </div>
+
+            <div>
+                <label class="block text-sm font-medium text-gray-700 mb-1">Slug</label>
+                <input type="text" name="slug" value="{{ old('slug') }}" class="w-full border border-gray-300 rounded-lg px-3 py-2 focus:ring-admin-500 focus:border-holiday @error('slug') border-red-500 @enderror">
+                @error('slug') <p class="text-red-500 text-xs mt-1">{{ $message }}</p> @enderror
+            </div>
+
+            <div>
+                <label class="block text-sm font-medium text-gray-700 mb-1">Gambar</label>
+                                <x-image-input name="image_id" :value="old('image_id', isset($galeri->image_id) ? $galeri->image_id : '')" />
+            </div>
+
+            <div>
+                <label class="block text-sm font-medium text-gray-700 mb-1">Deskripsi</label>
+                <textarea name="deskripsi" rows="4" class="w-full border border-gray-300 rounded-lg px-3 py-2 focus:ring-admin-500 focus:border-holiday @error('deskripsi') border-red-500 @enderror">{{ old('deskripsi') }}</textarea>
+                @error('deskripsi') <p class="text-red-500 text-xs mt-1">{{ $message }}</p> @enderror
+            </div>
+
+            <div class="flex items-center gap-3 pt-4">
+                <button type="submit" class="px-6 py-2 bg-holiday text-white rounded-lg hover:bg-holiday-dark transition">Simpan</button>
+                <a href="{{ route('admin.galeri.index') }}" class="px-6 py-2 border border-gray-300 rounded-lg hover:bg-gray-50 transition">Batal</a>
+            </div>
+        </form>
+    </div>
+</div>
+
+@endsection
