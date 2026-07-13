@@ -3,7 +3,7 @@
 @section('title', 'SEO Settings')
 
 @section('content')
-<div class="max-w-3xl mx-auto">
+<div class="w-full mx-auto">
     <h1 class="text-2xl font-semibold text-gray-800 mb-2">SEO Settings</h1>
     <p class="text-sm text-gray-500 mb-6">Atur meta tag, favicon, logo, dan Open Graph untuk website.</p>
 

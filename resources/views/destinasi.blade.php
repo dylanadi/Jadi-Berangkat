@@ -168,12 +168,22 @@
     <!-- KATEGORI & SEARCH -->
     <div class="flex flex-col md:flex-row justify-between items-center mb-6 gap-4 border-t border-black/10 pt-10">
         <!-- Categories -->
-        <div class="flex gap-2 overflow-x-auto w-full md:w-auto pb-2 md:pb-0 no-scrollbar" id="categoryFilters">
-            <button class="cat-btn active px-5 py-2.5 rounded-full text-xs font-bold uppercase tracking-wider bg-holiday text-white shadow-sm transition whitespace-nowrap" data-cat="semua" onclick="filterCategory('semua', this)">Semua</button>
-            <button class="cat-btn px-5 py-2.5 rounded-full text-xs font-bold uppercase tracking-wider bg-white text-gray-600 border border-gray-200 hover:border-holiday hover:text-holiday shadow-sm transition whitespace-nowrap" data-cat="alam" onclick="filterCategory('alam', this)">Alam</button>
-            <button class="cat-btn px-5 py-2.5 rounded-full text-xs font-bold uppercase tracking-wider bg-white text-gray-600 border border-gray-200 hover:border-holiday hover:text-holiday shadow-sm transition whitespace-nowrap" data-cat="budaya" onclick="filterCategory('budaya', this)">Budaya</button>
-            <button class="cat-btn px-5 py-2.5 rounded-full text-xs font-bold uppercase tracking-wider bg-white text-gray-600 border border-gray-200 hover:border-holiday hover:text-holiday shadow-sm transition whitespace-nowrap" data-cat="pantai" onclick="filterCategory('pantai', this)">Pantai</button>
-            <button class="cat-btn px-5 py-2.5 rounded-full text-xs font-bold uppercase tracking-wider bg-white text-gray-600 border border-gray-200 hover:border-holiday hover:text-holiday shadow-sm transition whitespace-nowrap" data-cat="kuliner" onclick="filterCategory('kuliner', this)">Kuliner</button>
+        <div class="flex gap-3 overflow-x-auto w-full md:w-auto pb-2 md:pb-0 no-scrollbar px-2" id="categoryFilters">
+            <button class="cat-btn group relative px-6 py-2.5 transition-all duration-300 transform -skew-x-12 bg-holiday text-white shadow-sm" data-cat="semua" onclick="filterCategory('semua', this)">
+                <span class="block transform skew-x-12 text-xs font-bold uppercase tracking-wider whitespace-nowrap">Semua</span>
+            </button>
+            
+            @foreach($semuaKategori->take(4) as $kat)
+            <button class="cat-btn group relative px-6 py-2.5 transition-all duration-300 transform -skew-x-12 bg-white text-gray-600 border border-gray-200 hover:border-holiday hover:text-holiday shadow-sm" data-cat="{{ strtolower($kat->nama_kategori) }}" onclick="filterCategory('{{ strtolower($kat->nama_kategori) }}', this)">
+                <span class="block transform skew-x-12 text-xs font-bold uppercase tracking-wider whitespace-nowrap">{{ $kat->nama_kategori }}</span>
+            </button>
+            @endforeach
+            
+            @if($semuaKategori->count() > 4)
+            <button id="btn-lainnya" class="group relative px-6 py-2.5 transition-all duration-300 transform -skew-x-12 bg-white text-gray-400 border border-gray-200 hover:bg-gray-50 shadow-sm" onclick="openKategoriModal()" title="Lainnya">
+                <span class="block transform skew-x-12 text-xs font-bold uppercase tracking-wider whitespace-nowrap"><i class="bi bi-three-dots"></i></span>
+            </button>
+            @endif
         </div>
         
         <!-- Search Bar -->
@@ -266,6 +276,31 @@
     </div>
 
 </main>
+
+<!-- Modal Kategori -->
+<div class="fixed inset-0 z-50 flex items-center justify-center bg-black/50 opacity-0 pointer-events-none transition-opacity duration-300" id="kategoriModal" onclick="closeKategoriModal(event)">
+    <div class="bg-white rounded-2xl shadow-xl w-full max-w-md m-4 transform scale-95 opacity-0 transition-all duration-300" id="kategoriModalContent" onclick="event.stopPropagation()">
+        <div class="p-6">
+            <div class="flex justify-between items-center mb-4">
+                <h3 class="text-lg font-bold text-gray-800">Pilih Kategori</h3>
+                <button onclick="closeKategoriModal()" class="text-gray-400 hover:text-gray-600 transition">
+                    <i class="bi bi-x-lg"></i>
+                </button>
+            </div>
+            <div class="grid grid-cols-2 gap-2 max-h-[60vh] overflow-y-auto pr-2 custom-scrollbar">
+                @foreach($semuaKategori as $kat)
+                <button onclick="selectKategori('{{ addslashes($kat->nama_kategori) }}', '{{ strtolower($kat->nama_kategori) }}')" class="flex items-center gap-3 p-3 rounded-xl border border-gray-100 hover:border-holiday hover:bg-holiday/5 text-left transition group">
+                    <div class="w-8 h-8 rounded-lg bg-holiday/10 text-holiday flex items-center justify-center group-hover:bg-holiday group-hover:text-white transition">
+                        <i class="{{ $kat->icon ?? 'bi bi-tag' }}"></i>
+                    </div>
+                    <span class="text-sm font-semibold text-gray-700 group-hover:text-holiday transition">{{ $kat->nama_kategori }}</span>
+                </button>
+                @endforeach
+            </div>
+        </div>
+    </div>
+</div>
+
 @endsection
 
 @push('scripts')
@@ -447,6 +482,80 @@
     // GSAP Animations
     if (typeof gsap !== 'undefined' && typeof ScrollTrigger !== 'undefined') {
         gsap.registerPlugin(ScrollTrigger);
+    }
+
+    function openKategoriModal() {
+        const modal = document.getElementById('kategoriModal');
+        const content = document.getElementById('kategoriModalContent');
+        modal.classList.remove('opacity-0', 'pointer-events-none');
+        content.classList.remove('scale-95', 'opacity-0');
+        document.body.style.overflow = 'hidden';
+    }
+
+    function closeKategoriModal(e) {
+        if (e && e.target !== e.currentTarget) return;
+        const modal = document.getElementById('kategoriModal');
+        const content = document.getElementById('kategoriModalContent');
+        modal.classList.add('opacity-0', 'pointer-events-none');
+        content.classList.add('scale-95', 'opacity-0');
+        document.body.style.overflow = '';
+    }
+
+    function selectKategori(nama, slug) {
+        const list = document.getElementById('categoryFilters');
+        let existing = list.querySelector(`[data-cat="${slug}"]`);
+        
+        if (!existing) {
+            const catBtns = Array.from(list.querySelectorAll('.cat-btn')).filter(el => el.dataset.cat !== 'semua');
+            
+            if (catBtns.length >= 4) {
+                const lastItem = catBtns[catBtns.length - 1];
+                if (typeof gsap !== 'undefined') {
+                    gsap.to(lastItem, {
+                        width: 0,
+                        opacity: 0,
+                        paddingLeft: 0,
+                        paddingRight: 0,
+                        marginRight: 0,
+                        duration: 0.3,
+                        onComplete: () => {
+                            lastItem.remove();
+                            insertAndAnimateNew(nama, slug, list);
+                        }
+                    });
+                } else {
+                    lastItem.remove();
+                    insertAndAnimateNew(nama, slug, list);
+                }
+            } else {
+                insertAndAnimateNew(nama, slug, list);
+            }
+        } else {
+            existing.click();
+            closeKategoriModal();
+        }
+    }
+
+    function insertAndAnimateNew(nama, slug, list) {
+        let btn = document.createElement('button');
+        btn.className = 'cat-btn group relative px-6 py-2.5 transition-all duration-300 transform -skew-x-12 bg-white text-gray-600 border border-gray-200 hover:border-holiday hover:text-holiday shadow-sm';
+        btn.dataset.cat = slug;
+        btn.onclick = function() { filterCategory(slug, this); };
+        btn.innerHTML = `<span class="block transform skew-x-12 text-xs font-bold uppercase tracking-wider whitespace-nowrap">${nama}</span>`;
+        
+        // Insert after "Semua"
+        const semuaBtn = list.querySelector('[data-cat="semua"]');
+        semuaBtn.after(btn);
+        
+        if (typeof gsap !== 'undefined') {
+            gsap.fromTo(btn, 
+                { width: 0, opacity: 0, paddingLeft: 0, paddingRight: 0, marginRight: 0 },
+                { width: 'auto', opacity: 1, paddingLeft: 24, paddingRight: 24, duration: 0.3, clearProps: "width,paddingLeft,paddingRight,marginRight" }
+            );
+        }
+        
+        btn.click();
+        closeKategoriModal();
     }
 </script>
 @endpush

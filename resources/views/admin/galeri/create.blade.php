@@ -11,7 +11,7 @@
         <h1 class="text-2xl font-semibold text-gray-800">Tambah Galeri</h1>
     </div>
 
-    <div class="bg-white rounded-lg shadow p-6 max-w-2xl">
+    <div class="bg-white rounded-lg shadow p-6 w-full">
         <form action="{{ route('admin.galeri.store') }}" method="POST" class="space-y-4">
             @csrf
 

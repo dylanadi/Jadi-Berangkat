@@ -32,6 +32,9 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
 
+    <!-- SweetAlert2 -->
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
     <style>
         html, body { font-family: 'Plus Jakarta Sans', sans-serif; }
         .sidebar-link { transition: all 0.2s ease; }
@@ -127,6 +130,64 @@
     </div>
 
     @include('admin.components.image-picker')
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Global Session Error Popup
+            @if(session('error'))
+            Swal.fire({
+                title: 'Peringatan!',
+                text: "{!! session('error') !!}",
+                icon: 'error',
+                confirmButtonColor: '#ef4444',
+                confirmButtonText: 'Tutup'
+            });
+            @endif
+
+            // Global Session Success Popup
+            @if(session('success_popup'))
+            Swal.fire({
+                title: 'Berhasil!',
+                text: "{!! session('success_popup') !!}",
+                icon: 'success',
+                confirmButtonColor: '#2f6f42',
+                confirmButtonText: 'OK'
+            });
+            @endif
+
+            // SweetAlert Delete Confirmation
+            const deleteForms = document.querySelectorAll('form[onsubmit*="return confirm"]');
+            deleteForms.forEach(form => {
+                const confirmMessage = form.getAttribute('onsubmit').match(/'([^']+)'/);
+                const messageText = confirmMessage ? confirmMessage[1] : 'Yakin ingin menghapus?';
+                
+                form.removeAttribute('onsubmit');
+                form.addEventListener('submit', function(e) {
+                    e.preventDefault();
+                    Swal.fire({
+                        title: 'Apakah Anda Yakin?',
+                        text: "Data yang dihapus tidak dapat dikembalikan!",
+                        icon: 'warning',
+                        showCancelButton: true,
+                        confirmButtonColor: '#ef4444',
+                        cancelButtonColor: '#6b7280',
+                        confirmButtonText: 'Ya, Hapus!',
+                        cancelButtonText: 'Batal',
+                        reverseButtons: true,
+                        customClass: {
+                            confirmButton: 'px-4 py-2 rounded-lg font-bold text-white bg-red-500 hover:bg-red-600 focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-offset-2 transition-all',
+                            cancelButton: 'px-4 py-2 rounded-lg font-bold text-white bg-gray-500 hover:bg-gray-600 focus:outline-none focus:ring-2 focus:ring-gray-500 focus:ring-offset-2 mr-3 transition-all'
+                        },
+                        buttonsStyling: false
+                    }).then((result) => {
+                        if (result.isConfirmed) {
+                            form.submit();
+                        }
+                    });
+                });
+            });
+        });
+    </script>
 
     @stack('scripts')
 </body>

@@ -30,7 +30,9 @@ class DestinasiController extends Controller
         // We will pass the 5 most recent destinations for the new slider
         $slider_destinasi = Destinasi::with('image')->where('status', 'aktif')->latest()->take(5)->get();
         
-        return view('destinasi', compact('destinasi', 'featured_destinasi', 'mediaSosial', 'data', 'destinasiHero', 'slider_destinasi'));
+        $semuaKategori = \App\Models\Kategori::all();
+        
+        return view('destinasi', compact('destinasi', 'featured_destinasi', 'mediaSosial', 'data', 'destinasiHero', 'slider_destinasi', 'semuaKategori'));
     }
 
     public function show($slug)

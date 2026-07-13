@@ -46,7 +46,16 @@ class KategoriController extends Controller
 
     public function destroy(Kategori $kategori)
     {
+        $isUsed = \App\Models\Destinasi::where('kategori_id', $kategori->id)->exists()
+               || \App\Models\Artikel::where('kategori_id', $kategori->id)->exists()
+               || \App\Models\Galeri::where('kategori_id', $kategori->id)->exists()
+               || \App\Models\Ulasan::where('kategori_id', $kategori->id)->exists();
+
+        if ($isUsed) {
+            return redirect()->back()->with('error', 'Kamu tidak bisa menghapus kategori ini, karena banyak konten menggunakan kategori ini.');
+        }
+
         $kategori->delete();
-        return redirect()->back()->with('success', 'Kategori berhasil dihapus.');
+        return redirect()->back()->with('success_popup', 'Kategori berhasil dihapus.');
     }
 }

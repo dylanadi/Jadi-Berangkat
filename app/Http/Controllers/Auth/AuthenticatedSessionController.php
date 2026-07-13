@@ -17,7 +17,8 @@ class AuthenticatedSessionController extends Controller
      */
     public function create(): View
     {
-        return view('auth.login');
+        $galeri = \App\Models\Galeri::with(['image', 'kategori'])->inRandomOrder()->take(5)->get();
+        return view('auth.login', compact('galeri'));
     }
 
     /**

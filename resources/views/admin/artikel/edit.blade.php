@@ -11,7 +11,7 @@
         <h1 class="text-2xl font-semibold text-gray-800">Edit Artikel</h1>
     </div>
 
-    <div class="bg-white rounded-lg shadow p-6 max-w-4xl">
+    <div class="bg-white rounded-lg shadow p-6 w-full">
         <form action="{{ route('admin.artikel.update', $artikel->id) }}" method="POST" class="space-y-4">
             @csrf
             @method('PUT')

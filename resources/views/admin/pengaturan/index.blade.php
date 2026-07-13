@@ -12,7 +12,7 @@
     </div>
     @endif
 
-    <div class="bg-white rounded-lg shadow p-6 max-w-3xl">
+    <div class="bg-white rounded-lg shadow p-6 w-full">
         <div class="flex items-center justify-between mb-6">
             <h2 class="text-lg font-semibold text-gray-800">Optimasi Gambar</h2>
             <button id="convertWebpBtn" onclick="convertToWebp()" class="px-4 py-2 bg-holiday text-white rounded-lg hover:bg-holiday-dark transition text-sm font-semibold flex items-center gap-2">
@@ -22,7 +22,7 @@
         <div id="webp-result" class="hidden p-4 rounded-lg mb-4 text-sm"></div>
     </div>
 
-    <div class="bg-white rounded-lg shadow p-6 max-w-3xl">
+    <div class="bg-white rounded-lg shadow p-6 w-full">
         <form action="{{ route('admin.pengaturan.update') }}" method="POST" class="space-y-6">
             @csrf
 
