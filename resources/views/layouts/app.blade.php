@@ -294,7 +294,7 @@
     @endif
 
     @php
-        $isHeroPage = request()->is('/') || request()->is('tentang') || request()->is('destinasi') || request()->routeIs('privasi') || request()->routeIs('bantuan');
+        $isHeroPage = request()->is('/') || request()->is('tentang') || request()->is('destinasi') || request()->is('artikel') || request()->is('artikel/*') || request()->routeIs('privasi') || request()->routeIs('bantuan');
     @endphp
     <main class="flex-grow {{ $isHeroPage ? '' : 'pt-24' }}">
         @yield('content')
